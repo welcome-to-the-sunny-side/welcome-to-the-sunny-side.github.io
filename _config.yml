@@ -68,7 +68,7 @@ defaults:
       sitemap: true
 
 # Google Analytics
-google_analytics: #G-2FG4XW2KE9
+google_analytics: G-16WZ1HKZT7
 
 collections:
   otherposts:

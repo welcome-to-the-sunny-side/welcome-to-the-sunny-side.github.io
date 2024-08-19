@@ -1,0 +1,48 @@
+.skin-toggle {
+    background-color: transparent; /* Transparent background */
+    border: none;
+    //border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: 0px;
+}
+
+.skin-toggle .icon {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the button */
+    transition: opacity 0.1s;
+    background-size: cover; /* Ensure the image covers the button */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent image repeating */
+}
+
+.classic-icon {
+    opacity: 1;
+    background-image: url('../images/pfp/satuo.png'); /* Use background image */
+}
+
+.dark-icon {
+    opacity: 0;
+    background-image: url('../images/pfp/misaki.png'); /* Use background image */
+}
+
+.skin-toggle.dark .classic-icon {
+    opacity: 0;
+}
+
+.skin-toggle.dark .dark-icon {
+    opacity: 1;
+}
+
+.skin-toggle:hover {
+    background-color: #e0e0e0; /* Slightly darker background on hover */
+}

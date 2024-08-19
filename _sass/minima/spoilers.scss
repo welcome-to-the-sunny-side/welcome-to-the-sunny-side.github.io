@@ -1,0 +1,16 @@
+/* Spoiler summary styles */
+.spoiler-summary {
+  text-decoration: underline dashed 1px;
+  cursor: pointer;
+  text-underline-offset: 5px; /* Adds 5px padding between the text and the underline */
+}
+
+/* Spoiler content styles */
+.spoiler-content {
+  border: 1px solid gray;
+  background-color: #def;
+  border-radius: 5px;
+  padding: 5px;
+  margin-top: 5px;
+}
+

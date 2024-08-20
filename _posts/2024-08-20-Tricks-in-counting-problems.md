@@ -20,4 +20,4 @@ If this blog does end up reaching a state close to what I currently envision it 
 
 ## Pretend that elements are distinct
 
-
+In some problems, you

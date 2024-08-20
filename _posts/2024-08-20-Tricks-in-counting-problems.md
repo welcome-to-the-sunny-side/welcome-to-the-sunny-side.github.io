@@ -18,6 +18,6 @@ Hello, in this blog, I'll just be listing down certain tricks or insights which 
 
 If this blog does end up reaching a state close to what I currently envision it to be, it will  be somewhat hard to navigate since there will be a lot of independent content  crammed next to each other. I recommend navigating through the "Outline" instead of manually scrolling if the blog is in such a state at the time of you reading this.
 
-## Pretend that elements are distinct
+## 1. Pretend that elements are distinct
 
 In some problems, you

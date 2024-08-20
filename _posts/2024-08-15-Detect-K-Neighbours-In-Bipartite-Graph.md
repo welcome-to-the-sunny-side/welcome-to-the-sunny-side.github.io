@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Finding K neighbours in an implicitly defined bipartite graph"
-tags: algorithm homepage
+tags: algorithm homepage incomplete
 ---
 
 ## Outline

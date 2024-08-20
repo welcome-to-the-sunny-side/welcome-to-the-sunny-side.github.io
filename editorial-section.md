@@ -12,7 +12,7 @@ permalink: /editorial/
     <ul class="post-list">
       {%- for post in site.posts -%}
       {%- if post.tags contains "editorial" -%}
-      {%- unless post.tags contains "incomplete" -%}
+      <!-- {%- unless post.tags contains "incomplete" -%} -->
 	  <li>
 	    {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
 	    <span class="post-meta">{{ post.date | date: date_format }}</span>
@@ -25,7 +25,7 @@ permalink: /editorial/
 	      {{ post.excerpt }}
 	    {%- endif -%}
 	  </li>
-      {%- endunless -%}
+      <!-- {%- endunless -%} -->
       {%- endif -%}
       {%- endfor -%}
     </ul>

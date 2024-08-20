@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "algorithm"
-permalink: /algorithm-section/
+permalink: /algorithm/
 ---
 
 <div class="home">
@@ -12,6 +12,7 @@ permalink: /algorithm-section/
     <ul class="post-list">
       {%- for post in site.posts -%}
       {%- if post.tags contains "algorithm" -%}
+      {%- unless post.tags contains "incomplete" -%}
 	  <li>
 	    {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
 	    <span class="post-meta">{{ post.date | date: date_format }}</span>
@@ -24,6 +25,7 @@ permalink: /algorithm-section/
 	      {{ post.excerpt }}
 	    {%- endif -%}
 	  </li>
+      {%- endunless -%}
       {%- endif -%}
       {%- endfor -%}
     </ul>

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Tricks in counting problems"
-tags: "competitive programming"
+tags: competitive-programming algorithm
 ---
 
 ## Outline

@@ -13,6 +13,7 @@ permalink: /other/
     <h2 class="post-list-heading">{{ "Other" }}</h2>
     <ul class="post-list">
       {%- for post in all_posts_sorted -%}
+      {%- unless post.tags contains "queue" -%}
 	  <li>
 	    {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
 	    <span class="post-meta">{{ post.date | date: date_format }}</span>
@@ -25,6 +26,7 @@ permalink: /other/
 	      {{ post.excerpt }}
 	    {%- endif -%}
 	  </li>
+	  {%- endunless -%}
       {%- endfor -%}
     </ul>
   {%- endif -%}

@@ -7,10 +7,10 @@ permalink: /queue/
 <div class="home">
 
   {%- if site.posts.size > 0 -%}
-    <h2 class="post-list-heading">{{ "Incomplete" }}</h2>
+    <h2 class="post-list-heading">{{ "Queue" }}</h2>
     <ul class="post-list">
       {%- for post in site.posts -%}
-      {%- if post.tags contains "incomplete" -%}
+      {%- if post.tags contains "queue" -%}
 	  <li>
 	    {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
 	    <span class="post-meta">{{ post.date | date: date_format }}</span>

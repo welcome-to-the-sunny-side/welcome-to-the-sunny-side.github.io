@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "On Relations"
-tag: queue life
+tags: queue life
 ---
 
 

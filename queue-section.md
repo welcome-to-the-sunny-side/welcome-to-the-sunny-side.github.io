@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "algorithm"
-permalink: /incomplete/
+permalink: /queue/
 ---
 
 <div class="home">

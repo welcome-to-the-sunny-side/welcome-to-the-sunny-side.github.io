@@ -35,7 +35,7 @@ minima:
   date_format: "%b %-d, %Y"
   skin: "classic"
   social_links:
-    - { platform: codeforces,          user_url: "https://codeforces.com/profile/unalive" }
+    #- { platform: codeforces,          user_url: "https://codeforces.com/profile/unalive" }
 
 
 # If you want to link only specific pages in your header, uncomment

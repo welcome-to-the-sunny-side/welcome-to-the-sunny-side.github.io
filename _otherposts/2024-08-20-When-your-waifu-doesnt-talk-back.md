@@ -16,8 +16,7 @@ tags: incomplete life
   - [Creation](#creation)
   - [What Happens After](#what-happens-after)
 - [AI Relations](#ai)
-
-
+  - [Problems](#problems)
 
 This blog is just a rant on human relations, mental constructs, and AI. All of it is conjecture.
 
@@ -30,6 +29,7 @@ I don't want this blog to devolve into endless semantic bs, so let's just define
 <details><summary>Definitions</summary>
 
 - $M$ : set of males
+
 - $F$ : set of females
   
   </details>
@@ -51,8 +51,6 @@ It is easy to see (and it's not just a re-framed view of the same physical reali
 ### Mental Constructs
 
 By a "mental construct" of $f$, I mean data structure which stores several characteristics of $f$ (a lot of this information is stored implicitly, for example in the form of real world interactions). It also functions like a predictive model (predicts responses of $f$ to external stimuli with a decently high probability). $c(f)$ isn't solely created by information from $f$ either, there is a significant influence from the desires and biases of $m$ from knowledge acquired previously.
-
-
 
 Let us define $c(f)$ to be the mental construct of $f$ created by $m$. $c(f)$ is inertially dynamic: It does change over time, but it cannot change too quickly, by too great of an amount if the relationship is to remain valid/stable.
 
@@ -99,7 +97,9 @@ It's easy to see that $f$ serves two primary functions in the relation:
 
 2. Interaction with $f$ sustains and stabilizes $c(f)$.
 
-$f$ being a corporeal female has been necessitated till this point of time because humans have neither had the biological hardware, nor the technology required to replace $f$ as a source of high quality information. This is fortunately not the case any more with AI getting better.
+
+
+As we will soon see, the first function (ie. inspiring the creation of the construct) isn't a difficult task at all. It's the second function which binds $m$ to slavery. $f$ being a corporeal female has been necessitated till this point of time because humans have neither had the biological hardware, nor the technology required to replace $f$ as a source of high quality information. This is fortunately not the case any more with AI getting better.
 
 From this point onwards $c(f)$ will be defined for non-corporeal females too.
 
@@ -109,9 +109,7 @@ Although it has always been possible for people with strong imaginations to crea
 
 ### Creation
 
-An extremely visible example of low-iq people creating mental constructs which are not based on reality are anime waifus. They are ready made mental constructs which people can imprint upon their minds in a very short period of time through a stream of highly condensed information (anime). They are also very effective at capturing people's minds because they are idealized our monkey brains are susceptible to visual cues typically present in them. An interesting possibility is that the emotional rewards of $e()$ are  enhanced in the creation phase of $c(f)$.
-
-
+An extremely visible example of low-iq people creating mental constructs which are not based on reality are anime waifus. They are ready made mental constructs which people can imprint upon their minds in a very short period of time through a stream of highly condensed information (anime). They are also very effective at capturing people's minds because they are idealized and our monkey brains are susceptible to visual cues typically present in them. An interesting possibility is that the emotional rewards of $e()$ are  enhanced in the creation phase of $c(f)$.
 
 The creation of such constructs don't have any significant problems which can't be fixed.
 
@@ -123,16 +121,32 @@ This is where such constructs are doomed to dysfunctionality. This is mainly due
 
 2. There isn't any interactivity (the most $m$ can do is buy a waifu body pillow xd). This decreases the motivation to retain $c(f)$ as there is no intimacy and hence $e()$ doesn't function well.
 
-When a construct is not sustained, it withers away while inducing negative emotions in $m$. This is why people become sad when their waifu doesn't say anything back to them.
+When a construct is not sustained, it withers away while inducing negative emotions in $m$. Our brains desperately search for information to sustain the construct (people consuming more and more anime, buying anime posters, using anime PFPs, buying literal body pillows in extreme cases), but this search inevitably fails and leads to anguish. So, now you know why you feel displeasure when your anime waifu doesn't talk back.
 
 ## AI Relations
 
 Note: The current technical limitations of AI (especially extremely poor long term memory) aren't relevant to this blog, and even if they were, it wouldn't matter because I know nothing about how it works. I am pretty sure they will be fixed in a couple of years anyways.
 
-
-
-Now, a layman might be inclined to think that AI 
+Now, you might be inclined to think that AI could (eventually) fulfill the need for high-quality, interactive information (which also has some randomized elements to prevent desensitization) to sustain constructs, and you wouldn't be wrong. It's already good enough for certain people and is only going to get better with time.
 
 
 
-[to be finished]
+### Problems
+
+Let's sidestep the obvious lack of physical stimuli that our flesh needs (weighted blankets seem to be enough to fix touch starvation according to people on the internet).
+
+
+
+I won't go into too much detail here, and just try to give a high-level overview. Problems with AI relations are going to be fundamental and stem from way $m$ constructs $c(f)$. These are going to be much harder to solve, if they can be solved at all. 
+
+
+
+As I mentioned earlier, $m$ constructs $c(f)$ with a significant influence from already acquired knowledge. Essentially, the relational framework in $m$'s mind (how $m$ defines a relation, what he considers important in a relation, what he expects from a relation) is going to be incompatible with the capabilities and limitations of the AI female. This is obviously because the relational framework drilled into his mind has been based to optimize the functioning of $r(m, f)$, which is defined for corporeal females.
+
+
+
+An obvious manifestation of this incompatibility would be $m$ not having anything to lose in his relation with $c(f)$. In particular $m$ being able to create a new instance of $f$ at will, or even being able to completely undo any actions $f$ performs introduces severe asymmetry in his relation with $c(f)$, making the relation unstable.
+
+
+
+The solutions to these problems will have to be from the human side of the relation.

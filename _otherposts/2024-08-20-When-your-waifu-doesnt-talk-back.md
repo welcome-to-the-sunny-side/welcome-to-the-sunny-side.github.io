@@ -109,7 +109,7 @@ Although it has always been possible for people with strong imaginations to crea
 
 ### Creation
 
-An extremely visible example of low-iq people creating mental constructs which are not based on reality are anime waifus. They are ready made mental constructs which people can imprint upon their minds in a very short period of time through a stream of highly condensed information (anime). They are also very effective at capturing people's minds because our monkey brains are susceptible to visual cues typically present in them. An interesting possibility is that the emotional rewards of $e()$ are  enhanced in the creation phase of $c(f)$.
+An extremely visible example of low-iq people creating mental constructs which are not based on reality are anime waifus. They are ready made mental constructs which people can imprint upon their minds in a very short period of time through a stream of highly condensed information (anime). They are also very effective at capturing people's minds because they are idealized our monkey brains are susceptible to visual cues typically present in them. An interesting possibility is that the emotional rewards of $e()$ are  enhanced in the creation phase of $c(f)$.
 
 
 

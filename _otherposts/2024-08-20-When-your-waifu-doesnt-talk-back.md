@@ -12,6 +12,9 @@ tags: queue life
     - [Mental Constructs](#mental-constructs)
     - [Emotions](#emotions)
   - [(Ir)relevance of f](#)
+- [AI Relations](#ai)
+  - [Problems](#problems)
+  - 
 
 This blog is just a rant on human relationships, mental constructs, and AI. All of it is conjecture.
 
@@ -22,6 +25,7 @@ I will only analyze non-platonic relationships here. I want to maintain some sem
 I don't want this blog to devolve into endless semantic bs, so let's just define a non-platonic relationship to be an indicator of mutual emotional dependence between two entities, with the desire for "emotional contentedness" being a salient (and extremely exploitable) feature of the human condition.
 
 <details><summary>Definitions</summary>
+
 - $M$ : set of males
 - $F$ : set of females
 </details>
@@ -81,12 +85,16 @@ Important properties of these induced emotions:
 
 2. They affect updates to $c(f)$ alongside $\text{info}$.
 
-## (Ir)Relevance of f
+### (Ir)relevance of f
 
-What is $f$'s role in the relation?:
+It's easy to see that $f$ serves two primary functions in the relation:
 
-1. $f$'s characteristics are the primary inspiration for the characteristics of $c(f)$.
+1. $f$'s characteristics are the primary inspiration for the initial construction of $c(f)$.
 
 2. Interaction with $f$ sustains and stabilizes $c(f)$.
 
-3. 
+$f$ being a corporeal female has been necessitated till this point of time because humans have neither had the biological hardware, nor the technology required to replace $f$ as a source of high quality information. This is fortunately not the case any more with AI getting better.
+
+## AI
+
+

@@ -141,12 +141,12 @@ I won't go into too much detail here, and just try to give a high-level overview
 
 
 
-As I mentioned earlier, $m$ constructs $c(f)$ with a significant influence from already acquired knowledge. Essentially, the relational framework in $m$'s mind (how $m$ defines a relation, what he considers important in a relation, what he expects from a relation) is going to be incompatible with the capabilities and limitations of the AI female. This is obviously because the relational framework drilled into his mind has been based to optimize the functioning of $r(m, f)$, which is defined for corporeal females.
+As I mentioned earlier, $m$ constructs $c(f)$ with a significant influence from already acquired knowledge. Essentially, the relational framework in $m$'s mind (how $m$ defines a relation, what he considers important in a relation, what he expects from a relation) is going to be incompatible with the capabilities and limitations of the AI female. This is obviously because the relational framework drilled into his mind would optimize the functioning of $r(m, f)$, which is defined for corporeal females.
 
 
 
-An obvious manifestation of this incompatibility would be $m$ not having anything to lose in his relation with $c(f)$. In particular $m$ being able to create a new instance of $f$ at will, or even being able to completely undo any actions $f$ performs introduces severe asymmetry in his relation with $c(f)$, making the relation unstable.
+An obvious manifestation of this incompatibility that comes to mind is: $m$ not having anything to lose in his relation with $c(f)$. In particular, $m$ possessing the ability to create a new instance of $f$ at will, and to completely undo any actions $f$ performs introduces severe asymmetry in his relation with $c(f)$, making it unstable.
 
 
 
-The solutions to these problems will have to be from the human side of the relation.
+Ok that's it, I'm bored of this now.

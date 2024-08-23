@@ -109,15 +109,23 @@ Although it has always been possible for people with strong imaginations to crea
 
 ### Creation
 
-An extremely visible example of low-iq people creating mental constructs which are not based on reality are anime waifus. They are ready made mental constructs which people can imprint upon their minds in a very short period of time through a stream of highly condensed information (anime). They are also very effective at capturing people's minds because our monkey brains are susceptible to visual cues typically present in them.
+An extremely visible example of low-iq people creating mental constructs which are not based on reality are anime waifus. They are ready made mental constructs which people can imprint upon their minds in a very short period of time through a stream of highly condensed information (anime). They are also very effective at capturing people's minds because our monkey brains are susceptible to visual cues typically present in them. An interesting possibility is that the emotional rewards of $e()$ are  enhanced in the creation phase of $c(f)$.
 
 
 
-The creation of such models don't have any significant problems which can't be fixed.
+The creation of such constructs don't have any significant problems which can't be fixed.
 
 ### What Happens After
 
+This is where such constructs are doomed to dysfunctionality due to the following:
 
+1. $m$ doesn't have an infinite and high quality source of information to sustain $c(f)$.
+
+2. There is absolutely no interactivity. (the most $m$ can do is buy a waifu body pillow xd). This decreases the motivation to retain $c(f)$ as there is no intimacy and hence $e()$ induces severely muted emotions after the initial creation phase of $c(f)$.
+
+
+
+Eventually, $c(f)$ loses its importance to $m$, and $m$ searches for a new waifu, $f'$.
 
 ## AI Relations
 

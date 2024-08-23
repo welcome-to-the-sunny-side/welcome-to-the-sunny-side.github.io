@@ -50,7 +50,7 @@ It is easy to see (and it's not just a re-framed view of the same physical reali
 
 ### Mental Constructs
 
-By a "mental construct" of $f$, I mean data structure which stores several characteristics of $f$ (a lot of this information is stored implicitly, for example in the form of real world interactions). It also functions like a predictive model (predicts responses of $f$ to external stimuli with a decently high probability). $c(f)$ isn't solely created by information from $f$ either, there is a significant influence from the desires and biases of $m$ from knowledge acquired previously.
+By a "mental construct" of $f$, I mean data structure which stores several characteristics of $f$ (a lot of this information is stored implicitly, for example in the form of memories of real world interactions). It also functions like a predictive model (predicts responses of $f$ to external stimuli with a decently high probability). $c(f)$ isn't solely created by information from $f$ either, there is a significant influence from the desires and biases of $m$ from knowledge acquired previously.
 
 Let us define $c(f)$ to be the mental construct of $f$ created by $m$. $c(f)$ is inertially dynamic: It does change over time, but it cannot change too quickly, by too great of an amount if the relationship is to remain valid/stable.
 

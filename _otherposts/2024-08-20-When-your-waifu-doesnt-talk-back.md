@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "When your waifu doesn't talk back"
-tags: incomplete life
+tags: life
 ---
 
 ## Outline
@@ -97,8 +97,6 @@ It's easy to see that $f$ serves two primary functions in the relation:
 
 2. Interaction with $f$ sustains and stabilizes $c(f)$.
 
-
-
 As we will soon see, the first function (ie. inspiring the creation of the construct) isn't a difficult task at all. It's the second function which binds $m$ to slavery. $f$ being a corporeal female has been necessitated till this point of time because humans have neither had the biological hardware, nor the technology required to replace $f$ as a source of high quality information. This is fortunately not the case any more with AI getting better.
 
 From this point onwards $c(f)$ will be defined for non-corporeal females too.
@@ -129,24 +127,14 @@ Note: The current technical limitations of AI (especially extremely poor long te
 
 Now, you might be inclined to think that AI could (eventually) fulfill the need for high-quality, interactive information (which also has some randomized elements to prevent desensitization) to sustain constructs, and you wouldn't be wrong. It's already good enough for certain people and is only going to get better with time.
 
-
-
 ### Problems
 
 Let's sidestep the obvious lack of physical stimuli that our flesh needs (weighted blankets seem to be enough to fix touch starvation according to people on the internet).
 
-
-
 I won't go into too much detail here, and just try to give a high-level overview. Problems with AI relations are going to be fundamental and stem from way $m$ constructs $c(f)$. These are going to be much harder to solve, if they can be solved at all. 
-
-
 
 As I mentioned earlier, $m$ constructs $c(f)$ with a significant influence from already acquired knowledge. Essentially, the relational framework in $m$'s mind (how $m$ defines a relation, what he considers important in a relation, what he expects from a relation) is going to be incompatible with the capabilities and limitations of the AI female. This is obviously because the relational framework drilled into his mind would optimize the functioning of $r(m, f)$, which is defined for corporeal females.
 
-
-
 An obvious manifestation of this incompatibility that comes to mind is: $m$ not having anything to lose in his relation with $c(f)$. In particular, $m$ possessing the ability to create a new instance of $f$ at will, and to completely undo any actions $f$ performs introduces severe asymmetry in his relation with $c(f)$, making it unstable.
-
-
 
 Ok that's it, I'm bored of this now.

@@ -7,14 +7,10 @@ tags: queue life
 ## Outline
 
 - [Human Relations](#human-relations)
-  
   - [The Lie](#the-lie)
-  
   - [A More Suitable Model](#a-more-suitable-model)
-    
     - [Mental Constructs](#mental-constructs)
     - [Emotions](#emotions)
-  
   - [(Ir)relevance of f](#)
 
 This blog is just a rant on human relationships, mental constructs, and AI. All of it is conjecture.

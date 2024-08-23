@@ -119,7 +119,7 @@ This is where such constructs are doomed to dysfunctionality. This is mainly due
 
 2. There isn't any interactivity (the most $m$ can do is buy a waifu body pillow xd). This decreases the motivation to retain $c(f)$ as there is no intimacy and hence $e()$ doesn't function well.
 
-When a construct is not sustained, it withers away while inducing negative emotions in $m$. Our brains desperately search for information to sustain the construct (people consuming more and more anime, buying anime posters, using anime PFPs, buying literal body pillows in extreme cases), but this search inevitably fails and leads to anguish. So, now you know why you feel displeasure when your anime waifu doesn't talk back.
+When a construct is not sustained, it withers away while inducing negative emotions in $m$. Our brains desperately search for information to sustain the construct (people consuming more and more anime, buying anime posters, using anime PFPs, buying literal body pillows in extreme cases), but this search inevitably fails and leads to anguish. So, now you know why you feel distressed when your anime waifu doesn't talk back: it's because her mental construct is desperately fighting to stay alive and not getting the sustenance it needs.
 
 ## AI Relations
 

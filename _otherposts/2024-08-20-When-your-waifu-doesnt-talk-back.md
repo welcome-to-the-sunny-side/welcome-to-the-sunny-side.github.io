@@ -105,8 +105,6 @@ From this point onwards $c(f)$ will be defined for non-corporeal females too.
 
 Although it has always been possible for people with strong imaginations to create detailed mental constructs without much aid from external stimuli, it has now also become extremely easy for low-iq people to do the same, with the help of technology. 
 
-
-
 ### Creation
 
 An extremely visible example of low-iq people creating mental constructs which are not based on reality are anime waifus. They are ready made mental constructs which people can imprint upon their minds in a very short period of time through a stream of highly condensed information (anime). They are also very effective at capturing people's minds because they are idealized our monkey brains are susceptible to visual cues typically present in them. An interesting possibility is that the emotional rewards of $e()$ are  enhanced in the creation phase of $c(f)$.
@@ -117,7 +115,7 @@ The creation of such constructs don't have any significant problems which can't 
 
 ### What Happens After
 
-This is where such constructs are doomed to dysfunctionality due to the following:
+This is where such constructs are doomed to dysfunctionality. This is mainly due to the following:
 
 1. $m$ doesn't have an infinite and high quality source of information to sustain $c(f)$.
 

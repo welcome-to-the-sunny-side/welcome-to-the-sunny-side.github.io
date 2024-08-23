@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "When your waifu doesn't talk back"
-tags: queue life
+tags: incomplete life
 ---
 
 ## Outline
@@ -11,15 +11,15 @@ tags: queue life
   - [A More Suitable Model](#a-more-suitable-model)
     - [Mental Constructs](#mental-constructs)
     - [Emotions](#emotions)
-  - [(Ir)relevance of f](#(ir)relevance-of-f)
-- [Unsustained Constructs](#unsustained constructs)
+  - [(Ir)relevance of f](#irrelevance-of-f)
+- [Unsustained Constructs](#unsustained-constructs)
   - [Creation](#creation)
   - [What Happens After](#what-happens-after)
 - [AI Relations](#ai)
-  - [Problems](#problems)
-  - 
 
-This blog is just a rant on human relationships, mental constructs, and AI. All of it is conjecture.
+
+
+This blog is just a rant on human relations, mental constructs, and AI. All of it is conjecture.
 
 ## Human Relations
 
@@ -50,7 +50,9 @@ It is easy to see (and it's not just a re-framed view of the same physical reali
 
 ### Mental Constructs
 
-By a "mental construct" of $f$, I mean a kind of data structure which stores several characteristics of $f$ (a lot of this information is stored implicitly, for example in the form of real world interactions). It also functions like a predictive model (predicts responses of $f$ to external stimuli with a decently high probability).
+By a "mental construct" of $f$, I mean data structure which stores several characteristics of $f$ (a lot of this information is stored implicitly, for example in the form of real world interactions). It also functions like a predictive model (predicts responses of $f$ to external stimuli with a decently high probability). $c(f)$ isn't solely created by information from $f$ either, there is a significant influence from the desires and biases of $m$ from knowledge acquired previously.
+
+
 
 Let us define $c(f)$ to be the mental construct of $f$ created by $m$. $c(f)$ is inertially dynamic: It does change over time, but it cannot change too quickly, by too great of an amount if the relationship is to remain valid/stable.
 
@@ -129,4 +131,8 @@ Note: The current technical limitations of AI (especially extremely poor long te
 
 
 
-Now, a layman might be inclined to think AI would fix  
+Now, a layman might be inclined to think that AI 
+
+
+
+[to be finished]

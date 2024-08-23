@@ -9,6 +9,7 @@ permalink: /editorial/
   
   {%- if site.posts.size > 0 -%}
     <h2 class="post-list-heading">{{ "Editorials" }}</h2>
+    <p>Somewhat detailed editorials to cute problems.</p> 
     <ul class="post-list">
       {%- for post in site.editorialposts -%}
       {%- if post.tags contains "editorial" -%}

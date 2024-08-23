@@ -8,7 +8,8 @@ permalink: /algorithm/
 
   
   {%- if site.posts.size > 0 -%}
-    <h2 class="post-list-heading">{{ "Algorithms" }}</h2> 
+    <h2 class="post-list-heading">{{ "Algorithms" }}</h2>
+    <p>Descriptions of algorithmic techniques</p> 
     <ul class="post-list">
       {%- for post in site.posts -%}
       {%- if post.tags contains "algorithm" -%}

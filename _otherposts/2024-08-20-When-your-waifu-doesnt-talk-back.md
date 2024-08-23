@@ -121,12 +121,10 @@ This is where such constructs are doomed to dysfunctionality due to the followin
 
 1. $m$ doesn't have an infinite and high quality source of information to sustain $c(f)$.
 
-2. There is absolutely no interactivity. (the most $m$ can do is buy a waifu body pillow xd). This decreases the motivation to retain $c(f)$ as there is no intimacy and hence $e()$ induces severely muted emotions after the initial creation phase of $c(f)$.
+2. There is absolutely no interactivity. (the most $m$ can do is buy a waifu body pillow xd). This decreases the motivation to retain $c(f)$ as there is no intimacy and hence $e()$ doesn't function well.
 
-
-
-Eventually, $c(f)$ loses its importance to $m$, and $m$ searches for a new waifu, $f'$.
+When a construct is not sustained, it withers away while inducing negative emotions in $m$. This is why people become sad when their waifu doesn't say anything back to them.
 
 ## AI Relations
 
-Well, as the title suggests, 
+Now, a layman might think that 

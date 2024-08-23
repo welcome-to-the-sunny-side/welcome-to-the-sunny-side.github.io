@@ -67,6 +67,8 @@ defaults:
 google_analytics: G-16WZ1HKZT7
 
 collections:
+  editorialposts:
+    output: true
   otherposts:
     output: true
 

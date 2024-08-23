@@ -4,7 +4,7 @@ layout: default
 <div class="post">
   <h1>Tag: {{ page.tag }}</h1>
   <ul>
-    {% assign combined_posts = site.posts | concat: site.otherposts %}
+    {% assign combined_posts = site.posts | concat: site.otherposts | concat: site.editorialposts %}
     {% assign tagged_posts = combined_posts | where: "tags", page.tag %}
     {% assign sorted_posts = tagged_posts | sort: "date" | reverse %}
 

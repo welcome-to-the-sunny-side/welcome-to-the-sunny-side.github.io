@@ -9,7 +9,7 @@ layout: default
 
   {{ content }}
   
-  {%- assign all_posts = site.posts | concat: site.otherposts | sort: "date" -%}
+  {%- assign all_posts = site.posts | concat: site.otherposts | concat: site.editorialposts | sort: "date" -%}
   {%- assign all_posts_sorted = all_posts | sort: "date" | reverse -%}
 
   {%- if all_posts_sorted.size > 0 -%}

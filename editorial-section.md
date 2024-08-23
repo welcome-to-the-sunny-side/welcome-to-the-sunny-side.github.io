@@ -10,7 +10,7 @@ permalink: /editorial/
   {%- if site.posts.size > 0 -%}
     <h2 class="post-list-heading">{{ "Editorials" }}</h2>
     <ul class="post-list">
-      {%- for post in site.posts -%}
+      {%- for post in site.editorialposts -%}
       {%- if post.tags contains "editorial" -%}
       {%- unless post.tags contains "queue" -%}
 	  <li>

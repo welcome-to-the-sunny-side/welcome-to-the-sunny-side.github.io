@@ -34,7 +34,7 @@ How is this asserted?
 
 $m$ is continuously subjected to propaganda and social interactions dictated by norms part of the larger framework containing $r$, both of which exploit irrational (or at least not obviously rational) parts of his monkey brain.
 
-This mental framework, although functional in stable conventional societies becomes obsolete as technology advances. More specifically, as we are exposed to simulated (not necessarily) interactive female constructs which mirror their corporeal counterparts with ever-increasing accuracy, $r$ begins to become incompatible with a functional society. An immediately obvious flaw (and the only relevant one in the context of this blog) with $r$ is that $f$ **doesn't need to be a corporeal entity**. $f$'s "existence" is neither fundamentally necessary, nor even relevant (beyond a certain capacity) to $m$'s emotional dependence on $f$.
+This mental framework, although functional in stable conventional societies becomes obsolete as technology advances. More specifically, as we are exposed to simulated (not necessarily) interactive female constructs which mirror their corporeal counterparts with ever-increasing accuracy, $r$ begins to become incompatible with a functional society. An immediately obvious flaw (and the only relevant one in the context of this blog) with $r$ is that $f$ **doesn't need to be a tangible entity**. $f$'s "existence" is neither fundamentally necessary, nor even relevant (beyond a certain capacity) to $m$'s emotional dependence on $f$.
 
 ## A more suitable model
 

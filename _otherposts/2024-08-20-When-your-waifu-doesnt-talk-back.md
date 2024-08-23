@@ -11,7 +11,8 @@ tags: queue life
   - [A More Suitable Model](#a-more-suitable-model)
     - [Mental Constructs](#mental-constructs)
     - [Emotions](#emotions)
-  - [(Ir)relevance of f](#)
+  - [(Ir)relevance of f](#(ir)relevance-of-f)
+- [Unsustained Constructs](#unsustained constructs)
 - [AI Relations](#ai)
   - [Problems](#problems)
   - 
@@ -28,7 +29,8 @@ I don't want this blog to devolve into endless semantic bs, so let's just define
 
 - $M$ : set of males
 - $F$ : set of females
-</details>
+  
+  </details>
 
 ### The Lie
 
@@ -95,6 +97,16 @@ It's easy to see that $f$ serves two primary functions in the relation:
 
 $f$ being a corporeal female has been necessitated till this point of time because humans have neither had the biological hardware, nor the technology required to replace $f$ as a source of high quality information. This is fortunately not the case any more with AI getting better.
 
-## AI
+From this point onwards $c(f)$ will be defined for non-corporeal females too.
+
+## Unsustained Constructs
+
+Although it has always been possible for people with strong imaginations to create detailed mental constructs without much aid from external stimuli, it has now also become extremely easy for low-iq people to do the same, with the help of technology. 
+
+An extremely visible example of this are anime waifus. They are ready made mental constructs which people can imprint upon their minds in a very short period of time through a stream of highly condensed information (anime). Now, once the construct $c(f)$ is created, 
 
 
+
+## AI Relations
+
+Well, as the title suggests, 

@@ -13,6 +13,8 @@ tags: queue life
     - [Emotions](#emotions)
   - [(Ir)relevance of f](#(ir)relevance-of-f)
 - [Unsustained Constructs](#unsustained constructs)
+  - [Creation](#creation)
+  - [What Happens After](#what-happens-after)
 - [AI Relations](#ai)
   - [Problems](#problems)
   - 
@@ -103,7 +105,17 @@ From this point onwards $c(f)$ will be defined for non-corporeal females too.
 
 Although it has always been possible for people with strong imaginations to create detailed mental constructs without much aid from external stimuli, it has now also become extremely easy for low-iq people to do the same, with the help of technology. 
 
-An extremely visible example of this are anime waifus. They are ready made mental constructs which people can imprint upon their minds in a very short period of time through a stream of highly condensed information (anime). Now, once the construct $c(f)$ is created, 
+
+
+### Creation
+
+An extremely visible example of low-iq people creating mental constructs which are not based on reality are anime waifus. They are ready made mental constructs which people can imprint upon their minds in a very short period of time through a stream of highly condensed information (anime). They are also very effective at capturing people's minds because our monkey brains are susceptible to visual cues typically present in them.
+
+
+
+The creation of such models don't have any significant problems which can't be fixed.
+
+### What Happens After
 
 
 

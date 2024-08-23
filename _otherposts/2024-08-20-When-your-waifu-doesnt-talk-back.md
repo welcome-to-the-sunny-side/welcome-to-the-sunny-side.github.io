@@ -22,14 +22,8 @@ I will only analyze non-platonic relationships here. I want to maintain some sem
 I don't want this blog to devolve into endless semantic bs, so let's just define a non-platonic relationship to be an indicator of mutual emotional dependence between two entities, with the desire for "emotional contentedness" being a salient (and extremely exploitable) feature of the human condition.
 
 <details><summary>Definitions</summary>
-
 - $M$ : set of males
 - $F$ : set of females
-
-</details>
-
-</details>
-
 </details>
 
 ### The Lie

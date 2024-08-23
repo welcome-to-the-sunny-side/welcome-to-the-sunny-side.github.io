@@ -42,13 +42,9 @@ It is easy to see (and it's not just a re-framed view of the same physical reali
 
 ### Mental Constructs
 
-By a "mental construct" of $f$, I mean a kind of data structure which stores several characteristics of $f$, complemented with a lot of other information like . It also has significant predictive power (predicts responses of $f$ to external stimuli with a decently high probability).
-
- 
+By a "mental construct" of $f$, I mean a kind of data structure which stores several characteristics of $f$ (a lot of this information is stored implicitly, for example in the form of real world interactions). It also functions like a predictive model (predicts responses of $f$ to external stimuli with a decently high probability).
 
 Let us define $c(f)$ to be the mental construct of $f$ created by $m$. $c(f)$ is inertially dynamic: It does change over time, but it cannot change too quickly, by too great of an amount if the relationship is to remain valid/stable.
-
-
 
 How is $c(f)$ updated? Most updates occur when $m$ makes small changes to $c(f)$ after every exchange of information with $f$.  We define a function $\text{interact} (m, f)$ to describe this process:
 
@@ -65,11 +61,7 @@ def interact(m, f):
 
 This process allows for much greater changes in the initial phase of a relationship, when $c(f)$ is in its infancy (changes in this stage are more of "constructive additions" than modifications). Changes eventually decrease in amount and $c(f)$ lazily asymptotes to something.
 
-
-
 Now, although the modifying strength of the updates is the strongest when the $\text{info}$ passed to $\text{mentally\_interact} ()$ is generated from $\text{interact} ()$, it is not always generated there. An examples of updates which do not originate from $\text{interact} ()$ would be when $m$ receives information about $f$ from some third party.
-
- 
 
 When starved of interaction with $f$ (the primary source of $c(f)$ relevant information) $m$ (who is addicted to $e(m, c(f), \text{info})$ for reasons that will be explained later) can also engage in certain activities which lead to calls of $\text{mentally\_interact} (m, c(f), \text{info})$. Some of these could be:
 
@@ -81,11 +73,7 @@ When starved of interaction with $f$ (the primary source of $c(f)$ relevant info
 
 Let's recall that a relationship is defined as emotional dependence. Where are the emotions in this model?
 
-
-
 Emotions are induced when $e(m, c(f), \text{info})$ is called. How exactly does that happen? I have some ideas but explaining them here would make this blog too long, so let's just hope it's not relevant for now. We can consider $e$ to be a black box which takes in $\text{info}$, does some computation on $\text{info}$ in the context of $c(f)$, and subsequently induces emotions in $m$ based on results of the computation.
-
-
 
 Important properties of these induced emotions:
 

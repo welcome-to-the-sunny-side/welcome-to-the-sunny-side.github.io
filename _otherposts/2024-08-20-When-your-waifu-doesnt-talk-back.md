@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "When your waifu doesn't talk back"
-tags: life
+tags: thoughts
 ---
 
 ## Outline

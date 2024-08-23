@@ -11,6 +11,7 @@ permalink: /other/
   
   {%- if all_posts_sorted.size > 0 -%}
     <h2 class="post-list-heading">{{ "Other" }}</h2>
+    <p>"(mostly spam)"</p>
     <ul class="post-list">
       {%- for post in all_posts_sorted -%}
       {%- unless post.tags contains "queue" -%}

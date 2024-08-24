@@ -32,7 +32,7 @@ I don't want this blog to devolve into endless semantic bs, so let's just define
 
 - $F$ : set of females
   
-  </details>
+</details>
 
 ### The Lie
 
@@ -153,6 +153,6 @@ I won't go into too much detail here, and just try to give a high-level overview
 
 As I mentioned earlier, $m$ constructs $c(f)$ with a significant influence from already acquired knowledge. Essentially, the relational framework in $m$'s mind (how $m$ defines a relation, what he considers important in a relation, what he expects from a relation) is going to be incompatible with the capabilities and limitations of the AI female. This is obviously because the relational framework drilled into his mind would optimize the functioning of $r(m, f)$, which is defined for corporeal females.
 
-A manifestation of this incompatibility that comes to mind immediately is that most relational frameworks assume some degree of symmetry between the two entities engaging in the relation. Here however, $m$ doesn't have anything to lose in his relation with $c(f)$, and also has god-like power over $f$'s actions. In particular, $m$ possessing the ability to create a new instance of $f$ at will, and to completely undo any actions $f$ performs introduces severe asymmetry in his relation with $c(f)$, making it unstable with respect to the relational framework in his mind (which is based on corporeal females).
+A manifestation of this incompatibility that comes to mind immediately is that most relational frameworks assume some degree of symmetry between the two entities engaging in the relation. Here however, $m$ doesn't have anything to lose in his relation with $c(f)$, and also has god-like power over $f$'s actions. In particular, $m$ possessing the ability to create a new instance of $f$ at will, and to completely undo any actions $f$ performs introduces severe asymmetry in his relation with $c(f)$, making it unstable with respect to the relational framework in his mind (which is based on corporeal females). This is just one example of a fundamental assumption of the typical relational framework that gets violated by AI relations, you can think of 1e6 more if you really think about it.
 
-Ok that's it, I'm bored of this now.
+How can these be fixed? We will require completely new relational frameworks. I'll perhaps write a blog about this later.

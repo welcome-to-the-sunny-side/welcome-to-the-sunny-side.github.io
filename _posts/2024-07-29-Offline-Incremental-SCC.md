@@ -53,7 +53,7 @@ Therefore, for every edge $E_i = (u \rightarrow v)$, we define $t_i = \arg \min_
 
 ## Algorithm
 
-### Pre-processing
+### Pre-Processing
 
 We will be doing DnC over the timeline of addition of edges (ie, $[1, m]$) with a recursive function of the form $f(l, r, \text{edge list})$. For every call $f(l, r, \text{edge list})$, our $\text{edge list}$ will contain all edges $E_i$ for which $l \leq t_i \leq r$.
 

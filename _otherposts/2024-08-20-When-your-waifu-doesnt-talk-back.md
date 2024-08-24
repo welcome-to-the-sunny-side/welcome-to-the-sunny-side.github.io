@@ -125,7 +125,7 @@ When a construct is not sustained, it withers away while inducing negative emoti
 
 <div style="text-align:center">
   <figure>
-    <img src="/assets/images/constructs/construct-dying.png" alt="Description of the image" />
+    <img src="/assets/images/construct/construct-dying.png"/>
     <figcaption>POV: construct abruptly dying</figcaption>
   </figure>
 </div>

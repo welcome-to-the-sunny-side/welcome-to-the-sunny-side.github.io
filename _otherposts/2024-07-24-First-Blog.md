@@ -2,6 +2,7 @@
 layout: post
 title: First Blog
 tags: notag homepage
+comments: true
 ---
 
 Hello, I feel obliged to indicate what this site is going to be for in my first blog so I am going to do so. I intend to write some blogs on algorithms, competitive programming, personal stuff, maybe even some short stories. I might also write some blogs explaining the solutions of problems I took a particular liking to, such blogs will be lower in quality and higher in number. I should probably learn how "Jekyll" works. Bye for now.

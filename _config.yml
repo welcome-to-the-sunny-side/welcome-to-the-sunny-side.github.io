@@ -76,6 +76,10 @@ sass:
   load_paths:
     - _sass
 
+disqus:
+  shortname: https-welcome-to-the-sunny-side-github-io
+
+
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to

@@ -50,9 +50,9 @@ It is easy to see (and it's not just a re-framed view of the same physical reali
 
 ### Mental Constructs
 
-By a "mental construct" of $f$, I mean data structure which stores several characteristics of $f$ (a lot of this information is stored implicitly, for example in the form of memories of real world interactions). It also functions like a predictive model (predicts responses of $f$ to external stimuli with a decently high probability). $c(f)$ isn't solely created by information from $f$ either, there is a significant influence from the desires and biases of $m$ from knowledge acquired previously.
+By a "mental construct" of $f$, I mean data structure which stores several characteristics of $f$ (a lot of this information is stored implicitly, for example in the form of memories of real world interactions). It also functions like a predictive model (predicts responses of $f$ to external stimuli with a decently high probability).
 
-Let us define $c(f)$ to be the mental construct of $f$ created by $m$. $c(f)$ is inertially dynamic: It does change over time, but it cannot change too quickly, by too great of an amount if the relationship is to remain valid/stable.
+Let us define $c(f)$ to be the mental construct of $f$ created by $m$. $c(f)$ is inertially dynamic: It does change over time, but it cannot change too quickly, by too great of an amount if the relationship is to remain valid/stable. $c(f)$ isn't solely created by information from $f$ either, there is a significant influence from the desires and biases of $m$ from knowledge acquired previously.
 
 How is $c(f)$ updated? Most updates occur when $m$ makes small changes to $c(f)$ after every exchange of information with $f$.  We define a function $\text{interact} (m, f)$ to describe this process:
 
@@ -85,9 +85,11 @@ Emotions are induced when $e(m, c(f), \text{info})$ is called. How exactly does 
 
 Important properties of these induced emotions:
 
-1. They are generally positive, and $m$ derives pleasure from them. They are also strongly addictive.
+1. They are generally positive, and $m$ derives pleasure from them. 
 
-2. They affect updates to $c(f)$ alongside $\text{info}$.
+2. They are strongly addictive.
+
+3. They affect updates to $c(f)$ alongside $\text{info}$.
 
 ### (Ir)relevance of f
 
@@ -107,9 +109,9 @@ Although it has always been possible for people with strong imaginations to crea
 
 ### Creation
 
-An extremely visible example of low-iq people creating mental constructs which are not based on reality are anime waifus. They are ready made mental constructs which people can imprint upon their minds in a very short period of time through a stream of highly condensed information (anime). They are also very effective at capturing people's minds because they are idealized and our monkey brains are susceptible to visual cues typically present in them. An interesting possibility is that the emotional rewards of $e()$ are  enhanced in the creation phase of $c(f)$.
+An extremely visible example of low-iq people creating mental constructs which are not based on reality are anime waifus. They are ready made mental constructs which people can imprint upon their minds in a very short period of time through a stream of highly condensed information (anime). They are also very effective at capturing people's minds because they are idealized and our monkey brains are susceptible to visual cues typically present in them. An interesting possibility is that the emotional rewards of $e()$ are  enhanced in the creation phase of $c(f)$. Since the creation of $c(f)$ here doesn't require any effort, it might provide additional motivation. 
 
-The creation of such constructs don't have any significant problems which can't be fixed.
+The creation of such constructs don't have any significant problems which can't be fixed.  
 
 ### What Happens After
 
@@ -120,6 +122,14 @@ This is where such constructs are doomed to dysfunctionality. This is mainly due
 2. There isn't any interactivity (the most $m$ can do is buy a waifu body pillow xd). This decreases the motivation to retain $c(f)$ as there is no intimacy and hence $e()$ doesn't function well.
 
 When a construct is not sustained, it withers away while inducing negative emotions in $m$. Our brains desperately search for information to sustain the construct (people consuming more and more anime, buying anime posters, using anime PFPs, buying literal body pillows in extreme cases), but this search inevitably fails and leads to anguish. So, now you know why you feel distressed when your anime waifu doesn't talk back: it's because her mental construct is desperately fighting to stay alive and not getting the sustenance it needs.
+
+<div style="text-align:center">
+  <figure>
+    <img src="/assets/images/constructs/construct-dying.png" alt="Description of the image" />
+    <figcaption>POV: construct abruptly dying</figcaption>
+  </figure>
+</div>
+
 
 ## AI Relations
 

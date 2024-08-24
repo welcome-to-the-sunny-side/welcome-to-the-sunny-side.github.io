@@ -76,8 +76,8 @@ sass:
   load_paths:
     - _sass
 
-disqus:
-  shortname: https-welcome-to-the-sunny-side-github-io
+#disqus:
+#  shortname: https-welcome-to-the-sunny-side-github-io
 
 
 # Exclude from processing.

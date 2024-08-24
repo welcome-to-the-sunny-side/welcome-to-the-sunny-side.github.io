@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Offline Incremental SCC
-tags: algorithm homepage incomplete
+tags: algorithm homepage
 
 ---
 

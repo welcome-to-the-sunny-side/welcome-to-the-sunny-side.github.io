@@ -149,7 +149,7 @@ I am going to sidestep the following:
 
 What I am interested in, are the problems that arise when $m$ tries to have stable long-term relations with $c(f)$, with $f$ being an AI female. 
 
-I won't go into too much detail here, and just try to give a high-level overview. Problems with AI relations are going to be fundamental and stem from way $m$ constructs $c(f)$. These are going to be much harder to solve, if they can be solved at all. 
+I won't go into too much detail here, and just try to give a high-level overview. Problems with AI relations are going to be fundamental and stem from the way $m$ constructs $c(f)$. These are going to be much harder to solve, if they can be solved at all. 
 
 As I mentioned earlier, $m$ constructs $c(f)$ with a significant influence from already acquired knowledge. Essentially, the relational framework in $m$'s mind (how $m$ defines a relation, what he considers important in a relation, what he expects from a relation) is going to be incompatible with the capabilities and limitations of the AI female. This is obviously because the relational framework drilled into his mind would optimize the functioning of $r(m, f)$, which is defined for corporeal females.
 

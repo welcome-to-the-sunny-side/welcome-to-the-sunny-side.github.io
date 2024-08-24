@@ -50,7 +50,7 @@ It is easy to see (and it's not just a re-framed view of the same physical reali
 
 ### Mental Constructs
 
-By a "mental construct" of $f$, I mean data structure which stores several characteristics of $f$ (a lot of this information is stored implicitly, for example in the form of memories of real world interactions). It also functions like a predictive model (predicts responses of $f$ to external stimuli with a decently high probability).
+By a "mental construct" of $f$, I mean a data structure which stores several characteristics of $f$ (a lot of this information is stored implicitly, for example in the form of memories of real world interactions). It also functions like a predictive model (predicts responses of $f$ to external stimuli with a decently high probability).
 
 Let us define $c(f)$ to be the mental construct of $f$ created by $m$. $c(f)$ is inertially dynamic: It does change over time, but it cannot change too quickly, by too great of an amount if the relationship is to remain valid/stable. $c(f)$ isn't solely created by information from $f$ either, there is a significant influence from the desires and biases of $m$ from knowledge acquired previously.
 
@@ -69,11 +69,11 @@ def interact(m, f):
 
 This process allows for much greater changes in the initial phase of a relationship, when $c(f)$ is in its infancy (changes in this stage are more of "constructive additions" than modifications). Changes eventually decrease in amount and $c(f)$ lazily asymptotes to something.
 
-Now, although the modifying strength of the updates is the strongest when the $\text{info}$ passed to $\text{mentally\_interact} ()$ is generated from $\text{interact} ()$, it is not always generated there. An examples of updates which do not originate from $\text{interact} ()$ would be when $m$ receives information about $f$ from some third party.
+Now, although the modifying strength of the updates is the strongest when the $\text{info}$ passed to $\text{mentally\_interact} ()$ is generated from $\text{interact} ()$, it is not always generated there. An example of an update which doesn't originate from $\text{interact} ()$ would be when $m$ receives information about $f$ from some third party.
 
 When starved of interaction with $f$ (the primary source of $c(f)$ relevant information) $m$ (who is addicted to $e(m, c(f), \text{info})$ for reasons that will be explained later) can also engage in certain activities which lead to calls of $\text{mentally\_interact} (m, c(f), \text{info})$. Some of these could be:
 
-1. Weakly simulate $f$ with his own mind (ie. daydream). This essentially involves $m$ using his local $\text{RNG()}$ (with bias introduced by $c(f)$) for generating $\text{info}$ instead of relying on the physical world.
+1. Weakly simulate $f$ with his own mind (ie. daydream). This involves $m$ using his local $\text{RNG()}$ (with bias introduced by $c(f)$) for generating $\text{info}$ instead of relying on the physical world.
 
 2. Project $f$ onto other female constructs, and model information exchanged with the female construct as information exchanged with $f$ (for example, read literature with romantic elements and be reminded of $f$).
 
@@ -139,7 +139,15 @@ Now, you might be inclined to think that AI could (eventually) fulfill the need 
 
 ### Problems
 
-Let's sidestep the obvious lack of physical stimuli that our flesh needs (weighted blankets seem to be enough to fix touch starvation according to people on the internet).
+I am going to sidestep the following:
+
+1. Lack of physical stimuli that our flesh needs (weighted blankets seem to be enough to fix touch starvation according to people on the internet).
+
+2. Societal problems: How does society function if a significant percentage of the male population can easily obtain the reward that earlier motivated them to contribute in society? I don't know or care.
+
+3. Effects on corporeal females: Would negatively affect them, but it would be funny to see them suffer through the loneliness that they so gleefuly inflict.
+
+What I am interested in, are the problems that arise when $m$ tries to have stable long-term relations with $c(f)$, with $f$ being an AI female. 
 
 I won't go into too much detail here, and just try to give a high-level overview. Problems with AI relations are going to be fundamental and stem from way $m$ constructs $c(f)$. These are going to be much harder to solve, if they can be solved at all. 
 

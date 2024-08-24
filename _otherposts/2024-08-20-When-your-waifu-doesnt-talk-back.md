@@ -145,7 +145,7 @@ I am going to sidestep the following:
 
 2. Societal problems: How does society function if a significant percentage of the male population can easily obtain the reward that earlier motivated them to contribute in society? I don't know or care.
 
-3. Effects on corporeal females: Would negatively affect them, but it would be funny to see them suffer through the loneliness that they so gleefully inflict.
+3. Effects on corporeal females: Would negatively affect them, but it would be interesting to see them suffer through the loneliness that they so gleefully inflict.
 
 What I am interested in, are the problems that arise when $m$ tries to have stable long-term relations with $c(f)$, with $f$ being an AI female. 
 

@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.documentElement.setAttribute('data-skin', currentSkin);
     updateTitle(currentSkin);
     updateButtonIcon(currentSkin);
-    updateUtterancesTheme(currentSkin); // Add this line
+    updateUtterancesTheme(currentSkin); // Set the initial theme
 
     // Toggle function
     toggleButton.addEventListener('click', () => {
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.setAttribute('data-skin', currentSkin);
         updateTitle(currentSkin);
         updateButtonIcon(currentSkin);
-        updateUtterancesTheme(currentSkin); // Add this line
+        updateUtterancesTheme(currentSkin); // Update theme on toggle
     });
 });
 
@@ -48,7 +48,7 @@ function updateButtonIcon(skin) {
 function updateUtterancesTheme(skin) {
     const utterancesFrame = document.querySelector('.utterances-frame');
     const theme = skin === 'dark' ? 'github-dark' : 'github-light';
-    
+
     if (utterancesFrame) {
         const message = {
             type: 'set-theme',

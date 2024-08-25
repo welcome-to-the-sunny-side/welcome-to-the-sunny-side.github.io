@@ -17,6 +17,17 @@ document.addEventListener('DOMContentLoaded', () => {
         updateButtonIcon(currentSkin);
         updateUtterancesTheme(currentSkin); // Update theme on toggle
     });
+
+    // Wait for Utterances iframe to be added to the DOM
+    const observer = new MutationObserver(() => {
+        const utterancesFrame = document.querySelector('.utterances-frame');
+        if (utterancesFrame) {
+            updateUtterancesTheme(currentSkin); // Set the initial theme
+            observer.disconnect(); // Stop observing after theme is set
+        }
+    });
+
+    observer.observe(document.getElementById('utterances'), { childList: true });
 });
 
 // Function to update the site title and browser tab title based on skin

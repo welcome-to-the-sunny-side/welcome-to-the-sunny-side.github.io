@@ -1,22 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
     const currentSkin = document.documentElement.getAttribute('data-skin') || 'classic';
-    waitForUtterancesIframe(currentSkin);
+    setTimeout(() => {
+        applyThemeToUtterances(currentSkin);
+    }, 500); // 3-second delay
 });
 
-function waitForUtterancesIframe(skin) {
-    const utterancesContainer = document.getElementById('utterances');
-
-    // Create a MutationObserver to watch for changes in the utterancesContainer
-    const observer = new MutationObserver(() => {
-        const utterancesFrame = document.querySelector('.utterances-frame');
-        if (utterancesFrame) {
-            updateUtterancesTheme(skin);
-            observer.disconnect(); // Stop observing once the iframe is found
-        }
-    });
-
-    // Start observing the utterancesContainer for child additions
-    observer.observe(utterancesContainer, { childList: true });
+function applyThemeToUtterances(skin) {
+    const utterancesFrame = document.querySelector('.utterances-frame');
+    if (utterancesFrame) {
+        updateUtterancesTheme(skin);
+    } else {
+        // If the iframe is not found, try again after a short delay
+        setTimeout(() => {
+            const retryFrame = document.querySelector('.utterances-frame');
+            if (retryFrame) {
+                updateUtterancesTheme(skin);
+            } else {
+                console.log('Utterances iframe still not found after retry');
+            }
+        }, 1000); // 1-second delay before retry
+    }
 }
 
 function updateUtterancesTheme(skin) {
@@ -31,6 +34,6 @@ function updateUtterancesTheme(skin) {
         };
         utterancesFrame.contentWindow.postMessage(message, 'https://utteranc.es');
     } else {
-        console.log('Utterances iframe not found'); // Optional: For debugging
+        console.log('Utterances iframe not found during theme update'); // Optional: For debugging
     }
 }

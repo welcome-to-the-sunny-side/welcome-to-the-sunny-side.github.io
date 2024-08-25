@@ -1,7 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
     const currentSkin = document.documentElement.getAttribute('data-skin') || 'classic';
-    updateUtterancesTheme(currentSkin);
+    waitForUtterancesIframe(currentSkin);
 });
+
+function waitForUtterancesIframe(skin) {
+    const utterancesContainer = document.getElementById('utterances');
+
+    // Create a MutationObserver to watch for changes in the utterancesContainer
+    const observer = new MutationObserver(() => {
+        const utterancesFrame = document.querySelector('.utterances-frame');
+        if (utterancesFrame) {
+            updateUtterancesTheme(skin);
+            observer.disconnect(); // Stop observing once the iframe is found
+        }
+    });
+
+    // Start observing the utterancesContainer for child additions
+    observer.observe(utterancesContainer, { childList: true });
+}
 
 function updateUtterancesTheme(skin) {
     const utterancesFrame = document.querySelector('.utterances-frame');

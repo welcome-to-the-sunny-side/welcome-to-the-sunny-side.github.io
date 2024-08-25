@@ -2,7 +2,6 @@
 layout: post
 title: Offline Incremental SCC
 tags: algorithm homepage
-comments: true
 ---
 
 ## Outline

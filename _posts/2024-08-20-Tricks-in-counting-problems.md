@@ -2,7 +2,6 @@
 layout: post
 title: "Tricks in counting problems"
 tags: competitive-programming algorithm incomplete
-comments: true
 ---
 
 ## Outline

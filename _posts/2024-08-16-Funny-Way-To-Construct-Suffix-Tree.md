@@ -2,8 +2,6 @@
 layout: post
 title: "A funny way to construct suffix tree and do other things"
 tags: algorithm homepage
-comments: true
-
 ---
 
 ## Outline

@@ -2,7 +2,6 @@
 layout: post
 title: "When your waifu doesn't talk back"
 tags: thoughts
-comments: true
 ---
 
 ## Outline

@@ -28,7 +28,7 @@ url: "https://welcome-to-the-sunny-side.github.io" # the base hostname & protoco
 email: nonadhocproblems@gmail.com
 show_excerpts: false # set to true to show excerpts on the homepage
 
-logo: /assets/images/misaki.png
+logo: /assets/images/pfp/misaki.png
 
 theme: minima
 minima:
@@ -45,7 +45,6 @@ header_pages:
  - editorial-section.md
  - other-section.md
  - about.md
-
 
 plugins:
  - jekyll-feed
@@ -99,5 +98,3 @@ sass:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
-
-    

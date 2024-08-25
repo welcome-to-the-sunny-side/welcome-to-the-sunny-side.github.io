@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentSkin = document.documentElement.getAttribute('data-skin') || 'classic';
     setTimeout(() => {
         applyThemeToUtterances(currentSkin);
-    }, 500); // 3-second delay
+    }, 1000); // 1-second delay
 });
 
 function applyThemeToUtterances(skin) {

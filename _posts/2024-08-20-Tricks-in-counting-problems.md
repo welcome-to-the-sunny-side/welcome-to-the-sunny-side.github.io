@@ -60,9 +60,12 @@ $y_i$ : number of elements to remove in the $i$'th query
 
 The answer is simply:
 
-$$ \frac{\prod_{i \mid t_i = 2} {\binom{\vert S_{i - 1}\vert}{y_i}}}{\prod_{i \mid t_i = 1} {x_i !}} $$
+$$ \frac{\prod_{i \mid t_i = 2} {\binom{\vert S_{i - 1}\vert}{y_i} \cdot y_i !}}{\prod_{i \mid t_i = 1} {x_i !}} $$
 
-Why is this so? Well, 
+It is not difficult to see why this is true. Consider what happens if we "pretend" for every type 1 query that all the elements inserted in it were distinct. This makes it very trivial for us to compute the number of ways to perform a type 2 query, which would otherwise be difficult to compute. 
+
+
+Now, once we have computed the final (incorrect) answer, let's "stop pretending" that type 1 queries involved distinct elements. For every type 1 query $i$, it's easy to see that our pretense results in the answer increasing by a factor of $x_i!$. So, we just "fix" the answer by dividing it by $\prod_{i \mid t_i = 1} {x_i !}$. 
 
 ### Example Problems (1)
 

@@ -37,7 +37,7 @@ Let's consider a specific example to illustrate the idea. You have a set $S$, an
 1. Add $x$ elements of the same type to $S$, given that no element of this type has been added before.
 2. Remove $y$ (given that $y \leq \vert S \vert$) elements from $S$, order these $y$ removed elements in any manner, and append them to $p$.
 
-Finally, we need to find the number of distinct lists $p$ we can generate. 
+Finally, you need to find the number of distinct generatable lists $p$. 
 
 <details><summary class ="spoiler-summary">Notation</summary>
 <div class = "spoiler-content">

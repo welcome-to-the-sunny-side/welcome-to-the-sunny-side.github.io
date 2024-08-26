@@ -32,7 +32,7 @@ Consider a problem which involves the following:
 >
 > Finally, you have to find the total number of ways that this process could have been executed.
 
-Let's consider a specific example wherein you have a set $S$, an initially empty list $p$, and the queries are of the following form:
+Let's consider a specific example to illustrate the idea. You have a set $S$, an initially empty list $p$, and have to process queries are of the following form:
 
 1. Add $x$ elements of the same type to $S$, given that no element of this type has been added before.
 2. Remove $y$ (given that $y \leq \vert S \vert$) elements from $S$, order these $y$ removed elements in any manner, and append them to $p$.

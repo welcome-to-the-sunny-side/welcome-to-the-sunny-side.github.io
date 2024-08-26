@@ -5,15 +5,13 @@ permalink: /algorithm/
 ---
 
 <div class="home">
-
-  
   {%- if site.posts.size > 0 -%}
     <h2 class="post-list-heading">{{ "Algorithms" }}</h2>
     <p>Descriptions of algorithmic techniques.</p> 
     <ul class="post-list">
       {%- for post in site.posts -%}
       {%- if post.tags contains "algorithm" -%}
-      {%- unless post.tags contains "queue" -%}
+      {%- unless post.tags contains "draft" -%}
 	  <li>
 	    {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
 	    <span class="post-meta">{{ post.date | date: date_format }}</span>

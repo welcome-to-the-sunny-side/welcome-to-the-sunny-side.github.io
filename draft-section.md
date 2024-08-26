@@ -1,7 +1,7 @@
 ---
 layout: default
-title: "algorithm"
-permalink: /queue/
+title: "draft"
+permalink: /draft/
 ---
 
 <div class="home">
@@ -10,10 +10,11 @@ permalink: /queue/
   {%- assign all_posts_sorted = all_posts | sort: "date" | reverse -%}
   
   {%- if all_posts_sorted.size > 0 -%}
-    <h2 class="post-list-heading">{{ "Queue" }}</h2>
+    <h2 class="post-list-heading">{{ "Drafts" }}</h2>
+    <p>Blogs which don't even deserve the "incomplete" tag</p>
     <ul class="post-list">
       {%- for post in all_posts_sorted -%}
-      {%- if post.tags contains "queue" -%}
+      {%- if post.tags contains "draft" -%}
 	  <li>
 	    {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
 	    <span class="post-meta">{{ post.date | date: date_format }}</span>

@@ -13,7 +13,7 @@ permalink: /editorial/
     <ul class="post-list">
       {%- for post in site.editorialposts -%}
       {%- if post.tags contains "editorial" -%}
-      {%- unless post.tags contains "queue" -%}
+      {%- unless post.tags contains "draft" -%}
 	  <li>
 	    {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
 	    <span class="post-meta">{{ post.date | date: date_format }}</span>

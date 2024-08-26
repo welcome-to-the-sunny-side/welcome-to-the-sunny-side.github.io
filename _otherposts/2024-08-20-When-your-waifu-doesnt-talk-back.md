@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "When your waifu doesn't talk back"
+title: When your waifu doesn't talk back
 tags: thoughts
 ---
 

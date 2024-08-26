@@ -41,19 +41,18 @@ Finally, we need to find the number of distinct lists $p$ we can generate.
 
 <details><summary class ="spoiler-summary">Notation</summary>
 <div class = "spoiler-content">
-
 <ul>
 <li>
-$S_i$ : the set after $i$ operations 
+$S_i$ : the set $S$ after $i$ operations 
 </li>
 <li>
-$t_i$ : type of $i$'th query
+$t_i$ : type of the $i$'th query
 </li>
 <li>
-$x_i$ : number of elements to add
+$x_i$ : number of elements to add in the $i$'th query
 </li>
 <li>
-$y_i$ : number of elements to remove
+$y_i$ : number of elements to remove in the $i$'th query
 </li>
 </ul>
 </div>
@@ -62,6 +61,8 @@ $y_i$ : number of elements to remove
 The answer is simply:
 
 $$ \frac{\prod_{i \mid t_i = 2} {\binom{\vert S_{i - 1}\vert}{y_i}}}{\prod_{i \mid t_i = 1} {x_i !}} $$
+
+Why is this so? Well, 
 
 ### Example Problems (1)
 

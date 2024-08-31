@@ -10,6 +10,8 @@ tags: competitive-programming algorithm incomplete
 - [1. Pretend that elements are distinct](#1-pretend-that-elements-are-distinct)
     - [Idea](#idea-1)
     - [Example Problems](#example-problems-1)
+        - [CF-1799G](#cf-1799g)
+        - [CF-814E](#cf-814e)
 
 ## Introduction
 

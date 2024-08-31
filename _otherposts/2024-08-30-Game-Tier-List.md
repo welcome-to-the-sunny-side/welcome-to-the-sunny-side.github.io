@@ -153,3 +153,6 @@ Demon Souls
 </li>
 
 </ol>
+
+
+<div style="text-align:center"><img src="/assets/images/draw/misaki1.png"/></div>

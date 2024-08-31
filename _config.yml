@@ -42,7 +42,6 @@ minima:
 # this and add the path to the pages in order as they should show up
 header_pages:
  - algorithm-section.md
- - editorial-section.md
  - other-section.md
  - about.md
 

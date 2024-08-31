@@ -97,7 +97,6 @@ I don't have enough math experience to write a fancy generalization for the kind
 
 The algorithm will construct the tree structure in $O(n \cdot \log(n) \cdot x)$.
 
-
 ## Example Problems
 
 ### Problem 1

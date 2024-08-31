@@ -106,7 +106,7 @@ The algorithm will construct the tree structure in $O(n \cdot \log(n) \cdot x)$.
 > You have to process the following queries *online*:
 > 
 > 1. "$1\; m\; x\; v_1\; v_2\; \dots \; v_x$" : Remove the nodes $v_1, v_2 \dots, v_x$ from the set whose maximum element is $m$, and create a new set with these elements.
-> 2. "$2 \; m$" : Let the set whose maximum element is $m$ be $S$. Find some node $x \mid \max_{y \in S}{\text{dis}(x, y)} = \max_{u, v \in S}{\text{dis}(u,v)} $. 
+> 2. "$2 \; m$" : Let the set whose maximum element is $m$ be $S$. Find some node $x \in S \mid \max_{y \in S}{\text{dis}(x, y)} = \max_{u, v \in S}{\text{dis}(u,v)} $. 
 
 <details><summary class ="spoiler-summary">Solution</summary>
 <div class = "spoiler-content">

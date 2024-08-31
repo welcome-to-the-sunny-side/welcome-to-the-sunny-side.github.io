@@ -104,7 +104,7 @@ The algorithm will construct the tree structure in $O(n \cdot \log(n) \cdot x)$.
 > You are given a tree on $n$ nodes. You also have a set containing all nodes, $\{1, 2, \dots , n\}$.
 > You have to process the following queries *online*:
 > 
-> 1. "$1\; m\; x\; v_1\; v_2\; \dots \; v_x$" : Remove the nodes $v_1, v_2 \dots, v_x$ from the set $S$ whose maximum element is $m$, and create a new set with these elements (it is guaranteed that $v_i \in S \; \forall \; i$).
+> 1. "$1\; m\; x\; v_1\; v_2\; \dots \; v_x$" : Remove the nodes $v_1, v_2 \dots, v_x$ from the set $S$ whose maximum element is $m$, and create a new set with these elements (it is guaranteed that there exists some set with maximum element $m$ and $v_i \in S \; \forall \; i$).
 > 2. "$2 \; m$" : Let the set whose maximum element is $m$ be $S$. Find some node $x \in S \mid \max_{y \in S}{\text{dis}(x, y)} = \max_{u, v \in S}{\text{dis}(u,v)} $. 
 
 <details><summary class ="spoiler-summary">Solution</summary>

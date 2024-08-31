@@ -10,6 +10,8 @@ tags: algorithm homepage
 - [Algorithm](#algorithm)
 - [Complexity Analysis](#complexity-analysis)
 - [Generalization](#generalization)
+- [Example Problems](#example-problems)
+    - [Problem 1](#problem-1)
 
 Hello, in this blog I'll share a funny way to construct a suffix tree in $O(n \log^2{n})$ time, for a given string $S$ of length $n$. I am going to call the underlying idea the "Leader Split Trick". It can probably be used to solve other problems too.
 
@@ -94,3 +96,20 @@ I don't have enough math experience to write a fancy generalization for the kind
 3. We want to create a suffix-tree like structure which will contain a (not necessarily unique) internal node corresponding to every pair $(x, y) \in G$ at depth $d_{x, y} = \max(i : f(x, i) = f(y, i))$.
 
 The algorithm will construct the tree structure in $O(n \cdot \log(n) \cdot x)$.
+
+
+## Example Problems
+
+### Problem 1
+
+> You are given a tree on $n$ nodes. You also have a set containing all nodes, $\{1, 2, \dots , n\}$.
+> You have to process the following queries *online*:
+> 
+> 1. "$1\; m\; x\; v_1\; v_2\; \dots \; v_x$" : Remove the nodes $v_1, v_2 \dots, v_x$ from the set whose maximum element is $m$, and create a new set with these elements.
+> 2. "$2 \; m$" : Let the set whose maximum element is $m$ be $S$. Find some node $x \mid \max_{y \in S}{\text{dis}(x, y)} = \max_{u, v \in S}{\text{dis}(u,v)} $. 
+
+<details><summary class ="spoiler-summary">Solution</summary>
+<div class = "spoiler-content">
+[to be updated]
+</div>
+</details>

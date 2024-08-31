@@ -9,7 +9,6 @@ tags: algorithm homepage
 - [Problem](#problem)
 - [Algorithm](#algorithm)
 - [Complexity Analysis](#complexity-analysis)
-- [Generalization](#generalization)
 - [Example Problems](#example-problems)
     - [Problem 1](#problem-1)
 
@@ -84,18 +83,6 @@ The above problem is computationally equivalent to [Randomized Quicksort](https:
 It's not difficult to see that our split operations are simply the operations that will occur in the above problem in a **reversed** manner (Formally, we can define a bijective relationship between the two sets of operations, such that related sets of operations will occur with the same probability) . Therefore, the time taken by all the split operations is $O(n \log{n})$.
 
 However, every time we perform a split operation (merge in reverse), we also compute $\text{dis}$ for the child set $C$ (which gets merged into the parent set), and that takes $O(\vert C \vert \log{n})$ time. Thus, our entire algorithm has an expected time complexity of $O(n \log^2{n})$.
-
-## Generalization
-
-I don't have enough math experience to write a fancy generalization for the kind of problems that can be solved with this, so I'll just describe the key requirements. It can be used to solve a problem with the following setup:
-
-1. We have a set $G$ of $n$ variables, and some function $f(x, j)$.
-
-2. We can find $\max{i} : f(x, j) = f(y, j) \quad \forall j \in [0, i]$ in $O(x)$ time.
-
-3. We want to create a suffix-tree like structure which will contain a (not necessarily unique) internal node corresponding to every pair $(x, y) \in G$ at depth $d_{x, y} = \max(i : f(x, i) = f(y, i))$.
-
-The algorithm will construct the tree structure in $O(n \cdot \log(n) \cdot x)$.
 
 ## Example Problems
 

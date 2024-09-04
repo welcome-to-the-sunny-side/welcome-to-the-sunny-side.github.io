@@ -1,6 +1,6 @@
 ---
 layout: post
-title: The Perfect Girl
+title: The perfect girl
 tags: thoughts
 ---
 

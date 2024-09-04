@@ -6,12 +6,14 @@ permalink: /editorial/
 
 <div class="home">
 
-  
-  {%- if site.posts.size > 0 -%}
+  {%- assign posts = site.editorialposts | sort: "date" -%}
+  {%- assign posts_sorted = all_posts | sort: "date" | reverse -%}
+
+  {%- if posts_sorted.size > 0 -%}
     <h2 class="post-list-heading">{{ "Editorials" }}</h2>
     <p>Somewhat detailed editorials to cute problems.</p> 
     <ul class="post-list">
-      {%- for post in site.editorialposts -%}
+      {%- for post in posts_sorted -%}
       {%- if post.tags contains "editorial" -%}
       {%- unless post.tags contains "draft" -%}
 	  <li>

@@ -5,11 +5,15 @@ permalink: /algorithm/
 ---
 
 <div class="home">
-  {%- if site.posts.size > 0 -%}
+
+  {%- assign posts = site.editorialposts | sort: "date" -%}
+  {%- assign posts_sorted = all_posts | sort: "date" | reverse -%}
+
+  {%- if posts_sorted.size > 0 -%}
     <h2 class="post-list-heading">{{ "Algorithms" }}</h2>
 <p>Descriptions of algorithmic techniques. <br> Editorials can be found <a href="https://welcome-to-the-sunny-side.github.io/editorial/">here</a>.</p>
     <ul class="post-list">
-      {%- for post in site.posts -%}
+      {%- for post in posts_sorted -%}
       {%- if post.tags contains "algorithm" -%}
       {%- unless post.tags contains "draft" -%}
 	  <li>

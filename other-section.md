@@ -6,14 +6,14 @@ permalink: /other/
 
 <div class="home">
 
-  {%- assign all_posts = site.otherposts | sort: "date" -%}
-  {%- assign all_posts_sorted = all_posts | sort: "date" | reverse -%}
+  {%- assign posts = site.otherposts | sort: "date" -%}
+  {%- assign posts_sorted = posts | sort: "date" | reverse -%}
   
-  {%- if all_posts_sorted.size > 0 -%}
+  {%- if posts_sorted.size > 0 -%}
     <h2 class="post-list-heading">{{ "Other" }}</h2>
     <p>(mostly spam)</p>
     <ul class="post-list">
-      {%- for post in all_posts_sorted -%}
+      {%- for post in posts_sorted -%}
       {%- unless post.tags contains "draft" -%}
 	  <li>
 	    {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}

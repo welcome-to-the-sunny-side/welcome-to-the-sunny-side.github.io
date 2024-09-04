@@ -7,7 +7,7 @@ permalink: /algorithm/
 <div class="home">
 
   {%- assign posts = site.posts | sort: "date" -%}
-  {%- assign posts_sorted = all_posts | sort: "date" | reverse -%}
+  {%- assign posts_sorted = posts | sort: "date" | reverse -%}
 
   {%- if posts_sorted.size > 0 -%}
     <h2 class="post-list-heading">{{ "Algorithms" }}</h2>

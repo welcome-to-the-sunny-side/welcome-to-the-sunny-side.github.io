@@ -1,0 +1,65 @@
+---
+layout: post
+title: ICPC Log
+tags: icpc dynamic
+---
+
+## Outline
+- ## [15/09/2024](#15092024-2020-2021-seoul-regional)
+
+Log for ICPC practice and on-site contests. I'll call my teammates X and Y for brevity.
+
+## 15/09/2024 (2020-2021 Seoul Regional)
+
+- Contest Link: https://codeforces.com/gym/102920
+- Rank: 210/7xx
+- Solved: 7/12 (B, C, E, G, H, I, J)
+
+Well, we took a team contest after a long while and were rusty. 
+
+I think B was the easiest problem and X solved it pretty quickly.
+
+<details>
+<summary class ="spoiler-summary">In the meanwhile, I read C and was extremely confused by its statement. </summary>
+<div class = "spoiler-content">
+It states that:
+
+> A candidate site $p$ is a good place if there exists a candidate site $z$ where an apartment complex is located such that $d(p,z)<d(q,z)$ for each candidate site $q (\neq p)$.
+
+This leads one to believe that $p$ being good is determined by the following:
+
+$$ p \; \text{is good} \iff \exists \; z \in \; \text{apartment} : (d(p, z) < d(q, v) \; \forall \; v \in \text{candidate}, v \neq z) $$
+
+What the setters actually meant was the following:
+
+$$ p \; \text{is good} \iff (\exists \; z \in \; \text{apartment} : d(p, z) < d(q, v)) \; \forall \; v \in \text{candidate}, v \neq z $$
+
+Which should have been conveyed through the following:
+
+> A candidate site $p$ is a good place if for each candidate site $q (\neq p)$, there exists a candidate site $z$ where an apartment complex is located such that $d(p,z)<d(q,z)$.
+
+Anyways, that's enough yapping. I realized the error and got AC quickly.
+</div>
+</details>
+<br>
+
+E was also an easy problem and Y got AC on it quickly after an accidental WA.
+
+I read I, insta-solved it in my mind, and began to implement it. In the meanwhile X worked on G and Y on J. Y asked for help on J while I was implementing I, and I realized that it was a direct application of XOR Basis, which Y didn't know. Since J was simpler to code than I, I switched to J, implemented it and got AC.
+
+The contest went downhill from this point onwards.
+
+I finished implementing I, and submitted it to get WA on test 4. It was an easy problem, and I knew my solution was definitely logically correct. I looked at the code for a bit, but my brain just refused to cooperate and I couldn't see any obvious bugs in the code. 
+
+While I was looking at the code, X said that he had the solution for G. I let him take the PC and thought about possible mistakes. He submitted soon but got WA on 8. 
+
+I was a bit frustated at this point, and said "fuck it, we stress-test". Surprisingly, it didn't take too long for me to create the files required for the stress test (10-20 mins?). Me and X kept taking turns at the PC as he modified his code for G and resubmitted. Unfortunately, G was a pretty evil problem and what I understood, required some careful precision handling. He kept getting WA on G. I soon found the glaringly obvious typos in my code from the stress-test. I corrected them and got AC. In hindsight, I should have just stared at my code hard enough (it wasn't even that long in the first place) as I got AC 1 hour 4 minutes after the first submission (which only required a couple of characters to be modified).
+
+I wasn't used to sitting and concentrating for 5 hours so I didn't do much for the rest of the contest (I did have some ideas for F which were correct but I didn't put much effort into developing them). X and Y spent quite some time dealing with the issues in G (a lot of teams bricked in the implementation for this problem). Eventually, we did get AC on G.
+
+Lastly, H was a standard FFT problem which we somehow failed to recognize for a while (brainlet moment). Once we recognized that it was FFT, we got AC on it pretty quickly.
+
+### To Improve:
+1. Improve problem allocation. J would have been solved faster if I had taken it and H would have been solved faster if Y had taken it.
+2. Don't stress test until you've stared at the code for a while (~5 minutes).
+3. Don't switch off your brain while implementing solutions. Consciously analyze your code on the go.

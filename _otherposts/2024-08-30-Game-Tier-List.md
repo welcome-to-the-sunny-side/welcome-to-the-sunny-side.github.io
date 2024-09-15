@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Games
-tags: notag
+tags: notag dynamic
 ---
 
 Hello, this blog just contains 2 lists of games which will be continuously updated.

@@ -11,7 +11,8 @@ permalink: /other/
   
   {%- if posts_sorted.size > 0 -%}
     <h2 class="post-list-heading">{{ "Other" }}</h2>
-    <p>Mostly spam. <br></p>
+    <p>Mostly spam.
+    <br> Dynamic blogs can be found <a href="https://welcome-to-the-sunny-side.github.io/dynamic/">here</a></p>
     <ul class="post-list">
       {%- for post in posts_sorted -%}
       {%- unless post.tags contains "draft" -%}

@@ -12,7 +12,7 @@ permalink: /dynamic/
   {%- if posts_sorted.size > 0 -%}
     <h2 class="post-list-heading">{{ "Dynamic" }}</h2>
 <p>Blogs which are updated frequently.
-<br> Editorials can be found <a href="https://welcome-to-the-sunny-side.github.io/dynamic/">here</a></p>
+</p>
     <ul class="post-list">
       {%- for post in posts_sorted -%}
       {%- if post.tags contains "dynamic" -%}

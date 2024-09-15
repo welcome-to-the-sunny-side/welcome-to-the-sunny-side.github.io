@@ -5,7 +5,7 @@ tags: icpc dynamic
 ---
 
 ## Outline
-- ## [15/09/2024](#15092024-2020-2021-seoul-regional)
+- [15/09/2024](#15092024-2020-2021-seoul-regional)
 
 Log for ICPC practice and on-site contests. I'll call my teammates X and Y for brevity.
 

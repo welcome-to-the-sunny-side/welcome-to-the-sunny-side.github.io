@@ -23,8 +23,9 @@ I think B was the easiest problem and X solved it pretty quickly.
 <summary class ="spoiler-summary">In the meanwhile, I read C and was extremely confused by its statement. </summary>
 <div class = "spoiler-content">
 It states that:
-<br>
-"A candidate site $p$ is a good place if there exists a candidate site $z$ where an apartment complex is located such that $d(p,z) < d(q,z)$ for each candidate site $q (\neq p)$."
+<blockquote>
+A candidate site $p$ is a good place if there exists a candidate site $z$ where an apartment complex is located such that $d(p,z) < d(q,z)$ for each candidate site $q (\neq p)$.
+</blockquote>
 
 This leads one to believe that $p$ being good is determined by the following:
 
@@ -35,10 +36,10 @@ What the setters actually meant was the following:
 $$ p \; \text{is good} \iff (\exists \; z \in \; \text{apartment} : d(p, z) < d(q, v)) \; \forall \; v \in \text{candidate}, v \neq z $$
 
 Which should have been conveyed through the following:
-<br>
-"A candidate site $p$ is a good place if for each candidate site $q (\neq p)$, there exists a candidate site $z$ where an apartment complex is located such that $d(p,z) < d(q,z)$."
+<blockquote>
+A candidate site $p$ is a good place if for each candidate site $q (\neq p)$, there exists a candidate site $z$ where an apartment complex is located such that $d(p,z) < d(q,z)$.
+</blockquote>
 
-<br>
 Anyways, that's enough yapping. I realized the error and got AC quickly.
 </div>
 </details>

@@ -43,7 +43,6 @@ A candidate site $p$ is a good place if for each candidate site $q (\neq p)$, th
 Anyways, that's enough yapping. I realized the error and got AC quickly.
 </div>
 </details>
-<br>
 
 E was also an easy problem and Y got AC on it quickly after an accidental WA.
 

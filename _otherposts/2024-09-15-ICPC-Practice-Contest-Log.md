@@ -38,6 +38,7 @@ Which should have been conveyed through the following:
 <br>
 "A candidate site $p$ is a good place if for each candidate site $q (\neq p)$, there exists a candidate site $z$ where an apartment complex is located such that $d(p,z) < d(q,z)$."
 
+<br>
 Anyways, that's enough yapping. I realized the error and got AC quickly.
 </div>
 </details>

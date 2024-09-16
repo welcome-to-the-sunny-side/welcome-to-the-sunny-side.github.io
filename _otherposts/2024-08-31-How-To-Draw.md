@@ -1,7 +1,7 @@
 ---
 layout: post
 title: How to draw
-tags: notag dynamic
+tags: draw dynamic
 ---
 
 

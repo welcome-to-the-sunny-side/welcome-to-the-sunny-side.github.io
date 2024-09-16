@@ -60,11 +60,11 @@ I wasn't used to sitting and concentrating for 5 hours so I didn't do much for t
 
 Lastly, H was a standard FFT problem which we somehow failed to recognize for a while (brainlet moment). Once we recognized that it was FFT, we got AC on it pretty quickly.
 
-### To Improve:
+#### To Improve:
 1. Improve problem allocation. J would have been solved faster if I had taken it and H would have been solved faster if Y had taken it.
 2. Don't stress test until you've stared at the code for a while (~5 minutes).
 3. Don't switch off your brain while implementing solutions. Consciously analyze your code on the go. I guess I should spend some time implementing solutions to CF problems with tedious implementations from my mindsolve queue.
 
-### Performance Rating
+#### Performance Rating
 
 4.8/10

@@ -62,7 +62,7 @@ Lastly, H was a standard FFT problem which we somehow failed to recognize for a 
 ### To Improve:
 1. Improve problem allocation. J would have been solved faster if I had taken it and H would have been solved faster if Y had taken it.
 2. Don't stress test until you've stared at the code for a while (~5 minutes).
-3. Don't switch off your brain while implementing solutions. Consciously analyze your code on the go. I guess I should I spend some time implementing solutions to CF problems with tedious implementations from my mindsolve queue.
+3. Don't switch off your brain while implementing solutions. Consciously analyze your code on the go. I guess I should spend some time implementing solutions to CF problems with tedious implementations from my mindsolve queue.
 
 ### Performance Rating
 

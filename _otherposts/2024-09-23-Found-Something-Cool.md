@@ -10,5 +10,5 @@ When I was about 12, I spent an unholy amount of time playing pokemon GBA games.
 
 <br>
 <div style="text-align:center"><img src="/assets/images/old-save/oldsavesinfo.png" /></div>
-
+<br>
 So many memories are running through my mind right now. I wonder why such a trivial thing impacts my emotional state so strongly.

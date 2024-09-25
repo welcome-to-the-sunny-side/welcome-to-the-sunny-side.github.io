@@ -9,6 +9,7 @@ tags: algorithm homepage
 - [Problem](#problem)
 - [Algorithm](#algorithm)
 - [Complexity Analysis](#complexity-analysis)
+- [Code](#code)
 - [Example Problems](#example-problems)
     - [Problem 1](#problem-1)
 
@@ -83,6 +84,10 @@ The above problem is computationally equivalent to [Randomized Quicksort](https:
 It's not difficult to see that our split operations are simply the operations that will occur in the above problem in a **reversed** manner (Formally, we can define a bijective relationship between the two sets of operations, such that related sets of operations will occur with the same probability) . Therefore, the time taken by all the split operations is $O(n \log{n})$.
 
 However, every time we perform a split operation (merge in reverse), we also compute $\text{dis}$ for the child set $C$ (which gets merged into the parent set), and that takes $O(\vert C \vert \log{n})$ time. Thus, our entire algorithm has an expected time complexity of $O(n \log^2{n})$.
+
+## Code
+
+My implementation can be found [here](https://github.com/welcome-to-the-sunny-side/libra/blob/main/meme/RandomSuffixTree.cpp).
 
 ## Example Problems
 

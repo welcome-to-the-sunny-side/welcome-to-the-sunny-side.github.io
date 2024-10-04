@@ -6,4 +6,4 @@ tags: dynamic
 
 I started watching Shin-Chan from the very first episode. Since episodes which introduce permanent/long-lasting changes are so rare, I'll list them here:
 
-1. E7: Shin-Chan adopts Shiro.
+1. **E7**: Shin-Chan adopts Shiro.

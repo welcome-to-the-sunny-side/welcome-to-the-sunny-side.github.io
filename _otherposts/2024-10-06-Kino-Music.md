@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Kino music
-tags:
+tags: music
 ---
 
 <div style="text-align: center;">

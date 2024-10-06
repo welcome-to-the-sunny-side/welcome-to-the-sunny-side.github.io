@@ -29,5 +29,5 @@ tags: music dynamic
 <br>
 
 <div style="text-align: center;">
-<iframe width="1280" height="720" src="https://www.youtube.com/embed/2qeuOEVzcyA" title="NEET - Please Be Patient I Have Autism" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="600" height="600" src="https://www.youtube.com/embed/2qeuOEVzcyA" title="NEET - Please Be Patient I Have Autism" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>

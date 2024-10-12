@@ -6,6 +6,7 @@ tags:
 
 <div style="text-align:center"><img src="/assets/images/vitamin-d/vitamin-d.png" /></div>
 
+<br>
 I took 50000 IU of oral D3 weekly for 8 weeks.
 
 Severe vitamin D deficiencies are linked to depression but I don't know if it's the case for me.

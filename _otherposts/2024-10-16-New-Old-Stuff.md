@@ -8,6 +8,7 @@ I went back homr for a few days after my exams. I bought some Shin-Chan memorabi
 
 <div style="text-align:center"><img src="/assets/images/newoldstuff/IMG_0639.jpg" /></div>
 <br>
+
 This is how my desk looks like now:
 
 <div style="text-align:center"><img src="/assets/images/newoldstuff/IMG_0646.jpg" /></div>

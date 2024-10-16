@@ -1,10 +1,10 @@
 ---
 layout: post
-title: Shin-Chan permanent changes
+title: Shin-Chan interesting events
 tags: dynamic
 ---
 
-I started watching Shin-Chan from the very first episode. Since episodes which introduce permanent/long-lasting changes are so rare, I'll list them here:
+I started watching Shin-Chan from the very first episode. I'll list noteworthy events (and the episodes they occur in) over here:
 
 1. **E7**: Shin-Chan adopts Shiro.
-2. **E18**: Shin-Chan (paternal) grandfather introduced.
+2. **E18**: Shin-Chan's (paternal) grandfather introduced for the first time.

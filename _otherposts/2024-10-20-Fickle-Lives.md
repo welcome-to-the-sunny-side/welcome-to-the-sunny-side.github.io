@@ -22,4 +22,4 @@ What would life be like 100 years ago?
 
 It’s kind of cold. Maybe I shouldn’t have bathed with cold water at 4:30 am.
 
-I should sleep now. Why is the fucking sun out at 6 am when it was raining so heavily just a few minutes ago.
+I should sleep now. Why is the fucking sun out at 6 am when it was raining so heavily just a few minutes ago?

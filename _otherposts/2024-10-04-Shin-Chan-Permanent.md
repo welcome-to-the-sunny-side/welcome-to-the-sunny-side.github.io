@@ -8,3 +8,4 @@ I started watching Shin-Chan from the very first episode. I'll list noteworthy e
 
 1. **E7**: Shin-Chan adopts Shiro.
 2. **E18**: Shin-Chan's (paternal) grandfather introduced for the first time.
+3. **E31**: First appearance of Quantum Robot.

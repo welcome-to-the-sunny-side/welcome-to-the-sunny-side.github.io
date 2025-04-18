@@ -1,0 +1,32 @@
+/* Define default (light mode) variables */
+:root {
+    --spoiler-summary-color: black;
+    --spoiler-content-bg-color: #def;
+    --spoiler-content-text-color: black;
+  }
+  
+  /* Dark mode variables */
+  [data-skin="dark"] {
+    --spoiler-summary-color: rgb(202, 201, 201);
+    --spoiler-content-bg-color: #5b5080;
+    --spoiler-content-text-color: rgb(237, 237, 237);
+  }
+  
+  /* Spoiler summary styles */
+  .spoiler-summary {
+    text-decoration: underline dashed 1px;
+    cursor: pointer;
+    text-underline-offset: 5px; // Adds 5px padding between the text and the underline
+    color: var(--spoiler-summary-color); // Use variable for text color
+  }
+  
+  /* Spoiler content styles */
+  .spoiler-content {
+    border: 1px solid gray;
+    background-color: var(--spoiler-content-bg-color); // Use variable for background color
+    color: var(--spoiler-content-text-color); // Use variable for text color
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 5px;
+  }
+  

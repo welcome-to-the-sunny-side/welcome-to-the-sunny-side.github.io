@@ -1,0 +1,4 @@
+<details><summary class ="spoiler-summary"></summary>
+<div class = "spoiler-content">
+</div>
+</details>

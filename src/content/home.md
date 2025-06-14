@@ -1,3 +1,4 @@
-# This is a Heading
-
-This is a paragraph.
+---
+title: Home
+backgroundImage: /assets/home/output.jpg
+---

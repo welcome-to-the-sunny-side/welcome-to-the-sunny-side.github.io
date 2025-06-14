@@ -11,10 +11,10 @@ import { tick } from 'svelte';
   // load all markdown as raw strings (Vite 5 syntax)
 const pages = import.meta.glob('../content/**/*.md', { query: '?raw', import: 'default' });
 
-  const md = new MarkdownIt({
+  const md: MarkdownIt = new MarkdownIt({
   html: true,
   linkify: true,
-  highlight: (str: string, lang: string) => {
+  highlight: (str: string, lang: string): string => {
     if (lang && hljs.getLanguage(lang)) {
       try {
         return `<pre class="hljs"><code>${hljs.highlight(str, { language: lang }).value}</code></pre>`;
@@ -29,6 +29,9 @@ let path = '/';
 let frontmatter: Record<string, any> = {};
 let isBlog = false;
 let contentHtml: string = md.render(contentRaw);
+let pageBackgroundImage: string | null = null;
+
+  $: isHomeWithBackground = (path === '/' || path === '/home.html') && pageBackgroundImage;
 
 function parseFrontmatter(raw: string) {
   if (raw.startsWith('---')) {
@@ -79,6 +82,7 @@ function parseFrontmatter(raw: string) {
       const { fm, body } = parseFrontmatter(contentRaw);
       frontmatter = fm;
       isBlog = frontmatter.displayMode === 'blog';
+      pageBackgroundImage = frontmatter.backgroundImage || null;
       contentHtml = md.render(body);
       await tick();
       if (typeof window !== 'undefined' && (window as any).MathJax?.typesetPromise) {
@@ -88,6 +92,7 @@ function parseFrontmatter(raw: string) {
       contentRaw = `# 404\nPath not found: ${path}`;
       frontmatter = {};
       isBlog = false;
+      pageBackgroundImage = null; // Reset for 404 or other errors
       contentHtml = md.render(contentRaw);
       await tick();
       if (typeof window !== 'undefined' && (window as any).MathJax?.typesetPromise) {
@@ -118,7 +123,16 @@ function parseFrontmatter(raw: string) {
     </article>
   </section>
 {:else}
-  <div class="p-4 prose prose-invert max-w-none bg-surface text-text transition-colors duration-150 ease-retro">
-    {@html contentHtml}
-  </div>
+  {#if isHomeWithBackground}
+    <div 
+      class="h-full w-full bg-cover bg-center bg-no-repeat"
+      style="background-image: url('{pageBackgroundImage}');"
+    >
+      <!-- This div is purely for the background image -->
+    </div>
+  {:else}
+    <div class="p-4 prose prose-invert max-w-none bg-surface text-text transition-colors duration-150 ease-retro">
+      {@html contentHtml}
+    </div>
+  {/if}
 {/if}

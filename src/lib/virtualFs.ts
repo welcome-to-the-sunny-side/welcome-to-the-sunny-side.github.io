@@ -44,7 +44,11 @@ let _virtualFs: FsNode | null = null;
 export function getVirtualFs(): FsNode {
   if (_virtualFs) return _virtualFs;
   // Remove leading /src/content/ for virtual FS root
-  const relPaths = contentFiles.map(f => f.replace(/^\/src\/content\//, ''));
+  // Convert markdown source paths (foo.md) to virtual paths ending with .html so
+// users interact with rendered filenames (e.g. foo.html)
+const relPaths = contentFiles.map(f =>
+  f.replace(/^\/src\/content\//, '').replace(/\.md$/, '.html')
+);
   _virtualFs = buildVirtualFsTree(relPaths);
   return _virtualFs;
 }

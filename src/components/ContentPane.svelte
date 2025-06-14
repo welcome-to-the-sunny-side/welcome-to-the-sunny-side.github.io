@@ -23,8 +23,10 @@ const pages = import.meta.glob('../content/**/*.md', { query: '?raw', import: 'd
   async function loadContent() {
     // Convert "/blogs/algo/treaps.md" -> "../content/blogs/algo/treaps.md"
     let filePath = path;
-    if (filePath === '/') filePath = '/home.md'; // default landing page
-    const key = '../content' + (filePath.endsWith('.md') ? filePath : filePath + '.md');
+    if (filePath === '/') filePath = '/home.html'; // default landing page
+    // Convert .html path to matching markdown source
+    const mdPath = filePath.replace(/\.html$/, '.md');
+    const key = '../content' + mdPath;
     if (key in pages) {
       content = (await (pages as any)[key]()) as string;
     } else {

@@ -7,7 +7,7 @@ import { writable } from 'svelte/store';
  * Browser Back/Forward buttons update the store automatically via a popstate listener.
  */
 function createRouter() {
-  const getResolvedPath = (path: string) => (path === '/' ? '/home.md' : path);
+  const getResolvedPath = (path: string) => (path === '/' ? '/home.html' : path);
 
   let initialBrowserPath = '/'; // Default for SSR or non-browser env
   if (typeof window !== 'undefined') {
@@ -17,8 +17,8 @@ function createRouter() {
   const initialStorePath = getResolvedPath(initialBrowserPath);
   const { subscribe, set } = writable<string>(initialStorePath);
 
-  if (typeof window !== 'undefined' && initialBrowserPath === '/' && initialStorePath === '/home.md') {
-    // If we landed on '/' and resolved to '/home.md', update browser URL to reflect the resolved path
+  if (typeof window !== 'undefined' && initialBrowserPath === '/' && initialStorePath === '/home.html') {
+    // If we landed on '/' and resolved to '/home.html', update browser URL to reflect the resolved path
     history.replaceState({}, '', initialStorePath);
   }
 
@@ -42,7 +42,7 @@ function createRouter() {
       const newStorePath = getResolvedPath(newBrowserPath);
       set(newStorePath);
       // If browser path was '/' and got resolved, update URL to match store's resolved path
-      if (newBrowserPath === '/' && newStorePath === '/home.md') {
+      if (newBrowserPath === '/' && newStorePath === '/home.html') {
         history.replaceState({}, '', newStorePath);
       }
     });

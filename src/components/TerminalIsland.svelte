@@ -190,8 +190,18 @@ onMount(async () => {
           term.writeln('grep: usage: grep <pattern> [path]');
           break;
         }
-        const pattern = args[0];
-        const target = args[1] ?? '.';
+        // Support multi-word pattern and optional path
+        let pathArg: string | null = null;
+        if (args.length > 1) {
+          const maybePath = args[args.length - 1];
+          const test = resolvePath(cwd, maybePath);
+          if (test) {
+            pathArg = maybePath;
+            args.pop();
+          }
+        }
+        const pattern = args.join(' ').replace(/^"|"$/g, ''); // strip surrounding quotes if any
+        const target = pathArg ?? '.';
         const resolved = resolvePath(cwd, target);
         if (!resolved) {
           term.writeln(`grep: ${target}: No such file or directory`);
@@ -225,7 +235,7 @@ onMount(async () => {
         // Instantiate Fuse
         const fuse = new FuseLib(records, {
           keys: ['line'],
-          threshold: 0.4,
+          threshold: 0.4, // adjust to tweak fuzziness
           ignoreLocation: true,
           includeScore: false,
         });

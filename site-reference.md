@@ -189,8 +189,8 @@ The site underwent a significant visual overhaul to implement a retro-dark, mini
 
 *   **`src/styles/custom-elements.css`:**
     *   Uses CSS variables (e.g., `--el-accent`, `--el-surface`, `--el-text`) for consistent theming of custom Markdown elements.
-    *   **Spoiler:** Styled with a custom caret. Content has a transparent background and a `var(--el-text)` border.
-    *   **Theorem Box:** Styled with a transparent background and a `var(--el-text)` border.
+    *   **Spoiler:** Styled with a custom caret. Content has a transparent background and a `var(--el-text)` border. **Now supports horizontal scrolling for long lines (e.g., LaTeX) inside the box.**
+    *   **Theorem Box:** Styled with a transparent background and a `var(--el-text)` border. **Now supports horizontal scrolling for long lines (e.g., LaTeX) inside the box.**
 
 *   **`src/layouts/BaseLayout.astro`:**
     *   Applies `dark` class to `<html>` tag.
@@ -213,7 +213,9 @@ This overhaul ensures a consistent visual identity across the site, aligning wit
 * **Styling:** Primarily use **Tailwind CSS utility classes** directly in your Svelte/Astro components. `src/styles/global.css` is used for Tailwind's base directives (`@tailwind base;`, etc.), importing external CSS (like `highlight.js` themes), and minimal global styles if absolutely necessary.
 * **Custom Elements in Markdown:** For elements like spoilers or theorem boxes, use specific HTML structures that are styled by `src/styles/custom-elements.css`. For example:
   * **Spoiler:** `<details><summary class="spoiler-summary">Spoiler Title</summary><div class="spoiler-content">Hidden content...</div></details>`
+    *Long lines (e.g., LaTeX) will not overflow but instead allow horizontal scrolling inside the spoiler box.*
   * **Theorem Box:** `<div class="theorem-box">Theorem content...</div>`
+    *Long lines (e.g., LaTeX) will not overflow but instead allow horizontal scrolling inside the theorem box.*
   For other types of reusable UI, Astro's standard Svelte component integration in Markdown (via frontmatter imports) can be used if you adapt the content rendering pipeline away from the custom `ContentPane.svelte` raw Markdown processing.
 * **Search:** hook into the VFS tree and a client-side fuzzy matcher.
 

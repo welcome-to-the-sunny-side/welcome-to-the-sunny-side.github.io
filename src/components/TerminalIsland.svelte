@@ -15,10 +15,17 @@ let container: HTMLDivElement;
 let isFocused = true;
 // Expose terminal instance for external focus control
 let termInstance: any;
+let fitAddon: any; // store FitAddon instance for external resizing
 
 export function focusTerminal() {
   termInstance?.focus();
 }
+
+// Re-fit terminal when its container size increases (e.g., after mobile expand)
+export function resizeTerminal() {
+  fitAddon?.fit();
+}
+
 
 onMount(async () => {
   isFocused = true; // Ensure border is active on mount
@@ -39,6 +46,7 @@ onMount(async () => {
     convertEol: true,
   });
   const fit = new FitAddon();
+  fitAddon = fit;
   term.loadAddon(fit);
   term.open(container);
   termInstance = term;

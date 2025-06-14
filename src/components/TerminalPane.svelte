@@ -24,10 +24,13 @@
     collapsed.update(v => {
       const newVal = !v;
       sessionStorage.setItem('terminalCollapsed', newVal.toString());
-      // When expanding (newVal false) focus terminal
+      // When expanding (newVal false) focus terminal and refit on mobile
       if (!newVal) {
         // slight delay to allow DOM to render width
-        setTimeout(() => islandComp?.focusTerminal(), 0);
+        setTimeout(() => {
+          if (isMobile) islandComp?.resizeTerminal();
+          islandComp?.focusTerminal();
+        }, 300); // match CSS transition duration (250ms) + buffer
       }
       return newVal;
     });

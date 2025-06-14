@@ -67,10 +67,39 @@
     checkMobile();
     window.addEventListener('resize', checkMobile);
     window.addEventListener('keydown', handleKey, true);
+
+    const handleVim = (e: KeyboardEvent) => {
+      if (isMobile) return;
+      // Ignore if terminal textarea is focused
+      const active = document.activeElement as HTMLElement | null;
+      if (active && active.classList.contains('xterm-helper-textarea')) return;
+      const pane = document.querySelector('main');
+      const step = 60;
+      switch (e.key) {
+        case 'j':
+          (pane ?? window).scrollBy({ top: 2*step, behavior: 'smooth' });
+          break;
+        case 'k':
+          (pane ?? window).scrollBy({ top: -2*step, behavior: 'smooth' });
+          break;
+        case 'h':
+          (pane ?? window).scrollBy({ left: -step, behavior: 'smooth' });
+          break;
+        case 'l':
+          (pane ?? window).scrollBy({ left: step, behavior: 'smooth' });
+          break;
+        default:
+          return; // do not prevent default
+      }
+      e.preventDefault();
+    };
+
+    window.addEventListener('keydown', handleVim);
     
     return () => {
       window.removeEventListener('resize', checkMobile);
       window.removeEventListener('keydown', handleKey, true);
+      window.removeEventListener('keydown', handleVim);
     };
   });
 </script>
@@ -99,7 +128,7 @@
   /* Desktop (md+) specific widths */
   @media (min-width: 768px) {
     .desktop-wrapper {
-      width: 320px;
+      width: 475px;
     }
     .desktop-collapsed {
       width: 28px !important; /* Just enough for the toggle button */

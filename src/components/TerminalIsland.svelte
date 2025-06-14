@@ -54,6 +54,12 @@ onMount(async () => {
   let cwd: string[] = [];
   let history: string[] = ['/'];
   let buffer = '';
+  // --- Autocomplete state ---
+  const COMMANDS = ['ls', 'cd', 'open', 'pop', 'clear', 'help'];
+  let completions: string[] = [];
+  let compIndex = 0;
+  let ghostActive = false;
+  let ghostText = '';
 
   const prompt = () => {
     const path = '/' + cwd.join('/');
@@ -173,6 +179,19 @@ onMount(async () => {
         for (const {cmd, desc} of entries) {
           term.writeln(`${FILE_COLOR}${pad(cmd, 14)}\x1b[0m  ${desc}`);
         }
+        // Extra blank line before shortcuts
+        term.writeln('');
+        term.writeln(`${PATH_COLOR}SHORTCUT        DESCRIPTION\x1b[0m`);
+        const sc = [
+          { key: 'Tab', desc: 'accept autocomplete' },
+          { key: '← / →', desc: 'cycle suggestions' },
+          { key: 'Shift+←', desc: 'collapse terminal' },
+          { key: 'Shift+→', desc: 'expand / focus terminal' },
+          { key: 'h/j/k/l', desc: 'scroll content pane (when terminal unfocused)' },
+        ];
+        for (const {key, desc} of sc) {
+          term.writeln(`${FILE_COLOR}${pad(key, 14)}\x1b[0m  ${desc}`);
+        }
         break;
       }
       default:
@@ -182,10 +201,128 @@ onMount(async () => {
     }
   }
 
+  // Helper to clear ghost suggestion (erase to end of line)
+  function clearGhost() {
+    if (!ghostActive) return;
+    term.write('\x1b[s');        // save cursor
+    term.write('\x1b[K');        // erase to end of line
+    term.write('\x1b[u');        // restore cursor
+    ghostActive = false;
+    ghostText = '';
+  }
+
+  function showGhost(text: string) {
+    clearGhost();
+    if (!text) return;
+    term.write('\x1b[s');
+    term.write(`\x1b[90m${text}\x1b[0m`); // dim grey text
+    term.write('\x1b[u');
+    ghostActive = true;
+    ghostText = text;
+  }
+
+  function buildCommandCompletions(prefix: string): string[] {
+    return COMMANDS.filter(c => c.startsWith(prefix));
+  }
+
+  function buildPathCompletions(prefix: string): string[] {
+    // Split prefix into dir part + base part
+    const lastSlash = prefix.lastIndexOf('/');
+    const dirInput = lastSlash === -1 ? '' : prefix.slice(0, lastSlash + 1); // keep trailing '/'
+    const basePart = lastSlash === -1 ? prefix : prefix.slice(lastSlash + 1);
+    const dirResolved = resolvePath(cwd, dirInput || '.');
+    if (!dirResolved) return [];
+    const fullDirPath = '/' + dirResolved.join('/');
+    const children = list(fullDirPath) || [];
+    const matches = children.filter(name => name.startsWith(basePart));
+    // append '/' to directories
+    const mapped = matches.map(name => {
+      const full = `${fullDirPath}/${name}`;
+      return dirInput + (isDir(full) ? name + '/' : name);
+    });
+    // sort dirs first, then files
+    mapped.sort((a, b) => {
+      const aIsDir = a.endsWith('/');
+      const bIsDir = b.endsWith('/');
+      if (aIsDir === bIsDir) return a.localeCompare(b);
+      return aIsDir ? -1 : 1;
+    });
+    return mapped.slice(0, 20); // cap to 20 as agreed
+  }
+
+  function triggerCompletion() {
+    // Determine context
+    const tokens = buffer.split(/\s+/);
+    const first = tokens[0] || '';
+    const current = tokens[tokens.length - 1] || '';
+    let cands: string[] = [];
+    if (tokens.length === 1) {
+      cands = buildCommandCompletions(current);
+    } else if (['cd', 'ls', 'open'].includes(first)) {
+      cands = buildPathCompletions(current);
+    }
+    completions = cands;
+    compIndex = 0;
+    if (completions.length) {
+      const candidate = completions[0];
+      const suffix = candidate.slice(current.length);
+      showGhost(suffix);
+    }
+  }
+
+  function acceptCompletion() {
+    if (!ghostActive || !ghostText) return;
+    buffer += ghostText;
+    term.write(ghostText);
+    clearGhost();
+  }
+
+  function cycleCompletion(dir: 1 | -1) {
+    if (!ghostActive || completions.length < 2) return;
+    compIndex = (compIndex + dir + completions.length) % completions.length;
+    const tokens = buffer.split(/\s+/);
+    const current = tokens[tokens.length - 1] || '';
+    const candidate = completions[compIndex];
+    const suffix = candidate.slice(current.length);
+    showGhost(suffix);
+  }
+
+  let escSeq = '';
   const writeChar = (data: string) => {
     for (const char of data) {
       const code = char.charCodeAt(0);
+      // Handle ESC sequence for arrow keys (\x1b[C and \x1b[D)
+      if (escSeq) {
+        escSeq += char;
+        if (escSeq === '\x1b[C') {
+          // Right arrow
+          cycleCompletion(1);
+          escSeq = '';
+          continue;
+        } else if (escSeq === '\x1b[D') {
+          // Left arrow
+          cycleCompletion(-1);
+          escSeq = '';
+          continue;
+        } else if (escSeq.length >= 3) {
+          // Unrecognized sequence, reset
+          escSeq = '';
+        }
+        continue;
+      }
+
+      if (char === '\x1b') {
+        escSeq = '\x1b';
+        continue;
+      }
+
       switch (code) {
+        case 9: { // Tab (accept current suggestion)
+          acceptCompletion();
+          // After acceptance, recompute suggestions for new buffer state
+          triggerCompletion();
+          break;
+        }
         case 13: { // Enter
           term.write('\r\n');
           exec(buffer.trim());
@@ -199,19 +336,35 @@ onMount(async () => {
             buffer = buffer.slice(0, -1);
             term.write('\b \b');
           }
+          triggerCompletion();
           break;
         }
         default:
           // Filter out non-printable characters to prevent free cursor movement
           if (code >= 32 && code < 127) {
+            clearGhost();
             buffer += char;
             term.write(char);
+            triggerCompletion();
           }
       }
     }
   };
 
+  // Initially compute empty suggestion line
+  triggerCompletion();
   term.onData(writeChar);
+
+  // Handle arrow keys for cycling completions using onKey
+  term.onKey(({ key, domEvent }) => {
+    if (ghostActive && (domEvent.key === 'ArrowRight' || domEvent.key === 'ArrowLeft')) {
+      domEvent.preventDefault();
+      cycleCompletion(domEvent.key === 'ArrowRight' ? 1 : -1);
+    } else if (ghostActive && !['Tab', 'Shift', 'Control', 'Alt', 'Meta', 'ArrowRight', 'ArrowLeft'].includes(domEvent.key)) {
+      // Any other key cancels ghost
+      clearGhost();
+    }
+  });
 
   // Initial prompt
   term.writeln('Type help for command list.');

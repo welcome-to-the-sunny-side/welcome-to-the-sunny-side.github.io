@@ -88,7 +88,16 @@ Explanation:
 | `clear`        | Clear the terminal output                                |
 | `help`         | Show built-in command help (now formatted, colorized)    |
 
-The terminal keeps history, supports arrow-key navigation, and can be collapsed with the **`Tab`** key.
+### Keyboard Shortcuts & UX Enhancements
+| Shortcut | Purpose |
+|----------|---------|
+| `Tab` | Accept the current autocomplete suggestion |
+| `← / →` | Cycle through autocomplete suggestions |
+| `Shift + ←` | Collapse the terminal pane (desktop) |
+| `Shift + →` | Expand / focus the terminal pane (desktop) |
+| `h / j / k / l` | Scroll content pane when terminal is not focused |
+
+The terminal keeps history, shows inline autocomplete suggestions while you type, and supports arrow-key navigation. On desktop widths you can collapse/expand it with **Shift + ← / Shift + →**.
 
 ### Terminal UI Color Scheme (2025-06)
 - **Prompt path and `/`**: Green (`rgb(100,255,218)`)

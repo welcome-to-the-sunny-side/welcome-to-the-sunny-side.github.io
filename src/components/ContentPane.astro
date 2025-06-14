@@ -1,0 +1,8 @@
+---
+export interface Props { path: string }
+const { path } = Astro.props as Props;
+---
+<div class="p-6 prose prose-invert max-w-none">
+  <h1>{path}</h1>
+  <p>Placeholder content for {path}. Markdown loading not yet wired.</p>
+</div>

@@ -1,0 +1,27 @@
+---
+import '../styles/global.css';
+import TerminalPane from "../components/TerminalPane.svelte";
+import ContentPane from "../components/ContentPane.svelte";
+import { currentPath } from "../stores/router";
+---
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-zinc-900 text-zinc-200">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Terminal-Driven Site</title>
+  </head>
+  <body class="h-full">
+    <div class="h-screen w-screen grid grid-cols-1 md:grid-cols-[1fr_auto] grid-rows-[auto_1fr] md:grid-rows-1">
+      <!-- Content -->
+      <main class="overflow-auto order-2 md:order-none">
+        <ContentPane client:load />
+      </main>
+
+      <!-- Terminal -->
+      <aside class="border-t border-zinc-700 md:border-t-0 md:border-l md:border-zinc-700 order-1 md:order-none">
+        <TerminalPane client:load />
+      </aside>
+    </div>
+  </body>
+</html>

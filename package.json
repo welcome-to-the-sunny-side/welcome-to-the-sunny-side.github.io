@@ -6,9 +6,21 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "serve": "astro preview --port 4321",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
-    "astro": "^5.9.3"
+    "@astrojs/svelte": "^7.1.0",
+    "@tailwindcss/vite": "^4.1.10",
+    "@xterm/addon-fit": "^0.10.0",
+    "astro": "^5.9.3",
+    "svelte": "^5.34.1",
+    "tailwindcss": "^4.1.10",
+    "typescript": "^5.8.3",
+    "xterm": "^5.3.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
   }
 }

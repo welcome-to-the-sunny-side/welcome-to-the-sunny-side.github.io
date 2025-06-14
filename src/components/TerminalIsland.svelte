@@ -177,6 +177,8 @@ onMount(async () => {
       }
       default:
         term.writeln(`unknown command: ${cmd}`);
+        term.write('\r\n'); // newline before prompt
+        prompt();
     }
   }
 
@@ -188,6 +190,7 @@ onMount(async () => {
           term.write('\r\n');
           exec(buffer.trim());
           buffer = '';
+          term.write('\r\n'); // Always add newline before prompt
           prompt();
           break;
         }

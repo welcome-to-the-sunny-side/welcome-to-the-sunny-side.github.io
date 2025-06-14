@@ -1,3 +1,1 @@
-# Treaps
-
-i love treaps
+a treap operation typically takes $O(n \log_2{n})$ time.

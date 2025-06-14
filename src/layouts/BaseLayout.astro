@@ -10,11 +10,24 @@ import { currentPath } from "../stores/router";
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Terminal-Driven Site</title>
-  </head>
+    <script type="text/javascript" id="mathjax-config">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script','noscript','style','textarea','pre','code']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
   <body class="h-full">
     <div class="h-screen w-screen grid grid-cols-1 md:grid-cols-[1fr_auto] grid-rows-[auto_1fr] md:grid-rows-1">
       <!-- Content -->
-      <main class="overflow-auto order-2 md:order-none">
+      <main class="overflow-auto order-2 md:order-none bg-white text-zinc-900">
         <ContentPane client:load />
       </main>
 

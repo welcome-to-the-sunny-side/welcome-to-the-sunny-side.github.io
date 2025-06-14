@@ -108,7 +108,7 @@ const { path } = Astro.props as Props;
 const pages = import.meta.glob('../content/**/*.md', { query: '?raw', import: 'default' });
 
   let path = '/';
-  let content: string = 'Welcome! No file selected.';
+  let content: string = '';
 
   const unsub = currentPath.subscribe(async (p) => {
     path = p;

@@ -15,12 +15,18 @@
     "@tailwindcss/vite": "^4.1.10",
     "@xterm/addon-fit": "^0.10.0",
     "astro": "^5.9.3",
+    "highlight.js": "^11.11.1",
+    "katex": "^0.16.22",
+    "markdown-it": "^14.1.0",
+    "markdown-it-katex": "^2.0.3",
     "svelte": "^5.34.1",
     "tailwindcss": "^4.1.10",
     "typescript": "^5.8.3",
     "xterm": "^5.3.0"
   },
   "devDependencies": {
+    "@types/highlight.js": "^9.12.4",
+    "@types/markdown-it": "^14.1.2",
     "gh-pages": "^6.3.0"
   }
 }

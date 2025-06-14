@@ -1,5 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+import MarkdownIt from 'markdown-it';
+
+import hljs from 'highlight.js';
+import { tick } from 'svelte';
   import { currentPath } from '../stores/router';
   import { readable } from 'svelte/store';
 
@@ -7,8 +11,51 @@
   // load all markdown as raw strings (Vite 5 syntax)
 const pages = import.meta.glob('../content/**/*.md', { query: '?raw', import: 'default' });
 
-  let path = '/';
-  let content: string = 'Welcome! No file selected.';
+  const md = new MarkdownIt({
+  html: true,
+  linkify: true,
+  highlight: (str: string, lang: string) => {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return `<pre class="hljs"><code>${hljs.highlight(str, { language: lang }).value}</code></pre>`;
+      } catch {}
+    }
+    return `<pre class="hljs"><code>${md.utils.escapeHtml(str)}</code></pre>`;
+  },
+});
+
+let path = '/';
+  let contentRaw: string = '';
+let frontmatter: Record<string, any> = {};
+let isBlog = false;
+let contentHtml: string = md.render(contentRaw);
+
+function parseFrontmatter(raw: string) {
+  if (raw.startsWith('---')) {
+    const end = raw.indexOf('\n---', 3);
+    if (end !== -1) {
+      const yaml = raw.slice(3, end).trim();
+      const body = raw.slice(end + 4); // skip newline
+      const obj: Record<string, any> = {};
+      for (const line of yaml.split(/\r?\n/)) {
+        const idx = line.indexOf(':');
+        if (idx === -1) continue;
+        const key = line.slice(0, idx).trim();
+        let val: any = line.slice(idx + 1).trim();
+        // strip quotes
+        val = val.replace(/^['\"]|['\"]$/g, '');
+        // try JSON parse for arrays
+        if (val.startsWith('[') && val.endsWith(']')) {
+          // naive list parsing: [a, b, c]
+          val = val.slice(1, -1).split(',').map((s: string) => s.trim().replace(/^['\\"]|['\\"]$/g, ''));
+        }
+        obj[key] = val;
+      }
+      return { fm: obj, body };
+    }
+  }
+  return { fm: {}, body: raw };
+}
 
   const unsub = currentPath.subscribe(async (p) => {
     path = p;
@@ -28,13 +75,49 @@ const pages = import.meta.glob('../content/**/*.md', { query: '?raw', import: 'd
     const mdPath = filePath.replace(/\.html$/, '.md');
     const key = '../content' + mdPath;
     if (key in pages) {
-      content = (await (pages as any)[key]()) as string;
+      contentRaw = (await (pages as any)[key]()) as string;
+      const { fm, body } = parseFrontmatter(contentRaw);
+      frontmatter = fm;
+      isBlog = frontmatter.layout === 'blog';
+      contentHtml = md.render(body);
+      await tick();
+      if (typeof window !== 'undefined' && (window as any).MathJax?.typesetPromise) {
+        (window as any).MathJax.typesetPromise();
+      }
     } else {
-      content = `# 404\nPath not found: ${path}`;
+      contentRaw = `# 404\nPath not found: ${path}`;
+      frontmatter = {};
+      isBlog = false;
+      contentHtml = md.render(contentRaw);
+      await tick();
+      if (typeof window !== 'undefined' && (window as any).MathJax?.typesetPromise) {
+        (window as any).MathJax.typesetPromise();
+      }
     }
   }
 </script>
 
-<div class="p-6 prose prose-invert max-w-none">
-  <pre>{@html content}</pre>
-</div>
+{#if isBlog}
+  <section class="mx-auto max-w-3xl px-6 py-10 bg-white text-zinc-900">
+    <header class="mb-8">
+      <h1 class="text-3xl font-bold tracking-tight text-zinc-800">{frontmatter.title ?? 'Untitled'}</h1>
+      {#if frontmatter.date}
+        <p class="mt-2 text-sm text-zinc-600">{new Date(frontmatter.date).toLocaleDateString()}</p>
+      {/if}
+      {#if frontmatter.tags && frontmatter.tags.length}
+        <ul class="mt-4 flex flex-wrap gap-2">
+          {#each frontmatter.tags as tag}
+            <li class="rounded bg-zinc-200 px-2 py-1 text-xs font-medium text-zinc-700" >{tag}</li>
+          {/each}
+        </ul>
+      {/if}
+    </header>
+    <article class="prose prose-slate max-w-none">
+      {@html contentHtml}
+    </article>
+  </section>
+{:else}
+  <div class="p-6 prose prose-slate max-w-none bg-white text-zinc-900">
+    {@html contentHtml}
+  </div>
+{/if}

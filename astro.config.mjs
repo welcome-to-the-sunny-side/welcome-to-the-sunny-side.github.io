@@ -14,6 +14,11 @@ export default defineConfig({
   integrations: [svelte()],
 
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    resolve: {
+      alias: {
+        blog: '/src/layouts/BlogLayout.astro'
+      }
+    }
   }
 });

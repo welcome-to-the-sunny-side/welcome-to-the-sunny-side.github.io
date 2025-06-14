@@ -113,6 +113,7 @@
     border-bottom: 1px solid #3f3f46;
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
+    border-right: 1px solid #3f3f46; /* vertical divider between button and pane */
     display: flex;
     align-items: center;
     justify-content: center;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
 import MarkdownIt from 'markdown-it';
 
 import hljs from 'highlight.js';
@@ -29,9 +29,13 @@ let path = '/';
 let frontmatter: Record<string, any> = {};
 let isBlog = false;
 let contentHtml: string = md.render(contentRaw);
-let pageBackgroundImage: string | null = null;
+let backgroundImagePC: string | null = null;
+let backgroundImageMobile: string | null = null;
+let isMobileView: boolean = false;
 
-  $: isHomeWithBackground = (path === '/' || path === '/home.html') && pageBackgroundImage;
+  // Reactive statement for currentBackgroundImage
+  $: currentBackgroundImage = isMobileView && backgroundImageMobile ? backgroundImageMobile : backgroundImagePC;
+  $: isHomeWithBackground = (path === '/' || path === '/home.html') && currentBackgroundImage;
 
 function parseFrontmatter(raw: string) {
   if (raw.startsWith('---')) {
@@ -67,7 +71,22 @@ function parseFrontmatter(raw: string) {
 
   onMount(() => {
     loadContent();
-    return () => unsub();
+
+    const checkMobile = () => {
+      isMobileView = typeof window !== 'undefined' && window.innerWidth < 768; // md: 768px
+    };
+
+    if (typeof window !== 'undefined') {
+      checkMobile(); // Initial check
+      window.addEventListener('resize', checkMobile);
+    }
+
+    return () => {
+      unsub();
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', checkMobile);
+      }
+    };
   });
 
   async function loadContent() {
@@ -82,7 +101,8 @@ function parseFrontmatter(raw: string) {
       const { fm, body } = parseFrontmatter(contentRaw);
       frontmatter = fm;
       isBlog = frontmatter.displayMode === 'blog';
-      pageBackgroundImage = frontmatter.backgroundImage || null;
+      backgroundImagePC = frontmatter.backgroundImagePC || null;
+      backgroundImageMobile = frontmatter.backgroundImageMobile || null;
       contentHtml = md.render(body);
       await tick();
       if (typeof window !== 'undefined' && (window as any).MathJax?.typesetPromise) {
@@ -92,7 +112,8 @@ function parseFrontmatter(raw: string) {
       contentRaw = `# 404\nPath not found: ${path}`;
       frontmatter = {};
       isBlog = false;
-      pageBackgroundImage = null; // Reset for 404 or other errors
+      backgroundImagePC = null;
+      backgroundImageMobile = null;
       contentHtml = md.render(contentRaw);
       await tick();
       if (typeof window !== 'undefined' && (window as any).MathJax?.typesetPromise) {
@@ -126,7 +147,7 @@ function parseFrontmatter(raw: string) {
   {#if isHomeWithBackground}
     <div 
       class="h-full w-full bg-cover bg-center bg-no-repeat"
-      style="background-image: url('{pageBackgroundImage}');"
+      style="background-image: url('{currentBackgroundImage}');"
     >
       <!-- This div is purely for the background image -->
     </div>

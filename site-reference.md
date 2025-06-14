@@ -1,6 +1,6 @@
 # Welcome to the Sunny Side – Site Reference
 
-_Last updated: 2025-06-14_ (Updated with Tailwind CSS and Markdown rendering details)
+_Last updated: 2025-06-15_ (Updated with Tailwind CSS and Markdown rendering details)
 
 ## 1 . High-level Overview
 The site is a **static, terminal-driven blog & knowledge base** built with **Astro** for static generation and **Svelte** for the interactive UI. Styling is primarily handled by **Tailwind CSS** (integrated via `@astrojs/tailwind`), utilizing its utility classes and the `@tailwindcss/typography` plugin for Markdown rendering. All human-readable content lives in Markdown files under `src/content` and is presented at URLs that end in `.html`.
@@ -120,12 +120,13 @@ The terminal keeps history, shows inline autocomplete suggestions while you type
    date: 2025-06-14
    tags: [astro, svelte]
    displayMode: blog        # optional – enables blog styling in ContentPane
+   backgroundImagePC: /path/to/desktop-image.jpg  # optional – for home page full background (desktop)
+   backgroundImageMobile: /path/to/mobile-image.jpg # optional – for home page full background (mobile)
    # For custom elements like spoilers or theorem boxes, use specific HTML structures:
    # <details><summary class="spoiler-summary">Title</summary><div class="spoiler-content">Content...</div></details>
    # <div class="theorem-box">Content...</div>
    # These are styled by src/styles/custom-elements.css
    ---
-
    ```
 3. The file will be available at the equivalent `.html` path, e.g. `src/content/foo/bar.md` → `/foo/bar.html`.
 4. No code changes or route files required.
@@ -201,6 +202,7 @@ The site underwent a significant visual overhaul to implement a retro-dark, mini
 *   **`src/components/ContentPane.svelte`:**
     *   Blog post titles, dates, and tags styled with theme colors and smaller font sizes.
     *   Markdown content uses `prose prose-invert`.
+    *   Can now render conditional full-page background images on the home page (via `backgroundImagePC` and `backgroundImageMobile` frontmatter in `home.md`), adapting to desktop/mobile views.
 
 This overhaul ensures a consistent visual identity across the site, aligning with the desired retro-dark aesthetic.
 

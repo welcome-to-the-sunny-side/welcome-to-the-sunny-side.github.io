@@ -1,4 +1,5 @@
 ---
 title: Home
-backgroundImage: /assets/home/output.jpg
+backgroundImagePC: /assets/home/output.jpg
+backgroundImageMobile: /assets/home/mobileoutput1.jpg
 ---

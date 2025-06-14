@@ -5,7 +5,7 @@ import ContentPane from "../components/ContentPane.svelte";
 import { currentPath } from "../stores/router";
 ---
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-zinc-900 text-zinc-200">
+<html lang="en" class="dark h-full bg-bg text-text font-mono">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -27,7 +27,7 @@ import { currentPath } from "../stores/router";
   <body class="h-full">
     <div class="h-screen w-screen grid grid-cols-1 md:grid-cols-[1fr_auto] grid-rows-[auto_1fr] md:grid-rows-1">
       <!-- Content -->
-      <main class="overflow-auto order-2 md:order-none bg-white text-zinc-900">
+      <main class="overflow-auto order-2 md:order-none bg-surface text-text transition-colors duration-150 ease-retro">
         <ContentPane client:load />
       </main>
 

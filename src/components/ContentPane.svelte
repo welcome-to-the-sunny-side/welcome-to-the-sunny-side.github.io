@@ -78,7 +78,7 @@ function parseFrontmatter(raw: string) {
       contentRaw = (await (pages as any)[key]()) as string;
       const { fm, body } = parseFrontmatter(contentRaw);
       frontmatter = fm;
-      isBlog = frontmatter.layout === 'blog';
+      isBlog = frontmatter.displayMode === 'blog';
       contentHtml = md.render(body);
       await tick();
       if (typeof window !== 'undefined' && (window as any).MathJax?.typesetPromise) {
@@ -98,26 +98,27 @@ function parseFrontmatter(raw: string) {
 </script>
 
 {#if isBlog}
-  <section class="mx-auto max-w-3xl px-6 py-10 bg-white text-zinc-900">
+  <section class="mx-auto max-w-2xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro">
     <header class="mb-8">
-      <h1 class="text-3xl font-bold tracking-tight text-zinc-800">{frontmatter.title ?? 'Untitled'}</h1>
+      <h1 class="text-2xl font-semibold tracking-tight text-accent">{frontmatter.title ?? 'Untitled'}</h1>
       {#if frontmatter.date}
-        <p class="mt-2 text-sm text-zinc-600">{new Date(frontmatter.date).toLocaleDateString()}</p>
+        <p class="mt-2 text-xs text-text-muted">{new Date(frontmatter.date).toLocaleDateString()}</p>
       {/if}
       {#if frontmatter.tags && frontmatter.tags.length}
         <ul class="mt-4 flex flex-wrap gap-2">
           {#each frontmatter.tags as tag}
-            <li class="rounded bg-zinc-200 px-2 py-1 text-xs font-medium text-zinc-700" >{tag}</li>
+            <li class="rounded-sm border border-accent-subtle px-2 py-1 text-xs font-medium text-text-muted transition-colors duration-150 ease-retro"
+            >{tag}</li>
           {/each}
         </ul>
       {/if}
     </header>
-    <article class="prose prose-slate max-w-none">
+    <article class="prose prose-invert max-w-none">
       {@html contentHtml}
     </article>
   </section>
 {:else}
-  <div class="p-6 prose prose-slate max-w-none bg-white text-zinc-900">
+  <div class="p-4 prose prose-invert max-w-none bg-surface text-text transition-colors duration-150 ease-retro">
     {@html contentHtml}
   </div>
 {/if}

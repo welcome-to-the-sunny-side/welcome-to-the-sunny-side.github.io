@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 
 import svelte from '@astrojs/svelte';
 
-import tailwindcss from '@tailwindcss/vite';
+import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,13 +11,13 @@ export default defineConfig({
   build: { format: 'file' },
   site: 'https://welcome-to-the-sunny-side.github.io',
   output: 'static',
-  integrations: [svelte()],
+  integrations: [svelte(), tailwind()],
 
   vite: {
-    plugins: [tailwindcss()],
+    // plugins: [tailwindcss()], // Removed @tailwindcss/vite
     resolve: {
       alias: {
-        blog: '/src/layouts/BlogLayout.astro'
+        // blog: '/src/layouts/BlogLayout.astro' // Removed as ContentPane.svelte handles blog styling
       }
     }
   }

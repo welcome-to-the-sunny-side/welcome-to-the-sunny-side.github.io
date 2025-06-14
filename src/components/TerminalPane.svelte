@@ -151,7 +151,11 @@
 </style>
 
 <!-- Wrapper adapts layout via Tailwind breakpoints -->
-<div class="h-full flex flex-col bg-zinc-900 desktop-wrapper" class:desktop-collapsed={!isMobile && isCollapsed}>
+<div class="h-full flex flex-col bg-zinc-900 desktop-wrapper"
+     class:desktop-collapsed={!isMobile && isCollapsed}
+     class:border-b={isMobile && !isCollapsed}
+     class:border-zinc-700={isMobile && !isCollapsed}
+>
   <!-- Header bar only visible on small screens -->
   <div class="md:hidden flex items-center justify-between px-3 py-2 border-b border-zinc-700">
     <span class="font-mono text-xs text-zinc-400">terminal</span>

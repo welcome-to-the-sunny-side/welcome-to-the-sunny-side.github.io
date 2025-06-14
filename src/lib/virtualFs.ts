@@ -67,7 +67,18 @@ function getNode(path: string): FsNode | null {
 export function list(path: string): string[] | null {
   const node = getNode(path);
   if (!node || node.type !== 'dir' || !node.children) return null;
-  return Object.keys(node.children);
+  const dirs: string[] = [];
+  const files: string[] = [];
+  for (const [name, child] of Object.entries(node.children)) {
+    if (child.type === 'dir') {
+      dirs.push(name);
+    } else {
+      files.push(name);
+    }
+  }
+  dirs.sort();
+  files.sort();
+  return [...dirs, ...files];
 }
 
 export function isFile(path: string): boolean {
@@ -75,9 +86,16 @@ export function isFile(path: string): boolean {
   return !!node && node.type === 'file';
 }
 
+export function isDir(path: string): boolean {
+  const node = getNode(path);
+  return !!node && node.type === 'dir';
+}
+
 export function resolvePath(cwd: string[], input: string): string[] | null {
-  const parts = input === '/' ? [] : input.split('/').filter(Boolean);
-  const stack = [...cwd];
+  if (input === '/') return [];
+  const isAbs = input.startsWith('/');
+  const parts = input.split('/').filter(Boolean);
+  const stack = isAbs ? [] : [...cwd];
   for (const part of parts) {
     if (part === '..') {
       stack.pop();

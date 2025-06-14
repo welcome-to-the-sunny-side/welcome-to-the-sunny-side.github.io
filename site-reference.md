@@ -1,9 +1,9 @@
 # Welcome to the Sunny Side – Site Reference
 
-_Last updated: 2025-06-14_
+_Last updated: 2025-06-14_ (Updated with Tailwind CSS and Markdown rendering details)
 
 ## 1 . High-level Overview
-The site is a **static, terminal-driven blog & knowledge base** built with **Astro** for static generation and **Svelte** for the interactive UI.  All human-readable content lives in Markdown files under `src/content` and is presented at URLs that end in `.html`.
+The site is a **static, terminal-driven blog & knowledge base** built with **Astro** for static generation and **Svelte** for the interactive UI. Styling is primarily handled by **Tailwind CSS** (integrated via `@astrojs/tailwind`), utilizing its utility classes and the `@tailwindcss/typography` plugin for Markdown rendering. All human-readable content lives in Markdown files under `src/content` and is presented at URLs that end in `.html`.
 
 Key pillars:
 1. **Virtual File System (VFS)** – mirrors `src/content` and maps `*.md` → `*.html`.
@@ -37,6 +37,9 @@ The site is published via GitHub Pages; Astro’s static output lives in `dist/`
 │  │   └─ router.ts
 │  └─ content/              **all markdown lives here**
 │      └─ ...
+├─ src/styles/
+│  └─ global.css            Tailwind directives, highlight.js import
+├─ tailwind.config.js       Tailwind CSS configuration
 └─ site-reference.md        (this file)
 ```
 
@@ -70,7 +73,7 @@ B --> T[TerminalPane]
 
 Explanation:
 1. **Build time:** `[...slug].astro/getStaticPaths` reads the VFS to emit every `.html` path.
-2. **Runtime (server-side render / pre-render):** `[...slug].astro` always renders `<BaseLayout>`, which includes both `ContentPane` and `TerminalPane`. `ContentPane.svelte` checks the markdown’s front-matter, and if `layout: blog`, applies blog styling to the content; otherwise, it renders with regular prose styling.
+2. **Runtime (server-side render / pre-render):** `[...slug].astro` always renders `<BaseLayout>`, which includes both `ContentPane` and `TerminalPane`. `ContentPane.svelte` checks the markdown’s front-matter. It applies a `.prose` class (from Tailwind Typography) for general Markdown styling, and if `layout: blog` is present, it adds further blog-specific styling.
 3. **Client side:** The embedded Svelte app controls navigation so the page never reloads after the first hit.
 
 ---
@@ -96,8 +99,13 @@ The terminal keeps history, supports arrow-key navigation, and can be collapsed 
    title: My Post
    date: 2025-06-14
    tags: [astro, svelte]
-   layout: blog        # optional – enables blog styling in ContentPane
+   displayMode: blog        # optional – enables blog styling in ContentPane
+   # For custom elements like spoilers or theorem boxes, use specific HTML structures:
+   # <details><summary class="spoiler-summary">Title</summary><div class="spoiler-content">Content...</div></details>
+   # <div class="theorem-box">Content...</div>
+   # These are styled by src/styles/custom-elements.css
    ---
+
    ```
 3. The file will be available at the equivalent `.html` path, e.g. `src/content/foo/bar.md` → `/foo/bar.html`.
 4. No code changes or route files required.
@@ -122,13 +130,69 @@ For GitHub Pages, push the `dist/` output (or let an action deploy).
 | Terminal `open` says “not a file”         | Path typo or points to directory            |
 | New file not built                        | Ensure filename ends with `.md`; rerun build|
 | Blog page shows prose, not blog styling | Front-matter lacks `layout: blog`           |
+| Markdown content (headings, lists) unstyled | Ensure `tailwind.config.js` includes `@tailwindcss/typography` plugin and `content` paths are correct. Verify `src/styles/global.css` has `@tailwind base/components/utilities` directives. Check `ContentPane.svelte` applies `.prose` class to the content wrapper. |
 
 ---
 
-## 9 . Extending the Site
+## 9 . Theme & Styling Overhaul (Retro Dark Minimal)
+_Updated: 2025-06-14_
+
+The site underwent a significant visual overhaul to implement a retro-dark, minimalistic theme with smaller fonts and smooth transitions.
+
+**Key Changes & Files:**
+
+*   **Overall Aesthetic:**
+    *   **Theme:** Retro, dark, minimalistic.
+    *   **Primary Font:** IBM Plex Mono (imported in `global.css`).
+    *   **Base Font Size:** 14px for UI elements, 0.9rem (approx 14.4px) for Markdown prose content.
+    *   **Transitions:** Smooth, custom cubic-bezier for UI interactions.
+
+*   **`tailwind.config.js`:**
+    *   `darkMode: 'class'` (the `dark` class is applied to the `<html>` element in `BaseLayout.astro`).
+    *   **Custom Color Palette:**
+        *   `bg`: charcoal (`#0d0d0d`)
+        *   `surface`: slightly lighter charcoal (`#1a1a1a` for panels/cards, `#161616` for custom element surfaces)
+        *   `accent`: neon teal (`#64ffda`)
+        *   `accent-subtle`: muted teal (`#264d48`)
+        *   `warning`: warm orange (`#ffb454`)
+        *   `text`: light gray (`#e0e0e0`)
+        *   `text-muted`: muted gray (`#9e9e9e`)
+    *   **Font Sizes:** `fontSize` scale updated. `text-base` is 14px. Markdown content (`.prose`) defaults to `0.9rem` via typography plugin configuration.
+    *   **Typography Plugin (`@tailwindcss/typography`):** Configured to set the base `DEFAULT` prose font size to `0.9rem`.
+
+*   **`src/styles/global.css`:**
+    *   Imports IBM Plex Mono.
+    *   Applies global `body` styles: theme background, text color, and `font-mono`.
+    *   Custom `::selection` styles using theme colors.
+    *   Contains essential Tailwind directives: `@tailwind base;`, `@tailwind components;`, `@tailwind utilities;`.
+
+*   **`src/styles/custom-elements.css`:**
+    *   Uses CSS variables (e.g., `--el-accent`, `--el-surface`, `--el-text`) for consistent theming of custom Markdown elements.
+    *   **Spoiler:** Styled with a custom caret. Content has a transparent background and a `var(--el-text)` border.
+    *   **Theorem Box:** Styled with a transparent background and a `var(--el-text)` border.
+
+*   **`src/layouts/BaseLayout.astro`:**
+    *   Applies `dark` class to `<html>` tag.
+    *   Sets theme background and text colors on the main content container.
+
+*   **`src/components/TerminalPane.svelte`:**
+    *   The main wrapper `div` has a conditional `border-b border-zinc-700` applied when in mobile view (`isMobile`) and the terminal is not collapsed (`!isCollapsed`).
+
+*   **`src/components/ContentPane.svelte`:**
+    *   Blog post titles, dates, and tags styled with theme colors and smaller font sizes.
+    *   Markdown content uses `prose prose-invert`.
+
+This overhaul ensures a consistent visual identity across the site, aligning with the desired retro-dark aesthetic.
+
+---
+
+## 10. Extending the Site
 * **Custom commands:** add to `TerminalIsland.svelte`.
-* **Styling:** Tailwind classes are sprinkled in layouts; edit them or add global CSS.
-* **Components in Markdown:** Astro’s markdown supports `<Component />` usage if imported via front-matter.
+* **Styling:** Primarily use **Tailwind CSS utility classes** directly in your Svelte/Astro components. `src/styles/global.css` is used for Tailwind's base directives (`@tailwind base;`, etc.), importing external CSS (like `highlight.js` themes), and minimal global styles if absolutely necessary.
+* **Custom Elements in Markdown:** For elements like spoilers or theorem boxes, use specific HTML structures that are styled by `src/styles/custom-elements.css`. For example:
+  * **Spoiler:** `<details><summary class="spoiler-summary">Spoiler Title</summary><div class="spoiler-content">Hidden content...</div></details>`
+  * **Theorem Box:** `<div class="theorem-box">Theorem content...</div>`
+  For other types of reusable UI, Astro's standard Svelte component integration in Markdown (via frontmatter imports) can be used if you adapt the content rendering pipeline away from the custom `ContentPane.svelte` raw Markdown processing.
 * **Search:** hook into the VFS tree and a client-side fuzzy matcher.
 
 Enjoy hacking on _Welcome to the Sunny Side_!

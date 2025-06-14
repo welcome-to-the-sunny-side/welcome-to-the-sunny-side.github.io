@@ -1,7 +1,7 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { currentPath } from '../stores/router';
-import { list, isFile, resolvePath } from '../lib/virtualFs';
+import { list, isFile, isDir, resolvePath } from '../lib/virtualFs';
 import 'xterm/css/xterm.css';
 
 let container: HTMLDivElement;
@@ -45,18 +45,68 @@ onMount(async () => {
     const [cmd, ...args] = command.split(/\s+/);
     switch (cmd) {
       case 'ls': {
-        const entries = list('/' + cwd.join('/')) || [];
-        term.writeln(entries.join('  '));
+                // Detect recursive flag (-R or -r)
+        const flags = args.filter(a => a.startsWith('-'));
+        const recursive = flags.includes('-R') || flags.includes('-r');
+        const targetArg = args.find(a => !a.startsWith('-')) || '.';
+
+        const pathArr = resolvePath(cwd, targetArg);
+        if (!pathArr) {
+          term.writeln(`ls: cannot access '${targetArg}': No such file or directory`);
+          break;
+        }
+        const fullPath = '/' + pathArr.join('/');
+        if (isFile(fullPath)) {
+          const color = '\x1b[37m';
+          term.writeln(`${color}${targetArg}\x1b[0m`);
+          break;
+        }
+
+        if (!recursive) {
+          const children = list(fullPath) || [];
+          children.forEach((name, idx) => {
+            const isLast = idx === children.length - 1;
+            const branch = isLast ? '└─ ' : '├─ ';
+            const col = isDir(`${fullPath}/${name}`) ? '\x1b[34m' : '\x1b[37m';
+            term.writeln(`${branch}${col}${name}\x1b[0m`);
+          });
+        } else {
+          // Recursive tree view
+          const lines: string[] = [];
+          const buildLines = (seg: string[], prefix = '') => {
+            const children = list('/' + seg.join('/')) || [];
+            children.forEach((name, idx) => {
+              const isLast = idx === children.length - 1;
+              const branch = isLast ? '└─ ' : '├─ ';
+              const childSegs = [...seg, name];
+              const childFull = '/' + childSegs.join('/');
+              const dir = isDir(childFull);
+              const color = dir ? '\x1b[34m' : '\x1b[37m';
+              lines.push(`${prefix}${branch}${color}${name}\x1b[0m`);
+              if (dir) {
+                const newPrefix = prefix + (isLast ? '   ' : '│  ');
+                buildLines(childSegs, newPrefix);
+              }
+            });
+          };
+          buildLines(pathArr);
+          for (const l of lines) term.writeln(l);
+        }
         break;
       }
       case 'cd': {
         const target = args[0] || '/';
         const resolved = resolvePath(cwd, target);
-        if (resolved) {
-          cwd = resolved;
-        } else {
+        if (!resolved) {
           term.writeln(`cd: no such directory: ${target}`);
+          break;
         }
+        const dirPath = '/' + resolved.join('/');
+        if (!isDir(dirPath)) {
+          term.writeln(`cd: not a directory: ${target}`);
+          break;
+        }
+        cwd = resolved;
         break;
       }
       case 'open': {
@@ -85,8 +135,11 @@ onMount(async () => {
         }
         break;
       }
+      case 'clear':
+        term.clear();
+        break;
       case 'help':
-        term.writeln('Commands: ls, cd <dir>, open <file>, pop, help');
+        term.writeln('Commands: ls [-R] [path], cd <dir>, open <file>, pop, clear, help');
         break;
       default:
         term.writeln(`unknown command: ${cmd}`);

@@ -81,13 +81,24 @@ Explanation:
 ## 5 . Terminal Commands
 | Command        | Description                                               |
 |---------------|-----------------------------------------------------------|
-| `ls`           | List items in current directory                           |
+| `ls`           | List items in current directory (tree with -R/-r)         |
 | `cd <dir>`     | Change directory (relative or absolute)                  |
 | `open <file>`  | Push file path to router and render it                   |
 | `pop`          | Return to previous path                                  |
-| `help`         | Show built-in command help                               |
+| `clear`        | Clear the terminal output                                |
+| `help`         | Show built-in command help (now formatted, colorized)    |
 
 The terminal keeps history, supports arrow-key navigation, and can be collapsed with the **`Tab`** key.
+
+### Terminal UI Color Scheme (2025-06)
+- **Prompt path and `/`**: Green (`rgb(100,255,218)`)
+- **Files**: Yellow (`rgb(255,230,120)`)
+- **Directories**: Plain white
+- **Help command**: Now formatted in a colorized, aligned table for readability
+- **Cursor**: Green (`rgb(100,255,218)`), blinks
+- **Active border**: Light green, semi-transparent
+- **Other**: Terminal supports focus/blur border effect, mobile collapse, and accessibility improvements
+
 
 ---
 

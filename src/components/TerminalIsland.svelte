@@ -2,9 +2,17 @@
 import { onMount } from 'svelte';
 import { currentPath } from '../stores/router';
 import { list, isFile, isDir, resolvePath } from '../lib/virtualFs';
+
+const PATH_RGB = '100;255;218'; // old green for prompt path and '/'
+const PATH_COLOR = `\x1b[38;2;${PATH_RGB}m`;
+const FILE_RGB = '255;230;120'; // yellowish highlight for files
+const FILE_COLOR = `\x1b[38;2;${FILE_RGB}m`;
+const DIR_COLOR = '\x1b[37m'; // plain white for directories
 import 'xterm/css/xterm.css';
 
 let container: HTMLDivElement;
+// reactive focus state for border highlight
+let isFocused = true;
 // Expose terminal instance for external focus control
 let termInstance: any;
 
@@ -13,12 +21,19 @@ export function focusTerminal() {
 }
 
 onMount(async () => {
+  isFocused = true; // Ensure border is active on mount
   const { Terminal } = await import('xterm');
   const { FitAddon } = await import('@xterm/addon-fit');
   const term = new Terminal({
-    theme: { background: '#18181b', foreground: '#e4e4e7', cursor: '#ffffff' },
-    fontFamily: 'Menlo, monospace',
-    fontSize: 14,
+    theme: {
+      background: '#0f0f0f',
+      foreground: '#d0d0d0',
+      cursor: 'rgb(100,255,218)'
+    },
+    // cursorBlink: true,
+    fontFamily: 'IBM Plex Mono, Menlo, monospace',
+    fontSize: 13,
+    letterSpacing: 0.25,
     cols: 80,
     rows: 24,
     convertEol: true,
@@ -30,14 +45,19 @@ onMount(async () => {
   fit.fit();
   term.focus();
 
+  function setFocusStyle(focused: boolean) {
+    isFocused = focused;
+  }
+  term.textarea?.addEventListener('focus', () => setFocusStyle(true));
+  term.textarea?.addEventListener('blur', () => setFocusStyle(false));
+
   let cwd: string[] = [];
   let history: string[] = ['/'];
   let buffer = '';
 
   const prompt = () => {
     const path = '/' + cwd.join('/');
-    // Using ANSI escape codes for colors: cyan for path, green for '$'
-    term.write(`\r\n\x1b[36m${path}\x1b[0m \x1b[32m$\x1b[0m `);
+    term.write(`${PATH_COLOR}${path}\x1b[0m $ `);
   };
 
   function exec(command: string) {
@@ -58,7 +78,7 @@ onMount(async () => {
         const fullPath = '/' + pathArr.join('/');
         if (isFile(fullPath)) {
           const color = '\x1b[37m';
-          term.writeln(`${color}${targetArg}\x1b[0m`);
+          term.writeln(`${(isDir(fullPath)?DIR_COLOR:FILE_COLOR)}${targetArg}\x1b[0m`);
           break;
         }
 
@@ -67,7 +87,7 @@ onMount(async () => {
           children.forEach((name, idx) => {
             const isLast = idx === children.length - 1;
             const branch = isLast ? '└─ ' : '├─ ';
-            const col = isDir(`${fullPath}/${name}`) ? '\x1b[34m' : '\x1b[37m';
+            const col = isDir(`${fullPath}/${name}`) ? DIR_COLOR : FILE_COLOR;
             term.writeln(`${branch}${col}${name}\x1b[0m`);
           });
         } else {
@@ -81,7 +101,7 @@ onMount(async () => {
               const childSegs = [...seg, name];
               const childFull = '/' + childSegs.join('/');
               const dir = isDir(childFull);
-              const color = dir ? '\x1b[34m' : '\x1b[37m';
+              const color = dir ? DIR_COLOR : FILE_COLOR;
               lines.push(`${prefix}${branch}${color}${name}\x1b[0m`);
               if (dir) {
                 const newPrefix = prefix + (isLast ? '   ' : '│  ');
@@ -138,9 +158,23 @@ onMount(async () => {
       case 'clear':
         term.clear();
         break;
-      case 'help':
-        term.writeln('Commands: ls [-R] [path], cd <dir>, open <file>, pop, clear, help');
+      case 'help': {
+        // Color and align command list
+        const pad = (s: string, n: number) => s + ' '.repeat(Math.max(0, n-s.length));
+        const entries = [
+          { cmd: 'ls [-R] [path]', desc: 'list directory (recursive with -R)' },
+          { cmd: 'cd <dir>', desc: 'change directory' },
+          { cmd: 'open <file>', desc: 'open file in content pane' },
+          { cmd: 'pop', desc: 'go back' },
+          { cmd: 'clear', desc: 'clear terminal' },
+          { cmd: 'help', desc: '-' },
+        ];
+        term.writeln(`${PATH_COLOR}COMMAND         DESCRIPTION\x1b[0m`);
+        for (const {cmd, desc} of entries) {
+          term.writeln(`${FILE_COLOR}${pad(cmd, 14)}\x1b[0m  ${desc}`);
+        }
         break;
+      }
       default:
         term.writeln(`unknown command: ${cmd}`);
     }
@@ -182,4 +216,31 @@ onMount(async () => {
 });
 </script>
 
-<div bind:this={container} class="h-full w-full"></div>
+<style>
+  .terminal-shell {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #3f3f46;
+    border-radius: 2px;
+    background: #0f0f0f;
+    box-shadow: inset 0 0 4px #000;
+    overflow: hidden;
+    transition: border-color 0.2s ease-out;
+  }
+  .terminal-shell.focused {
+    border-color: #caffee99;
+  }
+  /* Scrollbar */
+  :global(.terminal-shell .xterm-viewport::-webkit-scrollbar) {
+    width: 6px;
+  }
+  :global(.terminal-shell .xterm-viewport::-webkit-scrollbar-track) {
+    background: transparent;
+  }
+  :global(.terminal-shell .xterm-viewport::-webkit-scrollbar-thumb) {
+    background: rgba(63,167,255,0.3);
+    border-radius: 3px;
+  }
+</style>
+
+<div bind:this={container} class="terminal-shell h-full w-full" class:focused={isFocused}></div>

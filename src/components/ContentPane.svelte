@@ -98,7 +98,7 @@ function parseFrontmatter(raw: string) {
 </script>
 
 {#if isBlog}
-  <section class="mx-auto max-w-2xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro">
+  <section class="mx-auto max-w-4xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro">
     <header class="mb-8">
       <h1 class="text-2xl font-semibold tracking-tight text-accent">{frontmatter.title ?? 'Untitled'}</h1>
       {#if frontmatter.date}

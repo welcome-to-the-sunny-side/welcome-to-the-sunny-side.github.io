@@ -8,7 +8,13 @@
 
   onMount(() => {
     const saved = sessionStorage.getItem('terminalCollapsed');
-    if (saved) collapsed.set(saved === 'true');
+    if (saved) {
+      collapsed.set(saved === 'true');
+    } else if (window.innerWidth < 768) {
+      // Default to collapsed on mobile
+      collapsed.set(true);
+      sessionStorage.setItem('terminalCollapsed', 'true');
+    }
   });
 
   let isCollapsed = false;
@@ -42,10 +48,17 @@
         e.preventDefault();
         e.stopImmediatePropagation();
         toggle();
-      } else if (e.key === 'ArrowLeft' && isCollapsed) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        toggle();
+      } else if (e.key === 'ArrowLeft') {
+        if (isCollapsed) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          toggle();
+        } else {
+          // Focus terminal if already expanded
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          islandComp?.focusTerminal();
+        }
       }
     };
 

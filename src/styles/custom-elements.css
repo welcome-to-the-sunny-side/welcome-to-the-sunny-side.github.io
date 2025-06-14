@@ -117,8 +117,3 @@ ul.outline-list,
 .outline-list li:last-child::before {
   height: 0.8em;
 }
-
-/* hover accent */
-.outline-list li:hover {
-  color: var(--el-accent);
-}

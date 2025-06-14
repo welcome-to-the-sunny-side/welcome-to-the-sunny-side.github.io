@@ -26,9 +26,22 @@ export function resizeTerminal() {
   fitAddon?.fit();
 }
 
+// --- Fuse.js fuzzy search setup ---
+const RAW_FILES = import.meta.glob('/src/content/**/*.md', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+
+function getRaw(virtualPath: string): string | null {
+  // "/posts/foo.html" -> "/src/content/posts/foo.md"
+  const rel = virtualPath.replace(/^\//, '').replace(/\.html$/, '.md');
+  return RAW_FILES['/src/content/' + rel] ?? null;
+}
+
+let FuseLib: any;
 
 onMount(async () => {
   isFocused = true; // Ensure border is active on mount
+  // Dynamically import Fuse.js once on client
+  const { default: Fuse } = await import('fuse.js');
+  FuseLib = Fuse;
   const { Terminal } = await import('xterm');
   const { FitAddon } = await import('@xterm/addon-fit');
   const term = new Terminal({
@@ -63,7 +76,7 @@ onMount(async () => {
   let history: string[] = ['/'];
   let buffer = '';
   // --- Autocomplete state ---
-  const COMMANDS = ['ls', 'cd', 'open', 'pop', 'clear', 'help'];
+  const COMMANDS = ['ls', 'cd', 'open', 'pop', 'clear', 'help', 'grep'];
   let completions: string[] = [];
   let compIndex = 0;
   let ghostActive = false;
@@ -172,6 +185,62 @@ onMount(async () => {
       case 'clear':
         term.clear();
         break;
+      case 'grep': {
+        if (!args.length) {
+          term.writeln('grep: usage: grep <pattern> [path]');
+          break;
+        }
+        const pattern = args[0];
+        const target = args[1] ?? '.';
+        const resolved = resolvePath(cwd, target);
+        if (!resolved) {
+          term.writeln(`grep: ${target}: No such file or directory`);
+          break;
+        }
+        const searchRoot = '/' + resolved.join('/');
+        const files: string[] = [];
+        const collect = (p: string) => {
+          if (isFile(p) && p.endsWith('.html')) {
+            files.push(p);
+            return;
+          }
+          if (isDir(p)) {
+            const children = list(p) || [];
+            children.forEach(c => {
+              const next = p === '/' ? '/' + c : `${p}/${c}`; // avoid double // at root
+              collect(next);
+            });
+          }
+        };
+        collect(searchRoot);
+        // Build search corpus
+        const records: { line: string; file: string; lineNum: number }[] = [];
+        for (const file of files) {
+          const raw = getRaw(file);
+          if (!raw) continue;
+          raw.split('\n').forEach((line, idx) => {
+            records.push({ line, file, lineNum: idx + 1 });
+          });
+        }
+        // Instantiate Fuse
+        const fuse = new FuseLib(records, {
+          keys: ['line'],
+          threshold: 0.4,
+          ignoreLocation: true,
+          includeScore: false,
+        });
+        const results = fuse.search(pattern).slice(0, 100);
+        if (!results.length) {
+          term.writeln('grep: no matches');
+        } else {
+          results.forEach(r => {
+            const { file, lineNum, line } = r.item;
+            term.writeln(`${FILE_COLOR}${file}\x1b[0m:${lineNum}:${line.trim()}`);
+          });
+          term.writeln(`${results.length} match${results.length === 1 ? '' : 'es'}`);
+        }
+        break;
+      }
       case 'help': {
         // Color and align command list
         const pad = (s: string, n: number) => s + ' '.repeat(Math.max(0, n-s.length));
@@ -179,6 +248,7 @@ onMount(async () => {
           { cmd: 'ls [-R] [path]', desc: 'list directory (recursive with -R)' },
           { cmd: 'cd <dir>', desc: 'change directory' },
           { cmd: 'open <file>', desc: 'open file in content pane' },
+          { cmd: 'grep <pattern> [path]', desc: 'fuzzy search markdown files' },
           { cmd: 'pop', desc: 'go back' },
           { cmd: 'clear', desc: 'clear terminal' },
           { cmd: 'help', desc: '-' },
@@ -265,7 +335,7 @@ onMount(async () => {
     let cands: string[] = [];
     if (tokens.length === 1) {
       cands = buildCommandCompletions(current);
-    } else if (['cd', 'ls', 'open'].includes(first)) {
+    } else if (['cd', 'ls', 'open', 'grep'].includes(first)) {
       cands = buildPathCompletions(current);
     }
     completions = cands;

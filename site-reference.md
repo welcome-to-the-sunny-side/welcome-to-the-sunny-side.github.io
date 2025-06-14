@@ -1,6 +1,6 @@
 # Welcome to the Sunny Side – Site Reference
 
-_Last updated: 2025-06-15_ (Updated with Tailwind CSS and Markdown rendering details)
+_Last updated: 2025-06-15_ (Added Fuse.js-powered `grep` command and search details)
 
 ## 1 . High-level Overview
 The site is a **static, terminal-driven blog & knowledge base** built with **Astro** for static generation and **Svelte** for the interactive UI. Styling is primarily handled by **Tailwind CSS** (integrated via `@astrojs/tailwind`), utilizing its utility classes and the `@tailwindcss/typography` plugin for Markdown rendering. All human-readable content lives in Markdown files under `src/content` and is presented at URLs that end in `.html`.
@@ -83,6 +83,7 @@ Explanation:
 |---------------|-----------------------------------------------------------|
 | `ls`           | List items in current directory (tree with -R/-r)         |
 | `cd <dir>`     | Change directory (relative or absolute)                  |
+| `grep <pattern> [path]` | Fuzzy search Markdown-backed `.html` files (Fuse.js) |
 | `open <file>`  | Push file path to router and render it                   |
 | `pop`          | Return to previous path                                  |
 | `clear`        | Clear the terminal output                                |
@@ -208,6 +209,16 @@ This overhaul ensures a consistent visual identity across the site, aligning wit
 
 ---
 
+### Grep Cheat-Sheet
+| Example | What it does |
+|---------|--------------|
+| `grep suffix_tree` | Search everything for "suffix_tree" |
+| `grep "active point" algo/` | Phrase search in the `algo` directory |
+| `grep leaf algo/suffix_tree_funny_construction.html` | Search one file |
+| `grep dp` | Fuzzy match – also finds "Dp" or "DP" |
+
+---
+
 ## 10. Extending the Site
 * **Custom commands:** add to `TerminalIsland.svelte`.
 * **Styling:** Primarily use **Tailwind CSS utility classes** directly in your Svelte/Astro components. `src/styles/global.css` is used for Tailwind's base directives (`@tailwind base;`, etc.), importing external CSS (like `highlight.js` themes), and minimal global styles if absolutely necessary.
@@ -217,6 +228,12 @@ This overhaul ensures a consistent visual identity across the site, aligning wit
   * **Theorem Box:** `<div class="theorem-box">Theorem content...</div>`
     *Long lines (e.g., LaTeX) will not overflow but instead allow horizontal scrolling inside the theorem box.*
   For other types of reusable UI, Astro's standard Svelte component integration in Markdown (via frontmatter imports) can be used if you adapt the content rendering pipeline away from the custom `ContentPane.svelte` raw Markdown processing.
-* **Search:** hook into the VFS tree and a client-side fuzzy matcher.
+* **Search:** The terminal now includes a Fuse.js-backed `grep` command for fuzzy, typo-tolerant search over all Markdown content. Use:
+  * `grep pattern` – search from the current directory down.
+  * `grep pattern path/` – limit search to a subdir.
+  * `grep pattern file.html` – search a single file.
+  Returns top 100 matches as `file:line:snippet`.
+
+The search corpus is built client-side by mapping each `.html` file back to its raw Markdown (`import.meta.glob('/src/content/**/*.md', { as: 'raw' })`). Fuse.js is dynamically imported to keep the initial bundle small.
 
 Enjoy hacking on _Welcome to the Sunny Side_!

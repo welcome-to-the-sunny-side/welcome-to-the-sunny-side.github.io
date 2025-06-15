@@ -275,6 +275,7 @@ onMount(async () => {
           { key: '← / →', desc: 'cycle suggestions' },
           { key: 'Shift+←', desc: 'collapse terminal' },
           { key: 'Shift+→', desc: 'expand / focus terminal' },
+          { key: 'Shift+↑', desc: 'focus content pane' },
           { key: 'h/j/k/l', desc: 'scroll content pane (when terminal unfocused)' },
         ];
         for (const {key, desc} of sc) {

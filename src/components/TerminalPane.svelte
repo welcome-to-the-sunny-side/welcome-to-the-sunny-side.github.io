@@ -62,6 +62,14 @@
           e.stopImmediatePropagation();
           islandComp?.focusTerminal();
         }
+      } else if (e.key === 'ArrowUp') {
+        if (!isCollapsed) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          // Blur terminal textarea and let focus return to main content
+          const active = document.activeElement as HTMLElement | null;
+          if (active) active.blur();
+        }
       }
     };
 

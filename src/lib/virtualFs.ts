@@ -35,9 +35,9 @@ function buildVirtualFsTree(paths: string[]): FsNode {
   return root;
 }
 
-// Use Vite's import.meta.glob to enumerate all markdown files in src/content
+// Use Vite's import.meta.glob to enumerate all markdown and html files in src/content
 const contentFiles = Object.keys(
-  import.meta.glob('/src/content/**/*.md', { query: '?raw', import: 'default', eager: false })
+  import.meta.glob('/src/content/**/*.{md,html}', { query: '?raw', import: 'default', eager: false })
 );
 
 let _virtualFs: FsNode | null = null;
@@ -47,6 +47,7 @@ export function getVirtualFs(): FsNode {
   // Convert markdown source paths (foo.md) to virtual paths ending with .html so
 // users interact with rendered filenames (e.g. foo.html)
 const relPaths = contentFiles.map(f =>
+  // If source is markdown, map extension to .html, otherwise keep .html as-is
   f.replace(/^\/src\/content\//, '').replace(/\.md$/, '.html')
 );
   _virtualFs = buildVirtualFsTree(relPaths);

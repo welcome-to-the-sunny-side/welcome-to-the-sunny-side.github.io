@@ -9,7 +9,8 @@ import { tick } from 'svelte';
 
   // Import all markdown under src/content as raw strings
   // load all markdown as raw strings (Vite 5 syntax)
-const pages = import.meta.glob('../content/**/*.md', { query: '?raw', import: 'default' });
+const pagesMd = import.meta.glob('../content/**/*.md', { query: '?raw', import: 'default' });
+const pagesHtml = import.meta.glob('../content/**/*.html', { query: '?raw', import: 'default' });
 
   const md: MarkdownIt = new MarkdownIt({
   html: true,
@@ -32,6 +33,7 @@ let contentHtml: string = md.render(contentRaw);
 let backgroundImagePC: string | null = null;
 let backgroundImageMobile: string | null = null;
 let isMobileView: boolean = false;
+let htmlContainer: HTMLDivElement | null = null;
 
   // Reactive statement for currentBackgroundImage
   $: currentBackgroundImage = isMobileView && backgroundImageMobile ? backgroundImageMobile : backgroundImagePC;
@@ -93,11 +95,12 @@ function parseFrontmatter(raw: string) {
     // Convert "/blogs/algo/treaps.md" -> "../content/blogs/algo/treaps.md"
     let filePath = path;
     if (filePath === '/') filePath = '/home.html'; // default landing page
-    // Convert .html path to matching markdown source
+    // Try to resolve Markdown source first
     const mdPath = filePath.replace(/\.html$/, '.md');
-    const key = '../content' + mdPath;
-    if (key in pages) {
-      contentRaw = (await (pages as any)[key]()) as string;
+    const mdKey = '../content' + mdPath;
+    const htmlKey = '../content' + filePath;
+    if (mdKey in pagesMd) {
+      contentRaw = (await (pagesMd as any)[mdKey]()) as string;
       const { fm, body } = parseFrontmatter(contentRaw);
       frontmatter = fm;
       isBlog = frontmatter.displayMode === 'blog';
@@ -107,6 +110,24 @@ function parseFrontmatter(raw: string) {
       await tick();
       if (typeof window !== 'undefined' && (window as any).MathJax?.typesetPromise) {
         (window as any).MathJax.typesetPromise();
+      }
+    } else if (htmlKey in pagesHtml) {
+      // Raw HTML file – execute as-is
+      contentRaw = (await (pagesHtml as any)[htmlKey]()) as string;
+      frontmatter = {};
+      isBlog = false;
+      backgroundImagePC = null;
+      backgroundImageMobile = null;
+      contentHtml = contentRaw;
+      await tick();
+      // Execute inline scripts so that browser games work
+      if (typeof window !== 'undefined' && htmlContainer) {
+        htmlContainer.querySelectorAll('script').forEach((oldScript) => {
+          const newScript = document.createElement('script');
+          [...oldScript.attributes].forEach(attr => newScript.setAttribute(attr.name, attr.value));
+          newScript.textContent = oldScript.textContent;
+          oldScript.replaceWith(newScript);
+        });
       }
     } else {
       contentRaw = `# 404\nPath not found: ${path}`;
@@ -152,7 +173,7 @@ function parseFrontmatter(raw: string) {
       <!-- This div is purely for the background image -->
     </div>
   {:else}
-    <div class="p-4 prose prose-invert max-w-none bg-surface text-text transition-colors duration-150 ease-retro">
+    <div bind:this={htmlContainer} id="content-html-container" class="p-4 prose prose-invert max-w-none bg-surface text-text transition-colors duration-150 ease-retro">
       {@html contentHtml}
     </div>
   {/if}

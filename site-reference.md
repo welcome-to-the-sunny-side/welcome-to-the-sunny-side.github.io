@@ -1,9 +1,9 @@
 # Welcome to the Sunny Side – Site Reference
 
-_Last updated: 2025-06-15_ (Added Fuse.js-powered `grep` command and search details)
+_Last updated: 2025-06-16_ (HTML file support & new Games section; previous additions: Added Fuse.js-powered `grep` command and search details)
 
 ## 1 . High-level Overview
-The site is a **static, terminal-driven blog & knowledge base** built with **Astro** for static generation and **Svelte** for the interactive UI. Styling is primarily handled by **Tailwind CSS** (integrated via `@astrojs/tailwind`), utilizing its utility classes and the `@tailwindcss/typography` plugin for Markdown rendering. All human-readable content lives in Markdown files under `src/content` and is presented at URLs that end in `.html`.
+The site is a **static, terminal-driven blog & knowledge base** built with **Astro** for static generation and **Svelte** for the interactive UI. Styling is primarily handled by **Tailwind CSS** (integrated via `@astrojs/tailwind`), utilizing its utility classes and the `@tailwindcss/typography` plugin for Markdown rendering. All human-readable content lives in Markdown files under `src/content` and is presented at URLs that end in `.html`. Additionally, the site now supports rendering of HTML files, allowing for more diverse content presentation. A new Games section has also been added, providing a dedicated space for browser-game adjacent pages.
 
 Key pillars:
 1. **Virtual File System (VFS)** – mirrors `src/content` and maps `*.md` → `*.html`.
@@ -96,6 +96,7 @@ Explanation:
 | `← / →` | Cycle through autocomplete suggestions |
 | `Shift + ←` | Collapse the terminal pane (desktop) |
 | `Shift + →` | Expand / focus the terminal pane (desktop) |
+| `Shift + ↑` | Focus on the content pane |
 | `h / j / k / l` | Scroll content pane when terminal is not focused |
 
 The terminal keeps history, shows inline autocomplete suggestions while you type, and supports arrow-key navigation. On desktop widths you can collapse/expand it with **Shift + ← / Shift + →**.
@@ -235,5 +236,21 @@ This overhaul ensures a consistent visual identity across the site, aligning wit
   Returns top 100 matches as `file:line:snippet`.
 
 The search corpus is built client-side by mapping each `.html` file back to its raw Markdown (`import.meta.glob('/src/content/**/*.md', { as: 'raw' })`). Fuse.js is dynamically imported to keep the initial bundle small.
+
+## 11 . HTML Content Support
+Historically, **all authored content lived in Markdown** and was compiled into `.html` at build-time. The router and terminal now fully understand *native* `.html` files in `src/content`:
+
+* Any `.html` file under `src/content` is mapped 1-to-1 in the VFS (no markdown processing).
+* Terminal commands (`ls`, `open`, `grep`) treat `.html` the same as generated pages.
+* This enables hand-crafted mini-apps or embedded widgets without a Markdown wrapper – see the new **Games** section below.
+
+## 12 . Games (`/content/games`)
+A lightweight playground for interactive HTML pages that live alongside blog posts.
+
+| Game | Path | Tech | Notes |
+|------|------|------|-------|
+| **Zetamac Arithmetic Sprint** | `/games/zetamac.html` | Vanilla JS + Tailwind + Chart.js | Timed arithmetic quiz with detailed performance graphs, high-score tracking, keyboard shortcuts. |
+
+Games load inside the same Svelte `ContentPane` via the catch-all route, inheriting the dark retro theme automatically.
 
 Enjoy hacking on _Welcome to the Sunny Side_!

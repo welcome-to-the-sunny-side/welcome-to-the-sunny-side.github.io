@@ -2,7 +2,7 @@ const e=`---
 displayMode: blog
 title: "Finding K neighbours in an implicitly defined bipartite graph"
 date: 2024-08-15
-tags: [algorithm, homepage, incomplete]
+tags: [algorithm, incomplete]
 ---
 
 ## Outline

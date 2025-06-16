@@ -2,7 +2,7 @@ const e=`---
 displayMode: blog
 title: "A funny way to construct suffix tree and do other things"
 date: 2024-08-16
-tags: [algorithm, homepage]
+tags: [algorithm]
 ---
 
 ## Outline

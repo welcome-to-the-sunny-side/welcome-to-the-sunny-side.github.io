@@ -189,6 +189,7 @@ const e=`<!DOCTYPE html>
     duration = Math.min(600, Math.max(5, +document.getElementById('duration').value || 120));
     timeLeft = duration;
     solved = 0;
+    runData.length = 0; // clear data from previous runs
 
     settingsEl.classList.add('hidden');
     summaryEl.classList.add('hidden');
@@ -231,11 +232,10 @@ const e=`<!DOCTYPE html>
         <div class="flex-1 text-left space-y-4">
           <div class="text-3xl font-bold text-accent">\${solved}</div>
           <div class="text-sm">problems solved</div>
-          <div class="text-3xl font-bold text-accent mt-4">\${duration}s</div>
-          <div class="text-sm">run time</div>
+
           <div class="text-3xl font-bold text-accent">\${((solved - runData.reduce((s,d)=>s+d.mistakes,0))/solved*100).toFixed(0)}%</div>
           <div class="text-sm">accuracy</div>
-          <div class="text-3xl font-bold text-accent">\${ppm} <span class="text-sm font-normal">ppm</span>\${newRecord ? ' <span class="text-xs text-accent">NEW PB!</span>' : ''}</div>
+          <div class="text-3xl font-bold text-accent">\${ppm} <span class="text-sm font-normal">ppm</span></div>
         </div>
         <div class="flex-[2]">
           <canvas id="chart-run" class="w-full h-64"></canvas>

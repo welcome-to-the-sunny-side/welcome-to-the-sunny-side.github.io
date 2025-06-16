@@ -2,7 +2,7 @@
 displayMode: blog
 title: Offline Incremental SCC
 date: 2024-07-29
-tags: [algorithm, homepage]
+tags: [algorithm]
 ---
 
 ## Outline

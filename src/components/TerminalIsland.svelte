@@ -28,6 +28,81 @@ export function resizeTerminal() {
 
 // --- Fuse.js fuzzy search setup ---
 const RAW_FILES = import.meta.glob('/src/content/**/*.md', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+// Raw strings of *native* .html files (games etc.)
+const RAW_HTML = import.meta.glob('/src/content/**/*.html', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+
+// Extract YYYY-MM-DD from a markdown file's front-matter. Return a millis timestamp,
+// or Infinity when absent / malformed so those files sort to the end.
+function extractDate(raw: string | null): number {
+  if (!raw) return Infinity;
+  const m = /---[\s\S]*?^date:\s*(\d{4}-\d{2}-\d{2})/m.exec(raw);
+  if (!m) return Infinity;
+  const ts = Date.parse(m[1]);
+  return Number.isNaN(ts) ? Infinity : ts;
+}
+
+// --- Date helpers ---
+// Map an HTML virtual path (e.g. "/algo/blogs/foo.html") to its markdown raw and return
+// the timestamp represented by its `date:` field. Returns Infinity when missing.
+function dateForHtml(htmlPath: string): number {
+  // 1) Try markdown source if it exists (regular blog post flow)
+  const mdRaw = getRaw(htmlPath);
+  if (mdRaw) return extractDate(mdRaw);
+  // 2) Fallback: look for <meta name="wtss:date" content="YYYY-MM-DD"> inside native html file
+  const rawHtml = RAW_HTML['/src/content' + htmlPath] ?? null;
+  if (!rawHtml) return Infinity;
+  const m = /<meta\s+name=["']wtss:date["']\s+content=["'](\d{4}-\d{2}-\d{2})["'][^>]*>/i.exec(rawHtml);
+  if (!m) return Infinity;
+  const ts = Date.parse(m[1]);
+  return Number.isNaN(ts) ? Infinity : ts;
+}
+
+// Cache directory min / max dates to avoid recomputation during a single ls.
+type CacheRec = { min?: number; max?: number };
+const dirDateCache: Record<string, CacheRec> = {};
+
+// Recursively obtain the minimum / maximum date of any markdown file in a directory subtree.
+function getDirDate(dirPath: string, wantMax: boolean): number {
+  const cached = dirDateCache[dirPath];
+  if (cached && (wantMax ? cached.max !== undefined : cached.min !== undefined)) {
+    // Always return a number, never undefined
+    if (wantMax) return typeof cached.max === 'number' ? cached.max : -Infinity;
+    return typeof cached.min === 'number' ? cached.min : Infinity;
+  }
+  let best = wantMax ? -Infinity : Infinity;
+  const children = list(dirPath) || [];
+  for (const name of children) {
+    const child = dirPath === '/' ? '/' + name : `${dirPath}/${name}`;
+    let ts: number;
+    if (isDir(child)) {
+      ts = getDirDate(child, wantMax);
+    } else if (child.endsWith('.html')) {
+      ts = dateForHtml(child);
+    } else {
+      ts = wantMax ? -Infinity : Infinity;
+    }
+    best = wantMax ? Math.max(best, ts) : Math.min(best, ts);
+  }
+  if (!dirDateCache[dirPath]) dirDateCache[dirPath] = {};
+  if (wantMax) dirDateCache[dirPath].max = best; else dirDateCache[dirPath].min = best;
+  return best;
+}
+
+// Sort names inside a directory according to date ordering, keeping lexicographic tiebreak.
+function sortNamesByDate(dirPath: string, names: string[], mode: 'asc' | 'desc'): string[] {
+  const wantMax = mode === 'desc'; // newest first uses max date key
+  return [...names].sort((a, b) => {
+    const pathA = dirPath === '/' ? '/' + a : `${dirPath}/${a}`;
+    const pathB = dirPath === '/' ? '/' + b : `${dirPath}/${b}`;
+    let ta = isDir(pathA) ? getDirDate(pathA, wantMax) : dateForHtml(pathA);
+    let tb = isDir(pathB) ? getDirDate(pathB, wantMax) : dateForHtml(pathB);
+    // When date is missing use -Infinity for desc (-d/-dl) or +Infinity for asc (-de)
+    if (!Number.isFinite(ta)) ta = wantMax ? -Infinity : Infinity;
+    if (!Number.isFinite(tb)) tb = wantMax ? -Infinity : Infinity;
+    const diff = wantMax ? tb - ta : ta - tb;
+    return diff === 0 ? a.localeCompare(b) : diff;
+  });
+}
 
 function getRaw(virtualPath: string): string | null {
   // "/posts/foo.html" -> "/src/content/posts/foo.md"
@@ -74,6 +149,11 @@ onMount(async () => {
 
   let cwd: string[] = [];
   let history: string[] = ['/'];
+  // In-terminal command history (↑ / ↓)
+  let cmdHistory: string[] = [];
+  // Index into cmdHistory. 0 .. length-1 = stored commands, length = current typing
+  let histIndex = 0;
+  let savedBuffer = '';
   let buffer = '';
   // --- Autocomplete state ---
   const COMMANDS = ['ls', 'cd', 'open', 'pop', 'clear', 'help', 'grep'];
@@ -95,6 +175,7 @@ onMount(async () => {
                 // Detect recursive flag (-R or -r)
         const flags = args.filter(a => a.startsWith('-'));
         const recursive = flags.includes('-R') || flags.includes('-r');
+        const verbose = flags.includes('-v');
         const targetArg = args.find(a => !a.startsWith('-')) || '.';
 
         const pathArr = resolvePath(cwd, targetArg);
@@ -109,19 +190,66 @@ onMount(async () => {
           break;
         }
 
+        const dateDesc = flags.includes('-d') || flags.includes('-dl');
+        const dateAsc = flags.includes('-de');
+        const dateMode: 'asc' | 'desc' | null = dateDesc ? 'desc' : (dateAsc ? 'asc' : null);
+
         if (!recursive) {
-          const children = list(fullPath) || [];
+          let children = list(fullPath) || [];
+          if (dateMode) {
+            children = sortNamesByDate(fullPath, children, dateMode);
+          }
           children.forEach((name, idx) => {
             const isLast = idx === children.length - 1;
             const branch = isLast ? '└─ ' : '├─ ';
-            const col = isDir(`${fullPath}/${name}`) ? DIR_COLOR : FILE_COLOR;
-            term.writeln(`${branch}${col}${name}\x1b[0m`);
+            const pathChild = `${fullPath}/${name}`;
+            const dir = isDir(pathChild);
+            const col = dir ? DIR_COLOR : FILE_COLOR;
+            let dateLabel = '';
+            if (verbose && !dir) {
+              const ts = dateForHtml(pathChild.replace(/\.md$/, '.html'));
+              if (Number.isFinite(ts)) {
+                const d = new Date(ts).toISOString().slice(0,10);
+                dateLabel = `\x1b[2m[${d}]\x1b[0m `;
+              }
+            }
+            term.writeln(`${branch}${dateLabel}${col}${name}\x1b[0m`);
           });
         } else {
           // Recursive tree view
+          if (false /* legacy dateFlag branch disabled */) {
+            // Flatten gather paths
+            const items: { path: string; isDir: boolean; ts: number }[] = [];
+            const collect = (p: string) => {
+              if (isDir(p)) {
+                items.push({ path: p, isDir: true, ts: Infinity });
+                const cs = list(p) || [];
+                cs.forEach(c => collect(p === '/' ? '/' + c : `${p}/${c}`));
+              } else {
+                const isMd = p.endsWith('.md');
+                const raw = isMd ? RAW_FILES['/src/content' + p] : null;
+                items.push({ path: p, isDir: false, ts: isMd ? extractDate(raw) : Infinity });
+              }
+            };
+            collect(fullPath);
+            const dirs = items.filter(i => i.isDir && i.path !== fullPath).sort((a,b)=>a.path.localeCompare(b.path));
+            const files = items.filter(i => !i.isDir);
+            const mdSorted = files.filter(f => f.ts !== Infinity).sort((a,b)=>a.ts - b.ts);
+            const rest = files.filter(f => f.ts === Infinity).sort((a,b)=>a.path.localeCompare(b.path));
+            const ordered = [...dirs, ...mdSorted, ...rest];
+            ordered.forEach(i => {
+              const col = i.isDir ? DIR_COLOR : FILE_COLOR;
+              const rel = i.path.slice(fullPath.length + (fullPath.endsWith('/')?0:1));
+              term.writeln(`${col}${rel}\x1b[0m`);
+            });
+          } else {
           const lines: string[] = [];
           const buildLines = (seg: string[], prefix = '') => {
-            const children = list('/' + seg.join('/')) || [];
+            let dirPathCur = '/' + seg.join('/');
+            let children = list(dirPathCur) || [];
+            if (dateMode) {
+              children = sortNamesByDate(dirPathCur, children, dateMode);
+            }
             children.forEach((name, idx) => {
               const isLast = idx === children.length - 1;
               const branch = isLast ? '└─ ' : '├─ ';
@@ -129,7 +257,15 @@ onMount(async () => {
               const childFull = '/' + childSegs.join('/');
               const dir = isDir(childFull);
               const color = dir ? DIR_COLOR : FILE_COLOR;
-              lines.push(`${prefix}${branch}${color}${name}\x1b[0m`);
+              let dateLabel = '';
+              if (verbose && !dir) {
+                const ts = dateForHtml(childFull);
+                if (Number.isFinite(ts)) {
+                  const d = new Date(ts).toISOString().slice(0,10);
+                  dateLabel = `\x1b[2m[${d}]\x1b[0m `;
+                }
+              }
+              lines.push(`${prefix}${branch}${dateLabel}${color}${name}\x1b[0m`);
               if (dir) {
                 const newPrefix = prefix + (isLast ? '   ' : '│  ');
                 buildLines(childSegs, newPrefix);
@@ -138,6 +274,7 @@ onMount(async () => {
           };
           buildLines(pathArr);
           for (const l of lines) term.writeln(l);
+          }
         }
         break;
       }
@@ -255,7 +392,7 @@ onMount(async () => {
         // Color and align command list
         const pad = (s: string, n: number) => s + ' '.repeat(Math.max(0, n-s.length));
         const entries = [
-          { cmd: 'ls [-R] [path]', desc: 'list directory (recursive with -R)' },
+          { cmd: 'ls [-r] [-d|-dl|-de] [-v] [path]', desc: 'list directory (tree with -r, date sort, verbose dates)' },
           { cmd: 'cd <dir>', desc: 'change directory' },
           { cmd: 'open <file>', desc: 'open file in content pane' },
           { cmd: 'grep <pattern> [path]', desc: 'fuzzy search markdown files' },
@@ -411,9 +548,14 @@ onMount(async () => {
           triggerCompletion();
           break;
         }
-        case 13: { // Enter
+        case 13: { // Enter ↵
           term.write('\r\n');
-          exec(buffer.trim());
+          const cmdText = buffer.trim();
+          exec(cmdText);
+          if (cmdText) {
+            cmdHistory.push(cmdText);
+          }
+          histIndex = cmdHistory.length; // reset to after last
           buffer = '';
           term.write('\r\n'); // Always add newline before prompt
           prompt();
@@ -445,6 +587,28 @@ onMount(async () => {
 
   // Handle arrow keys for cycling completions using onKey
   term.onKey(({ key, domEvent }) => {
+    // History navigation (Up/Down) when at prompt
+    if (domEvent.key === 'ArrowUp' || domEvent.key === 'ArrowDown') {
+      domEvent.preventDefault();
+      if (!cmdHistory.length) return;
+      if (histIndex === cmdHistory.length) {
+        savedBuffer = buffer; // save current edit before first jump
+      }
+      if (domEvent.key === 'ArrowUp' && histIndex > 0) {
+        histIndex--;
+      } else if (domEvent.key === 'ArrowDown' && histIndex < cmdHistory.length) {
+        histIndex++;
+      }
+      const newBuf = histIndex === cmdHistory.length ? savedBuffer : cmdHistory[histIndex];
+      // Clear current input line and rewrite prompt + buffer
+      term.write('\x1b[2K\r');
+      prompt();
+      buffer = newBuf;
+      term.write(buffer);
+      clearGhost();
+      triggerCompletion();
+      return; // handled
+    }
     if (ghostActive && (domEvent.key === 'ArrowRight' || domEvent.key === 'ArrowLeft')) {
       domEvent.preventDefault();
       cycleCompletion(domEvent.key === 'ArrowRight' ? 1 : -1);

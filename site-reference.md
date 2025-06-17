@@ -1,6 +1,6 @@
 # Welcome to the Sunny Side – Site Reference
 
-_Last updated: 2025-06-16_ (HTML file support & new Games section; previous additions: Added Fuse.js-powered `grep` command and search details)
+_Last updated: 2025-06-17_ (verbose `ls -v`, date-sorted flags, command history navigation, native HTML metadata, Games section; previous additions: Fuse.js-powered `grep`)
 
 ## 1 . High-level Overview
 The site is a **static, terminal-driven blog & knowledge base** built with **Astro** for static generation and **Svelte** for the interactive UI. Styling is primarily handled by **Tailwind CSS** (integrated via `@astrojs/tailwind`), utilizing its utility classes and the `@tailwindcss/typography` plugin for Markdown rendering. All human-readable content lives in Markdown files under `src/content` and is presented at URLs that end in `.html`. Additionally, the site now supports rendering of HTML files, allowing for more diverse content presentation. A new Games section has also been added, providing a dedicated space for browser-game adjacent pages.
@@ -81,7 +81,7 @@ Explanation:
 ## 5 . Terminal Commands
 | Command        | Description                                               |
 |---------------|-----------------------------------------------------------|
-| `ls`           | List items in current directory (tree with -R/-r)         |
+| `ls`           | List items (tree **-r**). Extra flags: **-d / -dl / -de** for date sort, **-v** to show dates |
 | `cd <dir>`     | Change directory (relative or absolute)                  |
 | `grep <pattern> [path]` | Fuzzy search Markdown-backed `.html` files (Fuse.js) |
 | `open <file>`  | Push file path to router and render it                   |
@@ -240,7 +240,7 @@ The search corpus is built client-side by mapping each `.html` file back to its 
 ## 11 . HTML Content Support
 Historically, **all authored content lived in Markdown** and was compiled into `.html` at build-time. The router and terminal now fully understand *native* `.html` files in `src/content`:
 
-* Any `.html` file under `src/content` is mapped 1-to-1 in the VFS (no markdown processing).
+* Any `.html` file under `src/content` is mapped 1-to-1 in the VFS (no markdown processing). If it includes `<meta name="wtss:date" content="YYYY-MM-DD">` in its `<head>`, that date is used by `ls -d/-v` just like markdown front-matter.
 * Terminal commands (`ls`, `open`, `grep`) treat `.html` the same as generated pages.
 * This enables hand-crafted mini-apps or embedded widgets without a Markdown wrapper – see the new **Games** section below.
 

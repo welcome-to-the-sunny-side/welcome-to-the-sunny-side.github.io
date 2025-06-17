@@ -3,6 +3,7 @@ const e=`<!DOCTYPE html>
 <head>
   <meta charset="utf-8" />
   <title>Zetamac Arithmetic Sprint</title>
+  <meta name="wtss:date" content="2025-06-14" />
   <!-- Chart.js for performance graphs -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"><\/script>
 </head>

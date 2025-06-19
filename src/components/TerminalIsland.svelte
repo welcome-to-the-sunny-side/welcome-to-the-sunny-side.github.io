@@ -557,8 +557,15 @@ onMount(async () => {
           }
           histIndex = cmdHistory.length; // reset to after last
           buffer = '';
-          term.write('\r\n'); // Always add newline before prompt
-          prompt();
+          if (cmdText === 'clear') {
+            // For a clear, the screen has just been wiped and the cursor is already at (0,0).
+            // Emit the prompt without a leading newline so it appears on the very first line.
+            prompt();
+          } else {
+            // For all other commands insert a blank line before the next prompt for readability.
+            term.write('\r\n');
+            prompt();
+          }
           break;
         }
         case 127: { // Backspace

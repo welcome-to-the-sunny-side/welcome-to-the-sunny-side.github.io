@@ -234,9 +234,11 @@ const e=`<!DOCTYPE html>
           <div class="text-3xl font-bold text-accent">\${solved}</div>
           <div class="text-sm">problems solved</div>
 
-          <div class="text-3xl font-bold text-accent">\${((solved - runData.reduce((s,d)=>s+d.mistakes,0))/solved*100).toFixed(0)}%</div>
-          <div class="text-sm">accuracy</div>
-          <div class="text-3xl font-bold text-accent">\${ppm} <span class="text-sm font-normal">ppm</span></div>
+          <div class="text-3xl font-bold text-accent">\${duration}</div>
+          <div class="text-sm">time(s)</div>
+
+          <div class="text-3xl font-bold text-accent">\${ppm}</div>
+          <div class="text-sm">speed(ppm)</div>
         </div>
         <div class="flex-[2]">
           <canvas id="chart-run" class="w-full h-64"></canvas>

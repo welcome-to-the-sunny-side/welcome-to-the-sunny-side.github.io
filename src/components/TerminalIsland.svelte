@@ -2,6 +2,7 @@
 import { onMount } from 'svelte';
 import { currentPath } from '../stores/router';
 import { list, isFile, isDir, resolvePath } from '../lib/virtualFs';
+import { listSkins, wearSkin } from '../stores/skin';
 
 const PATH_RGB = '100;255;218'; // old green for prompt path and '/'
 const PATH_COLOR = `\x1b[38;2;${PATH_RGB}m`;
@@ -156,7 +157,7 @@ onMount(async () => {
   let savedBuffer = '';
   let buffer = '';
   // --- Autocomplete state ---
-  const COMMANDS = ['ls', 'cd', 'open', 'pop', 'clear', 'help', 'grep'];
+  const COMMANDS = ['ls', 'cd', 'open', 'pop', 'clear', 'help', 'grep', 'skin', 'skins'];
   let completions: string[] = [];
   let compIndex = 0;
   let ghostActive = false;
@@ -322,6 +323,28 @@ onMount(async () => {
       case 'clear':
         term.clear();
         break;
+      case 'skins': {
+        const names = listSkins();
+        names.forEach((name, idx) => {
+          const branch = idx === names.length - 1 ? '└─ ' : '├─ ';
+          term.writeln(branch + name);
+        });
+        break;
+      }
+      case 'skin': {
+        const name = args[0];
+        if (!name) {
+          term.writeln('Usage: skin <name>');
+        } else {
+          try {
+            wearSkin(name);
+            term.writeln(`Now wearing ${name}`);
+          } catch (e) {
+            term.writeln(String(e));
+          }
+        }
+        break;
+      }
       case 'grep': {
         if (!args.length) {
           term.writeln('grep: usage: grep <pattern> [path]');
@@ -396,6 +419,8 @@ onMount(async () => {
           { cmd: 'cd <dir>', desc: 'change directory' },
           { cmd: 'open <file>', desc: 'open file in content pane' },
           { cmd: 'grep <pattern> [path]', desc: 'fuzzy search markdown files' },
+          { cmd: 'skins', desc: 'list available skins' },
+          { cmd: 'skin <name>', desc: 'wear skin' },
           { cmd: 'pop', desc: 'go back' },
           { cmd: 'clear', desc: 'clear terminal' },
           { cmd: 'help', desc: '-' },

@@ -5,7 +5,7 @@ import ContentPane from "../components/ContentPane.svelte";
 import { currentPath } from "../stores/router";
 ---
 <!DOCTYPE html>
-<html lang="en" class="dark h-full bg-bg text-text font-mono">
+<html lang="en" class="h-full">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -23,6 +23,20 @@ import { currentPath } from "../stores/router";
     };
   </script>
   <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script type="module">
+    import { currentSkin } from '/src/stores/skin.ts';
+    currentSkin.subscribe((skin) => {
+      const rootCls = `h-full bg-bg text-text ${skin.classes.body}`;
+      document.documentElement.className = rootCls;
+      document.body.className = rootCls;
+      // set CSS variables on :root
+      const rs = document.documentElement.style;
+      Object.entries(skin.cssVars).forEach(([k,v]) => rs.setProperty(`--${k}`, v));
+      if (skin.inlineStyles?.body) {
+        Object.assign(document.body.style, skin.inlineStyles.body);
+      }
+    });
+  </script>
 </head>
   <body class="h-full">
     <div class="h-screen w-screen grid grid-cols-1 md:grid-cols-[1fr_auto] grid-rows-[auto_1fr] md:grid-rows-1">

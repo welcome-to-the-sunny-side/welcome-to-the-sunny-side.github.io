@@ -4,6 +4,7 @@ import MarkdownIt from 'markdown-it';
 
 import hljs from 'highlight.js';
 import { tick } from 'svelte';
+import { currentSkin } from '../stores/skin';
   import { currentPath } from '../stores/router';
   import { readable } from 'svelte/store';
 
@@ -34,6 +35,9 @@ let backgroundImagePC: string | null = null;
 let backgroundImageMobile: string | null = null;
 let isMobileView: boolean = false;
 let htmlContainer: HTMLDivElement | null = null;
+
+// Subscribe to skin store
+$: skin = $currentSkin;
 
   // Reactive statement for currentBackgroundImage
   $: currentBackgroundImage = isMobileView && backgroundImageMobile ? backgroundImageMobile : backgroundImagePC;
@@ -145,14 +149,14 @@ function parseFrontmatter(raw: string) {
 </script>
 
 {#if isBlog}
-  <section class="mx-auto max-w-4xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro">
+  <section class={`${skin.classes.contentPane} mx-auto max-w-4xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro`}>
     <header class="mb-8">
       <h1 class="text-2xl font-semibold tracking-tight text-accent">{frontmatter.title ?? 'Untitled'}</h1>
       {#if frontmatter.date}
         <p class="mt-2 text-xs text-text-muted">{new Date(frontmatter.date).toLocaleDateString()}</p>
       {/if}
       {#if frontmatter.tags && frontmatter.tags.length}
-        <ul class="mt-4 flex flex-wrap gap-2">
+        <ul class="mt-4 flex flex-wrap gap-2 list-none pl-0">
           {#each frontmatter.tags as tag}
             <li class="rounded-sm border border-accent-subtle px-2 py-1 text-xs font-medium text-text-muted transition-colors duration-150 ease-retro"
             >{tag}</li>
@@ -160,7 +164,7 @@ function parseFrontmatter(raw: string) {
         </ul>
       {/if}
     </header>
-    <article class="prose prose-invert max-w-none">
+    <article class={`${skin.classes.contentPane} max-w-none`}>
       {@html contentHtml}
     </article>
   </section>
@@ -173,7 +177,7 @@ function parseFrontmatter(raw: string) {
       <!-- This div is purely for the background image -->
     </div>
   {:else}
-    <div bind:this={htmlContainer} id="content-html-container" class="p-4 prose prose-invert max-w-none bg-surface text-text transition-colors duration-150 ease-retro">
+    <div bind:this={htmlContainer} id="content-html-container" class={`${skin.classes.contentPane} p-4 max-w-none bg-surface text-text transition-colors duration-150 ease-retro`}>
       {@html contentHtml}
     </div>
   {/if}

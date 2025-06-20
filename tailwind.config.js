@@ -8,16 +8,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        bg: '#0d0d0d',
-        surface: '#1a1a1a',
-        accent: '#64ffda',
-        'accent-subtle': '#1f3d38',
-        text: '#e0e0e0',
-        'text-muted': '#9e9e9e',
+        bg: 'var(--bg)',
+        surface: 'var(--surface)',
+        accent: 'var(--accent)',
+        'accent-subtle': 'var(--accent-subtle)',
+        text: 'var(--text)',
+        'text-muted': 'var(--text-muted)',
       },
       fontFamily: {
         mono: [
-          'IBM Plex Mono',
+          'var(--font-mono)',
           'ui-monospace',
           'SFMono-Regular',
           'Menlo',
@@ -25,19 +25,18 @@ module.exports = {
         ],
       },
       fontSize: {
-        base: ['14px', '1.5'], // Standard body copy, equivalent to 0.875rem
-        sm: ['0.8125rem', { lineHeight: '1.25rem' }], // 13px
-        lg: ['1.125rem', '1.75rem'],
-        xl: ['1.25rem', '1.75rem'],
-        '2xl': ['1.5rem', '2rem'],
-        // Add more sizes as needed
+        base: ['var(--fs-base)', 'var(--lh-base)'],
+        sm: ['var(--fs-sm)', 'var(--lh-sm)'],
+        lg: ['var(--fs-lg)', 'var(--lh-lg)'],
+        xl: ['var(--fs-xl)', 'var(--lh-xl)'],
+        '2xl': ['var(--fs-2xl)', 'var(--lh-2xl)'],
       },
-      typography: (theme) => ({
+      typography: ({ theme }) => ({
         DEFAULT: {
           css: {
-            fontSize: '0.9rem', // 13px
+            fontSize: 'var(--prose-font-size)',
             p: {
-              fontSize: '0.9rem', // 13px
+              fontSize: 'var(--prose-font-size)',
             },
             // You can add other elements like h1, h2, li etc. if needed
           },
@@ -45,14 +44,14 @@ module.exports = {
         // if you also use prose-sm, prose-lg, etc., you might want to configure them here too
       }),
       spacing: {
-        xs: '0.25rem',
-        sm: '0.5rem',
+        xs: 'var(--space-xs)',
+        sm: 'var(--space-sm)',
       },
       borderRadius: {
-        sm: '2px',
+        sm: 'var(--radius-sm)',
       },
       transitionTimingFunction: {
-        retro: 'cubic-bezier(0.25,0.46,0.45,0.94)',
+        retro: 'var(--ease-retro)',
       },
     },
   },

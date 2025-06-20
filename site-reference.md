@@ -1,6 +1,6 @@
 # Welcome to the Sunny Side – Site Reference
 
-_Last updated: 2025-06-17_ (verbose `ls -v`, date-sorted flags, command history navigation, native HTML metadata, Games section; previous additions: Fuse.js-powered `grep`)
+_Last updated: 2025-06-20_ (verbose `ls -v`, date-sorted flags, command history navigation, native HTML metadata, Games section; previous additions: Fuse.js-powered `grep`)
 
 ## 1 . High-level Overview
 The site is a **static, terminal-driven blog & knowledge base** built with **Astro** for static generation and **Svelte** for the interactive UI. Styling is primarily handled by **Tailwind CSS** (integrated via `@astrojs/tailwind`), utilizing its utility classes and the `@tailwindcss/typography` plugin for Markdown rendering. All human-readable content lives in Markdown files under `src/content` and is presented at URLs that end in `.html`. Additionally, the site now supports rendering of HTML files, allowing for more diverse content presentation. A new Games section has also been added, providing a dedicated space for browser-game adjacent pages.
@@ -237,7 +237,31 @@ This overhaul ensures a consistent visual identity across the site, aligning wit
 
 The search corpus is built client-side by mapping each `.html` file back to its raw Markdown (`import.meta.glob('/src/content/**/*.md', { as: 'raw' })`). Fuse.js is dynamically imported to keep the initial bundle small.
 
-## 11 . HTML Content Support
+## 11 . Dynamic Skins (Dark & Sunny)
+Introduced a **skin system** that allows live switching between completely different theme tokens at runtime.
+
+### Key pieces
+* **`src/skins/types.ts`** – `Skin` interface (`name`, `classes`, `cssVars`, `inlineStyles`).
+* **`src/skins/dark.ts`** – default retro-dark palette, now called _dark_.
+* **`src/skins/sunny.ts`** – new warm light academic palette.
+* **`src/stores/skin.ts`** – Svelte store now centralises DOM side-effects: applying classes to `<html>/<body>` and writing all `--css-vars` on every change (and on first load via `localStorage`).
+* **Commands** in `TerminalIsland.svelte`:
+  * `skins` – list available skins in a tree view (`├─`/`└─`).
+  * `skin <name>` – activate a skin (no page reload needed).
+* **Tailwind** refactor – all colour, typography, spacing, radius, easing tokens in `tailwind.config.js` reference CSS variables, so skins can override every visual token.
+* **ContentPane** binds classes reactively to `$currentSkin.classes.contentPane`, so prose enters or leaves `prose-invert` automatically.
+
+### Usage
+```
+> skins          # lists dark sunny
+> skin sunny     # instant switch to light mode
+> skin dark     # back to retro dark
+```
+Selection persists between sessions (key `wtss-skin` in localStorage).
+
+---
+
+## 12 . HTML Content Support
 Historically, **all authored content lived in Markdown** and was compiled into `.html` at build-time. The router and terminal now fully understand *native* `.html` files in `src/content`:
 
 * Any `.html` file under `src/content` is mapped 1-to-1 in the VFS (no markdown processing). If it includes `<meta name="wtss:date" content="YYYY-MM-DD">` in its `<head>`, that date is used by `ls -d/-v` just like markdown front-matter.

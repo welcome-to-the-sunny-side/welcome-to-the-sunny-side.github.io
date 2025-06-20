@@ -6,7 +6,7 @@ export const dark: Skin = {
   classes: {
     body: 'font-mono', // bg handled via css var
     contentPane: 'prose prose-invert',
-    blogTitle: 'text-accent',
+    blogTitle: 'text-2xl md:text-3xl font-semibold tracking-tight text-accent',
   },
   cssVars: {
     bg: '#0d0d0d',

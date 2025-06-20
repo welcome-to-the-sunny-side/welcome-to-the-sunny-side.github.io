@@ -1,27 +1,38 @@
 import type { Skin } from './types';
 
-// A bright, warm, academic-feeling light theme.
+/*
+1. Light
+2. Harbors an inviting warmth
+3. Elegant
+4. Academic, ideal for reading technical blogs (while not ignoring non-blog pages)
+*/
+
 export const sunny: Skin = {
   name: 'sunny',
   classes: {
     body: 'font-serif',
-    contentPane: 'prose',
-    blogTitle: 'text-accent',
+    contentPane: 'prose [--tw-prose-bullets:rgba(43,43,43,1)] [--tw-prose-counters:rgba(43,43,43,1)]',
+    blogTitle: 'font-semibold leading-tight tracking-tight mb-3 text-[2.1rem] md:text-[1.8rem] text-[color:var(--title)]',
   },
   cssVars: {
     /* core palette*/
-    bg: '#FCFCFA',
-    surface: '#F4F1E6',
+    bg: 'rgba(250,248,244,1)',
+    surface: 'rgba(246,242,236,1)',
     text: '#2B2B2B',
     'text-muted': '#555555',
     accent: '#D88B00',
     'accent-subtle': 'rgba(216,139,0,0.14)',
     link: '#0077CC',
 
+    /* list markers */
+    '--tw-prose-bullets': 'rgba(43,43,43,1)',
+    '--tw-prose-counters': 'rgba(43,43,43,1)',
+
     /* custom-elements */
     'el-accent': '#D88B00',
     'el-surface': '#FFFDF8',
     'el-text': '#2B2B2B',
+    'title': '#1F1F1F',
     'el-radius': '4px',
 
     /* typography & sizing */

@@ -41,7 +41,6 @@ body {
 
 .prose a::after,
 .prose-invert a::after {
-  content: "↗";
   color: theme('colors.accent');
   margin-left: 0.15rem;
   font-size: 1.1em;

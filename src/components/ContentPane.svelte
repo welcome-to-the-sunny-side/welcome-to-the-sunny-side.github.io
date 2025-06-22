@@ -31,16 +31,38 @@ let path = '/';
 let frontmatter: Record<string, any> = {};
 let isBlog = false;
 let contentHtml: string = md.render(contentRaw);
-let backgroundImagePC: string | null = null;
-let backgroundImageMobile: string | null = null;
+type Device = 'pc' | 'mobile';
+// Collect all home background images at build time (hashed URLs)
+const imageModules = import.meta.glob('../../public/assets/home/active/**/*.{jpg,jpeg,png,webp}', { as: 'url', eager: true });
+const imagesBySkin: Record<string, Record<Device, string[]>> = {};
+for (const [absPath, url] of Object.entries(imageModules)) {
+  const parts = absPath.split('/');
+  const idx = parts.indexOf('active'); // .../home/active/<skin>/<device>/<file>
+  if (idx !== -1 && parts.length >= idx + 3) {
+    const skinName = parts[idx + 1];
+    const device = parts[idx + 2] as Device;
+    (imagesBySkin[skinName] ??= { pc: [], mobile: [] })[device].push(url as string);
+  }
+}
+
+let currentBackgroundImage: string | null = null;
 let isMobileView: boolean = false;
 let htmlContainer: HTMLDivElement | null = null;
 
 // Subscribe to skin store
 $: skin = $currentSkin;
 
-  // Reactive statement for currentBackgroundImage
-  $: currentBackgroundImage = isMobileView && backgroundImageMobile ? backgroundImageMobile : backgroundImagePC;
+  // Reactive background image logic
+  $: {
+    const isHome = path === '/' || path === '/home.html';
+    if (isHome) {
+      const device: Device = isMobileView ? 'mobile' : 'pc';
+      const list = imagesBySkin[$currentSkin.name]?.[device] ?? [];
+      currentBackgroundImage = list.length ? list[Math.floor(Math.random() * list.length)] : null;
+    } else {
+      currentBackgroundImage = null;
+    }
+  }
   $: isHomeWithBackground = (path === '/' || path === '/home.html') && currentBackgroundImage;
 
 function parseFrontmatter(raw: string) {
@@ -108,8 +130,8 @@ function parseFrontmatter(raw: string) {
       const { fm, body } = parseFrontmatter(contentRaw);
       frontmatter = fm;
       isBlog = frontmatter.displayMode === 'blog';
-      backgroundImagePC = frontmatter.backgroundImagePC || null;
-      backgroundImageMobile = frontmatter.backgroundImageMobile || null;
+      
+      
       contentHtml = md.render(body);
       await tick();
       if (typeof window !== 'undefined' && (window as any).MathJax?.typesetPromise) {
@@ -120,8 +142,8 @@ function parseFrontmatter(raw: string) {
       contentRaw = (await (pagesHtml as any)[htmlKey]()) as string;
       frontmatter = {};
       isBlog = false;
-      backgroundImagePC = null;
-      backgroundImageMobile = null;
+      
+      
       contentHtml = contentRaw;
       await tick();
       // Execute inline scripts so that browser games work
@@ -137,8 +159,8 @@ function parseFrontmatter(raw: string) {
       contentRaw = `# 404\nPath not found: ${path}`;
       frontmatter = {};
       isBlog = false;
-      backgroundImagePC = null;
-      backgroundImageMobile = null;
+      
+      
       contentHtml = md.render(contentRaw);
       await tick();
       if (typeof window !== 'undefined' && (window as any).MathJax?.typesetPromise) {

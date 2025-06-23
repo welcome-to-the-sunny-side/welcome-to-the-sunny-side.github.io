@@ -435,8 +435,8 @@ onMount(async () => {
         const sc = [
           { key: 'Tab', desc: 'accept autocomplete' },
           { key: '← / →', desc: 'cycle suggestions' },
-          { key: 'Shift+←', desc: 'collapse terminal' },
-          { key: 'Shift+→', desc: 'expand / focus terminal' },
+          { key: 'Shift+→', desc: 'collapse terminal' },
+          { key: 'Shift+←', desc: 'expand / focus terminal' },
           { key: 'Shift+↑', desc: 'focus content pane' },
           { key: 'h/j/k/l', desc: 'scroll content pane (when terminal unfocused)' },
         ];

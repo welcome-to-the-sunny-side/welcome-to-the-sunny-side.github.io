@@ -65,3 +65,14 @@ body {
   color: inherit !important;
   opacity: 1 !important;
 }
+
+/* Ensure form controls adopt current skin text color */
+input[type="number"],
+input[type="text"],
+input[type="search"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+  color: var(--text);
+}

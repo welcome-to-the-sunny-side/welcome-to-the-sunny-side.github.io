@@ -3,6 +3,9 @@ import '../styles/global.css';
 import TerminalPane from "../components/TerminalPane.svelte";
 import ContentPane from "../components/ContentPane.svelte";
 import { currentPath } from "../stores/router";
+
+// const isProd = import.meta.env.MODE === 'production';
+const isProd = true;
 ---
 <!DOCTYPE html>
 <html lang="en" class="h-full">
@@ -10,6 +13,17 @@ import { currentPath } from "../stores/router";
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Welcome to the Sunny Side!</title>
+    {isProd && (
+      <>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-FDGES615HV"></script>
+        <script>
+          {`window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-FDGES615HV');`}
+        </script>
+      </>
+    )}
     <script type="text/javascript" id="mathjax-config">
     window.MathJax = {
       tex: {

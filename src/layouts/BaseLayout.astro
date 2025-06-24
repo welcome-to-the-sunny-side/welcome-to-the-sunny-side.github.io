@@ -4,7 +4,6 @@ import TerminalPane from "../components/TerminalPane.svelte";
 import ContentPane from "../components/ContentPane.svelte";
 import { currentPath } from "../stores/router";
 
-// const isProd = import.meta.env.MODE === 'production';
 const isProd = true;
 ---
 <!DOCTYPE html>
@@ -17,10 +16,10 @@ const isProd = true;
       <>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-FDGES615HV"></script>
         <script>
-          {`window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-FDGES615HV');`}
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);} 
+          gtag('js', new Date());
+          gtag('config', 'G-FDGES615HV');
         </script>
       </>
     )}

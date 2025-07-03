@@ -193,7 +193,7 @@ function parseFrontmatter(raw: string) {
 {:else}
   {#if isHomeWithBackground}
     <div 
-      class="h-full w-full bg-cover bg-bottom bg-no-repeat"
+      class="h-full w-full bg-cover bg-center bg-no-repeat"
       style="background-image: url('{currentBackgroundImage}');"
     >
       <!-- This div is purely for the background image -->

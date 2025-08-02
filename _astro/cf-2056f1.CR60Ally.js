@@ -1,4 +1,11 @@
-const e=`
+const e=`---
+displayMode: blog
+title: CF-2056F1
+date: 2025-07-27
+tags:
+  - editorial
+---
+
 There isn't anything particularly interesting or difficult about this problem, writing this blog is just a way for me to regain a general coherence in my approach to solving problems.
 
 ### Problem [CF-2056F1](https://codeforces.com/problemset/problem/2056/F1)

@@ -32,18 +32,18 @@ $m \\leq 500$
 
 A reasonable (and probably the only immediately obvious) direction to take is to fix the median and then consider the set of good sequences that correspond to that median, as $m$ is conveniently sized.
 
-Clearly, for a fixed $m$, the only thing that matters is the number of sequences having their median as $m$. If this number is even, $m$ has a no contribution at all to the overall answer. A potential solution then begins to take form in one's mind:
-- Iterate over $m$.
-- Find the parity of the number of good sequences with $m$ as their median.
-- If the aforementioned value is odd, include $m$ within the final set of terms to be XORed to get the answer.
+Clearly, for a fixed median $q$, the only thing that matters is the number of sequences having their median as $q$. If this number is even, $q$ has a no contribution at all to the overall answer. A potential solution then begins to take form in one's mind:
+- Iterate over $q$.
+- Find the parity of the number of good sequences with $q$ as their median.
+- If the aforementioned value is odd, include $q$ within the final set of terms to be XORed to get the answer.
 
 Let's define two functions for convenience:
-- $\\text{cnt}(m)$: The number of good sequences with $m$ as their median.
+- $\\text{cnt}(q)$: The number of good sequences with $q$ as their median.
 - $\\text{par}(x) = (x \\mod 2)$.
 
-A very brief consideration should reveal to one the huge difference in computational difficulty between the analysis of $\\text{cnt}(m)$, and $\\text{par}(\\text{cnt}(m))$, but the latter will still require some basic ideas from the former, so let’s go through them.
+A very brief consideration should reveal to one the huge difference in computational difficulty between the analysis of $\\text{cnt}(q)$, and $\\text{par}(\\text{cnt}(q))$, but the latter will still require some basic ideas from the former, so let’s go through them.
 
-Let’s partition all sequences with median $m$ into maximal groups that have the same multisets. These groups are obviously mutually exclusive and exhaustive. This makes analysis of all the sequences much easier, as the number of sequences that correspond to a single multiset $M$ is simply: $$\\frac{n!}{\\prod_{x \\in S(M)} \\text{freq}_M(x)!} $$
+Let’s partition all sequences with median $q$ into maximal groups that have the same multisets. These groups are obviously mutually exclusive and exhaustive. This makes analysis of all the sequences much easier, as the number of sequences that correspond to a single multiset $M$ is simply: $$\\frac{n!}{\\prod_{x \\in S(M)} \\text{freq}_M(x)!} $$
 (where $S(M)$ is the set of unique elements in a multiset $M$, and $\\text{freq}_M(x)$ is the number of occurrences of $x$ in $M$)
 
 Now, it's not difficult to see this expression and guess that it's a bit difficult to get it to be odd (ie. it is even for most partitions of $n$). If we can discover some necessary/sufficient conditions for it to be odd, we can simply ignore the groups of sequences corresponding to all multisets for which said conditions aren't satisfied (as they have no contribution to the final parity).
@@ -71,22 +71,22 @@ We now make the following key observation:
 
 Let us return to the problem at hand. To recap, we:
 
-- Fixed median $m$.
-- Fixed a multiset $M$ with median $m$ and analyzed all sequences that correspond to this multiset.
+- Fixed median $q$.
+- Fixed a multiset $M$ with median $q$ and analyzed all sequences that correspond to this multiset.
 
 Now, how does our result help us here? Well:
 - We now only care about multisets whose "frequency set" constitutes a good partition of $n$ (We will call a multiset good if it's frequency set is good).
-- We're relieved of the responsibility of having to force $m$ to be the median, since exactly one element has a frequency $\\geq n/2$ in a good multiset and is indisputably the median. This element must obviously be $m$.
+- We're relieved of the responsibility of having to force $q$ to be the median, since exactly one element has a frequency $\\geq n/2$ in a good multiset and is indisputably the median. This element must obviously be $q$.
 
-For a fixed $m$, all the sequences that correspond to a fixed, good multiset have a collective contribution of exactly $1$ to our answer, so for a fixed $m$, we simply have to find the number of good multisets, and if this number is odd, include $m$ within the final xor sum that is our answer.
+For a fixed $q$, all the sequences that correspond to a fixed, good multiset have a collective contribution of exactly $1$ to our answer, so for any fixed $q$, we simply have to find the number of good multisets, and if this number is odd, include $q$ within the final xor sum that is our answer.
 
-How do we find the parity of the number of good multisets with median $m$?
+How do we find the parity of the number of good multisets with median $q$?
 
 This is a very simple sub-problem that can be solved with the help of dynamic programming:
 - Define $f(i, j)$ to be the parity of the number of ways to partition a sequence of length $i$ into $j$ non-empty subsequences. Compute all $f(i, j)$ for $i, j \\leq k$ in $O(k^2)$ (using the transition $f(i, j) = ((f(i - 1, j - 1) + f(i - 1, j) \\cdot j) \\mod 2)$).
-- Then, we iterate over the number of unique elements, $x$, in our good multiset. The contribution of the number of good multisets with $x$ unique elements shall be $\\binom{m}{x - 1} \\cdot f(b(n) - 1, x - 1)$. We now apply our previously derived result again and realize that the parity of $\\binom{m}{x - 1}$ is 1 if and only if $(m - x + 1) \\oplus (x - 1) = m$ (where $\\oplus$ is the bitwise-OR operator), and add the parity of this expression to our answer.
+- Then, we iterate over the number of unique elements, $x$, in our good multiset. The contribution of the number of good multisets with $x$ unique elements shall be $\\binom{m}{x - 1} \\cdot f(b(n) - 1, x - 1)$. We now apply our previously derived result again and realize that the parity of $\\binom{q}{x - 1}$ is 1 if and only if $(q - x + 1) \\oplus (x - 1) = q$ (where $\\oplus$ is the bitwise-OR operator), and add the parity of this expression to our answer.
 
-We therefore compute this parity for every median $m$ in $O(k^2)$ time, and XOR the answer with $m$ in the case of said parity being 1. This is an $O(m \\cdot k^2)$ solution, which easily fits within the problem's T/M-L. The code ends up being very simple too, and has been attached ahead:
+We therefore compute this parity for every median $q$ in $O(k^2)$ time, and XOR the answer with $q$ in the case of said parity being 1. This is an $O(q \\cdot k^2)$ solution, which easily fits within the problem's T/M-L. The code ends up being very simple too, and has been included below.
 
 \`\`\`cpp
 #include<bits/stdc++.h>

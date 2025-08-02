@@ -86,7 +86,7 @@ This is a very simple sub-problem that can be solved with the help of dynamic pr
 - Define $f(i, j)$ to be the parity of the number of ways to partition a sequence of length $i$ into $j$ non-empty subsequences. Compute all $f(i, j)$ for $i, j \\leq k$ in $O(k^2)$ (using the transition $f(i, j) = ((f(i - 1, j - 1) + f(i - 1, j) \\cdot j) \\mod 2)$).
 - Then, we iterate over the number of unique elements, $x$, in our good multiset. The contribution of the number of good multisets with $x$ unique elements shall be $\\binom{q}{x - 1} \\cdot f(b(n) - 1, x - 1)$. We now apply our previously derived result again and realize that the parity of $\\binom{q}{x - 1}$ is 1 if and only if $(q - x + 1) \\oplus (x - 1) = q$ (where $\\oplus$ is the bitwise-OR operator), and add the parity of this expression to our answer.
 
-We therefore compute this parity for every median $q$ in $O(k^2)$ time, and XOR the answer with $q$ in the case of said parity being 1. This is an $O(q \\cdot k^2)$ solution, which easily fits within the problem's T/M-L. The code ends up being very simple too, and has been included below.
+We therefore compute this parity for every median $q$ in $O(k^2)$ time, and XOR the answer with $q$ in the case of said parity being 1. This is an $O(m \\cdot k^2)$ solution, which easily fits within the problem's T/M-L. The code ends up being very simple too, and has been included below.
 
 \`\`\`cpp
 #include<bits/stdc++.h>

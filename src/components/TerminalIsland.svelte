@@ -544,14 +544,8 @@ onMount(async () => {
       // Handle ESC sequence for arrow keys (\x1b[C and \x1b[D)
       if (escSeq) {
         escSeq += char;
-        if (escSeq === '\x1b[C') {
-          // Right arrow
-          cycleCompletion(1);
-          escSeq = '';
-          continue;
-        } else if (escSeq === '\x1b[D') {
-          // Left arrow
-          cycleCompletion(-1);
+        if (escSeq === '\x1b[C' || escSeq === '\x1b[D') {
+          // Arrow Right/Left handled in term.onKey; just reset sequence.
           escSeq = '';
           continue;
         } else if (escSeq.length >= 3) {

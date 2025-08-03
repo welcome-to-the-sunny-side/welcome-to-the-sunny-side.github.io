@@ -88,7 +88,7 @@ This is a very simple sub-problem that can be solved with the help of dynamic pr
 
 We therefore compute this parity for every median $q$ in $O(k^2)$ time, and XOR the answer with $q$ in the case of said parity being 1. This is an $O(m \\cdot k^2)$ solution, which fits within the problem's T/M-L. 
 
-We can however, make our solution faster by simply precomputing the dynamic programming states, which brings the time complexity of our solution down to $O(k \\cdot m + k ^ 2)$.
+We can however, make our solution faster by simply precomputing the dynamic programming states, which brings the time complexity of our solution down to $O(k ^ 2 + m \\cdot k)$.
 
 The code ends up being rather simple, and has been included below.
 

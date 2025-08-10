@@ -25,8 +25,9 @@ In other words, if both $i$ and $j$ are present in the sequence, then the number
 You are given integers $n$ and $m$. Compute the **bitwise XOR of the medians** of all **good** sequences $a$ of length $n$, where each element $a_i$ satisfies $0 \\leq a_i < m$.
 
 Constraints:
-$n \\leq 2^{200}$ (given to us in its binary form)
-$m \\leq 500$
+
+- $n \\leq 2^{200}$ (given to us in its binary form)
+- $m \\leq 500$
 
 ### Solution
 

@@ -1,6 +1,6 @@
 const e=`---
 displayMode: blog
-title: Group-restricted perfect matchings on a complete bipartite graph (CF-468D)
+title: CF-468D
 date: 2024-08-23
 tags: [editorial]
 ---

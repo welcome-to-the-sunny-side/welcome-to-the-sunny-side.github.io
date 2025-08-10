@@ -123,4 +123,6 @@ for t from 1 to 2 * n:
 		stop
 \`\`\`
 
+I shall spend no more time yapping about additional implementation details as I'm sleepy. [Here](https://codeforces.com/contest/2113/submission/332408233) is code if you want some.
+
 It's 5:19 AM and I'm really comfortable in my bedrot fortress, perhaps to a point where the foggy complacence induced by this leisurely state has made the blog really bad.`;export{e as default};

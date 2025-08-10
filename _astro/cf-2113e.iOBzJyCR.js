@@ -60,7 +60,7 @@ Solving this problem reduces to understanding that/why the latter is false, and 
 - At $t = -1 + 0.99$ (when the waiting red elements claim their nodes), we make a one-time exception (to requiring enemies for blue -> red conversions) and give every single node except $x$ to the red set.
 - The simulation continues as usual from $t = 0$.
 
-Now, why is this modification helpful? Well, because it helps us internalize the idea that every node has a sort of "default" value of blue. Why is that helpful? Well, because if a node starts off as blue, then the number of times it's (re)claimed by the blue set is at most the number of times it was snatched away by the red set, and the latter corresponds to steps 1 and 3, which are tractable (any blue node becomes red at most ~$m$ times, and any red/colorless node therefore becomes blue at most ~$m$ times).
+Why is this modification helpful? Well, because it helps us internalize the idea that every node has a sort of "default" value of blue. Why is that helpful? Well, because if a node starts off as blue, then the number of times it's (re)claimed by the blue set is at most the number of times it was snatched away by the red set, and the latter corresponds to steps 1 and 3, which are tractable (any blue node becomes red at most ~$m$ times, and any red/colorless node therefore becomes blue at most ~$m$ times).
 
 A concrete solution now begins to assume form:
 

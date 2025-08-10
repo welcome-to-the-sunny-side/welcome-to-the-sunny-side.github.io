@@ -41,15 +41,16 @@ Naturally, these (dynamic) sets maintain mutually exclusivity at any time $t$.
 
 Now, even before we visualize the process, one should have a vague idea of what it would involve, namely - the blue set “greedily” expanding outwards at the beginning of every second, and the red set then negating that blueness, or claiming some nodes for its own self (some subset of which may have been blue before/after the red expansion that occurred at the beginning of this second).
 
-Eh, I think it would be better to just formally state the rules for a simulation before we proceed.
+Eh, I think it would be better to just formally state the rules for our simulation before we proceed.
 
-- We begin at $t=0$ with $B=[x]$, and $R$ being the set of source nodes for his enemies.
-- At every second $t = i$, the following happens:
+- We begin at $t=0$ with node $x$ being blue and all the starting nodes for enemies being red.
+- Beginning at every second $t = i$, the following happens:
 	- At $t=i + 0.33$, all the red elements (enemies) vacate their nodes and if this wasn’t the last node on their path, they hop on to the edge to their next node. Otherwise, they simply vanish.
 	- At $t = i + 0.66$, all the blue nodes expand outward by 1 step (all empty nodes that are adjacent to at least 1 blue node become blue).
 	- At $t = i + 0.99$, all the red enemies waiting on edges move on to the next nodes in their path and claim these for themselves (possibly from the blue set).
 - The process ends at the earliest second when $y$ is blue or there is no blue node remaining. It’s easy to see that it takes at most $2 \\cdot n$ seconds to end, and always ends.
 
+Make of the following visualization what you will ($x = 1, y = 9$ and the paths are $[9 \\rightarrow 1], [7 \\rightarrow 1]$):
 <div style="text-align:center"><img src="/assets/cf-2113e/sim.gif"/></div>
 
 Now, if one were to try to estimate the computational expense of a literal simulation of this process, he would realize that at every second, steps 1 and 3 are cumulatively feasible to simulate (since each node is colored red a maximum of $k$ times, we process nodes at most $n \\cdot k$ times), but step 2 seems to potentially involve the consideration of $O(n^2)$ nodes across the timeline.
@@ -59,7 +60,7 @@ Solving this problem reduces to understanding that/why the latter is false, and 
 - At $t = -1 + 0.99$ (when the waiting red elements claim their nodes), we make a one-time exception (to requiring enemies for blue -> red conversions) and give every single node except $x$ to the red set.
 - The simulation continues as usual from $t = 0$.
 
-Now, why is this modification helpful? Well, because it helps us internalize the idea that every node has a sort of "default" value of blue. Why is that helpful? Well, because if a node starts off as blue, then the number of times it's (re)claimed by the blue set is at most the number of times it was snatched away by the red set, and the latter corresponds to steps 1 and 3, which are tractable (any blue node becomes red at most $k + 1$ times, and any red/colorless node therefore becomes blue at most $k + 1$ times).
+Now, why is this modification helpful? Well, because it helps us internalize the idea that every node has a sort of "default" value of blue. Why is that helpful? Well, because if a node starts off as blue, then the number of times it's (re)claimed by the blue set is at most the number of times it was snatched away by the red set, and the latter corresponds to steps 1 and 3, which are tractable (any blue node becomes red at most ~$k$ times, and any red/colorless node therefore becomes blue at most ~$k$ times).
 
 A concrete solution now begins to assume form:
 \`\`\`
@@ -82,7 +83,7 @@ for t from 1 to 2 * n:
 		stop
 \`\`\`
 
-The only thing that remains is to figure out how to efficiently iterate over non-blue nodes that are adjacent to a blue node at the $t$-th second. Let's call this set of nodes $J(t)$
+The only thing that remains is to figure out how to efficiently iterate over non-blue nodes that are adjacent to a blue node at the $t$-th second. Let's call this set of nodes $J(t)$.
 
 Well, upon closer inspection, we realize that any node $v$ in $J(t)$ must satisfy at least one of the following (their disjunction is necessary but not sufficient):
 - $v$ is colored red at time $t$.

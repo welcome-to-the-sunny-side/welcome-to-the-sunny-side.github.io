@@ -37,7 +37,7 @@ An attempt to visualize said process will make more self-aware readers realize t
 - The set of nodes at which the MC can be located at the $t$-th second (let’s associate this with the color blue).
 - The set of nodes upon which at least one of his enemies are located at the $t$-th second (let’s associate this with the color red).
 
-Naturally, these (dynamic) sets maintain mutually exclusivity at any time $t$. 
+Naturally, these (dynamic) sets maintain mutual exclusivity at any time $t$. 
 
 Now, even before we visualize the process, one should have a vague idea of what it would involve, namely - the blue set “greedily” expanding outwards at the beginning of every second, and the red set then negating that blueness, or claiming some nodes for its own self (some subset of which may have been blue before/after the red expansion that occurred at the beginning of this second).
 
@@ -53,21 +53,22 @@ Eh, I think it would be better to just formally state the rules for our simulati
 Make of the following visualization what you will ($x = 1, y = 9$ and the paths are $[9 \\rightarrow 1], [7 \\rightarrow 1]$):
 <div style="text-align:center"><img src="/assets/cf-2113e/sim.gif"/></div>
 
-Now, if one were to try to estimate the computational expense of a literal simulation of this process, he would realize that at every second, steps 1 and 3 are cumulatively feasible to simulate (since each node is colored red a maximum of $k$ times, we process nodes at most $n \\cdot k$ times), but step 2 seems to potentially involve the consideration of $O(n^2)$ nodes across the timeline.
+Now, if one were to try to estimate the computational expense of a literal simulation of this process, he would realize that at every second, steps 1 and 3 are cumulatively feasible to simulate (since each node is colored red a maximum of $m$ times, we process nodes at most $n \\cdot m$ times), but step 2 seems to potentially involve the consideration of $O(n^2)$ nodes across the timeline.
 
 Solving this problem reduces to understanding that/why the latter is false, and I happened to do so by modifying our system in the following manner:
 - The timeline begins at $t = -1$, with every node being initially blue.
 - At $t = -1 + 0.99$ (when the waiting red elements claim their nodes), we make a one-time exception (to requiring enemies for blue -> red conversions) and give every single node except $x$ to the red set.
 - The simulation continues as usual from $t = 0$.
 
-Now, why is this modification helpful? Well, because it helps us internalize the idea that every node has a sort of "default" value of blue. Why is that helpful? Well, because if a node starts off as blue, then the number of times it's (re)claimed by the blue set is at most the number of times it was snatched away by the red set, and the latter corresponds to steps 1 and 3, which are tractable (any blue node becomes red at most ~$k$ times, and any red/colorless node therefore becomes blue at most ~$k$ times).
+Now, why is this modification helpful? Well, because it helps us internalize the idea that every node has a sort of "default" value of blue. Why is that helpful? Well, because if a node starts off as blue, then the number of times it's (re)claimed by the blue set is at most the number of times it was snatched away by the red set, and the latter corresponds to steps 1 and 3, which are tractable (any blue node becomes red at most ~$m$ times, and any red/colorless node therefore becomes blue at most ~$m$ times).
 
 A concrete solution now begins to assume form:
+
 \`\`\`
 start with B = {x} and R = {whatever}
 ans = -1
 
-for t from 1 to 2 * n:
+for t from 0 to 2 * n:
 
 	for every enemy:
 		vacate its red node, move it onto an edge/kill it  
@@ -89,9 +90,9 @@ Well, upon closer inspection, we realize that any node $v$ in $J(t)$ must satisf
 - $v$ is colored red at time $t$.
 - Some node adjacent to $v$ was colored blue at time $t - 1 + 0.66$ (and not claimed by the red set at time $t - 1 + 0.99$).
 
-Notice that we didn't enforce the requirement of being next to a blue node in the first case (unlike the second), this condition simply constitutes a large, convenient net we cast upon a search space, and we shall now pay the cost for potential overshoot by actually having to check for a blue neighbour. It turns out to not be very punishing, as we can go over all red nodes at time $t$ and simply check if any of their neighbours is blue at time $t$ (this is fine since any node is red at at most $k$ points of time, and this therefore takes $O(\\sum{k \\cdot \\text{deg}(u)}) = O(k \\cdot \\sum{\\text{deg}(u)}) = O(k \\cdot n)$ time). 
+Notice that we didn't enforce the requirement of being next to a blue node in the first case (unlike the second), this condition simply constitutes a large, convenient net we cast upon a search space, and we shall now pay the cost for potential overshoot by actually having to check for a blue neighbour. It turns out to not be very punishing, as we can go over all red nodes at time $t$ and simply check if any of their neighbours is blue at time $t$ (this is fine since any node is red at at most $m$ points of time, and this therefore takes $O(\\sum{m \\cdot \\text{deg}(u)}) = O(m \\cdot \\sum{\\text{deg}(u)}) = O(m \\cdot n)$ time). 
 
-Let's now consider the second condition. For every node $v$ that gets colored blue at time $t - 1 + 0.66$, we have to consider all of its neighbours at time $t + 0.66$. This amounts to incurring a computational cost of $O(\\text{deg}(u))$ every time a node is colored blue, but it's also fine, as each node is colored blue at most $k$ times, and the total computational cost across the timeline for these neighbourial considerations also sums up to $O(\\sum{k \\cdot \\text{deg}(u)}) = O(k \\cdot \\sum{\\text{deg}(u)}) = O(k \\cdot n)$.
+Let's now consider the second condition. For every node $v$ that gets colored blue at time $t - 1 + 0.66$, we have to consider all of its neighbours at time $t + 0.66$. This amounts to incurring a computational cost of $O(\\text{deg}(u))$ every time a node is colored blue, but it's also fine, as each node is colored blue at most $m$ times, and the total computational cost across the timeline for these neighbourial considerations also sums up to $O(\\sum{m \\cdot \\text{deg}(u)}) = O(m \\cdot \\sum{\\text{deg}(u)}) = O(m \\cdot n)$.
 
 We finally have the following solution:
 
@@ -99,7 +100,7 @@ We finally have the following solution:
 start with B = {x} and R = {whatever}
 ans = -1
 
-for t from 1 to 2 * n:
+for t from 0 to 2 * n:
 	
 	for every enemy:
 		vacate its red node, move it onto an edge/kill it  
@@ -124,5 +125,7 @@ for t from 1 to 2 * n:
 \`\`\`
 
 I shall spend no more time yapping about additional implementation details as I'm sleepy. [Here](https://codeforces.com/contest/2113/submission/332408233) is code if you want some.
+
+Finally, our solution runs in $O()$
 
 It's 5:19 AM and I'm really comfortable in my bedrot fortress, perhaps to a point where the foggy complacence induced by this leisurely state has made the blog really bad.`;export{e as default};

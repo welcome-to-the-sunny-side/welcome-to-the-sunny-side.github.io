@@ -90,7 +90,7 @@ Well, upon closer inspection, we realize that any node $v$ in $J(t)$ must satisf
 - $v$ is colored red at time $t$.
 - Some node adjacent to $v$ was colored blue at time $t - 1 + 0.66$ (and not claimed by the red set at time $t - 1 + 0.99$).
 
-Notice that we didn't enforce the requirement of being next to a blue node in the first case (unlike the second), this condition simply constitutes a large, convenient net we cast upon a search space, and we shall now pay the cost for potential overshoot by actually having to check for a blue neighbour. It turns out to not be very punishing, as we can go over all red nodes at time $t$ and simply check if any of their neighbours is blue at time $t$ (this is fine since any node is red at at most $m$ points of time, and this therefore takes $O(\\sum{m \\cdot \\text{deg}(u)}) = O(m \\cdot \\sum{\\text{deg}(u)}) = O(m \\cdot n)$ time). 
+Notice that we didn't enforce the requirement of being next to a blue node in the first case (unlike the second), this condition simply constitutes a large, convenient net we cast upon a search space, and we shall now pay the cost for potential overshoot by actually having to check for a blue neighbour. It turns out to not be very punishing, as we can go over all red nodes at time $t$ and simply check if any of their neighbours is blue at time $t$ (this is fine since any node is red at at most $m$ points of time, and this therefore takes $O(\\sum{m \\cdot \\text{deg}(u)}) = O(m \\cdot \\sum{\\text{deg}(u)}) = O(m \\cdot n)$ time). Finding all red nodes at a certain time is obviously trivial.
 
 Let's now consider the second condition. For every node $v$ that gets colored blue at time $t - 1 + 0.66$, we have to consider all of its neighbours at time $t + 0.66$. This amounts to incurring a computational cost of $O(\\text{deg}(u))$ every time a node is colored blue, but it's also fine, as each node is colored blue at most $m$ times, and the total computational cost across the timeline for these neighbourial considerations also sums up to $O(\\sum{m \\cdot \\text{deg}(u)}) = O(m \\cdot \\sum{\\text{deg}(u)}) = O(m \\cdot n)$.
 
@@ -126,6 +126,6 @@ for t from 0 to 2 * n:
 
 I shall spend no more time yapping about additional implementation details as I'm sleepy. [Here](https://codeforces.com/contest/2113/submission/332408233) is code if you want some.
 
-Finally, our solution runs in $O()$
+Finally, our solution runs in $O(n \\cdot m)$ time, which is acceptable.
 
 It's 5:19 AM and I'm really comfortable in my bedrot fortress, perhaps to a point where the foggy complacence induced by this leisurely state has made the blog really bad.`;export{e as default};

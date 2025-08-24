@@ -7,6 +7,7 @@ import { tick } from 'svelte';
 import { currentSkin } from '../stores/skin';
   import { currentPath } from '../stores/router';
   import { readable } from 'svelte/store';
+  import MusingsStream from './MusingsStream.svelte';
 
   // Import all markdown under src/content as raw strings
   // load all markdown as raw strings (Vite 5 syntax)
@@ -30,6 +31,7 @@ let path = '/';
   let contentRaw: string = '';
 let frontmatter: Record<string, any> = {};
 let isBlog = false;
+let isMusings = false;
 let contentHtml: string = md.render(contentRaw);
 type Device = 'pc' | 'mobile';
 // Collect all home background images at build time (hashed URLs)
@@ -130,6 +132,7 @@ function parseFrontmatter(raw: string) {
       const { fm, body } = parseFrontmatter(contentRaw);
       frontmatter = fm;
       isBlog = frontmatter.displayMode === 'blog';
+      isMusings = frontmatter.displayMode === 'musings';
       
       
       contentHtml = md.render(body);
@@ -142,6 +145,7 @@ function parseFrontmatter(raw: string) {
       contentRaw = (await (pagesHtml as any)[htmlKey]()) as string;
       frontmatter = {};
       isBlog = false;
+      isMusings = false;
       
       
       contentHtml = contentRaw;
@@ -159,6 +163,7 @@ function parseFrontmatter(raw: string) {
       contentRaw = `# 404\nPath not found: ${path}`;
       frontmatter = {};
       isBlog = false;
+      isMusings = false;
       
       
       contentHtml = md.render(contentRaw);
@@ -191,7 +196,11 @@ function parseFrontmatter(raw: string) {
     </article>
   </section>
 {:else}
-  {#if isHomeWithBackground}
+  {#if isMusings}
+    <div class={`${skin.classes.contentPane} p-4 max-w-4xl mx-auto bg-surface text-text transition-colors duration-150 ease-retro`}>
+      <MusingsStream />
+    </div>
+  {:else if isHomeWithBackground}
     <div 
       class="h-full w-full bg-cover bg-center bg-no-repeat"
       style="background-image: url('{currentBackgroundImage}');"

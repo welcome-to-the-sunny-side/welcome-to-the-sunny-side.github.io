@@ -27,3 +27,9 @@ pnpm-debug.log*
 .vscode
 
 .obsidian
+
+#encrypted
+misc_assets/musings_src
+misc_assets/musings_src/key.txt
+
+venv

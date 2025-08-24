@@ -1,6 +1,6 @@
 # Welcome to the Sunny Side – Site Reference
 
-_Last updated: 2025-06-20_ (verbose `ls -v`, date-sorted flags, command history navigation, native HTML metadata, Games section; previous additions: Fuse.js-powered `grep`)
+_Last updated: 2025-08-25_ (Musings UI refinement: removed titles, consistent spacing, animated decrypt button; previous: verbose `ls -v`, date-sorted flags, command history navigation, native HTML metadata, Games section; Fuse.js-powered `grep`)
 
 ## 1 . High-level Overview
 The site is a **static, terminal-driven blog & knowledge base** built with **Astro** for static generation and **Svelte** for the interactive UI. Styling is primarily handled by **Tailwind CSS** (integrated via `@astrojs/tailwind`), utilizing its utility classes and the `@tailwindcss/typography` plugin for Markdown rendering. All human-readable content lives in Markdown files under `src/content` and is presented at URLs that end in `.html`. Additionally, the site now supports rendering of HTML files, allowing for more diverse content presentation. A new Games section has also been added, providing a dedicated space for browser-game adjacent pages.
@@ -276,5 +276,48 @@ A lightweight playground for interactive HTML pages that live alongside blog pos
 | **Zetamac Arithmetic Sprint** | `/games/zetamac.html` | Vanilla JS + Tailwind + Chart.js | Timed arithmetic quiz with detailed performance graphs, high-score tracking, keyboard shortcuts. |
 
 Games load inside the same Svelte `ContentPane` via the catch-all route, inheriting the dark retro theme automatically.
+
+---
+
+## 13. Musings Feature (Encrypted Personal Posts)
+_Added: 2025-08-25_
+
+The site includes a **Musings** feature for encrypted personal posts that can be selectively unlocked with a master passphrase.
+
+### Architecture
+* **Sources**: Gitignored `misc_assets/musings_src/` directory containing:
+  - Individual `.md` files for each post
+  - `key.txt` file with the master passphrase
+* **Build Output**: `public/musings/` directory with:
+  - `manifest.json` listing all posts with metadata
+  - `data/` subdirectory containing encrypted JSON blobs for private posts
+* **Python CLI**: `tools/musings/main.py` processes source files and generates encrypted blobs
+
+### Encryption Details
+* **Algorithm**: scrypt(N=32768, r=8, p=1) for key derivation → AES-256-GCM for encryption
+* **Per-post security**: Each post has unique salt + IV, with AAD `musings:<id>:v1`
+* **Single passphrase**: One master passphrase encrypts all private posts
+* **Client-side only**: Passphrase kept in memory, never persisted
+
+### UI Features (2025-08-25 Refinements)
+* **Minimalist design**: No post titles displayed (removed from both frontend and backend)
+* **Global passphrase input**: Single input at top of page for all encrypted posts
+* **Inline decrypt buttons**: Located next to timestamps, with animated letter permutation during decryption
+* **Consistent spacing**: Encrypted and decrypted post bodies have matching padding and font sizes
+* **Web Worker decryption**: Heavy cryptographic operations run off the main thread to keep UI responsive
+* **Ciphertext preview**: Shows first 160 characters of encrypted content when locked
+
+### Usage
+1. Navigate to `/void.html` to access the Musings page
+2. Enter the master passphrase in the global input field
+3. Click "decrypt" next to any encrypted post to unlock it
+4. The decrypt button animates (letter scrambling) while processing
+5. Decrypted content renders with consistent styling
+
+### Technical Implementation
+* **Frontend**: `src/components/MusingsStream.svelte` handles UI and decryption
+* **Worker**: `src/lib/musingsWorker.ts` performs scrypt + AES-GCM operations
+* **Build tool**: `tools/musings/main.py` encrypts posts and generates manifest
+* **Frontmatter**: Posts support `id`, `date`, `privacy` (public/master), `pinned` fields
 
 Enjoy hacking on _Welcome to the Sunny Side_!

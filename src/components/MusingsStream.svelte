@@ -55,10 +55,10 @@
 
   // We'll fetch blobs directly from public/musings/data/ at runtime
 
-  const blobCache: Record<string, PublicBlob | PrivateBlob> = {};
-  const decryptedMd: Record<string, { md: string }> = {};
+  let blobCache: Record<string, PublicBlob | PrivateBlob> = {};
+  let decryptedMd: Record<string, { md: string }> = {};
   let unlockingPosts: Set<string> = new Set();
-  const unlockErrors: Record<string, string> = {};
+  let unlockErrors: Record<string, string> = {};
   // Single global passphrase kept in-memory only
   let globalPassphrase: string = '';
   // Decrypt worker (lazy)
@@ -118,6 +118,87 @@
     return d.toLocaleString();
   }
 
+  const PAGE_SIZE = 12;
+  let visibleCount = PAGE_SIZE;
+
+  // Svelte action: invoke callback when node enters viewport (once)
+  function visibleOnce(node: Element, callback: () => void) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            try {
+              callback?.();
+            } catch {}
+            io.unobserve(node);
+          }
+        }
+      },
+      { rootMargin: '400px 0px' }
+    );
+    io.observe(node);
+    return {
+      destroy() {
+        io.disconnect();
+      },
+    };
+  }
+
+  // Svelte action: infinite scroll sentinel (keeps observing)
+  function infiniteSentinel(node: Element, callback: () => void) {
+    let pending = false;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && !pending) {
+            pending = true;
+            // Stop observing to force a future re-evaluation after DOM grows
+            io.unobserve(node);
+            try {
+              callback?.();
+            } finally {
+              // Re-observe on next frame after layout settles so we can trigger again
+              requestAnimationFrame(() => {
+                setTimeout(() => {
+                  pending = false;
+                  io.observe(node);
+                }, 50);
+              });
+            }
+          }
+        }
+      },
+      { rootMargin: '200px 0px' }
+    );
+    io.observe(node);
+    return {
+      destroy() {
+        io.disconnect();
+      },
+    };
+  }
+
+  // Ensure a post's data is loaded when it becomes visible
+  function ensureLoaded(entry: ManifestEntry) {
+    if (entry.tier === 'public') {
+      if (!decryptedMd[entry.id]) {
+        loadBlob(entry).then((b) => {
+          const pb = b as PublicBlob | null;
+          if (pb && (pb as any).md) {
+            decryptedMd[entry.id] = { md: (pb as any).md };
+            // trigger reactivity on nested object mutation
+            decryptedMd = { ...decryptedMd };
+          }
+        });
+      }
+    } else {
+      // For private posts, prefetch the blob to show ciphertext preview
+      if (!blobCache[entry.id]) {
+        loadBlob(entry);
+      }
+    }
+  }
+
   async function loadBlob(entry: ManifestEntry): Promise<PublicBlob | PrivateBlob | null> {
     if (blobCache[entry.id]) return blobCache[entry.id];
     try {
@@ -125,6 +206,8 @@
       if (!response.ok) return null;
       const data = await response.json();
       blobCache[entry.id] = data;
+      // trigger reactivity on nested object mutation
+      blobCache = { ...blobCache };
       return data as PublicBlob | PrivateBlob;
     } catch {
       return null;
@@ -164,6 +247,7 @@
     // reassign to trigger Svelte reactivity for Set mutation
     unlockingPosts = new Set(unlockingPosts);
     delete unlockErrors[postId];
+    unlockErrors = { ...unlockErrors };
     startDecryptAnimation(postId);
     await tick();
     
@@ -183,8 +267,10 @@
           w.removeEventListener('message', handler);
           if (data.ok) {
             decryptedMd[postId] = { md: data.md! };
+            decryptedMd = { ...decryptedMd };
           } else {
             unlockErrors[postId] = data.error || 'Failed to decrypt';
+            unlockErrors = { ...unlockErrors };
           }
           resolve();
         };
@@ -193,6 +279,7 @@
       });
     } catch (err: any) {
       unlockErrors[postId] = err?.message ?? String(err);
+      unlockErrors = { ...unlockErrors };
     } finally {
       unlockingPosts.delete(postId);
       // reassign to trigger Svelte reactivity for Set mutation
@@ -203,7 +290,9 @@
 
   function lockPost(postId: string) {
     delete decryptedMd[postId];
+    decryptedMd = { ...decryptedMd };
     delete unlockErrors[postId];
+    unlockErrors = { ...unlockErrors };
   }
 
   onMount(async () => {
@@ -213,16 +302,6 @@
       if (response.ok) {
         entries = await response.json();
         manifestLoaded = true;
-        
-        // Auto-load public posts
-        for (const e of entries) {
-          if (e.tier === 'public') {
-            const b = (await loadBlob(e)) as PublicBlob | null;
-            if (b && (b as any).md) {
-              decryptedMd[e.id] = { md: (b as any).md };
-            }
-          }
-        }
       }
     } catch (err) {
       console.error('Failed to load musings manifest:', err);
@@ -249,7 +328,7 @@
       <input
         type="password"
         class="px-2 py-1 rounded-sm bg-[color:var(--el-surface)] border border-text-muted text-xs flex-1"
-        placeholder="Passphrase"
+        placeholder="Key"
         bind:value={globalPassphrase}
         id="global-passphrase"
       />
@@ -265,8 +344,8 @@
 {/if}
 
 <ul class="list-none p-0 m-0 space-y-6">
-  {#each entries as e}
-    <li class="rounded-sm border border-text-muted bg-[color:var(--el-surface)] p-3">
+  {#each entries.slice(0, visibleCount) as e (e.id)}
+    <li use:visibleOnce={() => ensureLoaded(e)} class="rounded-sm border border-text-muted bg-[color:var(--el-surface)] p-3">
       <div class="flex items-center justify-between gap-2">
         <div class="text-xs text-text-muted">{tsToLocal(e.ts)}</div>
         {#if e.tier !== 'public' && !decryptedMd[e.id]}
@@ -281,23 +360,28 @@
       </div>
 
       {#if e.tier !== 'public' && !decryptedMd[e.id]}
-        {#await loadBlob(e) then b}
-          {#if b}
-            <div class="mt-1">
-              <div class="break-all">{(b as PrivateBlob).ct.slice(0, 160)}{(b as PrivateBlob).ct.length > 160 ? '…' : ''}</div>
-              {#if unlockErrors[e.id]}
-                <div class="text-xs text-accent mt-1">{unlockErrors[e.id]}</div>
-              {/if}
-            </div>
+        <div class="mt-1">
+          {#if blobCache[e.id]}
+            <div class="break-all">{(blobCache[e.id] as PrivateBlob).ct.slice(0, 160)}{(blobCache[e.id] as PrivateBlob).ct.length > 160 ? '…' : ''}</div>
+          {:else}
+            <div class="text-xs text-text-muted">Loading preview…</div>
           {/if}
-        {/await}
+          {#if unlockErrors[e.id]}
+            <div class="text-xs text-accent mt-1">{unlockErrors[e.id]}</div>
+          {/if}
+        </div>
       {:else if decryptedMd[e.id]}
         <div class="mt-1">
           <article class="max-w-none prose-p:my-0 prose-ul:my-0 prose-ol:my-0 prose-pre:my-0">
             {@html md.render(decryptedMd[e.id].md)}
           </article>
         </div>
+      {:else if e.tier === 'public'}
+        <div class="mt-1 text-xs text-text-muted">Loading…</div>
       {/if}
     </li>
   {/each}
 </ul>
+{#if manifestLoaded && visibleCount < entries.length}
+  <div use:infiniteSentinel={() => (visibleCount = Math.min(entries.length, visibleCount + PAGE_SIZE))} class="h-10"></div>
+{/if}

@@ -320,4 +320,22 @@ The site includes a **Musings** feature for encrypted personal posts that can be
 * **Build tool**: `tools/musings/main.py` encrypts posts and generates manifest
 * **Frontmatter**: Posts support `id`, `date`, `privacy` (public/master), `pinned` fields
 
+### Performance Optimizations (Lazy Loading)
+_Added: 2025-08-25_
+
+The Musings component implements **lazy loading** to improve initial page load performance:
+
+* **Incremental pagination**: Only renders first 12 posts initially (`PAGE_SIZE=12`)
+* **Visibility-based fetching**: Uses `IntersectionObserver` to load post blobs only when items enter viewport
+* **Infinite scroll**: Bottom sentinel automatically loads more posts as user scrolls
+* **Prefetch strategy**: 
+  - Public posts: fetch blob and render markdown when visible
+  - Private posts: fetch blob for ciphertext preview when visible
+* **Network optimization**: Eliminates eager loading of all posts on mount
+* **Two-tier observer system**:
+  - `visibleOnce()`: triggers once per post for blob loading
+  - `infiniteSentinel()`: re-triggers for pagination as user scrolls
+
+This reduces initial network requests from (1 manifest + N blobs) to just the manifest, with subsequent requests triggered by scroll position. Performance improvement is most noticeable with large post archives.
+
 Enjoy hacking on _Welcome to the Sunny Side_!

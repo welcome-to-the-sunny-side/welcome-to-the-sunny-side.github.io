@@ -118,6 +118,16 @@
     return d.toLocaleString();
   }
 
+  // Call MathJax to typeset any inline/display math that appears in the newly-rendered markdown
+  function typesetMath() {
+    if (typeof window !== 'undefined') {
+      const mj = (window as any).MathJax;
+      if (mj?.typesetPromise) {
+        mj.typesetPromise();
+      }
+    }
+  }
+
   const PAGE_SIZE = 12;
   let visibleCount = PAGE_SIZE;
 
@@ -182,12 +192,15 @@
   function ensureLoaded(entry: ManifestEntry) {
     if (entry.tier === 'public') {
       if (!decryptedMd[entry.id]) {
-        loadBlob(entry).then((b) => {
+        loadBlob(entry).then(async (b) => {
           const pb = b as PublicBlob | null;
           if (pb && (pb as any).md) {
             decryptedMd[entry.id] = { md: (pb as any).md };
             // trigger reactivity on nested object mutation
             decryptedMd = { ...decryptedMd };
+            // Ensure DOM is updated before asking MathJax to typeset
+            await tick();
+            typesetMath();
           }
         });
       }
@@ -230,11 +243,11 @@
       // Provide progress callback so scrypt-js yields to the event loop, allowing UI to update
       (_progress: number) => {}
     );
-    const key = await crypto.subtle.importKey('raw', derived, { name: 'AES-GCM' } as any, false, ['decrypt']);
+    const key = await crypto.subtle.importKey('raw', derived as unknown as BufferSource, { name: 'AES-GCM' } as any, false, ['decrypt']);
     const iv = b64ToBytes(blob.iv);
     const ct = b64ToBytes(blob.ct);
     const ad = enc.encode(blob.ad ?? `musings:${blob.id}:v${blob.v ?? 1}`);
-    const plaintext = await crypto.subtle.decrypt({ name: 'AES-GCM', iv, additionalData: ad } as any, key, ct);
+    const plaintext = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv as unknown as BufferSource, additionalData: ad } as any, key, ct as unknown as BufferSource);
     const json = new TextDecoder().decode(plaintext);
     const obj = JSON.parse(json);
     return { md: obj.md };
@@ -277,6 +290,9 @@
         w.addEventListener('message', handler);
         w.postMessage({ id: postId, blob, pass: passphrase });
       });
+      // After decrypted markdown is injected, typeset math
+      await tick();
+      typesetMath();
     } catch (err: any) {
       unlockErrors[postId] = err?.message ?? String(err);
       unlockErrors = { ...unlockErrors };
@@ -327,13 +343,13 @@
     <div class="flex items-center gap-2">
       <input
         type="password"
-        class="px-2 py-1 rounded-sm bg-[color:var(--el-surface)] border border-text-muted text-xs flex-1"
+        class="px-2 py-1 rounded-sm bg-[color:var(--el-surface)] border border-text-muted text-xs flex-1 text-text placeholder:text-text transition-colors"
         placeholder="Key"
         bind:value={globalPassphrase}
         id="global-passphrase"
       />
       <button
-        class="px-2 py-1 text-xs border border-accent-subtle rounded hover:bg-accent-subtle/20 disabled:opacity-50"
+        class="px-2 py-1 text-xs border border-accent-subtle rounded hover:bg-accent-subtle/20 disabled:opacity-50 text-text hover:text-accent transition-colors"
         on:click={() => (globalPassphrase = '')}
         disabled={!globalPassphrase}
       >

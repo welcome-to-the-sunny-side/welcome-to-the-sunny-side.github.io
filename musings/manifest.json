@@ -1,18 +1,26 @@
 [
   {
+    "id": "2025-08-25-1413",
+    "ts": "2025-08-25T08:43:00Z",
+    "tier": "master",
+    "path": "data/2025-08-25-1413.json",
+    "size": 484,
+    "hash": "55431438e50979f97fca91b9ab696d6a8fbadf3758230351f13bf8b04e66edc6"
+  },
+  {
     "id": "second",
     "ts": "2025-08-24T22:02:00Z",
     "tier": "master",
     "path": "data/second.json",
     "size": 314,
-    "hash": "9e37aa453d4d47af666d1b7e6fe2f50088367b6619362fe0be404d3e5d95e786"
+    "hash": "8cfa5d9d3b3bf39e23c31aeff0f98587afdf3730d7a9e19f20a3294be6a082af"
   },
   {
     "id": "first",
     "ts": "2025-08-24T22:01:00Z",
     "tier": "public",
     "path": "data/first.json",
-    "size": 101,
-    "hash": "f6904ca0a15e17bece5592a9bc1c24e2e8d721e03287f820155cb9af614089e0"
+    "size": 107,
+    "hash": "7cb98cc6f50dc0682a89094566415262ecab2db85c05fb8d4ef614318df9db5d"
   }
 ]

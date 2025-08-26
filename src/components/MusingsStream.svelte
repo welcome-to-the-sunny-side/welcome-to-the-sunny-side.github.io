@@ -333,7 +333,7 @@
 </script>
 
 {#if !manifestLoaded}
-  <div class="text-text-muted text-sm">Loading musings...</div>
+  <div class="text-text-muted text-sm">Your connection is rather slow, peasant...</div>
 {:else if entries.length === 0}
   <div class="text-text-muted text-sm">No musings found.</div>
 {/if}

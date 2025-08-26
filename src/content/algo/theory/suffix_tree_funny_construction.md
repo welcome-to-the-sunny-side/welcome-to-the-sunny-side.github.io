@@ -85,7 +85,7 @@ However, every time we perform a split operation (merge in reverse), we also com
 
 ## Code
 
-My implementation can be found [here](https://github.com/welcome-to-the-sunny-side/libra/blob/main/meme/RandomSuffixTree.cpp).
+My implementation can be found [here](https://github.com/welcome-to-the-sunny-side/libra/blob/main/meme/random_suffix_tree.cpp).
 
 ## Example Problems
 

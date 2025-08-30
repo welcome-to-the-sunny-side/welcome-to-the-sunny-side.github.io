@@ -3,6 +3,7 @@
   import MarkdownIt from 'markdown-it';
   import hljs from 'highlight.js';
   import scryptPkg from 'scrypt-js';
+  import { currentSkin } from '../stores/skin';
   const { scrypt } = scryptPkg as any;
 
   type Tier = 'public' | 'master';
@@ -388,7 +389,7 @@
         </div>
       {:else if decryptedMd[e.id]}
         <div class="mt-1">
-          <article class="max-w-none prose-p:my-0 prose-ul:my-0 prose-ol:my-0 prose-pre:my-0">
+          <article class="{$currentSkin.classes.contentPane} max-w-none">
             {@html md.render(decryptedMd[e.id].md)}
           </article>
         </div>

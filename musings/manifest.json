@@ -1,5 +1,13 @@
 [
   {
+    "id": "2025-08-31-0440",
+    "ts": "2025-08-30T23:10:00Z",
+    "tier": "public",
+    "path": "data/2025-08-31-0440.json",
+    "size": 268,
+    "hash": "899e9cbe883fc20a4f01c13bfb04b3834bb744223ca7420b744bbd8fbd0c02bb"
+  },
+  {
     "id": "2025-08-30-1454",
     "ts": "2025-08-30T09:24:00Z",
     "tier": "public",
@@ -29,7 +37,7 @@
     "tier": "master",
     "path": "data/2025-08-25-1413.json",
     "size": 484,
-    "hash": "3647159875a34735049144bb5ad500915a24cfc1a038361fe59119898b89d058"
+    "hash": "564fb70e0a18d133c83b1dc45d55178fe2d2f1fb4c1aac9d1a706f51d04902f0"
   },
   {
     "id": "second",
@@ -37,7 +45,7 @@
     "tier": "master",
     "path": "data/second.json",
     "size": 314,
-    "hash": "d923db5f62320d988c4224f1f9a5a33a63efb243c1ebf545e8520466e477c1c9"
+    "hash": "a1cccb5d3e330df0596e98f3f2aecf0fd92e1c6bf14627c8c5a7453bb9b31499"
   },
   {
     "id": "first",

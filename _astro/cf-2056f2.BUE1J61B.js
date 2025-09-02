@@ -47,7 +47,7 @@ for median q from 0 to m - 1:
         ans ^= q
 \`\`\`
 
-Firstly, we cannot compute required values of $f$ trivially in $O(k^2)$ like we did earlier, but we can analyse the recurrence and realize that $f(i,j) = 1 \\iff (i - j) \\& ((j - 1)/2) = 0$. The proof for this is left as an exercise to the reader. We can therefore get rid of the $O(k^2)$ precomputation we were performing earlier, and look up values for $f(i, j)$ in $O(1)$.
+Firstly, we cannot compute required values of $f$ trivially in $O(k^2)$ like we did earlier, but we can analyse the recurrence and realize that $f(i,j) = 1 \\iff (i - j) \\text{AND} ((j - 1)/2) = 0$ (where $\\text{AND}$ is the bitwise-AND operation). The proof for this is left as an exercise to the reader. We can therefore get rid of the $O(k^2)$ precomputation we were performing earlier, and look up values for $f(i, j)$ in $O(1)$.
 
 Now, as we already know from the ideas introduced in the previous blog: $(\\binom{q}{x - 1} \\equiv 1 \\pmod{2}) \\iff ((x - 1) \\text{ is a submask of } q)$, so when iterating over the number of unique elements $x$, we can simply ignore all $x$ where $x - 1$ isn't a submask of $q$. To make things more convenient, let's redefine $x$ to be the number of unique elements besides the median (just so we can say "$x$ must be a submask of $q$" instead of "$x - 1$ must be a submask of $q$"). The algorithm now becomes:
 

@@ -143,7 +143,7 @@ signed main()
                                     bits.push_back(i);
                             
                             int sz = bits.size();
-                            int l = 0, r = (1 << sz), opt = 0;
+                            int l = 0, r = (1 << sz) - 1, opt = 0;
                             while(l <= r)
                             {
                                 int mid = (l + r)/2;
@@ -169,7 +169,7 @@ signed main()
                             bits.push_back(i);
                         
                         int sz = bits.size();
-                        int l = 0, r = (1 << sz), opt = 0;
+                        int l = 0, r = (1 << sz) - 1, opt = 0;
                         while(l <= r)
                         {
                             int mid = (l + r)/2;

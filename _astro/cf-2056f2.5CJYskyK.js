@@ -81,7 +81,7 @@ for (median suffix mask) p from 0 to (2^L - 1):
 
 Now, the problem decomposes to two easy and independent subproblems:
 
-1. Finding $(\\bigoplus_{x \\in p} f(k, x + 1)) \\forall p \\subseteq [0, 2^L)$ (here $x \\subseteq p$ means that $x$ is a submask of $p$). This is a standard application of SOS DP, and warrants no further explanation from me.
+1. Finding $(\\bigoplus_{x \\subseteq p} f(k, x + 1)) \\forall p \\in [0, 2^L)$ (here $x \\subseteq p$ means that $x$ is a submask of $p$). This is a standard application of SOS DP, and warrants no further explanation from me.
 2. Finding  $(\\bigoplus_{p \\subseteq_L q} q) \\forall p \\in [0, 2^L)$. This can be done in $O(1)$ but I hate digit analysis far too much to not have mindlessly bashed it in $O(\\log_2^3{m})$.
 
 So our final solution runs in $O(k \\cdot (\\log_2{k} + \\log_2^3{m}))$ and can be optimized to $O(k \\cdot \\log_2{k})$ at the risk of one's sanity.

@@ -67,32 +67,150 @@ $: skin = $currentSkin;
   }
   $: isHomeWithBackground = (path === '/' || path === '/home.html') && currentBackgroundImage;
 
-function parseFrontmatter(raw: string) {
-  if (raw.startsWith('---')) {
-    const end = raw.indexOf('\n---', 3);
-    if (end !== -1) {
-      const yaml = raw.slice(3, end).trim();
-      const body = raw.slice(end + 4); // skip newline
-      const obj: Record<string, any> = {};
-      for (const line of yaml.split(/\r?\n/)) {
-        const idx = line.indexOf(':');
-        if (idx === -1) continue;
-        const key = line.slice(0, idx).trim();
-        let val: any = line.slice(idx + 1).trim();
-        // strip quotes
-        val = val.replace(/^['\"]|['\"]$/g, '');
-        // try JSON parse for arrays
-        if (val.startsWith('[') && val.endsWith(']')) {
-          // naive list parsing: [a, b, c]
-          val = val.slice(1, -1).split(',').map((s: string) => s.trim().replace(/^['\\"]|['\\"]$/g, ''));
+  function parseFrontmatter(raw: string) {
+    if (raw.startsWith('---')) {
+      const end = raw.indexOf('\n---', 3);
+      if (end !== -1) {
+        const yaml = raw.slice(3, end).trim();
+        const body = raw.slice(end + 4); // skip newline
+        const obj: Record<string, any> = {};
+        for (const line of yaml.split(/\r?\n/)) {
+          const idx = line.indexOf(':');
+          if (idx === -1) continue;
+          const key = line.slice(0, idx).trim();
+          let val: any = line.slice(idx + 1).trim();
+          // strip quotes
+          val = val.replace(/^['\"]|['\"]$/g, '');
+          // try JSON parse for arrays
+          if (val.startsWith('[') && val.endsWith(']')) {
+            // naive list parsing: [a, b, c]
+            val = val.slice(1, -1).split(',').map((s: string) => s.trim().replace(/^['\\"]|['\\"]$/g, ''));
+          }
+          obj[key] = val;
         }
-        obj[key] = val;
+        return { fm: obj, body };
       }
-      return { fm: obj, body };
     }
+    return { fm: {}, body: raw };
   }
-  return { fm: {}, body: raw };
-}
+
+  // Protect inline/display math from Markdown emphasis parsing by temporarily
+  // replacing math segments with unique placeholders before md.render(), then
+  // restoring the original TeX delimiters back into the resulting HTML string.
+  // Supported delimiters: $...$, $$...$$, \(...\), \[...\]
+  function protectMathSegments(input: string): { placeholderText: string; restore: (html: string) => string } {
+    const placeholders: string[] = [];
+    const MARKER = '§§MATH§§';
+    let counter = 0;
+
+    function makeKey(idx: number): string {
+      return `${MARKER}${idx}§§`;
+    }
+
+    function pushPlaceholder(raw: string): string {
+      const key = makeKey(counter);
+      placeholders.push(raw);
+      counter++;
+      return key;
+    }
+
+    function isEscaped(src: string, pos: number): boolean {
+      // Count preceding backslashes
+      let backslashes = 0;
+      for (let i = pos - 1; i >= 0 && src[i] === '\\'; i--) backslashes++;
+      return (backslashes % 2) === 1;
+    }
+
+    let i = 0;
+    let out = '';
+    const n = input.length;
+
+    while (i < n) {
+      const ch = input[i];
+
+      // Skip code spans/fences delimited by backticks `...` or ```...```
+      if (ch === '`') {
+        // Count backticks length
+        let btCount = 1;
+        let j = i + 1;
+        while (j < n && input[j] === '`') { btCount++; j++; }
+        // Find closing sequence of same length
+        const fence = '`'.repeat(btCount);
+        let k = input.indexOf(fence, j);
+        if (k === -1) {
+          // No closing fence; append rest and break
+          out += input.slice(i);
+          break;
+        } else {
+          // Include closing fence
+          out += input.slice(i, k + btCount);
+          i = k + btCount;
+          continue;
+        }
+      }
+
+      // MathJax \(...\)
+      if (ch === '\\' && i + 1 < n && input[i + 1] === '(') {
+        const start = i;
+        const end = input.indexOf('\\)', i + 2);
+        if (end !== -1) {
+          const raw = input.slice(start, end + 2);
+          out += pushPlaceholder(raw);
+          i = end + 2;
+          continue;
+        }
+      }
+
+      // MathJax \[...\]
+      if (ch === '\\' && i + 1 < n && input[i + 1] === '[') {
+        const start = i;
+        const end = input.indexOf('\\]', i + 2);
+        if (end !== -1) {
+          const raw = input.slice(start, end + 2);
+          out += pushPlaceholder(raw);
+          i = end + 2;
+          continue;
+        }
+      }
+
+      // Dollar-delimited: $...$ or $$...$$
+      if (ch === '$') {
+        // Count consecutive dollars (1 or 2 supported)
+        let d = 1;
+        if (i + 1 < n && input[i + 1] === '$') d = 2;
+        const start = i;
+        let j = i + d;
+        let found = -1;
+        while (true) {
+          j = input.indexOf('$'.repeat(d), j);
+          if (j === -1) break;
+          if (!isEscaped(input, j)) { found = j; break; }
+          j += d;
+        }
+        if (found !== -1) {
+          const raw = input.slice(start, found + d);
+          out += pushPlaceholder(raw);
+          i = found + d;
+          continue;
+        }
+      }
+
+      // Default: copy one char
+      out += ch;
+      i++;
+    }
+
+    function restore(html: string): string {
+      let result = html;
+      for (let idx = 0; idx < placeholders.length; idx++) {
+        const key = makeKey(idx);
+        result = result.split(key).join(placeholders[idx]);
+      }
+      return result;
+    }
+
+    return { placeholderText: out, restore };
+  }
 
   const unsub = currentPath.subscribe(async (p) => {
     path = p;
@@ -134,8 +252,10 @@ function parseFrontmatter(raw: string) {
       isBlog = frontmatter.displayMode === 'blog';
       isMusings = frontmatter.displayMode === 'musings';
       
-      
-      contentHtml = md.render(body);
+      // Protect math before Markdown parsing, then restore and let MathJax typeset
+      const { placeholderText, restore } = protectMathSegments(body);
+      contentHtml = md.render(placeholderText);
+      contentHtml = restore(contentHtml);
       await tick();
       if (typeof window !== 'undefined' && (window as any).MathJax?.typesetPromise) {
         (window as any).MathJax.typesetPromise();
@@ -165,8 +285,9 @@ function parseFrontmatter(raw: string) {
       isBlog = false;
       isMusings = false;
       
-      
-      contentHtml = md.render(contentRaw);
+      const { placeholderText, restore } = protectMathSegments(contentRaw);
+      contentHtml = md.render(placeholderText);
+      contentHtml = restore(contentHtml);
       await tick();
       if (typeof window !== 'undefined' && (window as any).MathJax?.typesetPromise) {
         (window as any).MathJax.typesetPromise();

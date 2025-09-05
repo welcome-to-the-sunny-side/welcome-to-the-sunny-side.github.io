@@ -21,13 +21,7 @@ $$
 > and call $s$ the **Fenwick Tree** of $a$. Let’s denote it as $s = f(a)$.
 > 
 > For a positive integer $k$ and an array $a$, define $f^{k}(a)$ recursively as  
-> $$
-> f^{k}(a) =
-> \\begin{cases}
-> f(a), & \\text{if } k = 1, \\\\
-> f(f^{k-1}(a)), & \\text{otherwise.}
-> \\end{cases}
-> $$
+> $$ f^{k}(a) = \\begin{cases} f(a), & \\text{if } k = 1, \\\\ f(f^{k-1}(a)), & \\text{otherwise.} \\end{cases} $$
 > 
 > You are given an array $b$ of length $n$ and a positive integer $k$.  
 > Find an array $a$ that satisfies $0 \\le a_i < 998244353$ and $f^{k}(a) = b$.  

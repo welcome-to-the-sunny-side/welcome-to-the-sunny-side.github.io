@@ -257,9 +257,7 @@ $: skin = $currentSkin;
       contentHtml = md.render(placeholderText);
       contentHtml = restore(contentHtml);
       await tick();
-      if (typeof window !== 'undefined' && (window as any).MathJax?.typesetPromise) {
-        (window as any).MathJax.typesetPromise();
-      }
+      await typesetMath();
     } else if (htmlKey in pagesHtml) {
       // Raw HTML file – execute as-is
       contentRaw = (await (pagesHtml as any)[htmlKey]()) as string;
@@ -279,6 +277,7 @@ $: skin = $currentSkin;
           oldScript.replaceWith(newScript);
         });
       }
+      await typesetMath();
     } else {
       contentRaw = `# 404\nPath not found: ${path}`;
       frontmatter = {};
@@ -289,9 +288,29 @@ $: skin = $currentSkin;
       contentHtml = md.render(placeholderText);
       contentHtml = restore(contentHtml);
       await tick();
-      if (typeof window !== 'undefined' && (window as any).MathJax?.typesetPromise) {
-        (window as any).MathJax.typesetPromise();
-      }
+      await typesetMath();
+    }
+  }
+
+  // Wait for MathJax to be ready and typeset the page content.
+  async function typesetMath() {
+    if (typeof window === 'undefined') return;
+    const waitForMJ = () => new Promise<any>((resolve) => {
+      const check = () => {
+        const MJ = (window as any).MathJax;
+        if (!MJ) { setTimeout(check, 25); return; }
+        const p = MJ.startup?.promise;
+        if (p && typeof p.then === 'function') { p.then(() => resolve(MJ)); }
+        else resolve(MJ);
+      };
+      check();
+    });
+    try {
+      const MJ = await waitForMJ();
+      if (MJ?.typesetClear) MJ.typesetClear();
+      if (MJ?.typesetPromise) await MJ.typesetPromise();
+    } catch (e) {
+      console.warn('MathJax typeset failed:', e);
     }
   }
 </script>

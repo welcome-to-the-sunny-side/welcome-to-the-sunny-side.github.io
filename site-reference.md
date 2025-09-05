@@ -155,6 +155,7 @@ For GitHub Pages, push the `dist/` output (or let an action deploy).
 | Blog page shows prose, not blog styling | Front-matter lacks `layout: blog`           |
 | Markdown content (headings, lists) unstyled | Ensure `tailwind.config.js` includes `@tailwindcss/typography` plugin and `content` paths are correct. Verify `src/styles/global.css` has `@tailwind base/components/utilities` directives. Check `ContentPane.svelte` applies `.prose` class to the content wrapper. |
 | Inline math with underscores appears italic (e.g., `$a(t)_{i} = b(t)_{i}$`) | Markdown runs before MathJax and treats `_` as emphasis. `ContentPane.svelte` protects TeX segments via a small placeholder preprocessor so underscores inside `$...$`, `\(...\)`, and `\[...\]` are not styled as italics. If authoring raw `.html`, keep TeX outside Markdown or escape underscores as `\_`. |
+| Horizontal page scroll on mobile when long math overflows | Use MathJax v4 with line breaking and clamp containers. In `src/layouts/BaseLayout.astro`: load `https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js` and set `output: { displayOverflow: 'linebreak', linebreaks: { inline: true, width: '100%' } }`. In `src/styles/global.css`: add `body { overflow-x: hidden; }`, `mjx-container { max-width: 100%; }`, and optionally `mjx-container[display="true"] { overflow-x: auto; }`. The main content `<main>` uses `overflow-y-auto overflow-x-hidden` to avoid page wobble. |
 
 ---
 

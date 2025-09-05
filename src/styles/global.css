@@ -9,6 +9,8 @@
 body {
   @apply bg-bg text-text font-mono tracking-tight;
   font-size: theme('fontSize.base');
+  /* Prevent page-level horizontal scrolling due to wide math or code */
+  overflow-x: hidden;
 }
 
 ::selection {
@@ -64,4 +66,15 @@ body {
 .prose-invert blockquote p {
   color: inherit !important;
   opacity: 1 !important;
+}
+
+/* MathJax overflow/wrapping safeguards */
+/* Ensure inline/display math never forces the page wider than the viewport */
+mjx-container {
+  max-width: 100%;
+}
+/* For display math, allow internal horizontal scroll if a formula still exceeds width */
+mjx-container[display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
 }

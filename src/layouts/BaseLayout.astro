@@ -27,10 +27,19 @@ import { currentPath } from "../stores/router";
       },
       options: {
         skipHtmlTags: ['script','noscript','style','textarea','pre','code']
+      },
+      // MathJax v4: enable automatic line breaking and prevent wide-expression overflow
+      output: {
+        displayOverflow: 'linebreak',
+        linebreaks: {
+          inline: true,     // allow inline math to wrap by browser when needed
+          width: '100%',    // base line-break width on the container width
+          lineleading: .2
+        }
       }
     };
   </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
   <script type="module">
     import { currentSkin } from '/src/stores/skin.ts';
     currentSkin.subscribe((skin) => {
@@ -49,7 +58,7 @@ import { currentPath } from "../stores/router";
   <body class="h-full">
     <div class="h-screen w-screen grid grid-cols-1 md:grid-cols-[1fr_auto] grid-rows-[auto_1fr] md:grid-rows-1">
       <!-- Content -->
-      <main class="overflow-auto order-2 md:order-none bg-surface text-text transition-colors duration-150 ease-retro">
+      <main class="overflow-y-auto overflow-x-hidden order-2 md:order-none bg-surface text-text transition-colors duration-150 ease-retro">
         <ContentPane client:load />
       </main>
 

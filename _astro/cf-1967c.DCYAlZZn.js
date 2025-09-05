@@ -11,7 +11,7 @@ This is a very easy problem but it did serve as a good exposition for intuition 
 
 ### Statement
 
-> Let **lowbit**$(x)$ denote the value of the lowest binary bit of $x$, e.g.  
+> Let $\\operatorname{lowbit}(x)$ denote the value of the lowest binary bit of $x$, e.g.  
 $\\operatorname{lowbit}(12)=4$, $\\operatorname{lowbit}(8)=8$.
 > 
 > For an array $a$ of length $n$, define an array $s$ of length $n$ by  
@@ -81,20 +81,20 @@ A simple way to do this is the following:
 
 It's easy to see that this is valid because the rightmost leaf in any subtree corresponds to a segment that covers all the leaf nodes in that subtree. This algorithm takes $O(n \\log {n})$ time, as we traverse to $v$'s parent at most $O(\\log {n})$ times for each $i$.
 
-For the sake of brevity in the coming sections, we define $C(i)$ to be the set of all $\\text{lc}$ that we touch when we run this algorithm for $i$. One can notice that $C(i) \\subseteq \\operatorname{cover}(i)$.
+For the sake of brevity in the coming sections, we define $C(i)$ to be the set of all $\\text{lc}$ that we touch when we run this algorithm for $i$.
 
 Let's return to the original problem and try to use some of the ideas we've consolidated. Computations ahead are modulo $998244353$ wherever applicable.
 
 Firstly, let's introduce a natural setup that's equivalent to the one in the problem:
 - We begin with some unknown sequence $a(0)$ of length $n$ at time $t = 0$.
-- At time $t = x$, we create a new sequence $a(x)$ (also of length $n$), which is defined in the following manner: $a(t)_i = \\sum_{i - \\operatorname{lowbit}(i) + 1 \\leq j \\leq i} a(t - 1)_j$
+- At time $t$, we create a new sequence $a(t)$ (also of length $n$), which is defined in the following manner: $a(t)_i = \\sum_{i - \\operatorname{lowbit}(i) + 1 \\leq j \\leq i} a(t - 1)_j$
 - We're given $a(k)$ and asked to recover $a(0)$.
 
 Since smaller indices directionally affect larger indices, it's reasonable to try and recover the original values of the sequence in increasing order of $i$.
 
-So, what about the first element? Well its segment is $[1, 1]$ and it will therefore remain constant across all sequences, implying $a(0)_1 = a(k)_1$. More generally, $a(0)_i = a(k)_i \\forall i : \\operatorname{lowbit}(i) = 1$.
+So, what about the first element? Well its segment is $[1, 1]$ and it will therefore remain constant across all sequences, implying $a(0)_1 = a(k)_1$. More generally, $a(0)_i = a(t)_1 =  a(k)_i \\forall i : \\operatorname{lowbit}(i) = 1$.
 
-A natural question that arises is: What about $i$ with $\\operatorname{lowbit}(i) = 2$? These have the segment $[i - 1, i]$, and since it's guaranteed that $\\operatorname{lowbit}(i - 1) = 1$, we obtain $a(t)_i = a(0)_i + t \\cdot a(0)_{i - 1} \\implies a(0)_i = a(k)_i - k \\cdot a(0)_{i - 1}$
+A natural question that now rears its head: What about $i$ with $\\operatorname{lowbit}(i) = 2$? These have the segment $[i - 1, i]$, and since it's guaranteed that $\\operatorname{lowbit}(i - 1) = 1$, we obtain $a(t)_i = a(0)_i + t \\cdot a(0)_{i - 1} \\implies a(0)_i = a(k)_i - k \\cdot a(0)_{i - 1}$
 
 Things start getting much more complicated if one attempts to analyse greater values of $\\operatorname{lowbit}(i)$ in this manner, and this prompts us to take a more systematic approach and actually understand what's going on here.
 
@@ -105,7 +105,7 @@ Let's study $i = \\operatorname{lowbit}(i) = 8$. We assume that we've already co
 
 Using previously developed intuition, we notice that $a(t)_i = \\sum_{i - \\operatorname{lowbit}(i) + 1 \\leq j \\leq i} a(t - 1)_j = a(t - 1)_i + \\sum_{j \\in C(i)} a(t)_j$. Does this even help us? There seems to be no immediately noticeable advantage but let's trudge on, keeping this in mind.
 
-Now, it's apparent that $a(t)_i$ is going to be some linear combination of $a(0)_j$ (where $j \\in [i - \\operatorname{lowbit}(i) + 1, i]$), but the coefficients in that linear combination do not reveal themselves to us immediately. Let's just define $a(t)_i$ in this manner as $\\sum_{i - \\operatorname{lowbit}(i) + 1 \\leq j \\leq i}{\\operatorname{coeff}(t, i, j) \\cdot a(0)_j}$. Trivially, $\\operatorname{coeff}(t, i, i) = 1$. 
+Now, it's apparent that $a(t)_i$ is going to be some linear combination of $a(0)_j$ (where $j \\in [i - \\operatorname{lowbit}(i) + 1, i]$), but the coefficients in that linear combination do not reveal themselves to us so easily. Let's just define $a(t)_i$ in this manner as $\\sum_{i - \\operatorname{lowbit}(i) + 1 \\leq j \\leq i}{\\operatorname{coeff}(t, i, j) \\cdot a(0)_j}$. Trivially, $\\operatorname{coeff}(t, i, i) = 1$. 
 
 Let's consider $p = 3$, what could $\\operatorname{coeff}(t, i, p)$ possibly be? If we go back to our alternate definition, ie. $a(t)_i = a(0)_i + \\sum_{j \\in C(i)} a(t)_j$, we can see that the only $j \\in C(i)$ that's relevant to $\\operatorname{coeff}(t, i, p)$ is $4$, and if we rewrite $a(t)_4$ as $\\sum_{1 \\leq j \\leq 4}{\\operatorname{coeff}(t, 4, j) \\cdot a(0)_j}$, we realise that at every second, we add $\\operatorname{coeff}(t, 4, 3)$ to $\\operatorname{coeff} (t, 8, 3)$ (and these gains carry over into the future), so we simply have $\\operatorname{coeff}(t, 8, 3) = \\sum_{1 \\leq k \\leq t} \\operatorname{coeff}(k, 4, 3)$.
 
@@ -141,7 +141,7 @@ The final solution takes the following form:
 L = ceil(log2(n))
 coeff2_t[L + 1] #compute this in whatever manner you'd like
 
-a_0[n + +1]      #initial values (to be recovered)
+a_0[n + 1]      #initial values (to be recovered)
 a_t[n + 1]      #final values (at time t)
 dp[n + 1][L + 1]    #dp[i][c] = sum(a_0[j]) for j : S(i, j) = c
 
@@ -158,4 +158,6 @@ for i from 1 to n:
     dp[i][0] = a_0[i]
 \`\`\`
 
-This clearly runs in $O(n \\log^2{n})$ and that's fast enough to fit within the TL (although a $O(n \\log{n})$ solution exists).`;export{e as default};
+This clearly runs in $O(n \\log^2{n})$ and that's fast enough to fit within the TL (although a $O(n \\log{n})$ solution exists).
+
+I suck at explaining things in a concise manner, but it's probably just a result of sucking at thinking about things in a concise manner.`;export{e as default};

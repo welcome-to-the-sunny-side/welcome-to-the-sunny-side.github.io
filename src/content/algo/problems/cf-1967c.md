@@ -5,7 +5,7 @@ date: 2025-09-04
 tags: [editorial]
 ---
 
-This is a very easy problem but it did serve as a good exposition for intuition on a couple of ideas for me.
+This is a very easy problem but it did serve as a good way to build intuition on a couple of ideas for me.
 
 ### Problem [CF-1967C](https://codeforces.com/problemset/problem/1967/C)
 

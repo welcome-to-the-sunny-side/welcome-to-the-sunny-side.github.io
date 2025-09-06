@@ -4,13 +4,6 @@ import TerminalPane from "../components/TerminalPane.svelte";
 import ContentPane from "../components/ContentPane.svelte";
 import { currentPath } from "../stores/router";
 
-export interface Props {
-  ssrPath?: string;
-  ssrHtml?: string;
-  ssrFrontmatter?: any;
-  ssrFlags?: { isBlog?: boolean; isMusings?: boolean };
-}
-const { ssrPath, ssrHtml, ssrFrontmatter, ssrFlags } = Astro.props as Props;
 ---
 <!DOCTYPE html>
 <html lang="en" class="h-full">
@@ -25,6 +18,28 @@ const { ssrPath, ssrHtml, ssrFrontmatter, ssrFlags } = Astro.props as Props;
         gtag('js', new Date());
         gtag('config', 'G-FDGES615HV');
         </script>
+    <script type="text/javascript" id="mathjax-config">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script','noscript','style','textarea','pre','code']
+      },
+      // MathJax v4: enable automatic line breaking and prevent wide-expression overflow
+      output: {
+        displayOverflow: 'linebreak',
+        linebreaks: {
+          inline: true,     // allow inline math to wrap by browser when needed
+          width: '100%',    // base line-break width on the container width
+          lineleading: .2
+        }
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
   <script type="module">
     import { currentSkin } from '/src/stores/skin.ts';
     currentSkin.subscribe((skin) => {
@@ -44,10 +59,7 @@ const { ssrPath, ssrHtml, ssrFrontmatter, ssrFlags } = Astro.props as Props;
     <div class="h-screen w-screen grid grid-cols-1 md:grid-cols-[1fr_auto] grid-rows-[auto_1fr] md:grid-rows-1">
       <!-- Content -->
       <main class="overflow-y-auto overflow-x-hidden order-2 md:order-none bg-surface text-text transition-colors duration-150 ease-retro">
-        {ssrHtml && (
-          <div id="ssr-fallback" class="p-4 prose prose-invert max-w-none" set:html={ssrHtml}></div>
-        )}
-        <ContentPane client:load ssrPath={ssrPath} ssrHtml={ssrHtml} ssrFrontmatter={ssrFrontmatter} ssrFlags={ssrFlags} />
+        <ContentPane client:load />
       </main>
 
       <!-- Terminal -->

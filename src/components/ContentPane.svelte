@@ -9,18 +9,6 @@ import { currentSkin } from '../stores/skin';
   import { readable } from 'svelte/store';
   import MusingsStream from './MusingsStream.svelte';
 
-  // SSR hydration props (optional). When provided, we use them to render the
-  // initial view without re-parsing markdown on the client. This improves
-  // first-paint performance and pairs with the SSR fallback in BaseLayout.
-  export let ssrPath: string | undefined;
-  export let ssrHtml: string | undefined;
-  export let ssrFrontmatter: any | undefined;
-  export let ssrFlags: { isBlog?: boolean; isMusings?: boolean } | undefined;
-
-  // Track whether we've hydrated from SSR to avoid duplicate work (must be
-  // declared before any usage, including within loadContent or subscriptions).
-  let hydratedFromSSR = false;
-
   // Import all markdown under src/content as raw strings
   // load all markdown as raw strings (Vite 5 syntax)
 const pagesMd = import.meta.glob('../content/**/*.md', { query: '?raw', import: 'default' });
@@ -47,7 +35,7 @@ let isMusings = false;
 let contentHtml: string = md.render(contentRaw);
 type Device = 'pc' | 'mobile';
 // Collect all home background images at build time (hashed URLs)
-const imageModules = import.meta.glob('../../public/assets/home/active/**/*.{jpg,jpeg,png,webp}', { query: '?url', import: 'default', eager: true });
+const imageModules = import.meta.glob('../../public/assets/home/active/**/*.{jpg,jpeg,png,webp}', { as: 'url', eager: true });
 const imagesBySkin: Record<string, Record<Device, string[]>> = {};
 for (const [absPath, url] of Object.entries(imageModules)) {
   const parts = absPath.split('/');
@@ -224,14 +212,10 @@ $: skin = $currentSkin;
     return { placeholderText: out, restore };
   }
 
-  // Avoid invoking loadContent during SSR; rely on the SSR fallback markup.
-  let unsub: (() => void) | null = null;
-  if (typeof window !== 'undefined') {
-    unsub = currentPath.subscribe(async (p) => {
-      path = p;
-      await loadContent();
-    });
-  }
+  const unsub = currentPath.subscribe(async (p) => {
+    path = p;
+    await loadContent();
+  });
 
   onMount(() => {
     loadContent();
@@ -246,7 +230,7 @@ $: skin = $currentSkin;
     }
 
     return () => {
-      if (unsub) unsub();
+      unsub();
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', checkMobile);
       }
@@ -254,29 +238,9 @@ $: skin = $currentSkin;
   });
 
   async function loadContent() {
-    // Do not attempt to run content loading during SSR render.
-    if (typeof window === 'undefined') return;
     // Convert "/blogs/algo/treaps.md" -> "../content/blogs/algo/treaps.md"
     let filePath = path;
     if (filePath === '/') filePath = '/home.html'; // default landing page
-
-    // If we have SSR payload and this is the initial navigation for the same
-    // path, hydrate from SSR instead of re-rendering markdown.
-    if (!hydratedFromSSR && ssrHtml && (!ssrPath || ssrPath === filePath)) {
-      frontmatter = ssrFrontmatter ?? {};
-      isBlog = !!(ssrFlags?.isBlog);
-      isMusings = !!(ssrFlags?.isMusings);
-      contentHtml = ssrHtml;
-      hydratedFromSSR = true;
-      await tick();
-      await maybeTypesetMath(contentHtml);
-      // Remove server-rendered fallback container to avoid duplicate content
-      if (typeof document !== 'undefined') {
-        const el = document.getElementById('ssr-fallback');
-        if (el && el.parentElement) el.parentElement.removeChild(el);
-      }
-      return;
-    }
     // Try to resolve Markdown source first
     const mdPath = filePath.replace(/\.html$/, '.md');
     const mdKey = '../content' + mdPath;
@@ -288,12 +252,12 @@ $: skin = $currentSkin;
       isBlog = frontmatter.displayMode === 'blog';
       isMusings = frontmatter.displayMode === 'musings';
       
-      // Protect math before Markdown parsing, then restore and (optionally) typeset
+      // Protect math before Markdown parsing, then restore and let MathJax typeset
       const { placeholderText, restore } = protectMathSegments(body);
       contentHtml = md.render(placeholderText);
       contentHtml = restore(contentHtml);
       await tick();
-      await maybeTypesetMath(body);
+      await typesetMath();
     } else if (htmlKey in pagesHtml) {
       // Raw HTML file – execute as-is
       contentRaw = (await (pagesHtml as any)[htmlKey]()) as string;
@@ -313,7 +277,7 @@ $: skin = $currentSkin;
           oldScript.replaceWith(newScript);
         });
       }
-      await maybeTypesetMath(contentHtml);
+      await typesetMath();
     } else {
       contentRaw = `# 404\nPath not found: ${path}`;
       frontmatter = {};
@@ -324,59 +288,25 @@ $: skin = $currentSkin;
       contentHtml = md.render(placeholderText);
       contentHtml = restore(contentHtml);
       await tick();
-      await maybeTypesetMath(contentHtml);
+      await typesetMath();
     }
   }
 
-  
-
-  // Only load MathJax if the current content likely contains TeX delimiters.
-  function containsMath(text: string): boolean {
-    if (!text) return false;
-    return /(\$\$[\s\S]*?\$\$)|(\$[^\n$]+\$)|(\\\(|\\\))|(\\\[|\\\])/m.test(text);
-  }
-
-  let mjPromise: Promise<any> | null = null;
-  async function ensureMathJaxLoaded(): Promise<any> {
-    if (typeof window === 'undefined') return null;
-    const w = window as any;
-    if (w.MathJax) return w.MathJax;
-    if (!mjPromise) {
-      mjPromise = new Promise<any>((resolve) => {
-        // Inject config first
-        const cfgId = 'mathjax-config';
-        if (!document.getElementById(cfgId)) {
-          const cfg = document.createElement('script');
-          cfg.type = 'text/javascript';
-          cfg.id = cfgId;
-          cfg.text = `window.MathJax = { tex: { inlineMath: [["$","$"],["\\\\(","\\\\)"]], displayMath: [["$$","$$"],["\\\\[","\\\\]"]], processEscapes: true }, options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }, output: { displayOverflow: 'linebreak', linebreaks: { inline: true, width: '100%', lineleading: .2 } } };`;
-          document.head.appendChild(cfg);
-        }
-        // Then inject the library
-        const scriptId = 'mathjax-v4';
-        if (!document.getElementById(scriptId)) {
-          const s = document.createElement('script');
-          s.id = scriptId;
-          s.defer = true;
-          s.src = 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js';
-          s.addEventListener('load', () => resolve((window as any).MathJax));
-          document.head.appendChild(s);
-        } else {
-          const tryResolve = () => {
-            if ((window as any).MathJax) resolve((window as any).MathJax); else setTimeout(tryResolve, 25);
-          };
-          tryResolve();
-        }
-      });
-    }
-    return mjPromise;
-  }
-
-  async function maybeTypesetMath(source: string) {
+  // Wait for MathJax to be ready and typeset the page content.
+  async function typesetMath() {
     if (typeof window === 'undefined') return;
-    if (!containsMath(source)) return;
+    const waitForMJ = () => new Promise<any>((resolve) => {
+      const check = () => {
+        const MJ = (window as any).MathJax;
+        if (!MJ) { setTimeout(check, 25); return; }
+        const p = MJ.startup?.promise;
+        if (p && typeof p.then === 'function') { p.then(() => resolve(MJ)); }
+        else resolve(MJ);
+      };
+      check();
+    });
     try {
-      const MJ = await ensureMathJaxLoaded();
+      const MJ = await waitForMJ();
       if (MJ?.typesetClear) MJ.typesetClear();
       if (MJ?.typesetPromise) await MJ.typesetPromise();
     } catch (e) {

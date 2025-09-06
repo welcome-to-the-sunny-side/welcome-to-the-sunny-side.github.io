@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getVirtualFs, type FsNode } from "../lib/virtualFs.ts";
+import MarkdownIt from 'markdown-it';
+import hljs from 'highlight.js';
 
 export const prerender = true;
 
@@ -13,7 +15,7 @@ export async function getStaticPaths() {
 
   const walk = (node: FsNode) => {
     if (node.type === "file") {
-      // node.path starts with '/' and already ends with .html
+      // node.path starts with '/' and ends with .html; keep extension so routes are '/foo.html'
       paths.push({ params: { slug: node.path.substring(1) } });
     } else if (node.children) {
       for (const child of Object.values(node.children)) walk(child);
@@ -27,17 +29,131 @@ export async function getStaticPaths() {
  * Runtime rendering decision
  *******************/
 const { slug } = Astro.params as { slug: string }; // e.g. "blogs/algo/treaps.html"
+const pageHtml = slug;
+const mdRel = slug.replace(/\.html$/, '.md');
 
-function getMarkdownModule() {
-  const mdRel = slug.replace(/\.html$/, ".md");
-  const modules = import.meta.glob("../content/**/*.md", { eager: true });
-  return modules[`../content/${mdRel}`] as any | undefined;
+// Load raw sources for SSR
+const rawMd = import.meta.glob("../content/**/*.md", { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+const rawHtml = import.meta.glob("../content/**/*.html", { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+
+// Simple frontmatter parser aligned with ContentPane.svelte
+function parseFrontmatter(raw: string): { fm: Record<string, any>; body: string } {
+  if (raw.startsWith('---')) {
+    const end = raw.indexOf('\n---', 3);
+    if (end !== -1) {
+      const yaml = raw.slice(3, end).trim();
+      const body = raw.slice(end + 4);
+      const obj: Record<string, any> = {};
+      for (const line of yaml.split(/\r?\n/)) {
+        const idx = line.indexOf(':');
+        if (idx === -1) continue;
+        const key = line.slice(0, idx).trim();
+        let val: any = line.slice(idx + 1).trim();
+        val = val.replace(/^["']|["']$/g, '');
+        if (val.startsWith('[') && val.endsWith(']')) {
+          val = val.slice(1, -1).split(',').map((s: string) => s.trim().replace(/^[\"']|[\"']$/g, ''));
+        }
+        obj[key] = val;
+      }
+      return { fm: obj, body };
+    }
+  }
+  return { fm: {}, body: raw };
 }
 
-const mdMod = getMarkdownModule();
-const isBlog = mdMod && mdMod.frontmatter?.layout === "blog";
-const BlogContent = mdMod?.default;
-const fm = mdMod?.frontmatter ?? {};
+// Protect TeX segments from Markdown emphasis parsing
+function protectMathSegments(input: string): { placeholderText: string; restore: (html: string) => string } {
+  const placeholders: string[] = [];
+  const MARKER = '§§MATH§§';
+  let counter = 0;
+  const makeKey = (idx: number) => `${MARKER}${idx}§§`;
+  function pushPlaceholder(raw: string): string {
+    const key = makeKey(counter);
+    placeholders.push(raw);
+    counter++;
+    return key;
+  }
+  function isEscaped(src: string, pos: number): boolean {
+    let backslashes = 0;
+    for (let i = pos - 1; i >= 0 && src[i] === '\\'; i--) backslashes++;
+    return (backslashes % 2) === 1;
+  }
+  let i = 0, out = '';
+  const n = input.length;
+  while (i < n) {
+    const ch = input[i];
+    if (ch === '`') {
+      let btCount = 1, j = i + 1;
+      while (j < n && input[j] === '`') { btCount++; j++; }
+      const fence = '`'.repeat(btCount);
+      const k = input.indexOf(fence, j);
+      if (k === -1) { out += input.slice(i); break; }
+      out += input.slice(i, k + btCount);
+      i = k + btCount; continue;
+    }
+    if (ch === '\\' && i + 1 < n && input[i + 1] === '(') {
+      const end = input.indexOf('\\)', i + 2);
+      if (end !== -1) { out += pushPlaceholder(input.slice(i, end + 2)); i = end + 2; continue; }
+    }
+    if (ch === '\\' && i + 1 < n && input[i + 1] === '[') {
+      const end = input.indexOf('\\]', i + 2);
+      if (end !== -1) { out += pushPlaceholder(input.slice(i, end + 2)); i = end + 2; continue; }
+    }
+    if (ch === '$') {
+      let d = 1; if (i + 1 < n && input[i + 1] === '$') d = 2;
+      const start = i; let j = i + d; let found = -1;
+      while (true) {
+        j = input.indexOf('$'.repeat(d), j);
+        if (j === -1) break;
+        if (!isEscaped(input, j)) { found = j; break; }
+        j += d;
+      }
+      if (found !== -1) { out += pushPlaceholder(input.slice(start, found + d)); i = found + d; continue; }
+    }
+    out += ch; i++;
+  }
+  function restore(html: string): string {
+    let result = html;
+    for (let idx = 0; idx < placeholders.length; idx++) {
+      result = result.split(makeKey(idx)).join(placeholders[idx]);
+    }
+    return result;
+  }
+  return { placeholderText: out, restore };
+}
+
+const md = new MarkdownIt({
+  html: true,
+  linkify: true,
+  highlight: (str: string, lang: string) => {
+    if (lang && hljs.getLanguage(lang)) {
+      try { return `<pre class="hljs"><code>${hljs.highlight(str, { language: lang }).value}</code></pre>`; } catch {}
+    }
+    const esc = md.utils.escapeHtml(str);
+    return `<pre class=\"hljs\"><code>${esc}</code></pre>`;
+  }
+});
+
+let ssrHtml = '';
+let ssrFrontmatter: any = {};
+let ssrFlags: { isBlog?: boolean; isMusings?: boolean } = {};
+
+const mdKey = `../content/${mdRel}`;
+const htmlKey = `../content/${pageHtml}`;
+
+if (rawMd[mdKey]) {
+  const raw = rawMd[mdKey] as string;
+  const { fm, body } = parseFrontmatter(raw);
+  ssrFrontmatter = fm;
+  ssrFlags.isBlog = fm.displayMode === 'blog';
+  ssrFlags.isMusings = fm.displayMode === 'musings';
+  const { placeholderText, restore } = protectMathSegments(body);
+  ssrHtml = restore(md.render(placeholderText));
+} else if (rawHtml[htmlKey]) {
+  ssrHtml = rawHtml[htmlKey] as string;
+  ssrFrontmatter = {};
+  ssrFlags = {};
+}
 
 ---
-<BaseLayout />
+<BaseLayout ssrPath={`/${pageHtml}`} ssrHtml={ssrHtml} ssrFrontmatter={ssrFrontmatter} ssrFlags={ssrFlags} />

@@ -1,6 +1,120 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 export const prerender = true;
+import MarkdownIt from 'markdown-it';
+import hljs from 'highlight.js';
+
+// Load home markdown as raw
+const rawHome = (await import('../content/home.md?raw')).default as string;
+
+function parseFrontmatter(raw: string): { fm: Record<string, any>; body: string } {
+  if (raw.startsWith('---')) {
+    const end = raw.indexOf('\n---', 3);
+    if (end !== -1) {
+      const yaml = raw.slice(3, end).trim();
+      const body = raw.slice(end + 4);
+      const obj: Record<string, any> = {};
+      for (const line of yaml.split(/\r?\n/)) {
+        const idx = line.indexOf(':');
+        if (idx === -1) continue;
+        const key = line.slice(0, idx).trim();
+        let val: any = line.slice(idx + 1).trim();
+        val = val.replace(/^["']|["']$/g, '');
+        if (val.startsWith('[') && val.endsWith(']')) {
+          val = val.slice(1, -1).split(',').map((s: string) => s.trim().replace(/^[\"']|[\"']$/g, ''));
+        }
+        obj[key] = val;
+      }
+      return { fm: obj, body };
+    }
+  }
+  return { fm: {}, body: raw };
+}
+
+function protectMathSegments(input: string): { placeholderText: string; restore: (html: string) => string } {
+  const placeholders: string[] = [];
+  const MARKER = '§§MATH§§';
+  let counter = 0;
+  const makeKey = (idx: number) => `${MARKER}${idx}§§`;
+  function pushPlaceholder(raw: string): string {
+    const key = makeKey(counter);
+    placeholders.push(raw);
+    counter++;
+    return key;
+  }
+  function isEscaped(src: string, pos: number): boolean {
+    let backslashes = 0;
+    for (let i = pos - 1; i >= 0 && src[i] === '\\'; i--) backslashes++;
+    return (backslashes % 2) === 1;
+  }
+  let i = 0, out = '';
+  const n = input.length;
+  while (i < n) {
+    const ch = input[i];
+    if (ch === '`') {
+      let btCount = 1, j = i + 1;
+      while (j < n && input[j] === '`') { btCount++; j++; }
+      const fence = '`'.repeat(btCount);
+      const k = input.indexOf(fence, j);
+      if (k === -1) { out += input.slice(i); break; }
+      out += input.slice(i, k + btCount);
+      i = k + btCount; continue;
+    }
+    if (ch === '\\' && i + 1 < n && input[i + 1] === '(') {
+      const end = input.indexOf('\\)', i + 2);
+      if (end !== -1) { out += pushPlaceholder(input.slice(i, end + 2)); i = end + 2; continue; }
+    }
+    if (ch === '\\' && i + 1 < n && input[i + 1] === '[') {
+      const end = input.indexOf('\\]', i + 2);
+      if (end !== -1) { out += pushPlaceholder(input.slice(i, end + 2)); i = end + 2; continue; }
+    }
+    if (ch === '$') {
+      let d = 1; if (i + 1 < n && input[i + 1] === '$') d = 2;
+      const start = i; let j = i + d; let found = -1;
+      while (true) {
+        j = input.indexOf('$'.repeat(d), j);
+        if (j === -1) break;
+        if (!isEscaped(input, j)) { found = j; break; }
+        j += d;
+      }
+      if (found !== -1) { out += pushPlaceholder(input.slice(start, found + d)); i = found + d; continue; }
+    }
+    out += ch; i++;
+  }
+  function restore(html: string): string {
+    let result = html;
+    for (let idx = 0; idx < placeholders.length; idx++) {
+      result = result.split(makeKey(idx)).join(placeholders[idx]);
+    }
+    return result;
+  }
+  return { placeholderText: out, restore };
+}
+
+const md = new MarkdownIt({
+  html: true,
+  linkify: true,
+  highlight: (str: string, lang: string) => {
+    if (lang && hljs.getLanguage(lang)) {
+      try { return `<pre class="hljs"><code>${hljs.highlight(str, { language: lang }).value}</code></pre>`; } catch {}
+    }
+    const esc = md.utils.escapeHtml(str);
+    return `<pre class=\"hljs\"><code>${esc}</code></pre>`;
+  }
+});
+
+let ssrHtml = '';
+let ssrFrontmatter: any = {};
+let ssrFlags: { isBlog?: boolean; isMusings?: boolean } = {};
+
+if (rawHome) {
+  const { fm, body } = parseFrontmatter(rawHome);
+  ssrFrontmatter = fm;
+  ssrFlags.isBlog = fm.displayMode === 'blog';
+  ssrFlags.isMusings = fm.displayMode === 'musings';
+  const { placeholderText, restore } = protectMathSegments(body);
+  ssrHtml = restore(md.render(placeholderText));
+}
 ---
 
-<BaseLayout />
+<BaseLayout ssrPath="/home.html" ssrHtml={ssrHtml} ssrFrontmatter={ssrFrontmatter} ssrFlags={ssrFlags} />

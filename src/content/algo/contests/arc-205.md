@@ -99,6 +99,7 @@ Let's say the node $u$ had only two children $c_1$ and $c_2$. Some "greedy" step
 It's easy to see that the above matching updates can be processed in $O(1)$, and for multiple children, when at some child $v$, we can assume all the children we've processed before it to form a monolith that we consider to be $c_1$, the current child to be $c_2$, and just perform the same update.
 
 How to prove that these merges are optimal? <s> proof by AC </s>
+
 My proof is complicated and not worth explaining, just look at the editorial.
 
 ### E

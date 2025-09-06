@@ -15,8 +15,9 @@ export async function getStaticPaths() {
 
   const walk = (node: FsNode) => {
     if (node.type === "file") {
-      // node.path starts with '/' and ends with .html; keep extension so routes are '/foo.html'
-      paths.push({ params: { slug: node.path.substring(1) } });
+      // node.path starts with '/' and ends with .html; strip extension so Astro doesn't append a second .html
+      const withoutExt = node.path.substring(1).replace(/\.html$/, "");
+      paths.push({ params: { slug: withoutExt } });
     } else if (node.children) {
       for (const child of Object.values(node.children)) walk(child);
     }
@@ -28,9 +29,9 @@ export async function getStaticPaths() {
 /********************
  * Runtime rendering decision
  *******************/
-const { slug } = Astro.params as { slug: string }; // e.g. "blogs/algo/treaps.html"
-const pageHtml = slug;
-const mdRel = slug.replace(/\.html$/, '.md');
+const { slug } = Astro.params as { slug: string }; // e.g. "blogs/algo/treaps"
+const pageHtml = `${slug}.html`;
+const mdRel = `${slug}.md`;
 
 // Load raw sources for SSR
 const rawMd = import.meta.glob("../content/**/*.md", { query: '?raw', import: 'default', eager: true }) as Record<string, string>;

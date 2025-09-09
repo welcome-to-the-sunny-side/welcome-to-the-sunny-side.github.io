@@ -1,0 +1,291 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+@import "highlight.js/styles/github-dark.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  background-color: #0d0d0d;
+  color: #e0e0e0;
+}
+
+/* Selection styling */
+::selection {
+  background-color: #64ffda;
+  color: #0d0d0d;
+}
+
+/* MathJax overflow/wrapping safeguards */
+/* Ensure inline/display math never forces the page wider than the viewport */
+mjx-container {
+  max-width: 100%;
+}
+/* For display math, allow internal horizontal scroll if a formula still exceeds width */
+mjx-container[display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
+}
+
+/* Terminal specific styles */
+#terminal-input:focus {
+  outline: none;
+}
+
+#terminal-output {
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 #1a1a1a;
+}
+
+/* Markdown tweaks – list spacing, quote color, link style */
+.prose ul li,
+.prose ol li {
+  margin-top: 0.15rem; /* tighter spacing */
+  margin-bottom: 0.15rem;
+}
+
+/* Link styling – remove bold weight and append arrow icon */
+.prose a,
+.prose-invert a {
+  font-weight: 400; /* normal */
+  text-decoration: underline;
+  text-underline-offset: 1px;
+  color: #64ffda;
+  opacity: 0.8;
+  transition: opacity 0.15s;
+}
+
+.prose a:hover,
+.prose-invert a:hover {
+  opacity: 1;
+}
+
+.prose a::after,
+.prose-invert a::after {
+  color: #64ffda;
+  margin-left: 0.15rem;
+  font-size: 1.1em;
+  position: relative;
+  top: -0.1em;
+  transition: transform 0.15s ease-out;
+}
+
+.prose a:hover::after,
+.prose-invert a:hover::after {
+  transform: translateY(-1px);
+}
+
+/* Override Tailwind Typography blockquote color/opacity */
+.prose blockquote,
+.prose-invert blockquote {
+  color: inherit !important;
+  opacity: 1 !important;
+}
+.prose blockquote p,
+.prose-invert blockquote p {
+  color: inherit !important;
+  opacity: 1 !important;
+}
+
+/* Blog post specific styling - matching original exactly */
+.blog-post {
+  font-size: 0.9rem; /* prose font size from original */
+}
+
+.blog-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(224, 224, 224, 0.2);
+}
+
+.blog-title {
+  font-size: 1.875rem; /* 30px */
+  font-weight: 600;
+  color: #64ffda;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+.blog-meta {
+  color: #9e9e9e;
+  font-size: 0.8125rem; /* 13px */
+  margin-bottom: 0.75rem;
+}
+
+.blog-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: 0.5rem;
+}
+
+.blog-tag {
+  background-color: rgba(100, 255, 218, 0.1);
+  color: #64ffda;
+  padding: 0.125rem 0.375rem;
+  border-radius: 2px;
+  font-size: 0.6875rem; /* 11px */
+  text-decoration: none;
+  border: 1px solid rgba(100, 255, 218, 0.3);
+  transition: all 0.15s ease;
+}
+
+.blog-tag:hover {
+  background-color: rgba(100, 255, 218, 0.2);
+  border-color: #64ffda;
+}
+
+/* Custom elements - matching original exactly */
+:root {
+  --el-accent: #3fa7ff;
+  --el-surface: #0f0f0f;
+  --el-text: #d0d0d0;
+  --el-radius: 2px;
+  --el-time: 140ms ease-out;
+}
+
+/* ===== SPOILER ===== */
+details.spoiler {
+  margin: 0.75rem 0;
+  font-size: 0.8125rem; /* 13px */
+}
+
+details > summary.spoiler-summary {
+  list-style: none;
+  cursor: pointer;
+  padding-left: 1rem;
+  color: var(--el-text);
+  transition: color var(--el-time);
+  position: relative;
+}
+
+/* custom caret */
+details > summary.spoiler-summary::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.45em;
+  height: 0.45em;
+  border-bottom: 2px solid var(--el-accent);
+  border-right: 2px solid var(--el-accent);
+  transform: rotate(-45deg);
+  transition: transform var(--el-time), border-color var(--el-time);
+}
+
+details[open] > summary.spoiler-summary::before {
+  transform: rotate(45deg);
+}
+
+.spoiler-content {
+  margin: 0.5rem 0;
+  padding: 0.5rem 0.75rem;
+  color: var(--el-text);
+  background: transparent;
+  line-height: 1.45;
+  border: 0.75px solid var(--el-text);
+  border-radius: var(--el-radius);
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===== THEOREM BOX ===== */
+.theorem-box {
+  margin: 0.5rem 0;
+  padding: 0.5rem 0.75rem;
+  border: 0.75px solid var(--el-text);
+  border-radius: var(--el-radius);
+  background: transparent;
+  color: var(--el-text);
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+}
+
+.theorem-box p:last-child { margin-bottom: 0; }
+
+/* Responsive design */
+@media (max-width: 768px) {
+  #terminal-pane {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 300px;
+    z-index: 50;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+
+  #terminal-pane.expanded {
+    transform: translateY(0);
+  }
+
+  #content-pane {
+    padding-bottom: 60px;
+  }
+
+  .blog-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* Animation for terminal cursor */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Terminal styling */
+#terminal-output {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1.4;
+}
+
+#terminal-input {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8125rem;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e0e0e0;
+  caret-color: #64ffda;
+}
+
+#terminal-prompt {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8125rem;
+  color: #64ffda;
+}

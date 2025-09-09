@@ -1,0 +1,4 @@
+---
+title: "Void"
+displayMode: musings
+---

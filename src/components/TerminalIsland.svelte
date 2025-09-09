@@ -27,35 +27,21 @@ export function resizeTerminal() {
   fitAddon?.fit();
 }
 
-// --- Fuse.js fuzzy search setup ---
-const RAW_FILES = import.meta.glob('/src/content/**/*.md', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
-// Raw strings of *native* .html files (games etc.)
-const RAW_HTML = import.meta.glob('/src/content/**/*.html', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+// --- On-demand content loaders (avoid bundling raw corpus on first load) ---
+const RAW_MD = import.meta.glob('/src/content/**/*.md', { query: '?raw', import: 'default' }) as Record<string, () => Promise<string>>;
 
-// Extract YYYY-MM-DD from a markdown file's front-matter. Return a millis timestamp,
-// or Infinity when absent / malformed so those files sort to the end.
-function extractDate(raw: string | null): number {
-  if (!raw) return Infinity;
-  const m = /---[\s\S]*?^date:\s*(\d{4}-\d{2}-\d{2})/m.exec(raw);
-  if (!m) return Infinity;
-  const ts = Date.parse(m[1]);
-  return Number.isNaN(ts) ? Infinity : ts;
-}
+// Build-time date index loaded at runtime: maps '/path.html' -> timestamp (ms) or null
+let dateIndex: Record<string, number | null> = {};
+
+// (legacy) retained for disabled branch; no longer used for live paths
+function extractDate(_raw: string | null): number { return Infinity; }
 
 // --- Date helpers ---
-// Map an HTML virtual path (e.g. "/algo/blogs/foo.html") to its markdown raw and return
-// the timestamp represented by its `date:` field. Returns Infinity when missing.
+// Map an HTML virtual path (e.g. "/algo/blogs/foo.html") to its timestamp using the date index.
 function dateForHtml(htmlPath: string): number {
-  // 1) Try markdown source if it exists (regular blog post flow)
-  const mdRaw = getRaw(htmlPath);
-  if (mdRaw) return extractDate(mdRaw);
-  // 2) Fallback: look for <meta name="wtss:date" content="YYYY-MM-DD"> inside native html file
-  const rawHtml = RAW_HTML['/src/content' + htmlPath] ?? null;
-  if (!rawHtml) return Infinity;
-  const m = /<meta\s+name=["']wtss:date["']\s+content=["'](\d{4}-\d{2}-\d{2})["'][^>]*>/i.exec(rawHtml);
-  if (!m) return Infinity;
-  const ts = Date.parse(m[1]);
-  return Number.isNaN(ts) ? Infinity : ts;
+  const v = dateIndex[htmlPath];
+  if (typeof v === 'number' && Number.isFinite(v)) return v;
+  return Infinity;
 }
 
 // Cache directory min / max dates to avoid recomputation during a single ls.
@@ -105,19 +91,27 @@ function sortNamesByDate(dirPath: string, names: string[], mode: 'asc' | 'desc')
   });
 }
 
-function getRaw(virtualPath: string): string | null {
+async function getRawMd(virtualPath: string): Promise<string | null> {
   // "/posts/foo.html" -> "/src/content/posts/foo.md"
   const rel = virtualPath.replace(/^\//, '').replace(/\.html$/, '.md');
-  return RAW_FILES['/src/content/' + rel] ?? null;
+  const loader = RAW_MD['/src/content/' + rel];
+  if (!loader) return null;
+  try {
+    return await loader();
+  } catch {
+    return null;
+  }
 }
 
 let FuseLib: any;
 
 onMount(async () => {
   isFocused = true; // Ensure border is active on mount
-  // Dynamically import Fuse.js once on client
-  const { default: Fuse } = await import('fuse.js');
-  FuseLib = Fuse;
+  // Preload date index (non-blocking)
+  fetch('/terminal-index.json')
+    .then(r => (r.ok ? r.json() : {}))
+    .then((idx) => { dateIndex = idx || {}; })
+    .catch(() => { dateIndex = {}; });
   const { Terminal } = await import('xterm');
   const { FitAddon } = await import('@xterm/addon-fit');
   const term = new Terminal({
@@ -168,7 +162,7 @@ onMount(async () => {
     term.write(`${PATH_COLOR}${path}\x1b[0m $ `);
   };
 
-  function exec(command: string) {
+  async function exec(command: string) {
     if (!command) return;
     const [cmd, ...args] = command.split(/\s+/);
     switch (cmd) {
@@ -227,9 +221,8 @@ onMount(async () => {
                 const cs = list(p) || [];
                 cs.forEach(c => collect(p === '/' ? '/' + c : `${p}/${c}`));
               } else {
-                const isMd = p.endsWith('.md');
-                const raw = isMd ? RAW_FILES['/src/content' + p] : null;
-                items.push({ path: p, isDir: false, ts: isMd ? extractDate(raw) : Infinity });
+                // Legacy branch disabled: avoid referencing removed RAW_FILES; default to Infinity
+                items.push({ path: p, isDir: false, ts: Infinity });
               }
             };
             collect(fullPath);
@@ -386,13 +379,17 @@ onMount(async () => {
         // Build search corpus
         const records: { line: string; file: string; lineNum: number }[] = [];
         for (const file of files) {
-          const raw = getRaw(file);
+          const raw = await getRawMd(file);
           if (!raw) continue;
           raw.split('\n').forEach((line, idx) => {
             records.push({ line, file, lineNum: idx + 1 });
           });
         }
-        // Instantiate Fuse
+        // Instantiate Fuse on-demand
+        if (!FuseLib) {
+          const { default: Fuse } = await import('fuse.js');
+          FuseLib = Fuse;
+        }
         const fuse = new FuseLib(records, {
           keys: ['line'],
           threshold: 0.4, // adjust to tweak fuzziness
@@ -403,7 +400,7 @@ onMount(async () => {
         if (!results.length) {
           term.writeln('grep: no matches');
         } else {
-          results.forEach(r => {
+          results.forEach((r: any) => {
             const { file, lineNum, line } = r.item;
             term.writeln(`${FILE_COLOR}${file}\x1b[0m:${lineNum}:${line.trim()}`);
           });
@@ -538,7 +535,7 @@ onMount(async () => {
   }
 
   let escSeq = '';
-  const writeChar = (data: string) => {
+  const writeChar = async (data: string) => {
     for (const char of data) {
       const code = char.charCodeAt(0);
       // Handle ESC sequence for arrow keys (\x1b[C and \x1b[D)
@@ -570,7 +567,7 @@ onMount(async () => {
         case 13: { // Enter ↵
           term.write('\r\n');
           const cmdText = buffer.trim();
-          exec(cmdText);
+          await exec(cmdText);
           if (cmdText) {
             cmdHistory.push(cmdText);
           }

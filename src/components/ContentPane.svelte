@@ -234,9 +234,9 @@ $: skin = $currentSkin;
     if (filePath === '/') filePath = '/home.html'; // default landing page
 
     const isHome = filePath === '/home.html';
-    showMusings = (filePath === '/void.html' || filePath === '/misc/void.html');
+    showMusings = (filePath === '/misc/void.html');
     if (showMusings && !MusingsStreamComp) {
-      // Dynamically import Musings stream only on /void.html
+      // Dynamically import Musings stream only on misc/void.html
       MusingsStreamComp = (await import('./MusingsStream.svelte')).default;
     }
 

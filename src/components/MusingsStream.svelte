@@ -49,13 +49,6 @@
       return `<pre class="hljs"><code>${md.utils.escapeHtml(str)}</code></pre>`;
     },
   });
-  // Ensure images rendered from Markdown are lazy-loaded by default
-  const defaultImg = md.renderer.rules.image || ((tokens: any, idx: number, options: any, env: any, self: any) => self.renderToken(tokens, idx, options));
-  md.renderer.rules.image = (tokens: any, idx: number, options: any, env: any, self: any) => {
-    tokens[idx].attrSet('loading', 'lazy');
-    tokens[idx].attrSet('decoding', 'async');
-    return defaultImg(tokens, idx, options, env, self);
-  };
 
   // Load manifest from public directory at runtime
   let entries: ManifestEntry[] = [];

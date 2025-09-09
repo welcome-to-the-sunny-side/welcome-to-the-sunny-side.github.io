@@ -18,7 +18,28 @@ import { currentPath } from "../stores/router";
         gtag('js', new Date());
         gtag('config', 'G-FDGES615HV');
         </script>
-    
+    <script type="text/javascript" id="mathjax-config">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script','noscript','style','textarea','pre','code']
+      },
+      // MathJax v4: enable automatic line breaking and prevent wide-expression overflow
+      output: {
+        displayOverflow: 'linebreak',
+        linebreaks: {
+          inline: true,     // allow inline math to wrap by browser when needed
+          width: '100%',    // base line-break width on the container width
+          lineleading: .2
+        }
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
   <script type="module">
     import { currentSkin } from '/src/stores/skin.ts';
     currentSkin.subscribe((skin) => {

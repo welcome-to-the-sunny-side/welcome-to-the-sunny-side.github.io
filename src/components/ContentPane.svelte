@@ -1,30 +1,38 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { tick } from 'svelte';
-  import { currentSkin } from '../stores/skin';
+import MarkdownIt from 'markdown-it';
+
+import hljs from 'highlight.js';
+import { tick } from 'svelte';
+import { currentSkin } from '../stores/skin';
   import { currentPath } from '../stores/router';
   import { readable } from 'svelte/store';
-
-  // Dynamic-only components and libs (loaded per-route)
-  let md: any = null;
-  let hljs: any = null;
-  let MusingsStreamComp: any = null;
-  let showMusings: boolean = false;
+  import MusingsStream from './MusingsStream.svelte';
 
   // Import all markdown under src/content as raw strings
   // load all markdown as raw strings (Vite 5 syntax)
 const pagesMd = import.meta.glob('../content/**/*.md', { query: '?raw', import: 'default' });
 const pagesHtml = import.meta.glob('../content/**/*.html', { query: '?raw', import: 'default' });
 
-  // md and hljs are initialized on-demand for non-home pages in loadContent()
+  const md: MarkdownIt = new MarkdownIt({
+  html: true,
+  linkify: true,
+  highlight: (str: string, lang: string): string => {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return `<pre class="hljs"><code>${hljs.highlight(str, { language: lang }).value}</code></pre>`;
+      } catch {}
+    }
+    return `<pre class="hljs"><code>${md.utils.escapeHtml(str)}</code></pre>`;
+  },
+});
 
 let path = '/';
   let contentRaw: string = '';
 let frontmatter: Record<string, any> = {};
 let isBlog = false;
 let isMusings = false;
-let contentHtml: string = '';
-let blogArticleEl: HTMLElement | null = null;
+let contentHtml: string = md.render(contentRaw);
 type Device = 'pc' | 'mobile';
 // Collect all home background images at build time (hashed URLs)
 const imageModules = import.meta.glob('../../public/assets/home/active/**/*.{jpg,jpeg,png,webp}', { as: 'url', eager: true });
@@ -233,52 +241,6 @@ $: skin = $currentSkin;
     // Convert "/blogs/algo/treaps.md" -> "../content/blogs/algo/treaps.md"
     let filePath = path;
     if (filePath === '/') filePath = '/home.html'; // default landing page
-
-    const isHome = filePath === '/home.html';
-    showMusings = (filePath === '/misc/void.html');
-    if (showMusings && !MusingsStreamComp) {
-      // Dynamically import Musings stream only on misc/void.html
-      MusingsStreamComp = (await import('./MusingsStream.svelte')).default;
-    }
-
-    if (isHome) {
-      // Skip loading markdown-it, highlight.js, and MathJax on home.
-      frontmatter = {};
-      isBlog = false;
-      isMusings = false;
-      contentRaw = '';
-      contentHtml = '';
-      return;
-    }
-
-    // Non-home pages: ensure markdown-it and highlight.js are available
-    if (!md || !hljs) {
-      const [{ default: MarkdownIt }, { default: hl }]: any = await Promise.all([
-        import('markdown-it'),
-        import('highlight.js'),
-      ]);
-      hljs = hl;
-      md = new MarkdownIt({
-        html: true,
-        linkify: true,
-        highlight: (str: string, lang: string): string => {
-          if (lang && hljs.getLanguage(lang)) {
-            try {
-              return `<pre class="hljs"><code>${hljs.highlight(str, { language: lang }).value}</code></pre>`;
-            } catch {}
-          }
-          return `<pre class=\"hljs\"><code>${md.utils.escapeHtml(str)}</code></pre>`;
-        },
-      });
-      // Ensure all Markdown images are lazy-loaded by default
-      const defaultImg = md.renderer.rules.image || ((tokens: any, idx: number, options: any, env: any, self: any) => self.renderToken(tokens, idx, options));
-      md.renderer.rules.image = (tokens: any, idx: number, options: any, env: any, self: any) => {
-        tokens[idx].attrSet('loading', 'lazy');
-        tokens[idx].attrSet('decoding', 'async');
-        return defaultImg(tokens, idx, options, env, self);
-      };
-    }
-
     // Try to resolve Markdown source first
     const mdPath = filePath.replace(/\.html$/, '.md');
     const mdKey = '../content' + mdPath;
@@ -289,18 +251,12 @@ $: skin = $currentSkin;
       frontmatter = fm;
       isBlog = frontmatter.displayMode === 'blog';
       isMusings = frontmatter.displayMode === 'musings';
-
+      
+      // Protect math before Markdown parsing, then restore and let MathJax typeset
       const { placeholderText, restore } = protectMathSegments(body);
       contentHtml = md.render(placeholderText);
       contentHtml = restore(contentHtml);
       await tick();
-      // Ensure all images inside the blog article are lazy
-      if (typeof window !== 'undefined' && blogArticleEl) {
-        blogArticleEl.querySelectorAll('img').forEach((img) => {
-          if (!img.hasAttribute('loading')) img.setAttribute('loading', 'lazy');
-          if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
-        });
-      }
       await typesetMath();
     } else if (htmlKey in pagesHtml) {
       // Raw HTML file – execute as-is
@@ -308,15 +264,10 @@ $: skin = $currentSkin;
       frontmatter = {};
       isBlog = false;
       isMusings = false;
+      
+      
       contentHtml = contentRaw;
       await tick();
-      // Apply lazy-loading to any native <img> in the injected HTML
-      if (typeof window !== 'undefined' && htmlContainer) {
-        htmlContainer.querySelectorAll('img').forEach((img) => {
-          if (!img.hasAttribute('loading')) img.setAttribute('loading', 'lazy');
-          if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
-        });
-      }
       // Execute inline scripts so that browser games work
       if (typeof window !== 'undefined' && htmlContainer) {
         htmlContainer.querySelectorAll('script').forEach((oldScript) => {
@@ -332,6 +283,7 @@ $: skin = $currentSkin;
       frontmatter = {};
       isBlog = false;
       isMusings = false;
+      
       const { placeholderText, restore } = protectMathSegments(contentRaw);
       contentHtml = md.render(placeholderText);
       contentHtml = restore(contentHtml);
@@ -343,39 +295,20 @@ $: skin = $currentSkin;
   // Wait for MathJax to be ready and typeset the page content.
   async function typesetMath() {
     if (typeof window === 'undefined') return;
-    const w = window as any;
-    // Lazily load MathJax v4 if not already present
-    if (!w.MathJax) {
-      w.MathJax = {
-        tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']],
-          displayMath: [['$$', '$$'], ['\\[', '\\]']],
-          processEscapes: true
-        },
-        options: {
-          skipHtmlTags: ['script','noscript','style','textarea','pre','code']
-        },
-        // MathJax v4: enable automatic line breaking and prevent wide-expression overflow
-        output: {
-          displayOverflow: 'linebreak',
-          linebreaks: { inline: true, width: '100%', lineleading: .2 }
-        }
+    const waitForMJ = () => new Promise<any>((resolve) => {
+      const check = () => {
+        const MJ = (window as any).MathJax;
+        if (!MJ) { setTimeout(check, 25); return; }
+        const p = MJ.startup?.promise;
+        if (p && typeof p.then === 'function') { p.then(() => resolve(MJ)); }
+        else resolve(MJ);
       };
-      await new Promise<void>((resolve, reject) => {
-        const s = document.createElement('script');
-        s.src = 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js';
-        s.async = true;
-        s.onload = () => resolve();
-        s.onerror = () => reject(new Error('Failed to load MathJax'));
-        document.head.appendChild(s);
-      });
-      if (w.MathJax?.startup?.promise?.then) {
-        await w.MathJax.startup.promise;
-      }
-    }
+      check();
+    });
     try {
-      if (w.MathJax?.typesetClear) w.MathJax.typesetClear();
-      if (w.MathJax?.typesetPromise) await w.MathJax.typesetPromise();
+      const MJ = await waitForMJ();
+      if (MJ?.typesetClear) MJ.typesetClear();
+      if (MJ?.typesetPromise) await MJ.typesetPromise();
     } catch (e) {
       console.warn('MathJax typeset failed:', e);
     }
@@ -398,16 +331,14 @@ $: skin = $currentSkin;
         </ul>
       {/if}
     </header>
-    <article bind:this={blogArticleEl} class={`${skin.classes.contentPane} max-w-none`}>
+    <article class={`${skin.classes.contentPane} max-w-none`}>
       {@html contentHtml}
     </article>
   </section>
 {:else}
-  {#if showMusings}
+  {#if isMusings}
     <div class={`${skin.classes.contentPane} p-4 max-w-4xl mx-auto bg-surface text-text transition-colors duration-150 ease-retro`}>
-      {#if MusingsStreamComp}
-        <svelte:component this={MusingsStreamComp} />
-      {/if}
+      <MusingsStream />
     </div>
   {:else if isHomeWithBackground}
     <div 

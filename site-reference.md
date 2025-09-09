@@ -155,7 +155,7 @@ For GitHub Pages, push the `dist/` output (or let an action deploy).
 | Blog page shows prose, not blog styling | Front-matter lacks `layout: blog`           |
 | Markdown content (headings, lists) unstyled | Ensure `tailwind.config.js` includes `@tailwindcss/typography` plugin and `content` paths are correct. Verify `src/styles/global.css` has `@tailwind base/components/utilities` directives. Check `ContentPane.svelte` applies `.prose` class to the content wrapper. |
 | Inline math with underscores appears italic (e.g., `$a(t)_{i} = b(t)_{i}$`) | Markdown runs before MathJax and treats `_` as emphasis. `ContentPane.svelte` protects TeX segments via a small placeholder preprocessor so underscores inside `$...$`, `\(...\)`, and `\[...\]` are not styled as italics. If authoring raw `.html`, keep TeX outside Markdown or escape underscores as `\_`. |
-| Horizontal page scroll on mobile when long math overflows | Use MathJax v4 with line breaking and clamp containers. MathJax is now loaded dynamically by `ContentPane.svelte` on all non-home pages with `output: { displayOverflow: 'linebreak', linebreaks: { inline: true, width: '100%' } }`. In `src/styles/global.css`: ensure `body { overflow-x: hidden; }`, `mjx-container { max-width: 100%; }`, and optionally `mjx-container[display="true"] { overflow-x: auto; }`. The main content `<main>` uses `overflow-y-auto overflow-x-hidden` to avoid page wobble. |
+| Horizontal page scroll on mobile when long math overflows | Use MathJax v4 with line breaking and clamp containers. In `src/layouts/BaseLayout.astro`: load `https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js` and set `output: { displayOverflow: 'linebreak', linebreaks: { inline: true, width: '100%' } }`. In `src/styles/global.css`: add `body { overflow-x: hidden; }`, `mjx-container { max-width: 100%; }`, and optionally `mjx-container[display="true"] { overflow-x: auto; }`. The main content `<main>` uses `overflow-y-auto overflow-x-hidden` to avoid page wobble. |
 
 ---
 
@@ -237,7 +237,7 @@ This overhaul ensures a consistent visual identity across the site, aligning wit
   * `grep pattern file.html` – search a single file.
   Returns top 100 matches as `file:line:snippet`.
 
-The search corpus is built on-demand by lazy-loading raw Markdown via `import.meta.glob()` dynamic loaders (not bundled on first load). A small build-time index at `/terminal-index.json` supplies per-file dates for `ls -d/-dl/-de`. Fuse.js is imported only when `grep` runs, keeping initial work minimal.
+The search corpus is built client-side by mapping each `.html` file back to its raw Markdown (`import.meta.glob('/src/content/**/*.md', { as: 'raw' })`). Fuse.js is dynamically imported to keep the initial bundle small.
 
 ## 11 . Dynamic Skins (Dark & Sunny)
 Introduced a **skin system** that allows live switching between completely different theme tokens at runtime.
@@ -341,27 +341,3 @@ The Musings component implements **lazy loading** to improve initial page load p
 This reduces initial network requests from (1 manifest + N blobs) to just the manifest, with subsequent requests triggered by scroll position. Performance improvement is most noticeable with large post archives.
 
 Enjoy hacking on _Welcome to the Sunny Side_!
-
----
-
-## 14 . Performance Optimizations (2025-09-09)
-
-This session focused on reducing first-visit JavaScript and making the terminal usable immediately.
-
-1) Homepage gating (no heavy libs on `/home.html`)
-- `ContentPane.svelte` now skips loading `markdown-it`, `highlight.js`, and MathJax on the home page. Effect: smaller initial JS and faster first paint.
-
-2) Musings loaded only on `/misc/void.html`
-- `MusingsStream.svelte` is dynamically imported only when the route is the Musings page. Effect: keeps encryption/scrypt code out of the main content bundle on non-Musings pages.
-
-3) Terminal: date index + lazy grep
-- New build-time endpoint `src/pages/terminal-index.json.ts` emits a JSON map of `/path.html` → timestamp. `TerminalIsland.svelte` uses this for `ls -d/-dl/-de` sorting without loading file contents.
-- Removed eager raw-glob bundling of Markdown. Raw content is loaded only when `grep` is executed (and only for the files involved).
-- `fuse.js` is imported inside the `grep` branch on first use and cached afterwards.
-
-4) xterm preloading
-- `TerminalPane.svelte` warms dynamic imports for `xterm` and `@xterm/addon-fit` in `onMount`, so the terminal becomes interactive faster when the island mounts.
-
-Net effect
-- First-visit JS for the content pane is greatly reduced on home; non-home pages load Markdown/render libs only when needed.
-- Terminal avoids bundling the entire corpus; xterm is preloaded; grep work happens only on demand.

@@ -41,10 +41,6 @@
   let isMobile = false;
   
   onMount(() => {
-    // Warm up dynamic imports used by TerminalIsland so they are ready by the time it mounts
-    try { import('xterm'); } catch {}
-    try { import('@xterm/addon-fit'); } catch {}
-
     const checkMobile = () => {
       isMobile = window.innerWidth < 768; // Match Tailwind's md breakpoint
     };

@@ -24,6 +24,7 @@ let frontmatter: Record<string, any> = {};
 let isBlog = false;
 let isMusings = false;
 let contentHtml: string = '';
+let blogArticleEl: HTMLElement | null = null;
 type Device = 'pc' | 'mobile';
 // Collect all home background images at build time (hashed URLs)
 const imageModules = import.meta.glob('../../public/assets/home/active/**/*.{jpg,jpeg,png,webp}', { as: 'url', eager: true });
@@ -269,6 +270,13 @@ $: skin = $currentSkin;
           return `<pre class=\"hljs\"><code>${md.utils.escapeHtml(str)}</code></pre>`;
         },
       });
+      // Ensure all Markdown images are lazy-loaded by default
+      const defaultImg = md.renderer.rules.image || ((tokens: any, idx: number, options: any, env: any, self: any) => self.renderToken(tokens, idx, options));
+      md.renderer.rules.image = (tokens: any, idx: number, options: any, env: any, self: any) => {
+        tokens[idx].attrSet('loading', 'lazy');
+        tokens[idx].attrSet('decoding', 'async');
+        return defaultImg(tokens, idx, options, env, self);
+      };
     }
 
     // Try to resolve Markdown source first
@@ -286,6 +294,13 @@ $: skin = $currentSkin;
       contentHtml = md.render(placeholderText);
       contentHtml = restore(contentHtml);
       await tick();
+      // Ensure all images inside the blog article are lazy
+      if (typeof window !== 'undefined' && blogArticleEl) {
+        blogArticleEl.querySelectorAll('img').forEach((img) => {
+          if (!img.hasAttribute('loading')) img.setAttribute('loading', 'lazy');
+          if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
+        });
+      }
       await typesetMath();
     } else if (htmlKey in pagesHtml) {
       // Raw HTML file – execute as-is
@@ -295,6 +310,13 @@ $: skin = $currentSkin;
       isMusings = false;
       contentHtml = contentRaw;
       await tick();
+      // Apply lazy-loading to any native <img> in the injected HTML
+      if (typeof window !== 'undefined' && htmlContainer) {
+        htmlContainer.querySelectorAll('img').forEach((img) => {
+          if (!img.hasAttribute('loading')) img.setAttribute('loading', 'lazy');
+          if (!img.hasAttribute('decoding')) img.setAttribute('decoding', 'async');
+        });
+      }
       // Execute inline scripts so that browser games work
       if (typeof window !== 'undefined' && htmlContainer) {
         htmlContainer.querySelectorAll('script').forEach((oldScript) => {
@@ -376,7 +398,7 @@ $: skin = $currentSkin;
         </ul>
       {/if}
     </header>
-    <article class={`${skin.classes.contentPane} max-w-none`}>
+    <article bind:this={blogArticleEl} class={`${skin.classes.contentPane} max-w-none`}>
       {@html contentHtml}
     </article>
   </section>

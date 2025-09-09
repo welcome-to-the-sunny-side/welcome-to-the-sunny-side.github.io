@@ -57,6 +57,13 @@ export const sunny: Skin = {
 
     /* easing */
     'ease-retro': 'cubic-bezier(0.25,0.46,0.45,0.94)',
+
+    /* scrollbar */
+    'scrollbar-track': 'rgba(216, 139, 0, 0.1)',
+    'scrollbar-thumb': 'linear-gradient(180deg, rgba(216, 139, 0, 0.4), rgba(216, 139, 0, 0.2))',
+    'scrollbar-thumb-border': '1px solid rgba(216, 139, 0, 0.2)',
+    'scrollbar-thumb-hover': 'linear-gradient(180deg, rgba(216, 139, 0, 0.6), rgba(216, 139, 0, 0.3))',
+    'scrollbar-color-firefox': 'rgba(216, 139, 0, 0.5) rgba(216, 139, 0, 0.1)',
   },
   inlineStyles: {},
 };

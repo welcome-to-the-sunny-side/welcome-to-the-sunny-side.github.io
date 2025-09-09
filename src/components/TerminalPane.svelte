@@ -118,7 +118,7 @@
 <style>
   /* Mobile collapse (vertical) */
   .body {
-    transition: all 0.25s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   /* Limit height only on mobile to allow smooth slide animation */
@@ -132,17 +132,23 @@
   .desktop-wrapper {
     position: relative;
     height: 100%;
-    width: 100%; /* full width by default (mobile) */
-    transition: width 0.25s ease;
+    width: 100%;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(135deg, #0a0a0a 0%, #0d0d0d 100%);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(100, 255, 218, 0.1);
   }
   
   /* Desktop (md+) specific widths */
   @media (min-width: 768px) {
     .desktop-wrapper {
-      width: 475px;
+      width: 480px;
     }
     .desktop-collapsed {
-      width: 28px !important; /* Just enough for the toggle button */
+      width: 32px !important;
     }
   }
   
@@ -155,24 +161,38 @@
   /* Desktop collapse toggle button */
   .desktop-toggle {
     position: absolute;
-    left: -20px; /* position outside terminal towards content pane */
+    left: -22px;
     top: 50%;
     transform: translateY(-50%);
-    width: 20px;
-    height: 60px;
-    background: #18181b; /* zinc-900 */
-    border-left: 1px solid #3f3f46; /* zinc-700 */
-    border-top: 1px solid #3f3f46;
-    border-bottom: 1px solid #3f3f46;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-    border-right: 1px solid #3f3f46; /* vertical divider between button and pane */
+    width: 22px;
+    height: 64px;
+    background: linear-gradient(135deg, #0d0d0d 0%, #161616 100%);
+    border: 1px solid rgba(100, 255, 218, 0.2);
+    border-right: none;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: #a1a1aa; /* zinc-400 */
+    color: rgba(100, 255, 218, 0.7);
     z-index: 10;
+    font-size: 10px;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(8px);
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(100, 255, 218, 0.1);
+  }
+  
+  .desktop-toggle:hover {
+    background: linear-gradient(135deg, #161616 0%, #1a1a1a 100%);
+    color: #64ffda;
+    border-color: rgba(100, 255, 218, 0.4);
+    box-shadow: 
+      0 6px 20px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(100, 255, 218, 0.3),
+      inset 0 1px 0 rgba(100, 255, 218, 0.2);
   }
   
   /* Terminal content container */
@@ -180,7 +200,9 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
+    padding: 8px;
   }
+  
   /* Hide terminal contents when collapsed on desktop */
   .desktop-collapsed .terminal-content {
     display: none;
@@ -189,30 +211,55 @@
   /* Collapsed placeholder label */
   .collapsed-label {
     position: absolute;
-    bottom: 8px;
+    bottom: 12px;
     left: 50%;
     transform: translateX(-50%);
     writing-mode: vertical-rl;
     text-orientation: upright;
-    font-family: monospace;
-    font-size: 0.75rem;
-    color: #a1a1aa; /* zinc-400 */
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: rgba(100, 255, 218, 0.6);
     user-select: none;
     pointer-events: none;
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 8px rgba(100, 255, 218, 0.3);
+  }
+  
+  /* Mobile header styling */
+  .mobile-header {
+    background: linear-gradient(90deg, #0d0d0d 0%, #161616 100%);
+    border-bottom: 1px solid rgba(100, 255, 218, 0.2);
+    backdrop-filter: blur(8px);
+  }
+  
+  .mobile-toggle {
+    color: rgba(100, 255, 218, 0.8);
+    transition: color 0.2s ease;
+    font-size: 12px;
+  }
+  
+  .mobile-toggle:hover {
+    color: #64ffda;
+  }
+  
+  .mobile-title {
+    color: rgba(100, 255, 218, 0.7);
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
     letter-spacing: 0.1em;
+    text-transform: lowercase;
   }
 </style>
 
 <!-- Wrapper adapts layout via Tailwind breakpoints -->
-<div class="h-full flex flex-col bg-zinc-900 desktop-wrapper"
+<div class="h-full flex flex-col desktop-wrapper"
      class:desktop-collapsed={!isMobile && isCollapsed}
-     class:border-b={isMobile && !isCollapsed}
-     class:border-zinc-700={isMobile && !isCollapsed}
 >
   <!-- Header bar only visible on small screens -->
-  <div class="md:hidden flex items-center justify-between px-3 py-2 border-b border-zinc-700">
-    <span class="font-mono text-xs text-zinc-400">terminal</span>
-    <button class="text-zinc-300" on:click={toggle} aria-label="Toggle terminal">
+  <div class="md:hidden flex items-center justify-between px-4 py-3 mobile-header">
+    <span class="mobile-title text-xs">terminal</span>
+    <button class="mobile-toggle" on:click={toggle} aria-label="Toggle terminal">
       {#if isCollapsed}
         ▼
       {:else}

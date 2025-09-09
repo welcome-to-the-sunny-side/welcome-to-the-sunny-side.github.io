@@ -43,6 +43,13 @@ export const dark: Skin = {
 
     /* easing */
     'ease-retro': 'cubic-bezier(0.25,0.46,0.45,0.94)',
+
+    /* scrollbar */
+    'scrollbar-track': 'rgba(0, 0, 0, 0.2)',
+    'scrollbar-thumb': 'linear-gradient(180deg, rgba(100, 255, 218, 0.3), rgba(100, 255, 218, 0.1))',
+    'scrollbar-thumb-border': '1px solid rgba(100, 255, 218, 0.1)',
+    'scrollbar-thumb-hover': 'linear-gradient(180deg, rgba(100, 255, 218, 0.5), rgba(100, 255, 218, 0.2))',
+    'scrollbar-color-firefox': 'rgba(100, 255, 218, 0.4) rgba(0, 0, 0, 0.2)',
   },
   inlineStyles: {},
 };

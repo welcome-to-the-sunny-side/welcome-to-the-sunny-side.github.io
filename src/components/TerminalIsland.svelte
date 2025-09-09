@@ -98,17 +98,39 @@ onMount(async () => {
   const { FitAddon } = await import('@xterm/addon-fit');
   const term = new Terminal({
     theme: {
-      background: '#0f0f0f',
-      foreground: '#d0d0d0',
-      cursor: 'rgb(100,255,218)'
+      background: '#0a0a0a',
+      foreground: '#e0e0e0',
+      cursor: '#64ffda',
+      cursorAccent: '#0a0a0a',
+      selectionBackground: 'rgba(100, 255, 218, 0.2)',
+      selectionForeground: '#e0e0e0',
+      black: '#0a0a0a',
+      red: '#ff6b6b',
+      green: '#51cf66',
+      yellow: '#ffd43b',
+      blue: '#339af0',
+      magenta: '#f06595',
+      cyan: '#64ffda',
+      white: '#e0e0e0',
+      brightBlack: '#495057',
+      brightRed: '#ff8787',
+      brightGreen: '#69db7c',
+      brightYellow: '#ffe066',
+      brightBlue: '#4dabf7',
+      brightMagenta: '#f783ac',
+      brightCyan: '#7fecec',
+      brightWhite: '#f8f9fa'
     },
-    // cursorBlink: true,
-    fontFamily: 'IBM Plex Mono, Menlo, monospace',
-    fontSize: 13,
-    letterSpacing: 0.25,
+    cursorBlink: false,
+    fontFamily: 'IBM Plex Mono, SF Mono, Menlo, Monaco, Consolas, monospace',
+    fontSize: 14,
+    fontWeight: '400',
+    letterSpacing: 0.5,
     cols: 80,
     rows: 24,
     convertEol: true,
+    allowProposedApi: true,
+    smoothScrollDuration: 120,
   });
   const fit = new FitAddon();
   fitAddon = fit;
@@ -132,6 +154,7 @@ onMount(async () => {
   let histIndex = 0;
   let savedBuffer = '';
   let buffer = '';
+  let cursorPos = 0; // cursor position within the buffer
   // --- Autocomplete state ---
   const COMMANDS = ['ls', 'cd', 'open', 'pop', 'clear', 'help', 'skin', 'skins'];
   let completions: string[] = [];
@@ -317,7 +340,8 @@ onMount(async () => {
         term.writeln(`${PATH_COLOR}SHORTCUT        DESCRIPTION\x1b[0m`);
         const sc = [
           { key: 'Tab', desc: 'accept autocomplete' },
-          { key: '← / →', desc: 'cycle suggestions' },
+          { key: 'Shift+Tab', desc: 'cycle suggestions' },
+          { key: '← / →', desc: 'move cursor left/right' },
           { key: 'Shift+→', desc: 'collapse terminal' },
           { key: 'Shift+←', desc: 'expand / focus terminal' },
           { key: 'Shift+↑', desc: 'focus content pane' },
@@ -347,8 +371,11 @@ onMount(async () => {
   function showGhost(text: string) {
     clearGhost();
     if (!text) return;
+    // Save cursor, move to end of buffer, show ghost, restore cursor
     term.write('\x1b[s');
-    term.write(`\x1b[90m${text}\x1b[0m`); // dim grey text
+    const moveToEnd = cursorPos < buffer.length ? `\x1b[${buffer.length - cursorPos}C` : '';
+    term.write(moveToEnd);
+    term.write(`\x1b[90m${text}\x1b[0m`); // dim grey ghost text
     term.write('\x1b[u');
     ghostActive = true;
     ghostText = text;
@@ -405,19 +432,73 @@ onMount(async () => {
 
   function acceptCompletion() {
     if (!ghostActive || !ghostText) return;
-    buffer += ghostText;
-    term.write(ghostText);
+    // Insert completion at cursor position
+    buffer = buffer.slice(0, cursorPos) + ghostText + buffer.slice(cursorPos);
+    cursorPos += ghostText.length;
+    // Redraw the line
+    redrawInputLine();
     clearGhost();
   }
 
-  function cycleCompletion(dir: 1 | -1) {
+  function cycleCompletion() {
     if (!ghostActive || completions.length < 2) return;
-    compIndex = (compIndex + dir + completions.length) % completions.length;
+    compIndex = (compIndex + 1) % completions.length;
     const tokens = buffer.split(/\s+/);
     const current = tokens[tokens.length - 1] || '';
     const candidate = completions[compIndex];
     const suffix = candidate.slice(current.length);
     showGhost(suffix);
+  }
+
+  function redrawInputLine() {
+    // Clear the current line and redraw buffer with cursor at correct position
+    term.write('\x1b[2K\r'); // clear line and return to start
+    prompt();
+    term.write(buffer);
+    // Move cursor to correct position
+    if (cursorPos < buffer.length) {
+      term.write(`\x1b[${buffer.length - cursorPos}D`);
+    }
+  }
+
+  function moveCursor(dir: 'left' | 'right') {
+    if (dir === 'left' && cursorPos > 0) {
+      cursorPos--;
+      term.write('\x1b[D'); // move cursor left
+    } else if (dir === 'right' && cursorPos < buffer.length) {
+      cursorPos++;
+      term.write('\x1b[C'); // move cursor right
+    }
+  }
+
+  function insertChar(char: string) {
+    buffer = buffer.slice(0, cursorPos) + char + buffer.slice(cursorPos);
+    cursorPos++;
+    
+    if (cursorPos === buffer.length) {
+      // At end of buffer, simple write
+      term.write(char);
+    } else {
+      // In middle, need to redraw from cursor position
+      const remaining = buffer.slice(cursorPos - 1);
+      term.write(remaining);
+      // Move cursor back to correct position
+      term.write(`\x1b[${remaining.length - 1}D`);
+    }
+  }
+
+  function deleteChar() {
+    if (cursorPos === 0) return;
+    
+    buffer = buffer.slice(0, cursorPos - 1) + buffer.slice(cursorPos);
+    cursorPos--;
+    
+    // Redraw from cursor position
+    term.write('\x1b[D'); // move left
+    const remaining = buffer.slice(cursorPos) + ' '; // add space to clear last char
+    term.write(remaining);
+    // Move cursor back to correct position
+    term.write(`\x1b[${remaining.length}D`);
   }
 
   let escSeq = '';
@@ -459,6 +540,7 @@ onMount(async () => {
           }
           histIndex = cmdHistory.length; // reset to after last
           buffer = '';
+          cursorPos = 0;
           if (cmdText === 'clear') {
             // For a clear, the screen has just been wiped and the cursor is already at (0,0).
             // Emit the prompt without a leading newline so it appears on the very first line.
@@ -471,10 +553,7 @@ onMount(async () => {
           break;
         }
         case 127: { // Backspace
-          if (buffer.length) {
-            buffer = buffer.slice(0, -1);
-            term.write('\b \b');
-          }
+          deleteChar();
           triggerCompletion();
           break;
         }
@@ -482,8 +561,7 @@ onMount(async () => {
           // Filter out non-printable characters to prevent free cursor movement
           if (code >= 32 && code < 127) {
             clearGhost();
-            buffer += char;
-            term.write(char);
+            insertChar(char);
             triggerCompletion();
           }
       }
@@ -509,19 +587,34 @@ onMount(async () => {
         histIndex++;
       }
       const newBuf = histIndex === cmdHistory.length ? savedBuffer : cmdHistory[histIndex];
-      // Clear current input line and rewrite prompt + buffer
-      term.write('\x1b[2K\r');
-      prompt();
       buffer = newBuf;
-      term.write(buffer);
+      cursorPos = buffer.length; // place cursor at end
+      redrawInputLine();
       clearGhost();
       triggerCompletion();
       return; // handled
     }
-    if (ghostActive && (domEvent.key === 'ArrowRight' || domEvent.key === 'ArrowLeft')) {
+    // Shift+Tab cycles through completions
+    if (domEvent.key === 'Tab' && domEvent.shiftKey && ghostActive) {
       domEvent.preventDefault();
-      cycleCompletion(domEvent.key === 'ArrowRight' ? 1 : -1);
-    } else if (ghostActive && !['Tab', 'Shift', 'Control', 'Alt', 'Meta', 'ArrowRight', 'ArrowLeft'].includes(domEvent.key)) {
+      cycleCompletion();
+      return;
+    }
+    
+    // Arrow keys for cursor movement
+    if (domEvent.key === 'ArrowLeft') {
+      domEvent.preventDefault();
+      moveCursor('left');
+      return;
+    }
+    
+    if (domEvent.key === 'ArrowRight') {
+      domEvent.preventDefault();
+      moveCursor('right');
+      return;
+    }
+    
+    if (ghostActive && !['Tab', 'Shift', 'Control', 'Alt', 'Meta'].includes(domEvent.key)) {
       // Any other key cancels ghost
       clearGhost();
     }
@@ -537,26 +630,89 @@ onMount(async () => {
   .terminal-shell {
     width: 100%;
     height: 100%;
-    border: 1px solid #3f3f46;
-    border-radius: 2px;
-    background: #0f0f0f;
-    box-shadow: inset 0 0 4px #000;
+    border: 1px solid rgba(100, 255, 218, 0.15);
+    border-radius: 8px;
+    background: linear-gradient(135deg, #0a0a0a 0%, #0d0d0d 100%);
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(100, 255, 218, 0.1),
+      inset 0 0 20px rgba(0, 0, 0, 0.3);
     overflow: hidden;
-    transition: border-color 0.2s ease-out;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
+  
+  .terminal-shell::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(100, 255, 218, 0.3), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none; /* do not interfere with text selection */
+  }
+  
   .terminal-shell.focused {
-    border-color: #caffee99;
+    border-color: rgba(100, 255, 218, 0.4);
+    box-shadow: 
+      0 4px 25px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(100, 255, 218, 0.15),
+      inset 0 0 20px rgba(0, 0, 0, 0.3);
   }
-  /* Scrollbar */
+  
+  .terminal-shell.focused::before {
+    opacity: 1;
+  }
+  
+  /* Modern scrollbar */
   :global(.terminal-shell .xterm-viewport::-webkit-scrollbar) {
-    width: 6px;
+    width: 8px;
   }
+  
   :global(.terminal-shell .xterm-viewport::-webkit-scrollbar-track) {
-    background: transparent;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
   }
+  
   :global(.terminal-shell .xterm-viewport::-webkit-scrollbar-thumb) {
-    background: rgba(63,167,255,0.3);
-    border-radius: 3px;
+    background: linear-gradient(180deg, rgba(100, 255, 218, 0.3), rgba(100, 255, 218, 0.1));
+    border-radius: 4px;
+    border: 1px solid rgba(100, 255, 218, 0.1);
+    transition: background 0.2s ease;
+  }
+  
+  :global(.terminal-shell .xterm-viewport::-webkit-scrollbar-thumb:hover) {
+    background: linear-gradient(180deg, rgba(100, 255, 218, 0.5), rgba(100, 255, 218, 0.2));
+  }
+  
+  /* Do not pad internal xterm layers; padding here breaks selection alignment */
+  /* Intentionally empty: keep .xterm-screen without custom padding */
+  
+  /* Cursor styling */
+  :global(.terminal-shell .xterm-cursor-layer .xterm-cursor-bar) {
+    background-color: #64ffda !important;
+    width: 2px !important;
+  }
+  
+  :global(.terminal-shell .xterm-cursor-layer .xterm-cursor-block) {
+    background-color: rgba(100, 255, 218, 0.8) !important;
+    border: 1px solid #64ffda !important;
+  }
+  
+  /* Selection styling */
+  :global(.terminal-shell .xterm-selection div) {
+    background-color: rgba(100, 255, 218, 0.2) !important;
+    /* Borders on selection blocks cause visual offsets; keep clean fill only */
+    border: none !important;
+  }
+  
+  /* Terminal text enhancements */
+  :global(.terminal-shell .xterm-rows) {
+    font-variant-ligatures: normal;
+    text-rendering: optimizeLegibility;
   }
 </style>
 

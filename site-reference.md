@@ -1,6 +1,6 @@
 # Welcome to the Sunny Side – Site Reference
 
-_Last updated: 2025-08-25_ (Musings UI refinement: removed titles, consistent spacing, animated decrypt button; previous: verbose `ls -v`, date-sorted flags, command history navigation, native HTML metadata, Games section; Fuse.js-powered `grep`)
+_Last updated: 2025-09-10_ (Terminal UI overhaul: modern retrocomputing design, Shift+Tab suggestion cycling, left/right cursor movement, skin-dependent scrollbars, single border; prior: Performance improvements, C++-only highlight.js, on-demand MarkdownIt + MathJax, removed terminal `grep`/Fuse, prebuilt date index, Musings UI refinement)
 
 ## 1 . High-level Overview
 The site is a **static, terminal-driven blog & knowledge base** built with **Astro** for static generation and **Svelte** for the interactive UI. Styling is primarily handled by **Tailwind CSS** (integrated via `@astrojs/tailwind`), utilizing its utility classes and the `@tailwindcss/typography` plugin for Markdown rendering. All human-readable content lives in Markdown files under `src/content` and is presented at URLs that end in `.html`. Additionally, the site now supports rendering of HTML files, allowing for more diverse content presentation. A new Games section has also been added, providing a dedicated space for browser-game adjacent pages.
@@ -38,8 +38,10 @@ The site is published via GitHub Pages; Astro’s static output lives in `dist/`
 │  └─ content/              **all markdown lives here**
 │      └─ ...
 ├─ src/styles/
-│  └─ global.css            Tailwind directives, highlight.js import
+│  └─ global.css            Tailwind directives, highlight.js theme import
 ├─ tailwind.config.js       Tailwind CSS configuration
+├─ tools/
+│  └─ build-vfs-date-index.mjs   build-time date indexer for terminal sorting
 └─ site-reference.md        (this file)
 ```
 
@@ -83,7 +85,6 @@ Explanation:
 |---------------|-----------------------------------------------------------|
 | `ls`           | List items (tree **-r**). Extra flags: **-d / -dl / -de** for date sort, **-v** to show dates |
 | `cd <dir>`     | Change directory (relative or absolute)                  |
-| `grep <pattern> [path]` | Fuzzy search Markdown-backed `.html` files (Fuse.js) |
 | `open <file>`  | Push file path to router and render it                   |
 | `pop`          | Return to previous path                                  |
 | `clear`        | Clear the terminal output                                |
@@ -93,22 +94,32 @@ Explanation:
 | Shortcut | Purpose |
 |----------|---------|
 | `Tab` | Accept the current autocomplete suggestion |
-| `← / →` | Cycle through autocomplete suggestions |
+| `Shift + Tab` | Cycle through autocomplete suggestions |
+| `← / →` | Move cursor left/right within input line |
 | `Shift + ←` | Collapse the terminal pane (desktop) |
 | `Shift + →` | Expand / focus the terminal pane (desktop) |
 | `Shift + ↑` | Focus on the content pane |
 | `h / j / k / l` | Scroll content pane when terminal is not focused |
 
-The terminal keeps history, shows inline autocomplete suggestions while you type, and supports arrow-key navigation. On desktop widths you can collapse/expand it with **Shift + ← / Shift + →**.
+The terminal keeps history, shows inline autocomplete suggestions while you type, and supports full cursor movement within the input line. Suggestions cycle with **Shift + Tab**. On desktop widths you can collapse/expand it with **Shift + ← / Shift + →**.
 
-### Terminal UI Color Scheme (2025-06)
-- **Prompt path and `/`**: Green (`rgb(100,255,218)`)
-- **Files**: Yellow (`rgb(255,230,120)`)
-- **Directories**: Plain white
-- **Help command**: Now formatted in a colorized, aligned table for readability
-- **Cursor**: Green (`rgb(100,255,218)`), blinks
-- **Active border**: Light green, semi-transparent
-- **Other**: Terminal supports focus/blur border effect, mobile collapse, and accessibility improvements
+### Terminal Navigation Changes (2025-09)
+- **Suggestion cycling**: Changed from left/right arrows to **Shift + Tab** only
+- **Cursor movement**: Left/right arrows now move cursor freely within input line
+- **Text editing**: Full cursor position tracking with insertion/deletion at any position
+- **Selection**: Fixed alignment issues - no phantom selections on click, proper text alignment
+
+### Terminal UI Design (2025-09)
+- **Modern retrocomputing aesthetic**: Dark gradient backgrounds with teal accent theme
+- **Typography**: IBM Plex Mono, 14px, enhanced letter spacing
+- **Visual elements**: Rounded corners (8px), sophisticated multi-layer box shadows, glowing focus states
+- **Prompt path and `/`**: Teal (`#64ffda`)
+- **Files**: Yellow (`#ffd43b`)
+- **Directories**: Light gray (`#e0e0e0`)
+- **Cursor**: Teal (`#64ffda`), non-blinking
+- **Borders**: Single teal border with focus glow, no double-border effect
+- **Scrollbars**: Modern gradient styling matching current skin theme
+- **Selection**: Clean teal highlight without borders for proper text alignment
 
 
 ---
@@ -155,7 +166,7 @@ For GitHub Pages, push the `dist/` output (or let an action deploy).
 | Blog page shows prose, not blog styling | Front-matter lacks `layout: blog`           |
 | Markdown content (headings, lists) unstyled | Ensure `tailwind.config.js` includes `@tailwindcss/typography` plugin and `content` paths are correct. Verify `src/styles/global.css` has `@tailwind base/components/utilities` directives. Check `ContentPane.svelte` applies `.prose` class to the content wrapper. |
 | Inline math with underscores appears italic (e.g., `$a(t)_{i} = b(t)_{i}$`) | Markdown runs before MathJax and treats `_` as emphasis. `ContentPane.svelte` protects TeX segments via a small placeholder preprocessor so underscores inside `$...$`, `\(...\)`, and `\[...\]` are not styled as italics. If authoring raw `.html`, keep TeX outside Markdown or escape underscores as `\_`. |
-| Horizontal page scroll on mobile when long math overflows | Use MathJax v4 with line breaking and clamp containers. In `src/layouts/BaseLayout.astro`: load `https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js` and set `output: { displayOverflow: 'linebreak', linebreaks: { inline: true, width: '100%' } }`. In `src/styles/global.css`: add `body { overflow-x: hidden; }`, `mjx-container { max-width: 100%; }`, and optionally `mjx-container[display="true"] { overflow-x: auto; }`. The main content `<main>` uses `overflow-y-auto overflow-x-hidden` to avoid page wobble. |
+| Horizontal page scroll on mobile when long math overflows | Use MathJax v4 with line breaking and clamp containers. MathJax is now loaded on-demand from `ContentPane.svelte` (first non-home page) with `output: { displayOverflow: 'linebreak', linebreaks: { inline: true, width: '100%' } }`. In `src/styles/global.css`: keep `body { overflow-x: hidden; }`, `mjx-container { max-width: 100%; }`, and optionally `mjx-container[display="true"] { overflow-x: auto; }`. The main content `<main>` uses `overflow-y-auto overflow-x-hidden` to avoid page wobble. |
 
 ---
 
@@ -212,13 +223,8 @@ This overhaul ensures a consistent visual identity across the site, aligning wit
 
 ---
 
-### Grep Cheat-Sheet
-| Example | What it does |
-|---------|--------------|
-| `grep suffix_tree` | Search everything for "suffix_tree" |
-| `grep "active point" algo/` | Phrase search in the `algo` directory |
-| `grep leaf algo/suffix_tree_funny_construction.html` | Search one file |
-| `grep dp` | Fuzzy match – also finds "Dp" or "DP" |
+### Search (2025-09-10)
+The previous Fuse.js-backed `grep` command has been removed to avoid bundling the entire Markdown corpus on first load. Use `ls -r` to explore and open files, or your browser's built-in find on a page.
 
 ---
 
@@ -231,13 +237,7 @@ This overhaul ensures a consistent visual identity across the site, aligning wit
   * **Theorem Box:** `<div class="theorem-box">Theorem content...</div>`
     *Long lines (e.g., LaTeX) will not overflow but instead allow horizontal scrolling inside the theorem box.*
   For other types of reusable UI, Astro's standard Svelte component integration in Markdown (via frontmatter imports) can be used if you adapt the content rendering pipeline away from the custom `ContentPane.svelte` raw Markdown processing.
-* **Search:** The terminal now includes a Fuse.js-backed `grep` command for fuzzy, typo-tolerant search over all Markdown content. Use:
-  * `grep pattern` – search from the current directory down.
-  * `grep pattern path/` – limit search to a subdir.
-  * `grep pattern file.html` – search a single file.
-  Returns top 100 matches as `file:line:snippet`.
-
-The search corpus is built client-side by mapping each `.html` file back to its raw Markdown (`import.meta.glob('/src/content/**/*.md', { as: 'raw' })`). Fuse.js is dynamically imported to keep the initial bundle small.
+* **Date Index for Terminal:** The terminal uses a tiny prebuilt index (`public/vfs-date-index.json`) to power `ls -d / -dl / -de` date sorting and `-v` verbose date labels. This index is generated by `tools/build-vfs-date-index.mjs` and removes the need to load all Markdown on the client.
 
 ## 11 . Dynamic Skins (Dark & Sunny)
 Introduced a **skin system** that allows live switching between completely different theme tokens at runtime.
@@ -267,7 +267,7 @@ Selection persists between sessions (key `wtss-skin` in localStorage).
 Historically, **all authored content lived in Markdown** and was compiled into `.html` at build-time. The router and terminal now fully understand *native* `.html` files in `src/content`:
 
 * Any `.html` file under `src/content` is mapped 1-to-1 in the VFS (no markdown processing). If it includes `<meta name="wtss:date" content="YYYY-MM-DD">` in its `<head>`, that date is used by `ls -d/-v` just like markdown front-matter.
-* Terminal commands (`ls`, `open`, `grep`) treat `.html` the same as generated pages.
+* Terminal commands (`ls`, `open`) treat `.html` the same as generated pages.
 * This enables hand-crafted mini-apps or embedded widgets without a Markdown wrapper – see the new **Games** section below.
 
 ## 12 . Games (`/content/games`)

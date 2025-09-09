@@ -1,1 +1,0 @@
-I document my performance for some subset of contests I participate in over here.

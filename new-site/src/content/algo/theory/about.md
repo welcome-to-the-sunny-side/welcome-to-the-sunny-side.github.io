@@ -1,1 +1,0 @@
-write-ups on algorithmic techniques/tricks

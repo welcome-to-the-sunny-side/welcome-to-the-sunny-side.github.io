@@ -27,35 +27,13 @@ export function resizeTerminal() {
   fitAddon?.fit();
 }
 
-// --- Fuse.js fuzzy search setup ---
-const RAW_FILES = import.meta.glob('/src/content/**/*.md', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
-// Raw strings of *native* .html files (games etc.)
-const RAW_HTML = import.meta.glob('/src/content/**/*.html', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
-
-// Extract YYYY-MM-DD from a markdown file's front-matter. Return a millis timestamp,
-// or Infinity when absent / malformed so those files sort to the end.
-function extractDate(raw: string | null): number {
-  if (!raw) return Infinity;
-  const m = /---[\s\S]*?^date:\s*(\d{4}-\d{2}-\d{2})/m.exec(raw);
-  if (!m) return Infinity;
-  const ts = Date.parse(m[1]);
-  return Number.isNaN(ts) ? Infinity : ts;
-}
+// --- Date index (prebuilt at build-time) ---
+let DATE_INDEX: Record<string, number> = {};
 
 // --- Date helpers ---
-// Map an HTML virtual path (e.g. "/algo/blogs/foo.html") to its markdown raw and return
-// the timestamp represented by its `date:` field. Returns Infinity when missing.
+// All dates are precomputed at build time and provided as epoch millis.
 function dateForHtml(htmlPath: string): number {
-  // 1) Try markdown source if it exists (regular blog post flow)
-  const mdRaw = getRaw(htmlPath);
-  if (mdRaw) return extractDate(mdRaw);
-  // 2) Fallback: look for <meta name="wtss:date" content="YYYY-MM-DD"> inside native html file
-  const rawHtml = RAW_HTML['/src/content' + htmlPath] ?? null;
-  if (!rawHtml) return Infinity;
-  const m = /<meta\s+name=["']wtss:date["']\s+content=["'](\d{4}-\d{2}-\d{2})["'][^>]*>/i.exec(rawHtml);
-  if (!m) return Infinity;
-  const ts = Date.parse(m[1]);
-  return Number.isNaN(ts) ? Infinity : ts;
+  return DATE_INDEX[htmlPath] ?? Infinity;
 }
 
 // Cache directory min / max dates to avoid recomputation during a single ls.
@@ -105,19 +83,17 @@ function sortNamesByDate(dirPath: string, names: string[], mode: 'asc' | 'desc')
   });
 }
 
-function getRaw(virtualPath: string): string | null {
-  // "/posts/foo.html" -> "/src/content/posts/foo.md"
-  const rel = virtualPath.replace(/^\//, '').replace(/\.html$/, '.md');
-  return RAW_FILES['/src/content/' + rel] ?? null;
-}
-
-let FuseLib: any;
+// No getRaw/RAW_FILES anymore – dates come from DATE_INDEX
 
 onMount(async () => {
   isFocused = true; // Ensure border is active on mount
-  // Dynamically import Fuse.js once on client
-  const { default: Fuse } = await import('fuse.js');
-  FuseLib = Fuse;
+  // Preload date index
+  try {
+    const res = await fetch('/vfs-date-index.json', { cache: 'force-cache' });
+    if (res.ok) {
+      DATE_INDEX = await res.json();
+    }
+  } catch {}
   const { Terminal } = await import('xterm');
   const { FitAddon } = await import('@xterm/addon-fit');
   const term = new Terminal({
@@ -157,7 +133,7 @@ onMount(async () => {
   let savedBuffer = '';
   let buffer = '';
   // --- Autocomplete state ---
-  const COMMANDS = ['ls', 'cd', 'open', 'pop', 'clear', 'help', 'grep', 'skin', 'skins'];
+  const COMMANDS = ['ls', 'cd', 'open', 'pop', 'clear', 'help', 'skin', 'skins'];
   let completions: string[] = [];
   let compIndex = 0;
   let ghostActive = false;
@@ -218,32 +194,6 @@ onMount(async () => {
           });
         } else {
           // Recursive tree view
-          if (false /* legacy dateFlag branch disabled */) {
-            // Flatten gather paths
-            const items: { path: string; isDir: boolean; ts: number }[] = [];
-            const collect = (p: string) => {
-              if (isDir(p)) {
-                items.push({ path: p, isDir: true, ts: Infinity });
-                const cs = list(p) || [];
-                cs.forEach(c => collect(p === '/' ? '/' + c : `${p}/${c}`));
-              } else {
-                const isMd = p.endsWith('.md');
-                const raw = isMd ? RAW_FILES['/src/content' + p] : null;
-                items.push({ path: p, isDir: false, ts: isMd ? extractDate(raw) : Infinity });
-              }
-            };
-            collect(fullPath);
-            const dirs = items.filter(i => i.isDir && i.path !== fullPath).sort((a,b)=>a.path.localeCompare(b.path));
-            const files = items.filter(i => !i.isDir);
-            const mdSorted = files.filter(f => f.ts !== Infinity).sort((a,b)=>a.ts - b.ts);
-            const rest = files.filter(f => f.ts === Infinity).sort((a,b)=>a.path.localeCompare(b.path));
-            const ordered = [...dirs, ...mdSorted, ...rest];
-            ordered.forEach(i => {
-              const col = i.isDir ? DIR_COLOR : FILE_COLOR;
-              const rel = i.path.slice(fullPath.length + (fullPath.endsWith('/')?0:1));
-              term.writeln(`${col}${rel}\x1b[0m`);
-            });
-          } else {
           const lines: string[] = [];
           const buildLines = (seg: string[], prefix = '') => {
             let dirPathCur = '/' + seg.join('/');
@@ -275,7 +225,6 @@ onMount(async () => {
           };
           buildLines(pathArr);
           for (const l of lines) term.writeln(l);
-          }
         }
         break;
       }
@@ -345,72 +294,7 @@ onMount(async () => {
         }
         break;
       }
-      case 'grep': {
-        if (!args.length) {
-          term.writeln('grep: usage: grep <pattern> [path]');
-          break;
-        }
-        // Support multi-word pattern and optional path
-        let pathArg: string | null = null;
-        if (args.length > 1) {
-          const maybePath = args[args.length - 1];
-          const test = resolvePath(cwd, maybePath);
-          if (test) {
-            pathArg = maybePath;
-            args.pop();
-          }
-        }
-        const pattern = args.join(' ').replace(/^"|"$/g, ''); // strip surrounding quotes if any
-        const target = pathArg ?? '.';
-        const resolved = resolvePath(cwd, target);
-        if (!resolved) {
-          term.writeln(`grep: ${target}: No such file or directory`);
-          break;
-        }
-        const searchRoot = '/' + resolved.join('/');
-        const files: string[] = [];
-        const collect = (p: string) => {
-          if (isFile(p) && p.endsWith('.html')) {
-            files.push(p);
-            return;
-          }
-          if (isDir(p)) {
-            const children = list(p) || [];
-            children.forEach(c => {
-              const next = p === '/' ? '/' + c : `${p}/${c}`; // avoid double // at root
-              collect(next);
-            });
-          }
-        };
-        collect(searchRoot);
-        // Build search corpus
-        const records: { line: string; file: string; lineNum: number }[] = [];
-        for (const file of files) {
-          const raw = getRaw(file);
-          if (!raw) continue;
-          raw.split('\n').forEach((line, idx) => {
-            records.push({ line, file, lineNum: idx + 1 });
-          });
-        }
-        // Instantiate Fuse
-        const fuse = new FuseLib(records, {
-          keys: ['line'],
-          threshold: 0.4, // adjust to tweak fuzziness
-          ignoreLocation: true,
-          includeScore: false,
-        });
-        const results = fuse.search(pattern).slice(0, 100);
-        if (!results.length) {
-          term.writeln('grep: no matches');
-        } else {
-          results.forEach(r => {
-            const { file, lineNum, line } = r.item;
-            term.writeln(`${FILE_COLOR}${file}\x1b[0m:${lineNum}:${line.trim()}`);
-          });
-          term.writeln(`${results.length} match${results.length === 1 ? '' : 'es'}`);
-        }
-        break;
-      }
+      // removed: grep
       case 'help': {
         // Color and align command list
         const pad = (s: string, n: number) => s + ' '.repeat(Math.max(0, n-s.length));
@@ -418,7 +302,6 @@ onMount(async () => {
           { cmd: 'ls [-r] [-d|-dl|-de] [-v] [path]', desc: 'list directory (tree with -r, date sort, verbose dates)' },
           { cmd: 'cd <dir>', desc: 'change directory' },
           { cmd: 'open <file>', desc: 'open file in content pane' },
-          { cmd: 'grep <pattern> [path]', desc: 'fuzzy search markdown files' },
           { cmd: 'skins', desc: 'list available skins' },
           { cmd: 'skin <name>', desc: 'wear skin' },
           { cmd: 'pop', desc: 'go back' },
@@ -508,7 +391,7 @@ onMount(async () => {
     let cands: string[] = [];
     if (tokens.length === 1) {
       cands = buildCommandCompletions(current);
-    } else if (['cd', 'ls', 'open', 'grep'].includes(first)) {
+    } else if (['cd', 'ls', 'open'].includes(first)) {
       cands = buildPathCompletions(current);
     }
     completions = cands;

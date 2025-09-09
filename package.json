@@ -3,7 +3,9 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "predev": "node tools/build-vfs-date-index.mjs",
     "dev": "astro dev",
+    "prebuild": "node tools/build-vfs-date-index.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -15,7 +17,6 @@
     "@astrojs/tailwind": "^6.0.2",
     "@xterm/addon-fit": "^0.10.0",
     "astro": "^5.9.3",
-    "fuse.js": "^7.1.0",
     "highlight.js": "^11.11.1",
     "katex": "^0.16.22",
     "markdown-it": "^14.1.0",

@@ -1,12 +1,8 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
-import MarkdownIt from 'markdown-it';
-
-import hljs from 'highlight.js';
-import { tick } from 'svelte';
-import { currentSkin } from '../stores/skin';
+  import { onMount } from 'svelte';
+  import { tick } from 'svelte';
+  import { currentSkin } from '../stores/skin';
   import { currentPath } from '../stores/router';
-  import { readable } from 'svelte/store';
   import MusingsStream from './MusingsStream.svelte';
 
   // Import all markdown under src/content as raw strings
@@ -14,25 +10,73 @@ import { currentSkin } from '../stores/skin';
 const pagesMd = import.meta.glob('../content/**/*.md', { query: '?raw', import: 'default' });
 const pagesHtml = import.meta.glob('../content/**/*.html', { query: '?raw', import: 'default' });
 
-  const md: MarkdownIt = new MarkdownIt({
-  html: true,
-  linkify: true,
-  highlight: (str: string, lang: string): string => {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return `<pre class="hljs"><code>${hljs.highlight(str, { language: lang }).value}</code></pre>`;
-      } catch {}
-    }
-    return `<pre class="hljs"><code>${md.utils.escapeHtml(str)}</code></pre>`;
-  },
-});
+  // Lazy singletons
+  let md: any = null;
+  let hljs: any = null;
+  let enginesLoaded = false;
+  let mathjaxLoading: Promise<void> | null = null;
+
+  async function ensureRenderEnginesLoaded() {
+    if (enginesLoaded) return;
+    const [MarkdownItMod, hljsCore, cppMod] = await Promise.all([
+      import('markdown-it'),
+      import('highlight.js/lib/core'),
+      import('highlight.js/lib/languages/cpp'),
+    ]);
+    hljs = (hljsCore as any).default;
+    hljs.registerLanguage('cpp', (cppMod as any).default);
+    const { default: MarkdownIt } = MarkdownItMod as any;
+    md = new MarkdownIt({
+      html: true,
+      linkify: true,
+      highlight: (str: string, lang: string): string => {
+        const norm = (lang || '').toLowerCase();
+        const isCpp = ['cpp', 'c++', 'cc', 'cxx', 'hpp', 'hxx'].includes(norm);
+        if (isCpp) {
+          try {
+            return `<pre class="hljs"><code>${hljs.highlight(str, { language: 'cpp' }).value}</code></pre>`;
+          } catch {}
+        }
+        return `<pre class="hljs"><code>${md.utils.escapeHtml(str)}</code></pre>`;
+      },
+    });
+    enginesLoaded = true;
+  }
+
+  async function ensureMathJaxLoaded() {
+    if (typeof window === 'undefined') return;
+    const w = window as any;
+    if (w.MathJax) return;
+    if (mathjaxLoading) { await mathjaxLoading; return; }
+    mathjaxLoading = new Promise<void>((resolve, reject) => {
+      w.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          processEscapes: true,
+        },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+        output: {
+          displayOverflow: 'linebreak',
+          linebreaks: { inline: true, width: '100%', lineleading: .2 },
+        },
+      };
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js';
+      s.defer = true;
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error('Failed to load MathJax'));
+      document.head.appendChild(s);
+    });
+    await mathjaxLoading;
+  }
 
 let path = '/';
   let contentRaw: string = '';
 let frontmatter: Record<string, any> = {};
 let isBlog = false;
 let isMusings = false;
-let contentHtml: string = md.render(contentRaw);
+let contentHtml: string = '';
 type Device = 'pc' | 'mobile';
 // Collect all home background images at build time (hashed URLs)
 const imageModules = import.meta.glob('../../public/assets/home/active/**/*.{jpg,jpeg,png,webp}', { as: 'url', eager: true });
@@ -241,11 +285,14 @@ $: skin = $currentSkin;
     // Convert "/blogs/algo/treaps.md" -> "../content/blogs/algo/treaps.md"
     let filePath = path;
     if (filePath === '/') filePath = '/home.html'; // default landing page
+    const isHome = (filePath === '/home.html');
     // Try to resolve Markdown source first
     const mdPath = filePath.replace(/\.html$/, '.md');
     const mdKey = '../content' + mdPath;
     const htmlKey = '../content' + filePath;
-    if (mdKey in pagesMd) {
+    if (!isHome && (mdKey in pagesMd)) {
+      await ensureRenderEnginesLoaded();
+      await ensureMathJaxLoaded();
       contentRaw = (await (pagesMd as any)[mdKey]()) as string;
       const { fm, body } = parseFrontmatter(contentRaw);
       frontmatter = fm;
@@ -277,8 +324,13 @@ $: skin = $currentSkin;
           oldScript.replaceWith(newScript);
         });
       }
-      await typesetMath();
+      if (!isHome) {
+        await ensureMathJaxLoaded();
+        await typesetMath();
+      }
     } else {
+      await ensureRenderEnginesLoaded();
+      await ensureMathJaxLoaded();
       contentRaw = `# 404\nPath not found: ${path}`;
       frontmatter = {};
       isBlog = false;

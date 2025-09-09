@@ -435,8 +435,15 @@ onMount(async () => {
     // Insert completion at cursor position
     buffer = buffer.slice(0, cursorPos) + ghostText + buffer.slice(cursorPos);
     cursorPos += ghostText.length;
-    // Redraw the line
-    redrawInputLine();
+    
+    // Optimize: only redraw if cursor wasn't at end (avoids flicker)
+    if (cursorPos === buffer.length) {
+      // Simple case: cursor at end, just write the ghost text
+      term.write(ghostText);
+    } else {
+      // Complex case: cursor in middle, need to redraw
+      redrawInputLine();
+    }
     clearGhost();
   }
 

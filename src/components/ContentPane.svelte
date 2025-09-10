@@ -72,6 +72,7 @@ const pagesHtml = import.meta.glob('../content/**/*.html', { query: '?raw', impo
   }
 
 let path = '/';
+let displayPath = '/';
   let contentRaw: string = '';
 let frontmatter: Record<string, any> = {};
 let isBlog = false;
@@ -101,9 +102,9 @@ let htmlContainer: HTMLDivElement | null = null;
 // Subscribe to skin store
 $: skin = $currentSkin;
 
-  // Reactive background image logic
+  // Reactive background image logic (use displayPath so old background stays during loading)
   $: {
-    const isHome = path === '/' || path === '/home.html';
+    const isHome = displayPath === '/' || displayPath === '/home.html';
     if (isHome) {
       const device: Device = isMobileView ? 'mobile' : 'pc';
       const list = imagesBySkin[$currentSkin.name]?.[device] ?? [];
@@ -112,7 +113,7 @@ $: skin = $currentSkin;
       currentBackgroundImage = null;
     }
   }
-  $: isHomeWithBackground = (path === '/' || path === '/home.html') && currentBackgroundImage;
+  $: isHomeWithBackground = (displayPath === '/' || displayPath === '/home.html') && currentBackgroundImage;
 
   function parseFrontmatter(raw: string) {
     if (raw.startsWith('---')) {
@@ -260,12 +261,13 @@ $: skin = $currentSkin;
   }
 
   const unsub = currentPath.subscribe(async (p) => {
-    // Store previous content before loading new content
-    if (contentHtml && path !== p) {
-      previousContentHtml = contentHtml;
+    // Always mark loading on path change so we don't flash 404 even from home
+    if (path !== p) {
       isLoading = true;
+      previousContentHtml = contentHtml;
+      // Keep displayPath as-is until load completes (so old background/content stays)
     }
-    path = p;
+    path = p; // target path for loading
     await loadContent();
   });
 
@@ -293,7 +295,7 @@ $: skin = $currentSkin;
     // Convert "/blogs/algo/treaps.md" -> "../content/blogs/algo/treaps.md"
     let filePath = path;
     if (filePath === '/') filePath = '/home.html'; // default landing page
-    const isHome = (filePath === '/home.html');
+    const isHome = (filePath === '/home.html' || filePath === '/');
     // Try to resolve Markdown source first
     const mdPath = filePath.replace(/\.html$/, '.md');
     const mdKey = '../content' + mdPath;
@@ -301,7 +303,14 @@ $: skin = $currentSkin;
     
     let contentFound = false;
     
-    if (!isHome && (mdKey in pagesMd)) {
+    if (isHome) {
+      // Home: show background (handled via isHomeWithBackground). No HTML body required.
+      frontmatter = {};
+      isBlog = false;
+      isMusings = false;
+      // Keep contentHtml as-is (previous page) until displayPath switches; then template shows background.
+      contentFound = true;
+    } else if (mdKey in pagesMd) {
       await ensureRenderEnginesLoaded();
       await ensureMathJaxLoaded();
       contentRaw = (await (pagesMd as any)[mdKey]()) as string;
@@ -373,6 +382,8 @@ $: skin = $currentSkin;
     if (isLoading) {
       isLoading = false;
       previousContentHtml = '';
+      // Update displayPath now that new content is ready
+      displayPath = path;
       currentPath.setLoadingComplete();
       // Now that the new content is visible, typeset math if needed
       if (pendingTypeset) {

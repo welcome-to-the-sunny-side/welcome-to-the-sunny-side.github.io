@@ -209,8 +209,8 @@ onMount(async () => {
     term.write(`${PATH_COLOR}${path}\x1b[0m $ `);
   };
 
-  function exec(command: string) {
-    if (!command) return;
+  function exec(command: string): boolean {
+    if (!command) return false;
     const [cmd, ...args] = command.split(/\s+/);
     switch (cmd) {
       case 'ls': {
@@ -223,13 +223,13 @@ onMount(async () => {
         const pathArr = resolvePath(cwd, targetArg);
         if (!pathArr) {
           term.writeln(`ls: cannot access '${targetArg}': No such file or directory`);
-          break;
+          return false;
         }
         const fullPath = '/' + pathArr.join('/');
         if (isFile(fullPath)) {
           const color = '\x1b[37m';
           term.writeln(`${(isDir(fullPath)?DIR_COLOR:FILE_COLOR)}${targetArg}\x1b[0m`);
-          break;
+          return false;
         }
 
         const dateDesc = flags.includes('-d') || flags.includes('-dl');
@@ -291,7 +291,7 @@ onMount(async () => {
           buildLines(pathArr);
           for (const l of lines) term.writeln(l);
         }
-        break;
+        return false;
       }
       case 'cd': {
         const target = args[0] || '/';
@@ -306,44 +306,46 @@ onMount(async () => {
           break;
         }
         cwd = resolved;
-        break;
+        return false;
       }
       case 'open': {
         const file = args[0];
         if (!file) {
           term.writeln('open: missing file');
-          break;
+          return false;
         }
         const pathArr = resolvePath(cwd, file);
         if (pathArr && isFile('/' + pathArr.join('/'))) {
           const fullPath = '/' + pathArr.join('/');
           history.push(fullPath);
           currentPath.push(fullPath);
+          return true; // navigation triggered
         } else {
           term.writeln(`open: file not found: ${file}`);
+          return false;
         }
-        break;
       }
       case 'pop': {
         if (history.length > 1) {
           history.pop();
           const last = history[history.length - 1];
           currentPath.push(last);
+          return true; // navigation triggered
         } else {
           term.writeln('pop: history empty');
+          return false;
         }
-        break;
       }
       case 'clear':
         term.clear();
-        break;
+        return false;
       case 'skins': {
         const names = listSkins();
         names.forEach((name, idx) => {
           const branch = idx === names.length - 1 ? '└─ ' : '├─ ';
           term.writeln(branch + name);
         });
-        break;
+        return false;
       }
       case 'skin': {
         const name = args[0];
@@ -357,7 +359,7 @@ onMount(async () => {
             term.writeln(String(e));
           }
         }
-        break;
+        return false;
       }
       // removed: grep
       case 'help': {
@@ -392,11 +394,12 @@ onMount(async () => {
         for (const {key, desc} of sc) {
           term.writeln(`${FILE_COLOR}${pad(key, 14)}\x1b[0m  ${desc}`);
         }
-        break;
+        return false;
       }
       default:
         term.writeln(`unknown command: ${cmd}`);
         term.write('\r');
+        return false;
     }
   }
 
@@ -586,7 +589,7 @@ onMount(async () => {
         case 13: { // Enter ↵
           term.write('\r\n');
           const cmdText = buffer.trim();
-          exec(cmdText);
+          const didNav = exec(cmdText);
           if (cmdText) {
             cmdHistory.push(cmdText);
           }
@@ -598,9 +601,13 @@ onMount(async () => {
             // Emit the prompt without a leading newline so it appears on the very first line.
             prompt();
           } else {
-            // For all other commands insert a blank line before the next prompt for readability.
-            term.write('\r\n');
-            prompt();
+            // If a navigation was triggered, the spinner subscription will
+            // manage the loading line and print the prompt on completion.
+            if (!didNav) {
+              // For non-navigation commands insert a blank line before next prompt.
+              term.write('\r\n');
+              prompt();
+            }
           }
           break;
         }

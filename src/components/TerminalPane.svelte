@@ -135,13 +135,15 @@
     position: relative;
     height: 100%;
     width: 100%;
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
     background: linear-gradient(135deg, #0a0a0a 0%, #0d0d0d 100%);
+    border: 1px solid rgba(100, 255, 218, 0.15);
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 
       0 8px 32px rgba(0, 0, 0, 0.3),
       inset 0 1px 0 rgba(100, 255, 218, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   /* Desktop (md+) specific widths */
@@ -154,16 +156,16 @@
     }
   }
   
-  /* Focus state for the outer wrapper */
+  
   .desktop-wrapper.focused {
-    border: 1px solid rgba(100, 255, 218, 0.4);
+    border-color: rgba(100, 255, 218, 0.4);
     box-shadow: 
       0 8px 32px rgba(0, 0, 0, 0.3),
       0 0 0 1px rgba(100, 255, 218, 0.2),
       inset 0 1px 0 rgba(100, 255, 218, 0.1);
   }
   
-  .desktop-wrapper.focused::before {
+  .desktop-wrapper::before {
     content: '';
     position: absolute;
     top: 0;
@@ -171,7 +173,13 @@
     right: 0;
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(100, 255, 218, 0.3), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
     pointer-events: none;
+  }
+  
+  .desktop-wrapper.focused::before {
+    opacity: 1;
   }
   
   /* Mobile collapse */

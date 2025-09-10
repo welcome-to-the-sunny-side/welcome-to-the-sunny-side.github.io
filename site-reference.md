@@ -1,6 +1,6 @@
 # Welcome to the Sunny Side – Site Reference
 
-_Last updated: 2025-09-10_ (Navigation UX improvements: fixed duplicate loading indicators, eliminated 404 flash during page transitions, deferred MathJax typesetting until content is visible, improved terminal spinner behavior; prior: Terminal UI overhaul: modern retrocomputing design, Shift+Tab suggestion cycling, left/right cursor movement, skin-dependent scrollbars, single border)
+_Last updated: 2025-09-11_ (Terminal UX improvements: fixed 'open' command getting stuck on current page, dynamic terminal width (30% of window), responsive resizing; prior: Navigation UX improvements: fixed duplicate loading indicators, eliminated 404 flash during page transitions, deferred MathJax typesetting until content is visible, improved terminal spinner behavior; prior: Terminal UI overhaul: modern retrocomputing design, Shift+Tab suggestion cycling, left/right cursor movement, skin-dependent scrollbars, single border)
 
 ## 1 . High-level Overview
 The site is a **static, terminal-driven blog & knowledge base** built with **Astro** for static generation and **Svelte** for the interactive UI. Styling is primarily handled by **Tailwind CSS** (integrated via `@astrojs/tailwind`), utilizing its utility classes and the `@tailwindcss/typography` plugin for Markdown rendering. All human-readable content lives in Markdown files under `src/content` and is presented at URLs that end in `.html`. Additionally, the site now supports rendering of HTML files, allowing for more diverse content presentation. A new Games section has also been added, providing a dedicated space for browser-game adjacent pages.
@@ -170,6 +170,8 @@ For GitHub Pages, push the `dist/` output (or let an action deploy).
 | Raw TeX ($$...$$) shows briefly during navigation | MathJax typesetting was running on hidden content during page transitions. `ContentPane.svelte` now defers MathJax typesetting using a `pendingTypeset` flag until the new content is actually visible in the DOM (after `isLoading` completes and `displayPath` updates). |
 | Duplicate "Loading..." lines in terminal during navigation | Fixed by making the loading spinner render in-place on the current prompt line using `\r\x1b[2K` (carriage return + clear line) instead of creating new lines. The spinner updates on the same line and clears properly on completion. |
 | Multiple empty prompts after navigation commands | Terminal `exec()` function now returns a boolean indicating navigation occurred. When navigation is triggered (`open`, `pop`), the immediate prompt is suppressed and the loading spinner subscription handles printing the success message and new prompt after completion. |
+| Terminal gets stuck when using `open` on current page | Fixed by checking if the requested file path matches the current path. If they match, the terminal shows "Already viewing: [filename]" instead of attempting navigation. This prevents the terminal from getting stuck in a loading state when trying to navigate to the current page. |
+| Terminal width is fixed and doesn't adapt to window size | Terminal now dynamically resizes to 30% of window width on desktop (with min/max bounds of 320px-600px). The `terminalWidth` variable is updated on window resize and applied via inline style. Terminal content automatically reflows to fit the new dimensions. |
 
 ---
 

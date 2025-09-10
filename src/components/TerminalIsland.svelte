@@ -36,6 +36,7 @@ let loadingSpinnerInterval: number | null = null;
 const spinnerFrames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
 let spinnerFrame = 0;
 let unsubLoading: (() => void) | null = null;
+let hasShownInitialBanner = false;
 
 // --- Date helpers ---
 // All dates are precomputed at build time and provided as epoch millis.
@@ -117,6 +118,7 @@ function stopLoadingSpinner(promptFn?: () => void) {
   if (termInstance) {
     termInstance.write('\r\x1b[K'); // Clear current line
     termInstance.write(`${FILE_COLOR}✓ Page loaded successfully\x1b[0m\r\n`);
+    termInstance.write('\r\n'); // extra newline as requested
     // Call prompt function if provided
     if (promptFn) {
       promptFn();
@@ -676,19 +678,23 @@ onMount(async () => {
     }
   });
 
-  // Set up loading state subscription now that prompt function is available
+  // Initial banner and prompt
+  term.writeln('Type help for command list.');
+  term.writeln('');
+  prompt();
+  hasShownInitialBanner = true;
+
+  // Set up loading state subscription now that initial banner is shown
   unsubLoading = currentPath.loading.subscribe((loading) => {
     isLoading = loading;
     if (loading) {
       startLoadingSpinner();
     } else {
+      // Avoid printing the ack before we've shown the initial banner
+      if (!hasShownInitialBanner) return;
       stopLoadingSpinner(prompt);
     }
   });
-
-  // Initial prompt
-  term.writeln('Type help for command list.');
-  prompt();
   
 });
 

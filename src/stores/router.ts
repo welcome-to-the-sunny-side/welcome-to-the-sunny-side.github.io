@@ -16,6 +16,9 @@ function createRouter() {
 
   const initialStorePath = getResolvedPath(initialBrowserPath);
   const { subscribe, set } = writable<string>(initialStorePath);
+  
+  // Loading state store
+  const { subscribe: subscribeLoading, set: setLoading } = writable<boolean>(false);
 
   if (typeof window !== 'undefined' && initialBrowserPath === '/' && initialStorePath === '/home.html') {
     // If we landed on '/' and resolved to '/home.html', update browser URL to reflect the resolved path
@@ -25,8 +28,13 @@ function createRouter() {
   function push(path: string) {
     if (typeof window === 'undefined') return;
     if (path === window.location.pathname) return;
+    setLoading(true);
     history.pushState({}, '', path);
     set(path);
+  }
+
+  function setLoadingComplete() {
+    setLoading(false);
   }
 
   function replace(path: string) {
@@ -52,6 +60,11 @@ function createRouter() {
     subscribe,
     push,
     replace,
+    setLoadingComplete,
+    // Export loading state as separate store
+    loading: {
+      subscribe: subscribeLoading,
+    },
   };
 }
 

@@ -77,6 +77,9 @@ let frontmatter: Record<string, any> = {};
 let isBlog = false;
 let isMusings = false;
 let contentHtml: string = '';
+let previousContentHtml: string = '';
+let isLoading = false;
+let pendingTypeset = false;
 type Device = 'pc' | 'mobile';
 // Collect all home background images at build time (hashed URLs)
 const imageModules = import.meta.glob('../../public/assets/home/active/**/*.{jpg,jpeg,png,webp}', { as: 'url', eager: true });
@@ -257,6 +260,11 @@ $: skin = $currentSkin;
   }
 
   const unsub = currentPath.subscribe(async (p) => {
+    // Store previous content before loading new content
+    if (contentHtml && path !== p) {
+      previousContentHtml = contentHtml;
+      isLoading = true;
+    }
     path = p;
     await loadContent();
   });
@@ -290,6 +298,9 @@ $: skin = $currentSkin;
     const mdPath = filePath.replace(/\.html$/, '.md');
     const mdKey = '../content' + mdPath;
     const htmlKey = '../content' + filePath;
+    
+    let contentFound = false;
+    
     if (!isHome && (mdKey in pagesMd)) {
       await ensureRenderEnginesLoaded();
       await ensureMathJaxLoaded();
@@ -304,7 +315,13 @@ $: skin = $currentSkin;
       contentHtml = md.render(placeholderText);
       contentHtml = restore(contentHtml);
       await tick();
-      await typesetMath();
+      // Defer typesetting if we're in loading mode (page not yet swapped in DOM)
+      if (isLoading) {
+        pendingTypeset = true;
+      } else {
+        await typesetMath();
+      }
+      contentFound = true;
     } else if (htmlKey in pagesHtml) {
       // Raw HTML file – execute as-is
       contentRaw = (await (pagesHtml as any)[htmlKey]()) as string;
@@ -326,22 +343,46 @@ $: skin = $currentSkin;
       }
       if (!isHome) {
         await ensureMathJaxLoaded();
+        if (isLoading) {
+          pendingTypeset = true;
+        } else {
+          await typesetMath();
+        }
+      }
+      contentFound = true;
+    } else {
+      // Only show 404 if we're not loading (to prevent flash)
+      if (!isLoading) {
+        await ensureRenderEnginesLoaded();
+        await ensureMathJaxLoaded();
+        contentRaw = `# 404\nPath not found: ${path}`;
+        frontmatter = {};
+        isBlog = false;
+        isMusings = false;
+        
+        const { placeholderText, restore } = protectMathSegments(contentRaw);
+        contentHtml = md.render(placeholderText);
+        contentHtml = restore(contentHtml);
+        await tick();
         await typesetMath();
       }
-    } else {
-      await ensureRenderEnginesLoaded();
-      await ensureMathJaxLoaded();
-      contentRaw = `# 404\nPath not found: ${path}`;
-      frontmatter = {};
-      isBlog = false;
-      isMusings = false;
-      
-      const { placeholderText, restore } = protectMathSegments(contentRaw);
-      contentHtml = md.render(placeholderText);
-      contentHtml = restore(contentHtml);
-      await tick();
-      await typesetMath();
+      contentFound = false;
     }
+    
+    // Mark loading as complete and notify router
+    if (isLoading) {
+      isLoading = false;
+      previousContentHtml = '';
+      currentPath.setLoadingComplete();
+      // Now that the new content is visible, typeset math if needed
+      if (pendingTypeset) {
+        await tick();
+        try { await typesetMath(); } catch {}
+        pendingTypeset = false;
+      }
+    }
+    
+    return contentFound;
   }
 
   // Wait for MathJax to be ready and typeset the page content.
@@ -384,7 +425,7 @@ $: skin = $currentSkin;
       {/if}
     </header>
     <article class={`${skin.classes.contentPane} max-w-none`}>
-      {@html contentHtml}
+      {@html isLoading && previousContentHtml ? previousContentHtml : contentHtml}
     </article>
   </section>
 {:else}
@@ -401,7 +442,7 @@ $: skin = $currentSkin;
     </div>
   {:else}
     <div bind:this={htmlContainer} id="content-html-container" class={`${skin.classes.contentPane} p-4 max-w-none bg-surface text-text transition-colors duration-150 ease-retro`}>
-      {@html contentHtml}
+      {@html isLoading && previousContentHtml ? previousContentHtml : contentHtml}
     </div>
   {/if}
 {/if}

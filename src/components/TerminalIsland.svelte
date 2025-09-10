@@ -1,5 +1,5 @@
 <script lang="ts">
-import { onMount } from 'svelte';
+import { onMount, onDestroy } from 'svelte';
 import { currentPath } from '../stores/router';
 import { list, isFile, isDir, resolvePath } from '../lib/virtualFs';
 import { listSkins, wearSkin } from '../stores/skin';
@@ -29,6 +29,13 @@ export function resizeTerminal() {
 
 // --- Date index (prebuilt at build-time) ---
 let DATE_INDEX: Record<string, number> = {};
+
+// --- Loading state ---
+let isLoading = false;
+let loadingSpinnerInterval: number | null = null;
+const spinnerFrames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+let spinnerFrame = 0;
+let unsubLoading: (() => void) | null = null;
 
 // --- Date helpers ---
 // All dates are precomputed at build time and provided as epoch millis.
@@ -85,8 +92,41 @@ function sortNamesByDate(dirPath: string, names: string[], mode: 'asc' | 'desc')
 
 // No getRaw/RAW_FILES anymore – dates come from DATE_INDEX
 
+function startLoadingSpinner() {
+  if (loadingSpinnerInterval || !termInstance) return; // Already running or no terminal
+  
+  // Draw spinner on the current prompt line (do not add a new line)
+  // Clear the current line, then render the spinner+label
+  termInstance.write('\r\x1b[2K');
+  termInstance.write(`${spinnerFrames[0]} Loading...`);
+  
+  loadingSpinnerInterval = setInterval(() => {
+    spinnerFrame = (spinnerFrame + 1) % spinnerFrames.length;
+    // Update spinner in-place on the same line
+    termInstance?.write(`\r\x1b[2K${spinnerFrames[spinnerFrame]} Loading...`);
+  }, 100) as any;
+}
+
+function stopLoadingSpinner(promptFn?: () => void) {
+  if (loadingSpinnerInterval) {
+    clearInterval(loadingSpinnerInterval);
+    loadingSpinnerInterval = null;
+  }
+  
+  // Clear the loading line and show success message
+  if (termInstance) {
+    termInstance.write('\r\x1b[K'); // Clear current line
+    termInstance.write(`${FILE_COLOR}✓ Page loaded successfully\x1b[0m\r\n`);
+    // Call prompt function if provided
+    if (promptFn) {
+      promptFn();
+    }
+  }
+}
+
 onMount(async () => {
   isFocused = true; // Ensure border is active on mount
+  
   // Preload date index
   try {
     const res = await fetch('/vfs-date-index.json', { cache: 'force-cache' });
@@ -510,6 +550,9 @@ onMount(async () => {
 
   let escSeq = '';
   const writeChar = (data: string) => {
+    // Disable input during loading
+    if (isLoading) return;
+    
     for (const char of data) {
       const code = char.charCodeAt(0);
       // Handle ESC sequence for arrow keys (\x1b[C and \x1b[D)
@@ -581,6 +624,12 @@ onMount(async () => {
 
   // Handle arrow keys for cycling completions using onKey
   term.onKey(({ key, domEvent }) => {
+    // Disable keyboard input during loading
+    if (isLoading) {
+      domEvent.preventDefault();
+      return;
+    }
+    
     // History navigation (Up/Down) when at prompt
     if (domEvent.key === 'ArrowUp' || domEvent.key === 'ArrowDown') {
       domEvent.preventDefault();
@@ -627,9 +676,29 @@ onMount(async () => {
     }
   });
 
+  // Set up loading state subscription now that prompt function is available
+  unsubLoading = currentPath.loading.subscribe((loading) => {
+    isLoading = loading;
+    if (loading) {
+      startLoadingSpinner();
+    } else {
+      stopLoadingSpinner(prompt);
+    }
+  });
+
   // Initial prompt
   term.writeln('Type help for command list.');
   prompt();
+  
+});
+
+onDestroy(() => {
+  if (unsubLoading) {
+    unsubLoading();
+  }
+  if (loadingSpinnerInterval) {
+    clearInterval(loadingSpinnerInterval);
+  }
 });
 </script>
 

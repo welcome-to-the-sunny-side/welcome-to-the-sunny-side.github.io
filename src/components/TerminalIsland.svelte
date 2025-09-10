@@ -1,5 +1,6 @@
 <script lang="ts">
 import { onMount, onDestroy } from 'svelte';
+import { get } from 'svelte/store';
 import { currentPath } from '../stores/router';
 import { list, isFile, isDir, resolvePath } from '../lib/virtualFs';
 import { listSkins, wearSkin } from '../stores/skin';
@@ -317,6 +318,15 @@ onMount(async () => {
         const pathArr = resolvePath(cwd, file);
         if (pathArr && isFile('/' + pathArr.join('/'))) {
           const fullPath = '/' + pathArr.join('/');
+          
+          // Check if we're already on this path
+          const currentPathValue = get(currentPath);
+          
+          if (currentPathValue === fullPath) {
+            term.writeln(`Already viewing: ${file}`);
+            return false; // no navigation needed
+          }
+          
           history.push(fullPath);
           currentPath.push(fullPath);
           return true; // navigation triggered
@@ -401,6 +411,7 @@ onMount(async () => {
         term.write('\r');
         return false;
     }
+    return false; // fallback return for TypeScript
   }
 
   // Helper to clear ghost suggestion (erase to end of line)

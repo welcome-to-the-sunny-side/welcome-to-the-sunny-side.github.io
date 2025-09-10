@@ -41,10 +41,20 @@
   let isMobile = false;
   // Track focus state from TerminalIsland
   let isFocused = false;
+  // Dynamic terminal width (30% of window width)
+  let terminalWidth = 480; // default fallback
   
   onMount(() => {
     const checkMobile = () => {
       isMobile = window.innerWidth < 768; // Match Tailwind's md breakpoint
+      // Update terminal width to 30% of window width on desktop
+      if (!isMobile) {
+        terminalWidth = Math.max(320, Math.min(600, window.innerWidth * 0.3));
+        // Resize terminal after width change
+        setTimeout(() => {
+          islandComp?.resizeTerminal();
+        }, 100);
+      }
     };
 
     const handleKey = (e: KeyboardEvent) => {
@@ -146,11 +156,8 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
-  /* Desktop (md+) specific widths */
+  /* Desktop (md+) specific widths - removed fixed width, now using dynamic width */
   @media (min-width: 768px) {
-    .desktop-wrapper {
-      width: 480px;
-    }
     .desktop-collapsed {
       width: 32px !important;
     }
@@ -285,6 +292,7 @@
 <div class="h-full flex flex-col desktop-wrapper"
      class:desktop-collapsed={!isMobile && isCollapsed}
      class:focused={isFocused}
+     style={!isMobile ? `width: ${terminalWidth}px` : ''}
 >
   <!-- Header bar only visible on small screens -->
   <div class="md:hidden flex items-center justify-between px-4 py-3 mobile-header">

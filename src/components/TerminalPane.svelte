@@ -39,6 +39,8 @@
   let islandComp: any;
   // Determine if we're in mobile view based on window width
   let isMobile = false;
+  // Track focus state from TerminalIsland
+  let isFocused = false;
   
   onMount(() => {
     const checkMobile = () => {
@@ -152,6 +154,26 @@
     }
   }
   
+  /* Focus state for the outer wrapper */
+  .desktop-wrapper.focused {
+    border: 1px solid rgba(100, 255, 218, 0.4);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(100, 255, 218, 0.2),
+      inset 0 1px 0 rgba(100, 255, 218, 0.1);
+  }
+  
+  .desktop-wrapper.focused::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(100, 255, 218, 0.3), transparent);
+    pointer-events: none;
+  }
+  
   /* Mobile collapse */
   .mobile-collapsed {
     max-height: 0;
@@ -200,7 +222,6 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    padding: 8px;
   }
   
   /* Hide terminal contents when collapsed on desktop */
@@ -255,6 +276,7 @@
 <!-- Wrapper adapts layout via Tailwind breakpoints -->
 <div class="h-full flex flex-col desktop-wrapper"
      class:desktop-collapsed={!isMobile && isCollapsed}
+     class:focused={isFocused}
 >
   <!-- Header bar only visible on small screens -->
   <div class="md:hidden flex items-center justify-between px-4 py-3 mobile-header">
@@ -291,7 +313,7 @@
   <!-- Terminal body: hidden on mobile when collapsed -->
   <div class="flex-1 overflow-hidden">
     <div class="terminal-content body" class:mobile-collapsed={isMobile && isCollapsed}>
-      <TerminalIsland bind:this={islandComp} />
+      <TerminalIsland bind:this={islandComp} bind:isFocused />
     </div>
   </div>
 </div>

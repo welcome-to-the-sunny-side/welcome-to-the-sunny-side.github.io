@@ -13,7 +13,7 @@ import 'xterm/css/xterm.css';
 
 let container: HTMLDivElement;
 // reactive focus state for border highlight
-let isFocused = true;
+export let isFocused = true;
 // Expose terminal instance for external focus control
 let termInstance: any;
 let fitAddon: any; // store FitAddon instance for external resizing
@@ -637,42 +637,12 @@ onMount(async () => {
   .terminal-shell {
     width: 100%;
     height: 100%;
-    border: 1px solid rgba(100, 255, 218, 0.15);
-    border-radius: 8px;
-    background: linear-gradient(135deg, #0a0a0a 0%, #0d0d0d 100%);
-    box-shadow: 
-      0 4px 20px rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(100, 255, 218, 0.1),
-      inset 0 0 20px rgba(0, 0, 0, 0.3);
+    background: transparent;
     overflow: hidden;
     position: relative;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 8px;
   }
   
-  .terminal-shell::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(100, 255, 218, 0.3), transparent);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none; /* do not interfere with text selection */
-  }
-  
-  .terminal-shell.focused {
-    border-color: rgba(100, 255, 218, 0.4);
-    box-shadow: 
-      0 4px 25px rgba(0, 0, 0, 0.5),
-      inset 0 1px 0 rgba(100, 255, 218, 0.15),
-      inset 0 0 20px rgba(0, 0, 0, 0.3);
-  }
-  
-  .terminal-shell.focused::before {
-    opacity: 1;
-  }
   
   /* Modern scrollbar */
   :global(.terminal-shell .xterm-viewport::-webkit-scrollbar) {

@@ -76,7 +76,7 @@ What if $(x, y)$ is "far away" from $A$'s current position $u$? One gets the int
 
 The intuitive hope is that deleting later leads to a longer path due to $A$ "receiving a surprise (that it was already expecting) as late as possible". The image below attempts to show the picture in my mind when at this stage on the path to the solution.
 
-<div style="text-align:center"><img src="/assets/cf-2068e/img1.png"/></div>
+<div style="text-align:center"><img src="/assets/cf-2068e/img2.png"/></div>
 
 Upon some further thought, one realizes that it's never optimal to delete some edge $(x, y)$ if it's not incident to $u$.
 

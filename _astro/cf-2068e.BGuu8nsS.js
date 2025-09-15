@@ -170,6 +170,8 @@ What's the problem with dealing with this BFS-Tree now? It's that some nodes tha
 
 However, we observe that any node $j$ that's reachable from $u$ in the BFS-DAG but doesn't lie within its subtree in the BFS-Tree is a potential $j$ (as it's going to have a path to $n$ that doesn't involve the edge $(u, v)$).
 
+Further, if some such $j$ isn't in the subtree of $u$, we only need to consider it if there exists some edge $(p, j)$ such that $p$ lies in the subtree of $u$ (as it will otherwise be strictly suboptimal).
+
 This leads to the following solution (I'm only giving a rough outline as I'm tired):
 
 - Build an euler tour on an arbitrary BFS-Tree.

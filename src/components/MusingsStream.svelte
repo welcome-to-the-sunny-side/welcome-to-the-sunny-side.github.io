@@ -1,10 +1,13 @@
 <script lang="ts">
   import { onMount, tick, onDestroy } from 'svelte';
   import MarkdownIt from 'markdown-it';
-  import hljs from 'highlight.js';
-  import scryptPkg from 'scrypt-js';
+  import hljsCore from 'highlight.js/lib/core';
+  import cpp from 'highlight.js/lib/languages/cpp';
   import { currentSkin } from '../stores/skin';
-  const { scrypt } = scryptPkg as any;
+
+  // Register only the C++ language to keep bundle size small
+  const hljs: any = hljsCore as any;
+  hljs.registerLanguage('cpp', cpp as any);
 
   type Tier = 'public' | 'master';
   type ManifestEntry = {
@@ -41,9 +44,11 @@
     html: true,
     linkify: true,
     highlight: (str: string, lang: string): string => {
-      if (lang && hljs.getLanguage(lang)) {
+      const norm = (lang || '').toLowerCase();
+      const isCpp = ['cpp', 'c++', 'cc', 'cxx', 'hpp', 'hxx'].includes(norm);
+      if (isCpp) {
         try {
-          return `<pre class="hljs"><code>${hljs.highlight(str, { language: lang }).value}</code></pre>`;
+          return `<pre class="hljs"><code>${hljs.highlight(str, { language: 'cpp' }).value}</code></pre>`;
         } catch {}
       }
       return `<pre class="hljs"><code>${md.utils.escapeHtml(str)}</code></pre>`;
@@ -228,31 +233,7 @@
     }
   }
 
-  async function decryptBlob(blob: PrivateBlob, pass: string): Promise<{ md: string }> {
-    if (!pass) throw new Error('Empty passphrase');
-    const enc = new TextEncoder();
-    const passBytes = enc.encode(pass);
-    const salt = b64ToBytes(blob.kdf.salt);
-    const dkLen = 32;
-    const derived = await scrypt(
-      passBytes,
-      salt,
-      blob.kdf.N,
-      blob.kdf.r,
-      blob.kdf.p,
-      dkLen,
-      // Provide progress callback so scrypt-js yields to the event loop, allowing UI to update
-      (_progress: number) => {}
-    );
-    const key = await crypto.subtle.importKey('raw', derived as unknown as BufferSource, { name: 'AES-GCM' } as any, false, ['decrypt']);
-    const iv = b64ToBytes(blob.iv);
-    const ct = b64ToBytes(blob.ct);
-    const ad = enc.encode(blob.ad ?? `musings:${blob.id}:v${blob.v ?? 1}`);
-    const plaintext = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv as unknown as BufferSource, additionalData: ad } as any, key, ct as unknown as BufferSource);
-    const json = new TextDecoder().decode(plaintext);
-    const obj = JSON.parse(json);
-    return { md: obj.md };
-  }
+  // Removed unused decryptBlob() and scrypt-js main-thread dependency; decryption is handled in the worker.
 
   async function unlockPost(postId: string, passphrase: string) {
     if (!passphrase.trim()) return;

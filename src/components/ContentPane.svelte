@@ -3,7 +3,7 @@
   import { tick } from 'svelte';
   import { currentSkin } from '../stores/skin';
   import { currentPath } from '../stores/router';
-  import MusingsStream from './MusingsStream.svelte';
+  // Musings is now lazy-loaded; see ensureMusingsLoaded() below
 
   // Import all markdown under src/content as raw strings
   // load all markdown as raw strings (Vite 5 syntax)
@@ -15,6 +15,10 @@ const pagesHtml = import.meta.glob('../content/**/*.html', { query: '?raw', impo
   let hljs: any = null;
   let enginesLoaded = false;
   let mathjaxLoading: Promise<void> | null = null;
+
+  // Lazy-load Musings component only when needed
+  let MusingsStreamComponent: any = null;
+  let musingsLoadPromise: Promise<any> | null = null;
 
   async function ensureRenderEnginesLoaded() {
     if (enginesLoaded) return;
@@ -71,6 +75,16 @@ const pagesHtml = import.meta.glob('../content/**/*.html', { query: '?raw', impo
     await mathjaxLoading;
   }
 
+  async function ensureMusingsLoaded() {
+    if (MusingsStreamComponent) return;
+    try {
+      const mod = await (musingsLoadPromise ??= import('./MusingsStream.svelte'));
+      MusingsStreamComponent = (mod as any).default;
+    } catch (e) {
+      console.error('Failed to load Musings component', e);
+    }
+  }
+
 let path = '/';
 let displayPath = '/';
   let contentRaw: string = '';
@@ -114,6 +128,9 @@ $: skin = $currentSkin;
     }
   }
   $: isHomeWithBackground = (displayPath === '/' || displayPath === '/home.html') && currentBackgroundImage;
+
+  // When musings mode is active, ensure its component is loaded
+  $: if (isMusings) { ensureMusingsLoaded(); }
 
   function parseFrontmatter(raw: string) {
     if (raw.startsWith('---')) {
@@ -318,6 +335,7 @@ $: skin = $currentSkin;
       frontmatter = fm;
       isBlog = frontmatter.displayMode === 'blog';
       isMusings = frontmatter.displayMode === 'musings';
+      if (isMusings) { await ensureMusingsLoaded(); }
       
       // Protect math before Markdown parsing, then restore and let MathJax typeset
       const { placeholderText, restore } = protectMathSegments(body);
@@ -442,7 +460,11 @@ $: skin = $currentSkin;
 {:else}
   {#if isMusings}
     <div class={`${skin.classes.contentPane} p-4 max-w-4xl mx-auto bg-surface text-text transition-colors duration-150 ease-retro`}>
-      <MusingsStream />
+      {#if MusingsStreamComponent}
+        <svelte:component this={MusingsStreamComponent} />
+      {:else}
+        <div class="text-text-muted text-sm">Loading…</div>
+      {/if}
     </div>
   {:else if isHomeWithBackground}
     <div 

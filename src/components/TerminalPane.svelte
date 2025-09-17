@@ -38,11 +38,15 @@
   
   let islandComp: any;
   // Determine if we're in mobile view based on window width
-  let isMobile = false;
+  // Initialize mobile detection immediately to prevent layout shift
+  let isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
   // Track focus state from TerminalIsland
   let isFocused = false;
   // Dynamic terminal width (30% of window width)
-  let terminalWidth = 480; // default fallback
+  // Calculate initial width immediately to prevent layout shift
+  let terminalWidth = typeof window !== 'undefined' 
+    ? Math.max(320, Math.min(600, window.innerWidth * 0.3))
+    : 480; // SSR fallback
   
   onMount(() => {
     const checkMobile = () => {

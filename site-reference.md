@@ -172,6 +172,7 @@ For GitHub Pages, push the `dist/` output (or let an action deploy).
 | Multiple empty prompts after navigation commands | Terminal `exec()` function now returns a boolean indicating navigation occurred. When navigation is triggered (`open`, `pop`), the immediate prompt is suppressed and the loading spinner subscription handles printing the success message and new prompt after completion. |
 | Terminal gets stuck when using `open` on current page | Fixed by checking if the requested file path matches the current path. If they match, the terminal shows "Already viewing: [filename]" instead of attempting navigation. This prevents the terminal from getting stuck in a loading state when trying to navigate to the current page. |
 | Terminal width is fixed and doesn't adapt to window size | Terminal now dynamically resizes to 30% of window width on desktop (with min/max bounds of 320px-600px). The `terminalWidth` variable is updated on window resize and applied via inline style. Terminal content automatically reflows to fit the new dimensions. |
+| Initial load downloads a very large `ContentPane.*.js` | Likely because `MusingsStream.svelte` was statically imported by `ContentPane.svelte`, which bundled heavy deps (full `highlight.js`, `scrypt-js`) into the first paint. Fix: lazy-load Musings with a dynamic import in `ContentPane.svelte` and render via `<svelte:component>`. Also ensure `MusingsStream.svelte` uses `highlight.js/lib/core` with only C++ registered, and that `scrypt-js` is only referenced inside the web worker (`src/lib/musingsWorker.ts`), not on the main thread. |
 
 ---
 
@@ -344,5 +345,27 @@ The Musings component implements **lazy loading** to improve initial page load p
   - `infiniteSentinel()`: re-triggers for pagination as user scrolls
 
 This reduces initial network requests from (1 manifest + N blobs) to just the manifest, with subsequent requests triggered by scroll position. Performance improvement is most noticeable with large post archives.
+
+---
+
+## 14 . Bundle Size & Code-Splitting (2025-09-17)
+
+Large initial `ContentPane.*.js` chunks were traced to the Musings feature being statically imported by `ContentPane.svelte`, which pulled heavy libraries into the first paint.
+
+What changed:
+
+* **Lazy-load Musings component**
+  * `ContentPane.svelte` now loads `./MusingsStream.svelte` on demand using a dynamic import inside `ensureMusingsLoaded()` and renders it with `<svelte:component this={MusingsStreamComponent} />` only when `displayMode: musings`.
+* **Trim Highlight.js in Musings**
+  * Switched to `highlight.js/lib/core` and registered only the C++ language (aliases supported: `cpp`, `c++`, `cc`, `cxx`, `hpp`, `hxx`).
+  * Non-C++ code blocks are safely escaped (no generic auto-detect to avoid bundling languages).
+* **Keep scrypt on the worker only**
+  * Removed the main-thread `scrypt-js` import from `src/components/MusingsStream.svelte`.
+  * Decryption continues exclusively in `src/lib/musingsWorker.ts` (scrypt → AES-256-GCM) to keep UI responsive and the main bundle small.
+
+Outcome:
+
+* Initial `ContentPane.*.js` size is significantly smaller on first visit (home/blog pages).
+* Musings code loads as a separate async chunk only when visiting pages with `displayMode: musings` (e.g., `/void.html`).
 
 Enjoy hacking on _Welcome to the Sunny Side_!

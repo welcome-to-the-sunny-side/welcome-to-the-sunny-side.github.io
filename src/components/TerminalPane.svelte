@@ -42,23 +42,16 @@
   let isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
   // Track focus state from TerminalIsland
   let isFocused = false;
-  // Dynamic terminal width (30% of window width)
-  // Calculate initial width immediately to prevent layout shift
-  let terminalWidth = typeof window !== 'undefined' 
-    ? Math.max(320, Math.min(600, window.innerWidth * 0.3))
-    : 480; // SSR fallback
+  // Desktop width is now driven purely by CSS (width: clamp(320px, 30vw, 600px))
+  // to avoid SSR/hydration mismatches and initial flicker.
   
   onMount(() => {
     const checkMobile = () => {
       isMobile = window.innerWidth < 768; // Match Tailwind's md breakpoint
-      // Update terminal width to 30% of window width on desktop
-      if (!isMobile) {
-        terminalWidth = Math.max(320, Math.min(600, window.innerWidth * 0.3));
-        // Resize terminal after width change
-        setTimeout(() => {
-          islandComp?.resizeTerminal();
-        }, 100);
-      }
+      // Trigger a fit after potential breakpoint/size changes; width is CSS-driven.
+      setTimeout(() => {
+        islandComp?.resizeTerminal();
+      }, 100);
     };
 
     const handleKey = (e: KeyboardEvent) => {
@@ -162,6 +155,10 @@
   
   /* Desktop (md+) specific widths - removed fixed width, now using dynamic width */
   @media (min-width: 768px) {
+    .desktop-wrapper {
+      /* Drive desktop width purely via CSS to avoid SSR/CSR mismatch */
+      width: clamp(320px, 30vw, 600px);
+    }
     .desktop-collapsed {
       width: 32px !important;
     }
@@ -296,7 +293,6 @@
 <div class="h-full flex flex-col desktop-wrapper"
      class:desktop-collapsed={!isMobile && isCollapsed}
      class:focused={isFocused}
-     style={!isMobile ? `width: ${terminalWidth}px` : ''}
 >
   <!-- Header bar only visible on small screens -->
   <div class="md:hidden flex items-center justify-between px-4 py-3 mobile-header">

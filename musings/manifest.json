@@ -4,8 +4,8 @@
     "ts": "2025-09-20T14:46:44Z",
     "tier": "public",
     "path": "data/2025-09-20-1644.json",
-    "size": 1605,
-    "hash": "ccd51d44c8b520f8128b519a1e4123e102a799d8e7585a1fdda62456483e07af"
+    "size": 1607,
+    "hash": "1773f0a787fa50e280a7feeab6610146d66a70031bd92ca36a377c80d57517b7"
   },
   {
     "id": "2025-09-20-0409",
@@ -24,6 +24,14 @@
     "hash": "1db96089743e37714e8bd21e8d89e0af49c874849285c84ea698413c8e527180"
   },
   {
+    "id": "2025-09-21-0528",
+    "ts": "2025-09-19T23:58:44Z",
+    "tier": "public",
+    "path": "data/2025-09-21-0528.json",
+    "size": 90,
+    "hash": "6c1f3f44255c61ab4459c6d62bf5244d734734a69899ef0a0ba5afe0a0565ab3"
+  },
+  {
     "id": "2025-09-17-2235",
     "ts": "2025-09-17T17:05:00Z",
     "tier": "public",
@@ -37,7 +45,7 @@
     "tier": "master",
     "path": "data/2025-09-17-0206.json",
     "size": 944,
-    "hash": "d5696773cb17397bd71a73097dd5564715267d57f087db53a11f131184ff01d9"
+    "hash": "415d6080ec168fdc1aef9aeeec288b93a91d749dd893ac6220f4583c5db2c8a6"
   },
   {
     "id": "2025-09-16-0229",
@@ -45,7 +53,7 @@
     "tier": "master",
     "path": "data/2025-09-16-0229.json",
     "size": 324,
-    "hash": "c7d5de9ebba8a8a72716283186d2e9475861714731ff37104abf4736750d07ad"
+    "hash": "8d8a2343df93e7463a52a1b0ab2c59eb57cf1b31d9548b86921032b94b7c5413"
   },
   {
     "id": "2025-08-31-0440",
@@ -85,7 +93,7 @@
     "tier": "master",
     "path": "data/2025-08-25-1413.json",
     "size": 484,
-    "hash": "a967406d1900ce3d496573de50c4f56f1cf98d80ed9072a9d4d46b38ff53cd91"
+    "hash": "ee952414d77b8c40ccedaceef240d6d82173e011574ebd32cb1028829a995abb"
   },
   {
     "id": "second",
@@ -93,7 +101,7 @@
     "tier": "master",
     "path": "data/second.json",
     "size": 314,
-    "hash": "0c11e7e4aeabcb561dcff7d05981796134ea1006dacdf1b41bc7719b1ab9e479"
+    "hash": "73f9628ad14e53ee49f7a278da6cd2c412b8ef69f2263cdeae4074acf9cc582f"
   },
   {
     "id": "first",

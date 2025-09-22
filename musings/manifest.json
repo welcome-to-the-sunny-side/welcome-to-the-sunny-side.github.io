@@ -1,19 +1,27 @@
 [
   {
+    "id": "2025-09-22-1530",
+    "ts": "2025-09-22T10:00:00Z",
+    "tier": "public",
+    "path": "data/2025-09-22-1530.json",
+    "size": 286,
+    "hash": "a2b477833d21a1aebdcc0187c6e006d96a6e1bc73b756cc76ad560989087276b"
+  },
+  {
+    "id": "2025-09-21-0528",
+    "ts": "2025-09-20T23:58:44Z",
+    "tier": "public",
+    "path": "data/2025-09-21-0528.json",
+    "size": 90,
+    "hash": "62a72375f6153dd5ae87b69627e248a71c2607c2be775b22aff91b11253e9075"
+  },
+  {
     "id": "2025-09-20-1644",
     "ts": "2025-09-20T11:14:00Z",
     "tier": "public",
     "path": "data/2025-09-20-1644.json",
     "size": 1607,
     "hash": "320e6a1c805e545e117578b9c9cd86c153e25113bd955453dec2eb2577a79858"
-  },
-  {
-    "id": "2025-09-21-0528",
-    "ts": "2025-09-19T23:58:44Z",
-    "tier": "public",
-    "path": "data/2025-09-21-0528.json",
-    "size": 90,
-    "hash": "6c1f3f44255c61ab4459c6d62bf5244d734734a69899ef0a0ba5afe0a0565ab3"
   },
   {
     "id": "2025-09-20-0409",
@@ -45,7 +53,7 @@
     "tier": "master",
     "path": "data/2025-09-17-0206.json",
     "size": 944,
-    "hash": "4047666324c0bdeacb50e10186b222deff61cd9777396eaac703fdd4acf4c24f"
+    "hash": "0db9d97eaae01e191b71ac75343637c3c9546cf0fe39c91f54d18c2f90115383"
   },
   {
     "id": "2025-09-16-0229",
@@ -53,7 +61,7 @@
     "tier": "master",
     "path": "data/2025-09-16-0229.json",
     "size": 324,
-    "hash": "a6df2564bacc48b97cfe127f7a8ab445d230fd814209339b566cc3544bdb24f8"
+    "hash": "a37d1a314400e89e369fe3aadab1d714e2770007df9dfcf5dcb72d35dab4912f"
   },
   {
     "id": "2025-08-31-0440",
@@ -93,7 +101,7 @@
     "tier": "master",
     "path": "data/2025-08-25-1413.json",
     "size": 484,
-    "hash": "0c754a8403f1251daa58304fa8b981582488009bcba628a6747fd051d4a07f63"
+    "hash": "99b81573dff98d33e2ae2cf8da6798cc000862819e647e5492b260052fbe79bd"
   },
   {
     "id": "second",
@@ -101,7 +109,7 @@
     "tier": "master",
     "path": "data/second.json",
     "size": 314,
-    "hash": "0d9ccc0e1e753322032f8c4a3f5e69f8de96f24934b05c499d361c6e4175f85b"
+    "hash": "0e1e77b93f3888d1d09430c188c10ad73107cb6b9a6885fe993ed2f3ee0ce74a"
   },
   {
     "id": "first",

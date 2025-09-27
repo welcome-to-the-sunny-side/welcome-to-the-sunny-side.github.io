@@ -142,6 +142,6 @@ Now, the only subproblem left unsolved is finding the greatest solution <= a thr
 
 Ignoring the $\\leq a$ constraint, it's easy to see that some solution exists iff $\\text{gcd}(f, g) \\vert (s - f)$. Let $d = \\text{gcd}(f, g)$, $G = g/d, F = f/d, A = (s - f)/d$, then the solution set is defined by the arithmetic progression $(((A/F) \\bmod G) + c \\cdot G)$. Finding the greatest term less than a given threshold for an arithmetic progression is trivial, and we have therefore solved this subproblem.
 
-Our solution is finally complete and takes $O(n^3)$ time. It's slightly redundant in that $\\text{dp2}$ can be computed in $O(n^2)$ time if we store some extra values when computing $\\text{dp}$, but the latter still bottlenecks us as at $O(n^3)$.
+Our solution is finally complete and takes $O(n^3)$ time. It's slightly redundant in that $\\text{dp2}$ can be computed in $O(n^2)$ time if we store some extra values when computing $\\text{dp}$, but the latter still bottlenecks us as to $O(n^3)$.
 
 Note: the official problem also allows $f = 0$, but I've omitted its consideration here since it's tedious and trivially follows from the analysis for $f > 0$.`;export{e as default};

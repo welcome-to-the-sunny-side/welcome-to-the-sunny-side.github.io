@@ -4,7 +4,7 @@ title: CF-105633L
 date: 2025-09-27
 tags: [editorial]
 ---
-### Problem [CF-2113E](https://codeforces.com/gym/105633/problem/L)
+### Problem [CF-105633L](https://codeforces.com/gym/105633/problem/L)
 
 ### Statement
 

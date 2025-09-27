@@ -45,13 +45,13 @@ Define the subtree of $[l, r] \\in S$ to be $T(l, r) = \\{[x, y] : ([x, y] \\in 
 
 Let's say that a segment $[l, r] \\in S$ is a "root segment" if it isn't in the child-set of any segment in $S$. Define $R$ to be the set of root segments. The final score must be:
 
-$$\\sum_{[l, r] \\in S} (\\sum_{i \\in I_{[l, r]}} (a[i]) - f)$$ 
-$$= \\sum_{[l, r] \\in S} \\sum_{i \\in I_{[l, r]}} (a[i]) - \\vert S \\vert  \\cdot f$$ 
+$$\\sum_{[l, r] \\in S} (\\sum_{i \\in I_{[l, r]}} (a_i) - f)$$ 
+$$= \\sum_{[l, r] \\in S} \\sum_{i \\in I_{[l, r]}} (a_i) - \\vert S \\vert  \\cdot f$$ 
 
 Notice that any $i \\in I_{[l, r]}$ where $[l, r] \\in S$ will lie in exactly one root segment.
 
-$$\\implies \\sum_{[l, r] \\in S} \\sum_{i \\in I_{[l, r]}} (a[i]) - \\vert S \\vert  \\cdot f = \\sum_{[l, r] \\in R} \\sum_{l \\leq i \\leq r} (a[i]) - \\vert S \\vert  \\cdot f$$ 
-$$\\implies \\text{score} = \\sum_{[l, r] \\in R} \\sum_{l \\leq i \\leq r} (a[i]) - \\vert S \\vert  \\cdot f$$
+$$\\implies \\sum_{[l, r] \\in S} \\sum_{i \\in I_{[l, r]}} (a_i) - \\vert S \\vert  \\cdot f = \\sum_{[l, r] \\in R} \\sum_{l \\leq i \\leq r} (a_i) - \\vert S \\vert  \\cdot f$$ 
+$$\\implies \\text{score} = \\sum_{[l, r] \\in R} \\sum_{l \\leq i \\leq r} (a_i) - \\vert S \\vert  \\cdot f$$
 
 Let's analyse the validity condition during deletions. When deleting $I_{[l, r]}$ (where $[l, r] \\in S$), we require:
 $$(\\sum_{i \\in I_{[l, r]}} a_i )\\bmod g = f \\tag{1}$$ 
@@ -60,8 +60,8 @@ Further, we add $\\sum_{i \\in I_{[l, r]}} a_i - f$ to our score.
 
 Now, let's try and understand the relation of the second term in the expression of the final score ($ \\vert S \\vert  \\cdot f$) with $R$. We can rewrite the expression in the following way:
 
-$$\\sum_{[l, r] \\in R} \\sum_{l \\leq i \\leq r} (a[i]) - \\vert S \\vert  \\cdot f$$
-$$ = \\sum_{[l, r] \\in R} ( \\sum_{l \\leq i \\leq r} (a[i]) - f - \\vert T(l, r) \\vert \\cdot f)$$
+$$\\sum_{[l, r] \\in R} \\sum_{l \\leq i \\leq r} (a_i) - \\vert S \\vert  \\cdot f$$
+$$ = \\sum_{[l, r] \\in R} ( \\sum_{l \\leq i \\leq r} (a_i) - f - \\vert T(l, r) \\vert \\cdot f)$$
 
 Consider a root segment $[l, r]$. We have:
 

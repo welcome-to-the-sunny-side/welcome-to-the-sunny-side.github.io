@@ -132,7 +132,10 @@ onMount(async () => {
   
   // Preload date index
   try {
-    const res = await fetch('/vfs-date-index.json', { cache: 'force-cache' });
+    // In dev, bypass stale caches so new/edited content dates show up immediately.
+    const cacheMode: RequestCache = import.meta.env.DEV ? 'reload' : 'force-cache';
+    const url = import.meta.env.DEV ? `/vfs-date-index.json?ts=${Date.now()}` : '/vfs-date-index.json';
+    const res = await fetch(url, { cache: cacheMode });
     if (res.ok) {
       DATE_INDEX = await res.json();
     }

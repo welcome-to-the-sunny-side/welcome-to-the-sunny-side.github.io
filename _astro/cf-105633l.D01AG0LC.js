@@ -90,7 +90,7 @@ Let's define $p(l, r, x)$ to be true if it's possible to delete $x$ subsequences
 
 <details><summary class ="spoiler-summary">Proof</summary>
 <div class = "spoiler-content">
-Let the set of segments corresponding to the $x$ subsequences here be $S$. Then there must exist at least one root segment $[l, r] \\in S$, and $S \\setminus \\{[l, r]\\}$ is also valid, because $[l, r] \\not \\belongs T(x, y) \\forall [x, y] \\in S$.
+Let the set of segments corresponding to the $x$ subsequences here be $S$. Then there must exist at least one root segment $[l, r] \\in S$, and $S \\setminus \\{[l, r]\\}$ is also valid, because $[l, r] \\not \\in T(x, y) \\forall [x, y] \\in S$.
 </div>
 </details>
 

@@ -175,10 +175,12 @@
       const problemId = getProblemId(sub);
       const submissionId = sub.id;
       const acTime = sub.creationTimeSeconds;
+      const contestId = sub.problem.contestId || sub.contestId || 'unknown';
 
       if (!problemsMap.has(problemId)) {
         problemsMap.set(problemId, {
           id: problemId,
+          contestId: contestId,
           name: sub.problem.name,
           rating: sub.problem.rating || 'N/A',
           tags: sub.problem.tags || [],
@@ -278,7 +280,7 @@
 
   // Generate CSV
   function generateCSV() {
-    const headers = ['id', 'problem_name', 'earliest_ac_time', 'rating', 'tags', 'submission_ids'];
+    const headers = ['id', 'contestid', 'problem_name', 'earliest_ac_time', 'rating', 'tags', 'submission_ids', 'links'];
     const rows = [headers];
 
     // Sort by problem ID
@@ -294,13 +296,20 @@
     });
 
     for (const problem of sortedProblems) {
+      const submissionIds = Array.from(problem.submissionIds).sort((a, b) => b - a);
+      const links = submissionIds.map(subId =>
+        `https://codeforces.com/contest/${problem.contestId}/submission/${subId}`
+      );
+
       const row = [
         problem.id,
+        problem.contestId,
         `"${problem.name.replace(/"/g, '""')}"`, // Escape quotes in problem name
         toISO8601(problem.earliestAcTime),
         problem.rating,
         `"${problem.tags.join('; ')}"`,
-        `"${Array.from(problem.submissionIds).sort((a, b) => b - a).join('; ')}"`
+        `"${submissionIds.join('; ')}"`,
+        `"${links.join('; ')}"`
       ];
       rows.push(row);
     }

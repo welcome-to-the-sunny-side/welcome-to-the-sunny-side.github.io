@@ -90,9 +90,16 @@
 
     const handleVim = (e: KeyboardEvent) => {
       if (isMobile) return;
-      // Ignore if terminal textarea is focused
+      // Ignore if any input/textarea is focused
       const active = document.activeElement as HTMLElement | null;
-      if (active && active.classList.contains('xterm-helper-textarea')) return;
+      if (active) {
+        const tagName = active.tagName.toLowerCase();
+        // Don't intercept hjkl when user is typing in inputs, textareas, or content-editable elements
+        if (tagName === 'input' || tagName === 'textarea' || active.isContentEditable ||
+            active.classList.contains('xterm-helper-textarea')) {
+          return;
+        }
+      }
       const pane = document.querySelector('main');
       const step = 60;
       switch (e.key) {

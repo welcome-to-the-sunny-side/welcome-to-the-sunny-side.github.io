@@ -95,6 +95,7 @@ let contentHtml: string = '';
 let previousContentHtml: string = '';
 let isLoading = false;
 let pendingTypeset = false;
+let pendingScriptExec = false;
 type Device = 'pc' | 'mobile';
 // Collect all home background images at build time (hashed URLs)
 const imageModules = import.meta.glob('../../public/assets/home/active/**/*.{jpg,jpeg,png,webp}', { as: 'url', eager: true });
@@ -359,14 +360,11 @@ $: skin = $currentSkin;
       
       contentHtml = contentRaw;
       await tick();
-      // Execute inline scripts so that browser games work
-      if (typeof window !== 'undefined' && htmlContainer) {
-        htmlContainer.querySelectorAll('script').forEach((oldScript) => {
-          const newScript = document.createElement('script');
-          [...oldScript.attributes].forEach(attr => newScript.setAttribute(attr.name, attr.value));
-          newScript.textContent = oldScript.textContent;
-          oldScript.replaceWith(newScript);
-        });
+      // Defer script execution until content is visible (after isLoading = false)
+      if (isLoading) {
+        pendingScriptExec = true;
+      } else {
+        await executeScripts();
       }
       if (!isHome) {
         await ensureMathJaxLoaded();
@@ -403,7 +401,12 @@ $: skin = $currentSkin;
       // Update displayPath now that new content is ready
       displayPath = path;
       currentPath.setLoadingComplete();
-      // Now that the new content is visible, typeset math if needed
+      // Now that the new content is visible, execute pending scripts and typeset math
+      if (pendingScriptExec) {
+        await tick();
+        try { await executeScripts(); } catch {}
+        pendingScriptExec = false;
+      }
       if (pendingTypeset) {
         await tick();
         try { await typesetMath(); } catch {}
@@ -433,6 +436,21 @@ $: skin = $currentSkin;
       if (MJ?.typesetPromise) await MJ.typesetPromise();
     } catch (e) {
       console.warn('MathJax typeset failed:', e);
+    }
+  }
+
+  // Execute inline scripts in HTML content (for games and interactive pages)
+  async function executeScripts() {
+    if (typeof window === 'undefined') return;
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    const container = document.getElementById('content-html-container');
+    if (container) {
+      container.querySelectorAll('script').forEach((oldScript) => {
+        const newScript = document.createElement('script');
+        [...oldScript.attributes].forEach(attr => newScript.setAttribute(attr.name, attr.value));
+        newScript.textContent = oldScript.textContent;
+        oldScript.replaceWith(newScript);
+      });
     }
   }
 </script>

@@ -1,0 +1,36 @@
+{
+  "name": "zapping-zero",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "predev": "node tools/build-vfs-date-index.mjs",
+    "dev": "astro dev",
+    "prebuild": "node tools/build-vfs-date-index.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "serve": "astro preview --port 4321",
+    "deploy": "npm run build && gh-pages --dotfiles -d dist"
+  },
+  "dependencies": {
+    "@astrojs/svelte": "^7.1.0",
+    "@astrojs/tailwind": "^6.0.2",
+    "@xterm/addon-fit": "^0.10.0",
+    "astro": "^5.9.3",
+    "highlight.js": "^11.11.1",
+    "katex": "^0.16.22",
+    "markdown-it": "^14.1.0",
+    "markdown-it-katex": "^2.0.3",
+    "scrypt-js": "^3.0.1",
+    "svelte": "^5.34.1",
+    "typescript": "^5.8.3",
+    "xterm": "^5.3.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16",
+    "@types/highlight.js": "^9.12.4",
+    "@types/markdown-it": "^14.1.2",
+    "gh-pages": "^6.3.0",
+    "markdown-it-texmath": "^1.0.0"
+  }
+}

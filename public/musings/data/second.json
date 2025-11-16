@@ -1,0 +1,1 @@
+{"v":1,"id":"second","ts":"2025-08-24T22:02:00Z","tier":"master","kdf":{"name":"scrypt","N":32768,"r":8,"p":1,"salt":"uUb9Z38vlZ30wvlRlPkpSw=="},"alg":"AES-256-GCM","iv":"CatM8j63LrdcwvJv","ad":"musings:second:v1","ct":"NFgpbEzcR7TUPqQX0ycN7y9HSmjwmttjx7NX/hfDw7F6Ou5FSHTiNMkCwSSU9S7rXxEUbjoFmn8qWtb20Fl4i/8mod4="}

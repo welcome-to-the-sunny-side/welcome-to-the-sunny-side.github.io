@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Zetamac Arithmetic Sprint</title>
+  <meta name="wtss:date" content="2025-06-14" />
+  <!-- Chart.js for performance graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="bg-surface text-text flex flex-col items-center justify-center min-h-screen p-4">
+  <!-- Settings Panel -->
+  <section id="settings" class="w-full max-w-3xl mx-auto flex flex-col justify-center items-center min-h-[70vh] space-y-8 py-8">
+    <header class="space-y-2 w-full flex flex-col items-center">
+      <h1 class="text-3xl font-semibold text-accent">Arithmetic Sprint</h1>
+      <p class="text-sm text-text-muted">Solve as many problems as you can before the timer runs out.</p>
+    </header>
+
+    <!-- Operation Selection -->
+    <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-8">
+      <!-- Addition -->
+      <label class="flex flex-col items-center gap-4 group">
+        <input id="chk-add" type="checkbox" checked class="peer hidden" />
+        <span class="text-6xl sm:text-7xl font-mono transition peer-checked:text-accent peer-checked:drop-shadow-[0_0_18px_theme(colors.accent.DEFAULT)]">+</span>
+        <div class="text-xs text-center space-x-1">
+          (<input id="add-min1" type="number" value="2" class="w-12 text-center rounded bg-surface" />
+          to
+          <input id="add-max1" type="number" value="100" class="w-12 text-center rounded bg-surface" />)
+          +
+          (<input id="add-min2" type="number" value="2" class="w-12 text-center rounded bg-surface" />
+          to
+          <input id="add-max2" type="number" value="100" class="w-12 text-center rounded bg-surface" />)
+        </div>
+      </label>
+
+      <!-- Multiplication -->
+      <label class="flex flex-col items-center gap-4 group">
+        <input id="chk-mul" type="checkbox" checked class="peer hidden" />
+        <span class="text-6xl sm:text-7xl font-mono transition peer-checked:text-accent peer-checked:text-accent peer-checked:drop-shadow-[0_0_18px_theme(colors.accent.DEFAULT)]
+        ">×</span>
+        <div class="text-xs text-center space-x-1">
+          (<input id="mul-min1" type="number" value="2" class="w-12 text-center rounded bg-surface" />
+          to
+          <input id="mul-max1" type="number" value="12" class="w-12 text-center rounded bg-surface" />)
+          ×
+          (<input id="mul-min2" type="number" value="2" class="w-12 text-center rounded bg-surface" />
+          to
+          <input id="mul-max2" type="number" value="100" class="w-12 text-center rounded bg-surface" />)
+        </div>
+      </label>
+
+      <!-- Subtraction -->
+      <label class="flex flex-col items-center gap-2 group">
+        <input id="chk-sub" type="checkbox" checked class="peer hidden" />
+        <span title="Uses the addition ranges; problems presented in reverse." class="text-6xl sm:text-7xl font-mono transition peer-checked:text-accent peer-checked:drop-shadow-[0_0_18px_theme(colors.accent.DEFAULT)]">−</span>
+      </label>
+
+      <!-- Division -->
+      <label class="flex flex-col items-center gap-2 group">
+        <input id="chk-div" type="checkbox" checked class="peer hidden" />
+        <span title="Uses the multiplication ranges; asks for product ÷ first factor." class="text-6xl sm:text-7xl font-mono transition peer-checked:text-accent peer-checked:drop-shadow-[0_0_18px_theme(colors.accent.DEFAULT)]">÷</span>
+      </label>
+    </div>
+
+    <!-- Duration -->
+    <div>
+      <label class="font-medium flex items-center gap-2">Duration (seconds):
+        <input id="duration" type="number" min="5" max="600" value="120" class="w-24 text-center rounded bg-surface" />
+      </label>
+    </div>
+
+        <!-- Display options -->
+    <div class="flex items-center gap-6 flex-wrap text-sm">
+      <label class="flex items-center gap-2"><input id="opt-show-timer" type="checkbox" checked class="accent-accent" /> Show timer</label>
+      <label class="flex items-center gap-2"><input id="opt-show-counter" type="checkbox" checked class="accent-accent" /> Show counter</label>
+    </div>
+
+    <button id="btn-start" class="mt-4 inline-block px-6 py-3 rounded bg-accent text-bg font-semibold hover:bg-accent/90 transition">Start</button>
+  </section>
+
+  <!-- Game Panel -->
+  <section id="game" class="hidden w-full max-w-3xl mx-auto py-12 flex flex-col items-center gap-8">
+    <div id="timer" class="text-accent text-xl font-mono"></div>
+    <div id="problem" class="text-4xl font-semibold"></div>
+    <input id="answer" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" class="w-48 text-3xl text-center bg-surface rounded focus:outline-none focus:ring-2 focus:ring-accent" />
+    <div id="score" class="text-sm text-text-muted"></div>
+  </section>
+
+  <!-- Summary Panel -->
+  <section id="summary" class="hidden w-full max-w-3xl mx-auto py-12 text-center space-y-6">
+    <h2 class="text-2xl font-semibold text-accent">Time's up!</h2>
+    <p id="summary-text" class="text-lg"></p>
+    <button id="btn-restart" class="px-4 py-2 rounded bg-accent text-bg font-semibold hover:bg-accent/90 transition">Play Again</button>
+  </section>
+
+<script>
+(function () {
+  // Prevent double-initialization when navigating away and back in the SPA
+  if (window.__zetamacLoaded) return;
+  window.__zetamacLoaded = true;
+  const settingsEl = document.getElementById('settings');
+  const gameEl = document.getElementById('game');
+  const summaryEl = document.getElementById('summary');
+  const problemEl = document.getElementById('problem');
+  const answerEl = document.getElementById('answer');
+  const timerEl = document.getElementById('timer');
+  const optShowTimerEl = document.getElementById('opt-show-timer');
+  const optShowCounterEl = document.getElementById('opt-show-counter');
+  const scoreEl = document.getElementById('score');
+  const summaryText = document.getElementById('summary-text');
+
+  let opts = {};
+  const runData = [];
+  let problemStartTime = 0;
+  let currentMistakes = 0;
+  let currentType = '';
+  let duration = 120;
+  let timeLeft = 0;
+  let solved = 0;
+  let currentAnswer = 0;
+  let timerId;
+
+  // Utility
+  const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+  function nextProblem() {
+    const pool = [];
+    if (opts.add) pool.push('add');
+    if (opts.sub) pool.push('sub');
+    if (opts.mul) pool.push('mul');
+    if (opts.div) pool.push('div');
+    if (!pool.length) return;
+    currentType = pool[Math.floor(Math.random() * pool.length)];
+  const type = currentType;
+  problemStartTime = Date.now();
+  currentMistakes = 0;
+
+    let a, b, display;
+    switch (type) {
+      case 'add':
+        a = randInt(opts.addMin1, opts.addMax1);
+        b = randInt(opts.addMin2, opts.addMax2);
+        currentAnswer = a + b;
+        display = `${a} + ${b} =`;
+        break;
+      case 'sub':
+        a = randInt(opts.addMin1, opts.addMax1);
+        b = randInt(opts.addMin2, opts.addMax2);
+        if (b > a) [a, b] = [b, a]; // ensure non-negative result
+        currentAnswer = a - b;
+        display = `${a} − ${b} =`;
+        break;
+      case 'mul':
+        a = randInt(opts.mulMin1, opts.mulMax1);
+        b = randInt(opts.mulMin2, opts.mulMax2);
+        currentAnswer = a * b;
+        display = `${a} × ${b} =`;
+        break;
+      case 'div':
+      // Division is asked as (product) ÷ (first factor) = ? where answer is second factor
+      a = randInt(opts.mulMin1, opts.mulMax1); // first factor (e.g., 2‒12)
+      b = randInt(opts.mulMin2, opts.mulMax2); // second factor
+      currentAnswer = b; // ask for second factor
+      const product = a * b;
+      display = `${product} ÷ ${a} =`;
+      break;
+    }
+    problemEl.textContent = display;
+    answerEl.value = '';
+    answerEl.focus();
+  }
+
+  document.getElementById('btn-start').addEventListener('click', () => {
+    opts = {
+      add: document.getElementById('chk-add').checked,
+      sub: document.getElementById('chk-sub').checked,
+      mul: document.getElementById('chk-mul').checked,
+      div: document.getElementById('chk-div').checked,
+      addMin1: +document.getElementById('add-min1').value || 2,
+      addMax1: +document.getElementById('add-max1').value || 100,
+      addMin2: +document.getElementById('add-min2').value || 2,
+      addMax2: +document.getElementById('add-max2').value || 100,
+      mulMin1: +document.getElementById('mul-min1').value || 2,
+      mulMax1: +document.getElementById('mul-max1').value || 12,
+      mulMin2: +document.getElementById('mul-min2').value || 2,
+      mulMax2: +document.getElementById('mul-max2').value || 100,
+      showTimer: optShowTimerEl.checked,
+      showCounter: optShowCounterEl.checked,
+    };
+
+    duration = Math.min(600, Math.max(5, +document.getElementById('duration').value || 120));
+    timeLeft = duration;
+    solved = 0;
+    runData.length = 0; // clear data from previous runs
+
+    settingsEl.classList.add('hidden');
+    summaryEl.classList.add('hidden');
+    gameEl.classList.remove('hidden');
+
+    if (opts.showTimer) timerEl.textContent = timeLeft;
+    if (opts.showCounter) scoreEl.textContent = `Solved: 0`; else scoreEl.textContent = '';
+    nextProblem();
+
+    clearInterval(timerId);
+    timerId = setInterval(() => {
+      timeLeft -= 1;
+      if (opts.showTimer) timerEl.textContent = timeLeft;
+      if (timeLeft <= 0) finish();
+    }, 1000);
+  });
+
+  function finish() {
+    clearInterval(timerId);
+    gameEl.classList.add('hidden');
+    summaryEl.classList.remove('hidden');
+
+    // aggregate stats
+    const byType = {};
+    runData.forEach(d => {
+      if (!byType[d.type]) byType[d.type] = { count: 0, timeSum: 0, mistakes: 0 };
+      byType[d.type].count += 1;
+      byType[d.type].timeSum += d.time;
+      byType[d.type].mistakes += d.mistakes;
+    });
+
+    const ppm = (solved / (duration / 60)).toFixed(1);
+    const bestPPM = parseFloat(localStorage.getItem('zetamacBestPPM') || '0');
+    const newRecord = ppm > bestPPM;
+    if (newRecord) localStorage.setItem('zetamacBestPPM', ppm);
+
+    // build summary HTML (Monkeytype-inspired)
+    summaryEl.innerHTML = `
+      <div class="flex flex-col md:flex-row gap-8 w-full">
+        <div class="flex-1 text-left space-y-4">
+          <div class="text-3xl font-bold text-accent">${solved}</div>
+          <div class="text-sm">problems solved</div>
+
+          <div class="text-3xl font-bold text-accent">${duration}</div>
+          <div class="text-sm">time(s)</div>
+
+          <div class="text-3xl font-bold text-accent">${ppm}</div>
+          <div class="text-sm">speed(ppm)</div>
+        </div>
+        <div class="flex-[2]">
+          <canvas id="chart-run" class="w-full h-64"></canvas>
+          <canvas id="chart-op" class="w-full h-40 mt-6"></canvas>
+        </div>
+      </div>
+      <button id="btn-restart" class="mt-8 px-4 py-2 rounded bg-accent text-bg font-semibold hover:bg-accent/90 transition">Play Again</button>
+    `;
+
+    // chart data
+    const times = runData.map(d=>d.time);
+    const mistakes = runData.map(d=>d.mistakes);
+    const ctx = document.getElementById('chart-run');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: runData.map((_,i)=>i+1),
+        datasets: [
+          {
+            type: 'line',
+            label: 'Time (s)',
+            data: times,
+            borderColor: '#facc15',
+            backgroundColor: 'transparent',
+            yAxisID: 'y',
+            tension: 0.3,
+          },
+          {
+            type: 'bar',
+            label: 'Mistakes',
+            data: mistakes,
+            backgroundColor: 'rgba(239,68,68,0.5)',
+            yAxisID: 'y1',
+          }
+        ]
+      },
+      options: {
+        scales: {
+          y: { beginAtZero: true, ticks:{color:'#ddd'}, grid:{color:'#444'}},
+          y1: { beginAtZero: true, position:'right', ticks:{color:'#ddd'}, grid:{display:false}},
+          x: { ticks:{color:'#ddd'}, grid:{color:'#444'} }
+        },
+        plugins:{legend:{labels:{color:'#ddd'}}}
+      }
+    });
+
+    // operation bar chart
+    const opLabels = Object.keys(byType).map(t=>({add:'+ ',sub:'− ',mul:'× ',div:'÷ '}[t]||t));
+    const opTimes = opLabels.map((_,i)=>{const t=Object.keys(byType)[i];return (byType[t].timeSum/byType[t].count).toFixed(2)});
+    const opMist = opLabels.map((_,i)=>{const t=Object.keys(byType)[i];return (byType[t].mistakes/byType[t].count).toFixed(2)});
+    const ctx2 = document.getElementById('chart-op');
+    new Chart(ctx2, {
+      type: 'bar',
+      data:{
+        labels: opLabels,
+        datasets:[
+          { label:'Avg Time (s)', data: opTimes, backgroundColor:'#facc15', yAxisID:'y' },
+          { label:'Avg Mistakes', data: opMist, backgroundColor:'rgba(239,68,68,0.6)', yAxisID:'y1' }
+        ]
+      },
+      options:{
+        scales:{ y:{beginAtZero:true,ticks:{color:'#ddd'}}, y1:{beginAtZero:true, position:'right', ticks:{color:'#ddd'}, grid:{display:false}}, x:{ticks:{color:'#ddd'}}},
+        plugins:{legend:{labels:{color:'#ddd'}}}
+      }
+    });
+
+    // restart listener
+    summaryEl.querySelector('#btn-restart').addEventListener('click', ()=>{
+      settingsEl.classList.remove('hidden');
+      summaryEl.classList.add('hidden');
+    });
+  }
+
+  answerEl.addEventListener('input', () => {
+    const val = answerEl.value.trim();
+    if (val === '') return;
+    const ansStr = currentAnswer.toString();
+    if (!ansStr.startsWith(val)) {
+      currentMistakes += 1;
+    }
+    if (+val === currentAnswer) {
+      solved += 1;
+      if (opts.showCounter) scoreEl.textContent = `Solved: ${solved}`;
+      runData.push({
+        type: currentType,
+        time: (Date.now() - problemStartTime) / 1000,
+        mistakes: currentMistakes
+      });
+      nextProblem();
+    }
+  });
+
+  document.getElementById('btn-restart').addEventListener('click', () => {
+    settingsEl.classList.remove('hidden');
+    summaryEl.classList.add('hidden');
+  });
+  // global key shortcuts
+  document.addEventListener('keydown', (e)=>{
+    // determine context
+    const inGame = !gameEl.classList.contains('hidden');
+    const inSettings = !settingsEl.classList.contains('hidden');
+    const inSummary = !summaryEl.classList.contains('hidden');
+    if (e.key === 'Escape' && inGame) {
+      clearInterval(timerId);
+      gameEl.classList.add('hidden');
+      settingsEl.classList.remove('hidden');
+    } else if (e.key === 'Escape' && inSummary) {
+      summaryEl.classList.add('hidden');
+      settingsEl.classList.remove('hidden');
+    }
+    if (e.key === 'Enter') {
+      if (!settingsEl.classList.contains('hidden')) {
+        document.getElementById('btn-start').click();
+      } else if (!summaryEl.classList.contains('hidden')) {
+        summaryEl.querySelector('#btn-restart').click();
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>

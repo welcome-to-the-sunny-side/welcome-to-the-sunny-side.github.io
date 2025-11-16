@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Codeforces AC Archiver</title>
+  <meta name="wtss:date" content="2025-01-16" />
+</head>
+<body class="bg-surface text-text flex flex-col items-center justify-start min-h-screen p-4">
+
+  <!-- Input Panel -->
+  <section id="input-panel" class="w-full max-w-3xl mx-auto flex flex-col justify-center items-center min-h-[70vh] space-y-6 py-8">
+    <header class="space-y-2 w-full flex flex-col items-center">
+      <h1 class="text-3xl font-semibold text-accent">Codeforces AC Archiver</h1>
+      <p class="text-sm text-text-muted text-center">Export all accepted problems from multiple Codeforces users to CSV</p>
+    </header>
+
+    <div class="w-full space-y-4">
+      <label class="block">
+        <span class="text-sm font-medium mb-2 block">Codeforces Usernames (one per line or comma-separated):</span>
+        <textarea
+          id="usernames-input"
+          rows="6"
+          placeholder="tourist&#10;Petr&#10;Benq"
+          class="w-full px-3 py-2 bg-surface border border-text-muted/30 rounded text-text focus:outline-none focus:ring-2 focus:ring-accent resize-vertical"
+        ></textarea>
+      </label>
+
+      <div class="flex gap-3 flex-wrap">
+        <button id="btn-fetch" class="px-6 py-3 rounded bg-accent text-bg font-semibold hover:bg-accent/90 transition">
+          Fetch & Export
+        </button>
+        <button id="btn-clear-cache" class="px-6 py-3 rounded bg-surface border border-text-muted/30 text-text hover:bg-text-muted/10 transition">
+          Clear Cache
+        </button>
+      </div>
+
+      <div id="cache-indicator" class="text-xs text-text-muted"></div>
+    </div>
+  </section>
+
+  <!-- Progress Panel -->
+  <section id="progress-panel" class="hidden w-full max-w-3xl mx-auto py-12 space-y-6">
+    <h2 class="text-2xl font-semibold text-accent text-center">Processing...</h2>
+
+    <div class="space-y-3">
+      <div class="w-full bg-surface border border-text-muted/30 rounded-full h-6 overflow-hidden">
+        <div id="progress-bar" class="h-full bg-accent transition-all duration-300" style="width: 0%"></div>
+      </div>
+
+      <div id="progress-text" class="text-sm text-center text-text-muted"></div>
+
+      <div id="error-log" class="mt-4 space-y-1 text-xs text-warning max-h-48 overflow-y-auto"></div>
+    </div>
+  </section>
+
+  <!-- Results Panel -->
+  <section id="results-panel" class="hidden w-full max-w-3xl mx-auto py-12 space-y-6">
+    <h2 class="text-2xl font-semibold text-accent text-center">Export Ready!</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+      <div class="p-4 bg-surface border border-text-muted/30 rounded">
+        <div id="stat-users" class="text-2xl font-bold text-accent">0</div>
+        <div class="text-sm text-text-muted">Users</div>
+      </div>
+      <div class="p-4 bg-surface border border-text-muted/30 rounded">
+        <div id="stat-problems" class="text-2xl font-bold text-accent">0</div>
+        <div class="text-sm text-text-muted">Problems</div>
+      </div>
+      <div class="p-4 bg-surface border border-text-muted/30 rounded">
+        <div id="stat-submissions" class="text-2xl font-bold text-accent">0</div>
+        <div class="text-sm text-text-muted">Submissions</div>
+      </div>
+    </div>
+
+    <div class="flex gap-3 justify-center flex-wrap">
+      <button id="btn-download" class="px-6 py-3 rounded bg-accent text-bg font-semibold hover:bg-accent/90 transition">
+        Download CSV
+      </button>
+      <button id="btn-restart" class="px-6 py-3 rounded bg-surface border border-text-muted/30 text-text hover:bg-text-muted/10 transition">
+        Start Over
+      </button>
+    </div>
+  </section>
+
+<script>
+(function () {
+  // Prevent double-initialization when navigating in SPA
+  if (window.__cfArchiverLoaded) return;
+  window.__cfArchiverLoaded = true;
+
+  const STORAGE_KEY = 'cf-archiver-users';
+  const API_DELAY = 4000; // 4 seconds between requests
+  const MAX_RETRIES = 2;
+
+  // DOM elements
+  const inputPanel = document.getElementById('input-panel');
+  const progressPanel = document.getElementById('progress-panel');
+  const resultsPanel = document.getElementById('results-panel');
+  const usernamesInput = document.getElementById('usernames-input');
+  const cacheIndicator = document.getElementById('cache-indicator');
+  const progressBar = document.getElementById('progress-bar');
+  const progressText = document.getElementById('progress-text');
+  const errorLog = document.getElementById('error-log');
+
+  // Global state
+  let problemsMap = new Map(); // key: problemId (e.g., "1234A"), value: problem data
+  let totalSubmissions = 0;
+  let processedUsers = 0;
+
+  // Load cached usernames on init
+  function loadCache() {
+    const cached = localStorage.getItem(STORAGE_KEY);
+    if (cached) {
+      usernamesInput.value = cached;
+      cacheIndicator.textContent = '✓ Loaded from cache';
+    }
+  }
+
+  // Save usernames to cache
+  function saveCache(usernames) {
+    localStorage.setItem(STORAGE_KEY, usernames);
+  }
+
+  // Clear cache
+  document.getElementById('btn-clear-cache').addEventListener('click', () => {
+    localStorage.removeItem(STORAGE_KEY);
+    usernamesInput.value = '';
+    cacheIndicator.textContent = 'Cache cleared';
+  });
+
+  // Parse usernames from input
+  function parseUsernames(input) {
+    return input
+      .split(/[\n,]+/)
+      .map(u => u.trim())
+      .filter(u => u.length > 0);
+  }
+
+  // Sleep utility
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  // Fetch with retry logic
+  async function fetchWithRetry(url, retries = MAX_RETRIES) {
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.status === 'OK') {
+          return data.result;
+        } else if (data.status === 'FAILED') {
+          if (data.comment === 'Call limit exceeded' && attempt < retries) {
+            await sleep(API_DELAY);
+            continue;
+          }
+          throw new Error(data.comment || 'API request failed');
+        }
+      } catch (error) {
+        if (attempt === retries) {
+          throw error;
+        }
+        await sleep(1000 * (attempt + 1)); // Exponential backoff
+      }
+    }
+  }
+
+  // Fetch submissions for a user
+  async function fetchUserSubmissions(handle) {
+    const url = `https://codeforces.com/api/user.status?handle=${handle}&from=1&count=100000`;
+    return await fetchWithRetry(url);
+  }
+
+  // Convert Unix timestamp to ISO 8601
+  function toISO8601(unixTimestamp) {
+    return new Date(unixTimestamp * 1000).toISOString();
+  }
+
+  // Get problem ID
+  function getProblemId(submission) {
+    const contestId = submission.problem.contestId || submission.contestId || 'unknown';
+    const index = submission.problem.index;
+    return `${contestId}${index}`;
+  }
+
+  // Process submissions and merge into problemsMap
+  function processSubmissions(submissions) {
+    const acSubmissions = submissions.filter(s => s.verdict === 'OK');
+
+    for (const sub of acSubmissions) {
+      const problemId = getProblemId(sub);
+      const submissionId = sub.id;
+      const acTime = sub.creationTimeSeconds;
+
+      if (!problemsMap.has(problemId)) {
+        problemsMap.set(problemId, {
+          id: problemId,
+          name: sub.problem.name,
+          rating: sub.problem.rating || 'N/A',
+          tags: sub.problem.tags || [],
+          earliestAcTime: acTime,
+          submissionIds: new Set([submissionId])
+        });
+      } else {
+        const existing = problemsMap.get(problemId);
+        existing.submissionIds.add(submissionId);
+        if (acTime < existing.earliestAcTime) {
+          existing.earliestAcTime = acTime;
+        }
+      }
+    }
+
+    totalSubmissions += acSubmissions.length;
+  }
+
+  // Log error to UI
+  function logError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'text-warning';
+    errorDiv.textContent = `⚠ ${message}`;
+    errorLog.appendChild(errorDiv);
+  }
+
+  // Update progress
+  function updateProgress(current, total, message) {
+    const percentage = (current / total) * 100;
+    progressBar.style.width = `${percentage}%`;
+    progressText.textContent = message;
+  }
+
+  // Main fetch process
+  async function processFetch() {
+    const input = usernamesInput.value.trim();
+    if (!input) {
+      alert('Please enter at least one username');
+      return;
+    }
+
+    const usernames = parseUsernames(input);
+    if (usernames.length === 0) {
+      alert('No valid usernames found');
+      return;
+    }
+
+    // Save to cache
+    saveCache(input);
+
+    // Reset state
+    problemsMap.clear();
+    totalSubmissions = 0;
+    processedUsers = 0;
+    errorLog.innerHTML = '';
+
+    // Show progress panel
+    inputPanel.classList.add('hidden');
+    resultsPanel.classList.add('hidden');
+    progressPanel.classList.remove('hidden');
+
+    // Process each user
+    for (let i = 0; i < usernames.length; i++) {
+      const handle = usernames[i];
+      updateProgress(i, usernames.length, `Fetching submissions for ${handle}...`);
+
+      try {
+        const submissions = await fetchUserSubmissions(handle);
+        processSubmissions(submissions);
+        processedUsers++;
+
+        // Rate limiting: wait between requests (except after the last one)
+        if (i < usernames.length - 1) {
+          await sleep(API_DELAY);
+        }
+      } catch (error) {
+        logError(`Failed to fetch data for ${handle}: ${error.message}`);
+      }
+    }
+
+    updateProgress(usernames.length, usernames.length, 'Processing complete!');
+
+    // Show results
+    setTimeout(() => {
+      showResults(usernames.length);
+    }, 500);
+  }
+
+  // Show results panel
+  function showResults(userCount) {
+    progressPanel.classList.add('hidden');
+    resultsPanel.classList.remove('hidden');
+
+    document.getElementById('stat-users').textContent = userCount;
+    document.getElementById('stat-problems').textContent = problemsMap.size;
+    document.getElementById('stat-submissions').textContent = totalSubmissions;
+  }
+
+  // Generate CSV
+  function generateCSV() {
+    const headers = ['id', 'problem_name', 'earliest_ac_time', 'rating', 'tags', 'submission_ids'];
+    const rows = [headers];
+
+    // Sort by problem ID
+    const sortedProblems = Array.from(problemsMap.values()).sort((a, b) => {
+      // Extract numeric contest ID for better sorting
+      const aMatch = a.id.match(/^(\d+)/);
+      const bMatch = b.id.match(/^(\d+)/);
+      const aNum = aMatch ? parseInt(aMatch[1]) : 0;
+      const bNum = bMatch ? parseInt(bMatch[1]) : 0;
+
+      if (aNum !== bNum) return aNum - bNum;
+      return a.id.localeCompare(b.id);
+    });
+
+    for (const problem of sortedProblems) {
+      const row = [
+        problem.id,
+        `"${problem.name.replace(/"/g, '""')}"`, // Escape quotes in problem name
+        toISO8601(problem.earliestAcTime),
+        problem.rating,
+        `"${problem.tags.join('; ')}"`,
+        `"${Array.from(problem.submissionIds).sort((a, b) => b - a).join('; ')}"`
+      ];
+      rows.push(row);
+    }
+
+    return rows.map(row => row.join(',')).join('\n');
+  }
+
+  // Download CSV
+  function downloadCSV() {
+    const csv = generateCSV();
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `codeforces-ac-archive-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // Event listeners
+  document.getElementById('btn-fetch').addEventListener('click', processFetch);
+  document.getElementById('btn-download').addEventListener('click', downloadCSV);
+  document.getElementById('btn-restart').addEventListener('click', () => {
+    resultsPanel.classList.add('hidden');
+    inputPanel.classList.remove('hidden');
+  });
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.ctrlKey && !inputPanel.classList.contains('hidden')) {
+      processFetch();
+    }
+    if (e.key === 'Escape' && !progressPanel.classList.contains('hidden')) {
+      // Could add cancel functionality here
+    }
+  });
+
+  // Initialize
+  loadCache();
+})();
+</script>
+</body>
+</html>

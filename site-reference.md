@@ -1,6 +1,6 @@
 # Welcome to the Sunny Side – Site Reference
 
-_Last updated: 2025-09-11_ (Terminal UX improvements: fixed 'open' command getting stuck on current page, dynamic terminal width (30% of window), responsive resizing; prior: Navigation UX improvements: fixed duplicate loading indicators, eliminated 404 flash during page transitions, deferred MathJax typesetting until content is visible, improved terminal spinner behavior; prior: Terminal UI overhaul: modern retrocomputing design, Shift+Tab suggestion cycling, left/right cursor movement, skin-dependent scrollbars, single border)
+_Last updated: 2025-01-16_ (Added Codeforces AC Archiver utility tool with CSV export and code fetch modes; prior: Terminal UX improvements: fixed 'open' command getting stuck on current page, dynamic terminal width (30% of window), responsive resizing; prior: Navigation UX improvements: fixed duplicate loading indicators, eliminated 404 flash during page transitions, deferred MathJax typesetting until content is visible, improved terminal spinner behavior)
 
 ## 1 . High-level Overview
 The site is a **static, terminal-driven blog & knowledge base** built with **Astro** for static generation and **Svelte** for the interactive UI. Styling is primarily handled by **Tailwind CSS** (integrated via `@astrojs/tailwind`), utilizing its utility classes and the `@tailwindcss/typography` plugin for Markdown rendering. All human-readable content lives in Markdown files under `src/content` and is presented at URLs that end in `.html`. Additionally, the site now supports rendering of HTML files, allowing for more diverse content presentation. A new Games section has also been added, providing a dedicated space for browser-game adjacent pages.
@@ -276,14 +276,15 @@ Historically, **all authored content lived in Markdown** and was compiled into `
 * Terminal commands (`ls`, `open`) treat `.html` the same as generated pages.
 * This enables hand-crafted mini-apps or embedded widgets without a Markdown wrapper – see the new **Games** section below.
 
-## 12 . Games (`/content/games`)
-A lightweight playground for interactive HTML pages that live alongside blog posts.
+## 12 . Games & Utilities (`/content/games` & `/content/misc`)
+Interactive HTML pages that live alongside blog posts, including games and utility tools.
 
-| Game | Path | Tech | Notes |
+| Name | Path | Tech | Notes |
 |------|------|------|-------|
 | **Zetamac Arithmetic Sprint** | `/games/zetamac.html` | Vanilla JS + Tailwind + Chart.js | Timed arithmetic quiz with detailed performance graphs, high-score tracking, keyboard shortcuts. |
+| **Codeforces AC Archiver** | `/misc/cf-archiver.html` | Vanilla JS + JSZip + Web Crypto API | Dual-mode tool: (1) CSV export of AC problems from multiple users with metadata; (2) Code fetch mode downloads all AC submissions as organized ZIP archive. Features localStorage caching, CF API authentication, rate limiting (4s/request), and retry logic. |
 
-Games load inside the same Svelte `ContentPane` via the catch-all route, inheriting the dark retro theme automatically.
+These pages load inside the same Svelte `ContentPane` via the catch-all route, inheriting the active skin (dark/sunny) automatically.
 
 ---
 

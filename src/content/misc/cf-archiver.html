@@ -11,11 +11,13 @@
   <!-- Input Panel -->
   <section id="input-panel" class="w-full max-w-2xl mx-auto flex flex-col justify-center space-y-4 py-8">
     <!-- Mode Selector -->
-    <div class="w-full">
-      <select id="mode-selector" class="w-full px-3 py-2 bg-bg border border-text-muted/20 rounded text-sm text-text focus:outline-none focus:border-accent/40 font-mono">
-        <option value="csv">csv export</option>
-        <option value="code">code fetch</option>
-      </select>
+    <div class="w-full flex gap-2 p-1 bg-bg border border-text-muted/30 rounded">
+      <button id="mode-csv" class="flex-1 px-4 py-2 text-sm rounded bg-accent/10 border border-accent/30 text-accent font-mono transition">
+        csv export
+      </button>
+      <button id="mode-code" class="flex-1 px-4 py-2 text-sm rounded bg-transparent text-text-muted font-mono hover:text-text transition">
+        code fetch
+      </button>
     </div>
 
     <!-- CSV Mode Form -->
@@ -154,7 +156,8 @@
   const inputPanel = document.getElementById('input-panel');
   const progressPanel = document.getElementById('progress-panel');
   const resultsPanel = document.getElementById('results-panel');
-  const modeSelector = document.getElementById('mode-selector');
+  const modeCSVBtn = document.getElementById('mode-csv');
+  const modeCodeBtn = document.getElementById('mode-code');
   const csvForm = document.getElementById('csv-form');
   const codeForm = document.getElementById('code-form');
   const progressBar = document.getElementById('progress-bar');
@@ -169,16 +172,23 @@
   let zipData = null; // For code mode
 
   // Mode switching
-  modeSelector.addEventListener('change', (e) => {
-    currentMode = e.target.value;
-    if (currentMode === 'csv') {
+  function switchMode(mode) {
+    currentMode = mode;
+    if (mode === 'csv') {
       csvForm.classList.remove('hidden');
       codeForm.classList.add('hidden');
+      modeCSVBtn.className = 'flex-1 px-4 py-2 text-sm rounded bg-accent/10 border border-accent/30 text-accent font-mono transition';
+      modeCodeBtn.className = 'flex-1 px-4 py-2 text-sm rounded bg-transparent text-text-muted font-mono hover:text-text transition';
     } else {
       csvForm.classList.add('hidden');
       codeForm.classList.remove('hidden');
+      modeCSVBtn.className = 'flex-1 px-4 py-2 text-sm rounded bg-transparent text-text-muted font-mono hover:text-text transition';
+      modeCodeBtn.className = 'flex-1 px-4 py-2 text-sm rounded bg-accent/10 border border-accent/30 text-accent font-mono transition';
     }
-  });
+  }
+
+  modeCSVBtn.addEventListener('click', () => switchMode('csv'));
+  modeCodeBtn.addEventListener('click', () => switchMode('code'));
 
   // CSV Mode: Load/Save cache
   function loadCSVCache() {
@@ -405,7 +415,7 @@
       }, apiKey, apiSecret);
 
       const submissions = await fetchWithRetry(url);
-      const acSubmissions = submissions.filter(s => s.verdict === 'OK' && s.source);
+      const acSubmissions = submissions.filter(s => s.verdict === 'OK' && s.sourceBase64);
 
       updateProgress(1, 3, `creating zip (${acSubmissions.length} files)...`);
 
@@ -420,9 +430,19 @@
         const lang = sub.programmingLanguage;
         const ext = LANG_TO_EXT[lang] || '.cpp';
 
+        // Decode base64 source code
+        let sourceCode;
+        try {
+          const decoded = atob(sub.sourceBase64);
+          sourceCode = decodeURIComponent(escape(decoded)); // Handle UTF-8
+        } catch (e) {
+          // Fallback if UTF-8 decoding fails
+          sourceCode = atob(sub.sourceBase64);
+        }
+
         const contestFolder = cfFolder.folder(contestId.toString());
         const filename = `${problemId}_${submissionId}${ext}`;
-        contestFolder.file(filename, sub.source);
+        contestFolder.file(filename, sourceCode);
       }
 
       updateProgress(2, 3, 'generating archive...');

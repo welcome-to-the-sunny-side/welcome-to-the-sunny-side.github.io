@@ -1,0 +1,408 @@
+FILETREE:
+
+|-components
+|  |-ContentPane.astro
+|  |-ContentPane.svelte
+|  !-TerminalIsland.svelte
+|-content
+|  |-blogs
+|  |  !-algo
+|  |  |  !-treaps.md
+|  !-home.md
+|-layouts
+|  !-BaseLayout.astro
+|-lib
+|  !-virtualFs.ts
+|-pages
+|  !-index.astro
+|-stores
+|  !-router.ts
+|-styles
+|  !-global.css
+
+
+// ===== BEGIN: stores/router.ts =====
+import { writable } from 'svelte/store';
+
+/**
+ * Very lightweight client-side router.
+ * The store holds the current path (pathname only).
+ * Calling `push()` will update the browser history and the store.
+ * Browser Back/Forward buttons update the store automatically via a popstate listener.
+ */
+function createRouter() {
+  const { subscribe, set } = writable<string>(typeof window !== 'undefined' ? window.location.pathname : '/');
+
+  function push(path: string) {
+    if (typeof window === 'undefined') return;
+    if (path === window.location.pathname) return;
+    history.pushState({}, '', path);
+    set(path);
+  }
+
+  function replace(path: string) {
+    if (typeof window === 'undefined') return;
+    history.replaceState({}, '', path);
+    set(path);
+  }
+
+  // Keep store in sync with browser navigation
+  if (typeof window !== 'undefined') {
+    window.addEventListener('popstate', () => set(window.location.pathname));
+  }
+
+  return {
+    subscribe,
+    push,
+    replace,
+  };
+}
+
+export const currentPath = createRouter();
+// ===== END  : stores/router.ts =====
+
+
+// ===== BEGIN: content/home.md =====
+# Welcome Home
+
+This is the landing page of the terminal-driven site.
+
+Type `ls` to see what’s here, or `cd blogs` to explore.
+// ===== END  : content/home.md =====
+
+
+// ===== BEGIN: content/blogs/algo/treaps.md =====
+# Treaps
+
+This is a placeholder blog post about Treaps.
+
+Treap = Tree + Heap. Useful for implicit indexing, order statistics, etc.
+// ===== END  : content/blogs/algo/treaps.md =====
+
+
+// ===== BEGIN: styles/global.css =====
+@import "tailwindcss";
+// ===== END  : styles/global.css =====
+
+
+// ===== BEGIN: components/ContentPane.astro =====
+---
+export interface Props { path: string }
+const { path } = Astro.props as Props;
+---
+<div class="p-6 prose prose-invert max-w-none">
+  <h1>{path}</h1>
+  <p>Placeholder content for {path}. Markdown loading not yet wired.</p>
+</div>
+// ===== END  : components/ContentPane.astro =====
+
+
+// ===== BEGIN: components/ContentPane.svelte =====
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import { currentPath } from '../stores/router';
+  import { readable } from 'svelte/store';
+
+  // Import all markdown under src/content as raw strings
+  // load all markdown as raw strings (Vite 5 syntax)
+const pages = import.meta.glob('../content/**/*.md', { query: '?raw', import: 'default' });
+
+  let path = '/';
+  let content: string = '';
+
+  const unsub = currentPath.subscribe(async (p) => {
+    path = p;
+    await loadContent();
+  });
+
+  onMount(() => {
+    loadContent();
+    return () => unsub();
+  });
+
+  async function loadContent() {
+    // Convert "/blogs/algo/treaps.md" -> "../content/blogs/algo/treaps.md"
+    let filePath = path;
+    if (filePath === '/') filePath = '/home.md'; // default landing page
+    const key = '../content' + (filePath.endsWith('.md') ? filePath : filePath + '.md');
+    if (key in pages) {
+      content = (await (pages as any)[key]()) as string;
+    } else {
+      content = `# 404\nPath not found: ${path}`;
+    }
+  }
+</script>
+
+<div class="p-6 prose prose-invert max-w-none">
+  <pre>{@html content}</pre>
+</div>
+// ===== END  : components/ContentPane.svelte =====
+
+
+// ===== BEGIN: components/TerminalIsland.svelte =====
+<script lang="ts">
+import { onMount } from 'svelte';
+import { currentPath } from '../stores/router';
+import { list, isFile, resolvePath } from '../lib/virtualFs';
+
+let container: HTMLDivElement;
+
+onMount(async () => {
+  const { Terminal } = await import('xterm');
+  const { FitAddon } = await import('@xterm/addon-fit');
+
+  const term = new Terminal({
+    theme: { background: '#18181b', foreground: '#e4e4e7', cursor: '#ffffff' },
+    fontFamily: 'Menlo, monospace',
+    fontSize: 14,
+    cols: 80,
+    rows: 24,
+    convertEol: true,
+  });
+  const fit = new FitAddon();
+  term.loadAddon(fit);
+  term.open(container);
+  fit.fit();
+
+  let cwd: string[] = [];
+  let history: string[] = ['/'];
+  let buffer = '';
+
+  const prompt = () => {
+    term.write(`\r\n$ ${cwd.length ? cwd.join('/') + ' ' : ''}`);
+  };
+
+  function exec(command: string) {
+    if (!command) return;
+    const [cmd, ...args] = command.split(/\s+/);
+    switch (cmd) {
+      case 'ls': {
+        const entries = list('/' + cwd.join('/')) || [];
+        term.writeln(entries.join('  '));
+        break;
+      }
+      case 'cd': {
+        const target = args[0] || '/';
+        const resolved = resolvePath(cwd, target);
+        if (resolved) {
+          cwd = resolved;
+        } else {
+          term.writeln(`cd: no such directory: ${target}`);
+        }
+        break;
+      }
+      case 'visit': {
+        const file = args[0];
+        if (!file) {
+          term.writeln('visit: missing file');
+          break;
+        }
+        const pathArr = resolvePath(cwd, file);
+        if (pathArr && isFile('/' + pathArr.join('/'))) {
+          const fullPath = '/' + pathArr.join('/');
+          history.push(fullPath);
+          currentPath.push(fullPath);
+        } else {
+          term.writeln(`visit: file not found: ${file}`);
+        }
+        break;
+      }
+      case 'pop': {
+        if (history.length > 1) {
+          history.pop();
+          const last = history[history.length - 1];
+          currentPath.push(last);
+        } else {
+          term.writeln('pop: history empty');
+        }
+        break;
+      }
+      case 'help':
+        term.writeln('Commands: ls, cd <dir>, visit <file>, pop, help');
+        break;
+      default:
+        term.writeln(`unknown command: ${cmd}`);
+    }
+  }
+
+  const writeChar = (data: string) => {
+    const code = data.charCodeAt(0);
+    switch (code) {
+      case 13: { // Enter
+        term.write('\r\n');
+        exec(buffer.trim());
+        buffer = '';
+        prompt();
+        break;
+      }
+      case 127: { // Backspace
+        if (buffer.length) {
+          buffer = buffer.slice(0, -1);
+          term.write('\b \b');
+        }
+        break;
+      }
+      default:
+        buffer += data;
+        term.write(data);
+    }
+  };
+
+  term.onData(writeChar);
+
+  // Initial prompt
+  term.writeln('Type help for command list.');
+  prompt();
+});
+</script>
+
+<style>
+/* xterm css reset to make it take full space */
+.xterm, .xterm-viewport, .xterm-screen {
+  height: 100%;
+}
+/* Hide xterm measurement helper that Tailwind makes visible */
+.xterm-helpers { position:absolute; width:0; height:0; overflow:hidden; }
+.xterm-helpers span { display:none; }
+/* Hide xterm measurement helper */
+.xterm-helpers {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+.xterm-helpers span {
+  display: none;
+}
+</style>
+
+<div bind:this={container} class="h-full w-full"></div>
+// ===== END  : components/TerminalIsland.svelte =====
+
+
+// ===== BEGIN: layouts/BaseLayout.astro =====
+---
+import '../styles/global.css';
+import TerminalIsland from "../components/TerminalIsland.svelte";
+import ContentPane from "../components/ContentPane.svelte";
+import { currentPath } from "../stores/router";
+---
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-zinc-900 text-zinc-200">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Terminal-Driven Site</title>
+  </head>
+  <body class="h-full">
+    <div class="h-screen w-screen grid grid-cols-1 md:grid-cols-[1fr_minmax(320px,30%)] grid-rows-[auto_1fr] md:grid-rows-1">
+      <!-- Content -->
+      <main class="overflow-auto">
+        <ContentPane client:load />
+      </main>
+
+      <!-- Terminal -->
+      <aside class="border-t border-zinc-700 overflow-hidden md:border-t-0 md:border-l md:border-zinc-700">
+        <TerminalIsland client:load />
+      </aside>
+    </div>
+  </body>
+</html>
+// ===== END  : layouts/BaseLayout.astro =====
+
+
+// ===== BEGIN: lib/virtualFs.ts =====
+export interface FsNode {
+  name: string;
+  type: 'file' | 'dir';
+  children?: Record<string, FsNode>;
+  path: string; // full path starting with '/'
+}
+
+// Build a very small demo tree.
+export const virtualFs: FsNode = {
+  name: '/',
+  type: 'dir',
+  path: '/',
+  children: {
+    home: {
+      name: 'home',
+      type: 'dir',
+      path: '/home',
+      children: {
+        'home.md': {
+          name: 'home.md',
+          type: 'file',
+          path: '/home/home.md',
+        },
+      },
+    },
+    blogs: {
+      name: 'blogs',
+      type: 'dir',
+      path: '/blogs',
+      children: {
+        algo: {
+          name: 'algo',
+          type: 'dir',
+          path: '/blogs/algo',
+          children: {
+            'treaps.md': {
+              name: 'treaps.md',
+              type: 'file',
+              path: '/blogs/algo/treaps.md',
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+function getNode(path: string): FsNode | null {
+  const parts = path.split('/').filter(Boolean);
+  let node: FsNode = virtualFs;
+  for (const part of parts) {
+    if (!node.children || !node.children[part]) return null;
+    node = node.children[part];
+  }
+  return node;
+}
+
+export function list(path: string): string[] | null {
+  const node = getNode(path);
+  if (!node || node.type !== 'dir' || !node.children) return null;
+  return Object.keys(node.children);
+}
+
+export function isFile(path: string): boolean {
+  const node = getNode(path);
+  return !!node && node.type === 'file';
+}
+
+export function resolvePath(cwd: string[], input: string): string[] | null {
+  const parts = input === '/' ? [] : input.split('/').filter(Boolean);
+  const stack = [...cwd];
+  for (const part of parts) {
+    if (part === '..') {
+      stack.pop();
+    } else if (part !== '.') {
+      stack.push(part);
+    }
+  }
+  // Verify path exists
+  const node = getNode('/' + stack.join('/'));
+  if (!node) return null;
+  return stack;
+}
+// ===== END  : lib/virtualFs.ts =====
+
+
+// ===== BEGIN: pages/index.astro =====
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout />
+// ===== END  : pages/index.astro =====
+

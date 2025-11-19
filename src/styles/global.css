@@ -1,0 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+@import "highlight.js/styles/github-dark.css";
+@import "./custom-elements.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-bg text-text font-mono tracking-tight;
+  font-size: theme('fontSize.base');
+  /* Prevent page-level horizontal scrolling due to wide math or code */
+  overflow-x: hidden;
+}
+
+/* Content pane scrollbar styling (skin-dependent) */
+main {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: var(--scrollbar-color-firefox); /* Firefox */
+}
+
+main::-webkit-scrollbar {
+  width: 8px;
+}
+
+main::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 4px;
+}
+
+main::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+  border: var(--scrollbar-thumb-border);
+  transition: background 0.2s ease;
+}
+
+main::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+::selection {
+  background-color: theme('colors.accent');
+  color: theme('colors.bg');
+}
+
+/* Markdown tweaks – list spacing, quote color, link style */
+.prose ul li,
+.prose ol li {
+  margin-top: 0.15rem; /* tighter spacing */
+  margin-bottom: 0.15rem;
+}
+
+/* Link styling – remove bold weight and append arrow icon */
+.prose a,
+.prose-invert a {
+  font-weight: 400; /* normal */
+  text-decoration: underline;
+  text-underline-offset: 1px;
+  color: theme('colors.accent');
+  opacity: 0.8;
+  transition: opacity 0.15s;
+}
+
+.prose a:hover,
+.prose-invert a:hover {
+  opacity: 1;
+}
+
+.prose a::after,
+.prose-invert a::after {
+  color: theme('colors.accent');
+  margin-left: 0.15rem;
+  font-size: 1.1em;
+  position: relative;
+  top: -0.1em;
+  transition: transform 0.15s ease-out;
+}
+
+.prose a:hover::after,
+.prose-invert a:hover::after {
+  transform: translateY(-1px);
+}
+
+/* Override Tailwind Typography blockquote color/opacity */
+.prose blockquote,
+.prose-invert blockquote {
+  color: inherit !important;
+  opacity: 1 !important;
+}
+.prose blockquote p,
+.prose-invert blockquote p {
+  color: inherit !important;
+  opacity: 1 !important;
+}
+
+/* MathJax overflow/wrapping safeguards */
+/* Ensure inline/display math never forces the page wider than the viewport */
+mjx-container {
+  max-width: 100%;
+}
+/* For display math, allow internal horizontal scroll if a formula still exceeds width */
+mjx-container[display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+}

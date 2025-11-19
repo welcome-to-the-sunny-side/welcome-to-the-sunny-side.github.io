@@ -1,0 +1,125 @@
+/* ───────────────────────────────────────────────
+   Minimal retro-dark custom elements
+   (spoiler + theorem)
+   ─────────────────────────────────────────────── */
+
+   :root {
+    --el-accent: #3fa7ff;   /* cool blue highlight – change once if desired */
+    --el-surface: #0f0f0f;  /* matches dark background */
+    --el-text:    #d0d0d0;
+    --el-radius:  2px;
+    --el-time:    140ms ease-out;
+  }
+  
+  /* ===== SPOILER ===== */
+  
+  details.spoiler {
+    margin: 0.75rem 0;
+    font-size: 0.8125rem; /* 13px */
+  }
+  
+  details > summary.spoiler-summary {
+    list-style: none;             /* remove default caret */
+    cursor: pointer;
+    padding-left: 1rem;           /* space for custom caret */
+    color: var(--el-text);
+    transition: color var(--el-time);
+    position: relative;
+  }
+  
+  /* custom caret */
+  details > summary.spoiler-summary::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 0.45em;
+    height: 0.45em;
+    border-bottom: 2px solid var(--el-accent);
+    border-right: 2px solid var(--el-accent);
+    transform: rotate(-45deg);
+    transition: transform var(--el-time), border-color var(--el-time);
+  }
+  
+  details[open] > summary.spoiler-summary::before {
+    transform: rotate(45deg);
+  }
+  
+  /* Removed hover color change for spoilers at user request */
+  
+  .spoiler-content {
+    margin: 0.5rem 0;
+    padding: 0.5rem 0.75rem;
+    color: var(--el-text);
+    background: transparent;
+    line-height: 1.45;
+    border: 0.75px solid var(--el-text);
+    border-radius: var(--el-radius);
+    overflow-x: auto;            /* allow sideways scroll */
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* ===== THEOREM BOX ===== */
+  
+  .theorem-box {
+    margin: 0.5rem 0;
+    padding: 0.5rem 0.75rem;
+    border: 0.75px solid var(--el-text);
+    border-radius: var(--el-radius);
+    background: transparent;
+    color: var(--el-text);
+    overflow-x: auto;            /* allow sideways scroll for long LaTeX lines */
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .theorem-box p:last-child { margin-bottom: 0; }
+
+/* ===== OUTLINE LIST (file-tree style) ===== */
+ul.outline-list,
+.outline-list ul {
+  list-style: none;
+  margin: 0;
+  margin-left: 0.5rem;
+  padding-left: 0.75rem;
+  position: relative;
+}
+
+.outline-list li {
+  position: relative;
+  padding-left: 0.75rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.825rem; /* ~13px */
+  line-height: 1.4;
+  color: var(--el-text);
+}
+
+/* vertical connector */
+.outline-list li::before {
+  content: '';
+  position: absolute;
+  left: -0.5rem;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--el-text);
+  opacity: 0.4;
+}
+
+/* horizontal connector */
+.outline-list li::after {
+  content: '';
+  position: absolute;
+  left: -0.5rem;
+  top: 0.8em;
+  width: 0.5rem;
+  height: 1px;
+  background: var(--el-text);
+  opacity: 0.4;
+}
+
+/* remove vertical line for last child */
+.outline-list li:last-child::before {
+  height: 0.8em;
+}

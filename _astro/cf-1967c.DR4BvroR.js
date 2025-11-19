@@ -1,0 +1,163 @@
+const e=`---
+displayMode: blog
+title: CF-1967C
+date: 2025-09-04
+tags: [editorial]
+---
+
+This is a very easy problem but it did serve as a good way to build intuition on a couple of ideas for me.
+
+### Problem [CF-1967C](https://codeforces.com/problemset/problem/1967/C)
+
+### Statement
+
+> Let $\\operatorname{lowbit}(x)$ denote the value of the lowest binary bit of $x$, e.g.  
+$\\operatorname{lowbit}(12)=4$, $\\operatorname{lowbit}(8)=8$.
+> 
+> For an array $a$ of length $n$, define an array $s$ of length $n$ by  
+$$
+s_k \\equiv \\left(\\sum_{i = k - \\operatorname{lowbit}(k) + 1}^{k} a_i \\right) \\bmod 998244353 \\quad \\text{for all } k,
+$$  
+> and call $s$ the **Fenwick Tree** of $a$. Let’s denote it as $s = f(a)$.
+> 
+> For a positive integer $k$ and an array $a$, define $f^{k}(a)$ recursively as  
+> $$ f^{k}(a) = \\begin{cases} f(a), & \\text{if } k = 1, \\\\ f(f^{k-1}(a)), & \\text{otherwise.} \\end{cases} $$
+> 
+> You are given an array $b$ of length $n$ and a positive integer $k$.  
+> Find an array $a$ that satisfies $0 \\le a_i < 998244353$ and $f^{k}(a) = b$.  
+> 
+> It can be proved that an answer always exists. If there are multiple possible answers, you may print any of them.
+
+
+Constraints:
+
+- $1 \\leq n \\leq 2 \\cdot 10^5$
+- $1 \\leq k \\leq 10^9$
+- $0 \\le b_i < 998244353$
+
+### Solution
+
+Firstly, it's time for me to admit that I never really bothered to learn how a fenwick tree internally works, due to almost always having preferred segment trees over them (only using them as a blackbox when trying to squeeze one of my cursed $O(n \\sqrt{n} \\log{n})$ implementations into the TL). Knowing this, the reader shall excuse me for spending some time understanding what's going on with $\\operatorname{lowbit}(x)$.
+
+Let's define $\\operatorname{lsb}(x) = \\log_2 (\\operatorname{lowbit}(x))$ for convenience.
+
+So, what does the sequence $\\operatorname{lowbit}(x)$ even look like? It takes the following form:
+
+> 1 2 1 4 1 2 1 8 1 2 1 4 1 2 1 16 ...
+
+Clearly, $\\operatorname{lowbit}(x)$ is simply the greatest power of 2 that divides $x$, and any value of $\\operatorname{lowbit}(x)$, say $d$, repeats with a period of $d$ save for places where it gets "overridden" by greater values of $d$.
+
+Now, what form do the segments $[i - \\operatorname{lowbit}(i) + 1, i]$ take?
+
+<div style="text-align:center"><img src="/assets/cf-1967c/img1.png"/></div>
+
+It isn't difficult to see that this structure is essentially just half a segment tree (to be more specific, it is what we would be left with upon deleting the segment corresponding to the right child of every node).
+
+Here's an illustration that should make this clearer. The blue nodes (and their corresponding ranges) are the ones present in our structure, while the red ones aren't.
+
+<div style="text-align:center"><img src="/assets/cf-1967c/img2.png"/></div>
+
+Let's give this thing a name, we'll call it a ghost segment tree (after the red ghost nodes/segments).
+
+What are some useful properties of this structure?
+
+1. For all $i$, $\\operatorname{lowbit}(j) = \\operatorname{lowbit}(i -  \\operatorname{lowbit}(i) + j)$ for $1 \\leq j \\leq \\operatorname{lowbit}(i)$. This simplifies analysis by a great deal, as we now need to only concern ourselves with prefixes of the $\\operatorname{lowbit}(i)$ that have lengths which are some powers of two.
+2. Let's define $\\operatorname{cover}(i)$ as the set of all $j$ where $j - \\operatorname{lowbit}(j) + 1 \\leq i \\leq j$. Then $\\operatorname{lowbit}(j_1) \\neq \\operatorname{lowbit}(j_2) \\quad \\forall \\quad j_1, j_2 \\in \\operatorname{cover}(i) : j_1 \\neq j_2$.
+
+How do these properties help us? Consider the first property, it implies that no matter what $i$ we choose, the minimal "subtree" of this "ghost segment tree" that contains the segment $[i - \\operatorname{lowbit}(i) + 1, i]$ will conveniently be isomorphic to the minimal subtree over the segment $[1, \\operatorname{lowbit}(i)]$. This is extremely convenient because we now know that for any $i$, the minimal subtree containing its segment is going to be a perfect binary tree of height $\\operatorname{lsb}(i)$ (well, as perfect as it can get with half of its nodes being ghost nodes, but you get the point), and we can use properties implied from this symmetry to design efficient algorithms.
+
+Another useful property is that the leaf node corresponding to $i$ is the rightmost leaf in the minimal subtree on segment $[i - \\operatorname{lowbit}(i) + 1, i]$.
+
+For instance, let's consider finding the sum over $[i - \\operatorname{lowbit}(i) + 1, i]$ for all $i \\leq n$. Assume $n = 8$, and look at the diagram above again.
+
+A simple way to do this is the following:
+
+- We compute $x(i) = \\sum_{i - \\operatorname{lowbit}(i) + 1 \\leq j \\leq i} a_j$ in increasing order of $i$.
+- We compute $x(i)$ in the following manner:
+    - We begin at $v = $ the leaf node corresponding to $i$, with $x(i) = a_i$.
+    - Until $v \\neq r$, where $r$ is the root node of the minimal subtree containing $[i - \\operatorname{lowbit}(i) + 1, i]$:
+        - Set $v$ to the parent of $v$.
+        - Let $\\text{lc}$ be the rightmost leaf in the subtree of the left child of $v$. Add $x(\\text{lc})$ to $x(i)$. 
+
+It's easy to see that this is valid because the rightmost leaf in any subtree corresponds to a segment that covers all the leaf nodes in that subtree. This algorithm takes $O(n \\log {n})$ time, as we traverse to $v$'s parent at most $O(\\log {n})$ times for each $i$.
+
+For the sake of brevity in the coming sections, we define $C(i)$ to be the set of all $\\text{lc}$ that we touch when we run this algorithm for $i$.
+
+Let's return to the original problem and try to use some of the ideas we've consolidated. Computations ahead are modulo $998244353$ wherever applicable.
+
+Firstly, let's introduce a natural setup that's equivalent to the one in the problem:
+- We begin with some unknown sequence $a(0)$ of length $n$ at time $t = 0$.
+- At time $t$, we create a new sequence $a(t)$ (also of length $n$), which is defined in the following manner: $a(t)_i = \\sum_{i - \\operatorname{lowbit}(i) + 1 \\leq j \\leq i} a(t - 1)_j$
+- We're given $a(k)$ and asked to recover $a(0)$.
+
+Since smaller indices directionally affect larger indices, it's reasonable to try and recover the original values of the sequence in increasing order of $i$.
+
+So, what about the first element? Well its segment is $[1, 1]$ and it will therefore remain constant across all sequences, implying $a(0)_1 = a(k)_1$. More generally, $a(0)_i = a(t)_1 =  a(k)_i \\forall i : \\operatorname{lowbit}(i) = 1$.
+
+A natural question that now rears its head: What about $i$ with $\\operatorname{lowbit}(i) = 2$? These have the segment $[i - 1, i]$, and since it's guaranteed that $\\operatorname{lowbit}(i - 1) = 1$, we obtain $a(t)_i = a(0)_i + t \\cdot a(0)_{i - 1} \\implies a(0)_i = a(k)_i - k \\cdot a(0)_{i - 1}$
+
+Things start getting much more complicated if one attempts to analyse greater values of $\\operatorname{lowbit}(i)$ in this manner, and this prompts us to take a more systematic approach and actually understand what's going on here.
+
+
+Let's study $i = \\operatorname{lowbit}(i) = 8$. We assume that we've already computed all $a(0)_j : j < i$ by the time we reach $i$.
+
+<div style="text-align:center"><img src="/assets/cf-1967c/img3.png"/></div>
+
+Using previously developed intuition, we notice that $a(t)_i = \\sum_{i - \\operatorname{lowbit}(i) + 1 \\leq j \\leq i} a(t - 1)_j = a(t - 1)_i + \\sum_{j \\in C(i)} a(t)_j$. Does this even help us? There seems to be no immediately noticeable advantage but let's trudge on, keeping this in mind.
+
+Now, it's apparent that $a(t)_i$ is going to be some linear combination of $a(0)_j$ (where $j \\in [i - \\operatorname{lowbit}(i) + 1, i]$), but the coefficients in that linear combination do not reveal themselves to us so easily. Let's just define $a(t)_i$ in this manner as $\\sum_{i - \\operatorname{lowbit}(i) + 1 \\leq j \\leq i}{\\operatorname{coeff}(t, i, j) \\cdot a(0)_j}$. Trivially, $\\operatorname{coeff}(t, i, i) = 1$. 
+
+Let's consider $p = 3$, what could $\\operatorname{coeff}(t, i, p)$ possibly be? If we go back to our alternate definition, ie. $a(t)_i = a(0)_i + \\sum_{j \\in C(i)} a(t)_j$, we can see that the only $j \\in C(i)$ that's relevant to $\\operatorname{coeff}(t, i, p)$ is $4$, and if we rewrite $a(t)_4$ as $\\sum_{1 \\leq j \\leq 4}{\\operatorname{coeff}(t, 4, j) \\cdot a(0)_j}$, we realise that at every second, we add $\\operatorname{coeff}(t, 4, 3)$ to $\\operatorname{coeff} (t, 8, 3)$ (and these gains carry over into the future), so we simply have $\\operatorname{coeff}(t, 8, 3) = \\sum_{1 \\leq k \\leq t} \\operatorname{coeff}(k, 4, 3)$.
+
+What about $\\operatorname{coeff}(t, 4, 3)$? Well, if we consider $C(4)$, we realize that it's built directly from contributions by the node $3$ itself, and it turns out to be $\\operatorname{coeff}(t, 4, 3) = \\sum_{1 \\leq k \\leq t} \\operatorname{coeff}(k, 3, 3)$.
+
+There's a clear pattern being revealed here, and it takes the following form:
+
+- To find $\\operatorname{coeff}(t, i, j)$:
+    - If $j = i$, then it's trivially defined as $\\operatorname{coeff}(t, i, i) = 1$.
+    - Otherwise, start with $k = i$ and sequence $S = [i]$ and run the following algorithm until you reach $k = j$:
+        - There will be exactly one $y \\in C(k)$ such that $j \\in [y - \\operatorname{lowbit}(y) + 1, y]$, set $k = y$. Append $k$ to $S$.
+    - Now, it's not difficult to observe that for every element $k$ in $S$ except the last (which is $j$), all of its contributions to $\\operatorname{coeff}(t, k, j)$ are made solely by the next element $k_2$. To be more precise $\\operatorname{coeff}(t, k, j) = \\sum_{1 \\leq l \\leq t} \\operatorname{coeff}(l, k_2, j)$.
+    - Clearly, this process is equivalent to starting off with an identity sequence, and at every iteration, replacing the current sequence with its prefix sum sequence, $\\vert S \\vert - 1$ times. The final sequence is going to be $\\operatorname{coeff}(t, i, j)$. Since only the size of $S$ is important, let's define $S(i, j) = \\vert S \\vert - 1$. Note that $S(i, j) \\leq \\lceil \\log_2{n} \\rceil$ (actually, $S(i, j) = \\operatorname{popcount}(i - j)$ but let's not get into that). 
+- Using some combinatorics, we can derive the resultant sequence, and it's: $\\operatorname{coeff}(t, i, j) = \\frac{t(t + 1) \\dots (t + S(i, j) - 1)}{S(i, j)!}$. Since this value depends solely on $t$ and $S(i, j)$, let's define $\\operatorname{coeff2} (t, s) = \\frac{t(t + 1) \\dots (t + s - 1)}{s!}$.
+
+I understand that the iterative process that generates $S$ may feel a bit arbitrary/unmotivated, so here's a visual which shows the values of $k$ that we touch when generating $S$ for $i = 16, j = 3$:
+
+<div style="text-align:center"><img src="/assets/cf-1967c/img4.png"/></div>
+
+$\\operatorname{coeff}(t, i, j)$ depending solely on $t$ and $S(i, j)$, motivates: $$a(t)_i = \\sum_{i - \\operatorname{lowbit}(i) + 1 \\leq j \\leq i}{\\operatorname{coeff}(t, i, j) \\cdot a(0)_j} = \\sum_{c \\leq \\lceil \\log_2{n} \\rceil} (\\operatorname{coeff2}(t, c) \\cdot \\sum_{j : S(i, j) = c} a(0)_j)$$
+
+All that remains is to find an efficient way to compute $\\sum_{j : S(i, j) = c} a(0)_j$ for all $c \\leq \\lceil \\log_2{n} \\rceil$ in the relevant range (we can just precompute the $O(\\log{n})$ required values of $\\operatorname{coeff2}(t, c)$).
+
+Consider any $i$ and $j \\in [i - \\operatorname{lowbit}(i) + 1, i]$. There's a unique element $y \\in C(i)$ for which $j \\in [y - \\operatorname{lowbit}(y) + 1, y]$. It's easy to see that $S(i, j) = S(y, j) + 1$, so the contribution to $\\sum_{j : S(i, j) = c} a(0)_j$ from elements in $[y - \\operatorname{lowbit}(y) + 1, y]$ for $y \\in C(i)$ is going to be $\\sum_{j : S(y, j) = c - 1} a(0)_j$, and at long last, we have an efficient formulation for $\\sum_{j : S(i, j) = c} a(0)_j$:
+
+$$\\sum_{j : S(i, j) = c} a(0)_j = \\sum_{y \\in C(i)} \\sum_{j : S(y, j) = c - 1} a(0)_j$$
+
+(this is efficient because $\\vert C(i) \\vert \\leq \\lceil \\log_2{n} \\rceil$)
+
+The final solution takes the following form:
+
+\`\`\`
+L = ceil(log2(n))
+coeff2_t[L + 1] #compute this in whatever manner you'd like
+
+a_0[n + 1]      #initial values (to be recovered)
+a_t[n + 1]      #final values (at time t)
+dp[n + 1][L + 1]    #dp[i][c] = sum(a_0[j]) for j : S(i, j) = c
+
+for i from 1 to n:
+    compute C(i) in O(log(n))
+    for y in C(i)
+        for c from 1 to L
+            dp[i][c] += dp[y][c - 1]
+
+    a_0[i] = a_t[i]
+    for c from 1 to L
+        a_0[i] -= dp[i][c] * coeff2_t[c]
+
+    dp[i][0] = a_0[i]
+\`\`\`
+
+This clearly runs in $O(n \\log^2{n})$ and that's fast enough to fit within the TL (although a $O(n \\log{n})$ solution exists).
+
+I suck at explaining things in a concise manner, but it's probably just a result of sucking at thinking about things in a concise manner.`;export{e as default};

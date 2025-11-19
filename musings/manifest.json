@@ -1,0 +1,82 @@
+[
+  {
+    "id": "2025-09-26-0911",
+    "ts": "2025-09-26T03:41:00Z",
+    "tier": "master",
+    "path": "data/2025-09-26-0911.json",
+    "size": 352,
+    "hash": "a5d13adf02b121dc20607cd7e7435492660c285e227aa7f57c511aef31f6cb3f"
+  },
+  {
+    "id": "2025-09-21-0528",
+    "ts": "2025-09-20T23:58:44Z",
+    "tier": "public",
+    "path": "data/2025-09-21-0528.json",
+    "size": 90,
+    "hash": "62a72375f6153dd5ae87b69627e248a71c2607c2be775b22aff91b11253e9075"
+  },
+  {
+    "id": "2025-09-20-1644",
+    "ts": "2025-09-20T11:14:00Z",
+    "tier": "public",
+    "path": "data/2025-09-20-1644.json",
+    "size": 1607,
+    "hash": "320e6a1c805e545e117578b9c9cd86c153e25113bd955453dec2eb2577a79858"
+  },
+  {
+    "id": "2025-09-20-0409",
+    "ts": "2025-09-19T22:39:00Z",
+    "tier": "public",
+    "path": "data/2025-09-20-0409.json",
+    "size": 110,
+    "hash": "fd0ef506c98df8be72982de600698f72ac56e37d2b7c386214e608725da2a1fd"
+  },
+  {
+    "id": "2025-08-31-0440",
+    "ts": "2025-08-30T23:10:00Z",
+    "tier": "public",
+    "path": "data/2025-08-31-0440.json",
+    "size": 268,
+    "hash": "899e9cbe883fc20a4f01c13bfb04b3834bb744223ca7420b744bbd8fbd0c02bb"
+  },
+  {
+    "id": "2025-08-30-1454",
+    "ts": "2025-08-30T09:24:00Z",
+    "tier": "public",
+    "path": "data/2025-08-30-1454.json",
+    "size": 1737,
+    "hash": "3a3b6e46a4aea554fddf971fd73fdc28d368b7857fa99def7f904abbd3c1c219"
+  },
+  {
+    "id": "2025-08-25-1505",
+    "ts": "2025-08-25T09:35:00Z",
+    "tier": "public",
+    "path": "data/2025-08-25-1505.json",
+    "size": 144,
+    "hash": "41b8b8e2422ede157007e63bacb7059cb21549dbb02b8fbb8be5449d45eb7ecc"
+  },
+  {
+    "id": "2025-08-25-1413",
+    "ts": "2025-08-25T08:43:00Z",
+    "tier": "master",
+    "path": "data/2025-08-25-1413.json",
+    "size": 484,
+    "hash": "81369e055b21b42059aab44c9720086f5826d0f8c719cb3f67fb58daf9df2f91"
+  },
+  {
+    "id": "second",
+    "ts": "2025-08-24T22:02:00Z",
+    "tier": "master",
+    "path": "data/second.json",
+    "size": 314,
+    "hash": "5a408da00236984010088c908ef09849df36e962d0cdb22b9755c3e326649047"
+  },
+  {
+    "id": "first",
+    "ts": "2025-08-24T22:01:00Z",
+    "tier": "public",
+    "path": "data/first.json",
+    "size": 107,
+    "hash": "7cb98cc6f50dc0682a89094566415262ecab2db85c05fb8d4ef614318df9db5d"
+  }
+]

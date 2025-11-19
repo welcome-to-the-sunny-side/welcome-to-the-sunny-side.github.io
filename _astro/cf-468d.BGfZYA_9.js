@@ -1,0 +1,125 @@
+const e=`---
+displayMode: blog
+title: CF-468D
+date: 2024-08-23
+tags: [editorial]
+---
+
+### Problem [CF-468D](https://codeforces.com/problemset/problem/468/D)
+
+### Statement
+
+> Given an undirected weighted tree on $n$ nodes, find a permutation $p$ which maximises $\\sum_{1 \\leq u \\leq n}{\\text{dis}(u, p_u)}$. If there are multiple such permutations, find the lexicographically smallest one.
+
+### Solution
+
+#### Observation 1:
+
+<div class = "theorem-box">
+In the optimal permutation, paths $(u, p_u)$ and $(v, p_v)$ intersect for every pair of nodes $(u, v)$.
+</div>
+
+<details><summary class ="spoiler-summary">Proof</summary>
+<div class = "spoiler-content">
+Assume that the two paths do not intersect for some optimal $p$. If we swap $p_u$ and $p_v$, the two paths now intersect and the score strictly increases. So $p$ wasn't optimal.
+</div>
+</details>
+
+
+#### Observation 2:
+
+<div class = "theorem-box">
+In the optimal permutation, there exists a node $c$ such that all paths $(u, p_u)$ cover $c$.
+</div>
+
+<details><summary class ="spoiler-summary">Proof</summary>
+<div class = "spoiler-content">
+<ul>
+<li>We know that every pair of paths must intersect. </li>
+<li> Let us root the tree at node $1$. 
+Now, there can be atmost one child $v$ such that there exists some path in the subtree of $v$ which doesn't come out of the subtree (touch 1) (Since if there are multiple such child nodes, the paths completely contained in their subtrees wouldn't intersect). </li>
+<li>
+If there is no such child node, then $1$ is the node $c$.
+Otherwise, if there is such a child node $v$, we travel down to it and repeat the same process. </li>
+</ul>
+
+Since this traversal definitely ends at some point of time (it will eventually travel down to a leaf where there will trivially be no such child $v$), we will always find such a $c$ for an optimal permutation $p$.
+</div>
+</details>
+
+Now, if we fix such a node $c$, the score of the optimal permutation will simply be $2 \\cdot \\sum_{1 \\leq u \\leq n} {\\text{dis(c, u)}}$. It should be pretty easy to see why this is the case. 
+
+
+Let us assume that we know the node $c$ which is to be covered by all paths for now and worry about neither lexicographic minimization, nor maximization of $\\sum_{1 \\leq u \\leq n} {\\text{dis(c, u)}}$. Let's just focus on finding some valid permutation.
+
+We root the tree at $c$. Now, all that remains is to find a permutation $p$ such that $\\text{lca}(u, p_u) = c \\; \\forall \\; u \\leq n$.
+
+We define $\\text{rep}(u)$ to be the first node on the path from $c$ to $u$. So for every $u$, a restriction on $p_u$ is that $\\text{rep}(u) \\neq \\text{rep} (p_u)$. 
+
+### Generalization
+
+This problem can now be generalized to the following:
+
+> You are given a complete bipartite graph $G(V, E)$ (defined on *equally* sized partitions $A$ and $B$), and some groups of nodes $S_1, S_2, \\dots S_x$ such that $S_i \\subseteq A \\cup B$, $S_i \\cap S_j = \\emptyset \\; \\forall \\; i \\neq j$ and $S_1 \\cup S_2 \\dots \\cup S_x = V$. Find a perfect matching on $G$ such that there is no edge between two nodes which belongs to the same group of nodes $S_i$.
+
+How do we solve this problem? Let's think about when the problem is solvable first.
+
+We observe that a **necessary** condition for being able to find a perfect matching in this graph is the following:
+
+<div class = "theorem-box">
+For every group $S_i$, we must have $\\vert S_i \\cap A \\vert \\leq n - \\vert S_i \\cap B \\vert             \\implies \\vert S_i \\cap A \\vert +  \\vert S_i \\cap B \\vert \\leq n               \\implies \\vert S_i \\vert \\leq n$ (where $n = \\vert A \\vert = \\vert B \\vert$).
+</div>
+
+<details><summary class ="spoiler-summary">Proof</summary>
+<div class = "spoiler-content">
+Assume that $\\vert S_i \\cap A \\vert > n - \\vert S_i \\cap B \\vert$, this would mean that it wouldn't be possible to assign a valid node from $B$ to every node in $\\vert S_i \\cap A \\vert$. Therefore, a perfect matching wouldn't exist. 
+</div>
+</details>
+
+<div class = "theorem-box">
+The condition $\\vert S_i \\vert \\leq n \\; \\forall \\; i$ is also sufficient for the existence of a perfect matching.
+</div>
+
+<details><summary class ="spoiler-summary">Proof</summary>
+<div class = "spoiler-content">
+Let's assume that the condition is initially satisfied. Now, we can always remove a pair of nodes $(a, b), a \\in A, b \\in B$ from $A$ and $B$, and add an edge from between them, such that the condition is satisfied for $n = \\vert A \\vert - 1$ too (it holds as an invariant after every move).
+
+How to remove such an edge? We only have to ensure that any $S_i$ with $S_i = \\vert n \\vert$ has a vertice removed from it. There can be at most two such groups.
+
+Cases:
+<ol>
+<li> Two such groups: remove one vertex from both of them (such that one belongs to $A$ and one belongs to $B$). It's always possible to remove such a pair. </li>
+<li> One such group: remove one vertex from this group and one from any other group. </li>
+<li> No such group: remove a pair of vertices from two different groups </li>
+</ol>
+
+
+We repeatedly perform this operation until all sets are empty, and obtain a perfect matching.
+</div>
+</details>
+
+### Back to our problem
+
+In our problem, we have the set of permutation indices as $A$, the set of permutation values as $B$, and the groups of nodes are formed by partitioning nodes on the basis of $\\text{rep}(u)$.
+
+
+Let us recall that:
+
+- We don't know what $c$ is.
+- We have to maximise  $\\sum_{1 \\leq u \\leq n} {\\text{dis(c, u)}}$.
+- We have to lexicographically minimize $p$.
+
+It's easy to see that $c$ becomes (semi) uniquely defined as (one of) the centroid(s) of the tree because of the necessary condition. This can be easily proved and is left as an exercise to the reader. Maximization becomes meaningless now, and seems ironic because $\\sum_{1 \\leq u \\leq n} {\\text{dis(c, u)}}$ is actually minimized when $c$ is the centroid. 
+
+Now that we know $c$,  and a necessary and sufficient condition for the existence of a perfect matching given some group restrictions, we can easily find a lexicographically minimum permutation in the following way:
+
+\`\`\`
+Iterate over indice i from 1 to n:
+    Find the smallest value v such that rep[i] != rep[v] and the invariant holds if we remove the pair (i, v) 
+    Set p[i] to v
+\`\`\`
+
+Finding the smallest such $v$ can be easily accomplished by using a set and doing some casework. I will not discuss it here because its trivial. There is an annoying edge case wherein we are allowed to have $c = p_c$, so take care of that.
+
+
+My submission can be found [here](https://codeforces.com/contest/468/submission/277773412).`;export{e as default};

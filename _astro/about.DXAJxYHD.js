@@ -6,4 +6,7 @@ the selection of problems here has very little to do with their quality or elega
 queue:
 - https://codeforces.com/contest/2066/problem/D2
 - https://codeforces.com/problemset/problem/2164/F2
-- https://codeforces.com/contest/2059/problem/E2`;export{e as default};
+- https://codeforces.com/contest/2059/problem/E2
+- https://oj.uz/problem/view/JOI24_ho_t4
+- https://codeforces.com/problemset/problem/1732/E
+- https://codeforces.com/problemset/problem/2162/H`;export{e as default};

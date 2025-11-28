@@ -10,3 +10,4 @@ queue:
 - https://oj.uz/problem/view/JOI24_ho_t4
 - https://codeforces.com/problemset/problem/1732/E
 - https://codeforces.com/problemset/problem/2162/H
+- https://codeforces.com/contest/1943/problem/E2

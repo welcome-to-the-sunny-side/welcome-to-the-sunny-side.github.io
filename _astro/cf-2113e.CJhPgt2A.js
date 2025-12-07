@@ -4,6 +4,7 @@ title: CF-2113E
 date: 2025-08-10
 tags: [editorial]
 ---
+
 ### Problem [CF-2113E](https://codeforces.com/problemset/problem/2113/E)
 
 ### Statement

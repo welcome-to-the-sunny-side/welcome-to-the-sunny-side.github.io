@@ -44,7 +44,7 @@ Let's consider some shortest path in a valid assignment of weights $w$ and play 
 <details><summary class ="spoiler-summary">Proof</summary>
 <div class = "spoiler-content">
 
-Doing so doesn't affect the weight of $P$ and only potentially increases the weight of the paths from $1$ to $n$ which go through $k$. SInce the shortest one amongst the latter was strictly worse than $P$ before these changes, the shortest one amongst the latter after these changes is also strictly worse.
+Doing so doesn't affect the weight of $P$ and only potentially increases the weight of the paths from $1$ to $n$ which go through $k$. Since the shortest one amongst the latter was strictly worse than $P$ before these changes, the shortest one amongst the latter after these changes is also strictly worse.
 
 </div>
 </details>

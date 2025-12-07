@@ -189,9 +189,7 @@ The only point of contention one may have with this formula is that for certain 
 <details><summary class ="spoiler-summary">Proof</summary>
 <div class = "spoiler-content">
 
-Easy to prove but tedious and mostly left as an exercise to the reader.
-
-Hint: Like we've already shown earlier, *some* optimal path through $k$ is going to travel along $P$ for some prefix, hop off it once, visit $k$, and hop back onto $P$ for the remaining suffix. Those two "hop points" can be chosen as $g$ and $h$ to get the minimum for $(1)$.  
+As we've already shown earlier, *some* optimal path through $k$ is going to travel along $P$ for some prefix, hop off it once, visit $k$, and hop back onto $P$ for the remaining suffix. Those two "hop points" can be chosen as $g$ and $h$ to get the minimum for $(1)$.  
 
 </div>
 </details>

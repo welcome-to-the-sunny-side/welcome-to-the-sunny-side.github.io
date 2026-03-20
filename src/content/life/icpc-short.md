@@ -1,6 +1,6 @@
 ---
 displayMode: blog
-title: ICPC-short.md
+title: AWF 2026
 date: 2026-03-18
 tags: [contest]
 ---

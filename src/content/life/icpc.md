@@ -1,6 +1,6 @@
 ---
 displayMode: blog
-title: ICPC.md
+title: ICPC
 date: 2026-03-18
 tags: [contest]
 ---

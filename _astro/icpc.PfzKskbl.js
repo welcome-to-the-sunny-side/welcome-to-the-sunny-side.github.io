@@ -93,7 +93,7 @@ A few hours later, while sitting on a bench at the airport, the judge slowly gav
 
 I later realized that a few characters of diffs sufficed to correct my original code.
 
-[attach picture of diffs]
+![](https://i.ibb.co/Cpf8tXBc/Photo-31-03-24-3-26-58-PM.jpg)
 
 Note: The site that originally hosted AWF 2024 seems to have been taken down, and I didn't find the problemset anywhere except an archive that may or may not persist, so I've stored a pdf of the same on my own cloud storage : [link](https://www.dropbox.com/scl/fi/6i4cqrxdrivodz7hc1hjk/asiawest2023-2024.pdf?rlkey=e1mkxcsmxa5zs602fcyzc2joz&st=ornhpxxe&dl=0)
 

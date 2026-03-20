@@ -101,13 +101,17 @@ Well, the only way it would go wrong was if there were multiple connected compon
 
 I was only a few minutes into the problem at this point, and all of this seemed rather abstract, so I asked GeometryDashAddict to just construct some concrete examples that showcased the failure of the naive strategy. As he worked on this, I pre-emptively wrote some code that we would almost certainly use, no matter our final solution &mdash; I/O and a DSU. A few minutes later, he showed me the following, with $n = 7$ and $k = 3$:
 
-<!-- <details><summary class ="spoiler-summary">Graph</summary>
-<div class = "spoiler-content"> -->
-
-![ ](https://i.ibb.co/ynPc1WL9/Screenshot-2026-03-14-at-2-47-17-PM.png)
-
-<!-- </div>
-</details> -->
+<figure style="text-align: center;">
+  <img
+    src="https://i.ibb.co/ynPc1WL9/Screenshot-2026-03-14-at-2-47-17-PM.png"
+    alt="Alt text"
+    width="600"
+    style="display: block; margin: 0 auto;"
+  >
+  <figcaption>
+    Graph 1: n = 7, k = 3.
+  </figcaption>
+</figure>
 
 
 The issue here was that the only valid selection of edges is $\\lbrace 1, 2, 3, 4, 6, 7 \\rbrace$, but naive selection (in increasing order of edge labels) would include edge $5$, disallowing the inclusion of $6$ and $7$ later. However, this counter-example doesn't conform to problem's constraints, as $(k = 3) < \\lceil (n = 7)/2 \\rceil$. Nevertheless, it gave us reason to pause.
@@ -150,7 +154,18 @@ While he worked on this, I pretended to think about D for some time. If one coul
 
 GeometryDashAddict shook me out of this spiral with a constraint-conforming example where our naive strategy failed. I do not remember the exact graph he drew, but this was the relevant subgraph, with $n = 5$ and $k = 3$:
 
-![ ](https://i.ibb.co/wNJ3sGSY/Screenshot-From-2026-03-20-05-18-48.png)
+
+<figure style="text-align: center;">
+  <img
+    src="https://i.ibb.co/wNJ3sGSY/Screenshot-From-2026-03-20-05-18-48.png"
+    alt="Alt text"
+    width="600"
+    style="display: block; margin: 0 auto;"
+  >
+  <figcaption>
+    Graph 2: n = 5, k = 3.
+  </figcaption>
+</figure>
 
 
 Of course it was an embarrassingly trivial oversight that either one of us could have easily resolved in a couple of minutes, if this had happened in an online contest. Instead, I had spent the last two hours idly watching our rank plummet to the late twenties as I daydreamt of increasingly novel methods of self-sabotage at my disposal.

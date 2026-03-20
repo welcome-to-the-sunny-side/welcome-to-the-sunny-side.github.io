@@ -1,158 +1,10 @@
 const e=`---
 displayMode: blog
-title: ICPC
+title: AWF 2026
 date: 2026-03-18
 tags: [contest]
 ---
 
-ICPC AWF took place on 8 March 2026, and while official confirmation will take some time, my team should almost certainly qualify (based on the ranklist, previous year trends, and unofficial hearsay from the organizers).
-
-I hate forgetting the details of "important" events of my life, and then later having to make do with vague recollections (aside: admitting that qualification to WF mattered enough to me to warrant the effort this blog will take to write is a bit embarrassing, but I've recently made a resolution to not hide behind self-deprecating irony as an emotional defense as frequently as I once did). In anticipation of this, I'll be dumping a lot of information about my experience with ICPC in general, along with most of what I can remember about AWF 2026 in particular. As such, this might not be the most pleasant reading experience for anyone except me.
-
-### Background
-
-I am, in the most extreme sense of the word, a filthy *tryhard* at ICPC. I've been to the regionals seven times now, and to AWF thrice.
-
-Unlike my performance in online contests, where I can clearly recognize periods where I've under/overperformed, it has always seemed like my team has, with the exception of this last contest, severely underperformed relative to other teams at an apparently similar level of strength (with this perception of strength being drawn from our performance in practice contests, and the CF ratings of individual team members). On the journey home after almost every ICPC contest, we would be plagued by a vague sense of disappointment and gloom - the mistakes we made would appear so infuriatingly simple and preventable in hindsight, the process of correcting trivial mistakes during the contest so glacial, the problem selection so unfortunate. The observations we made about our shortcomings in the aftermath of these contests were rather similar after every one of them, but we would fail similarly and draw similar conclusions time and time again. It didn't help that a lot of these shortcomings had no obvious remedies.
-
-For instance, we were slow at everything except mindsolving problems. One could attribute it to a variety of micro-errors (like initially misinterpreting the problem statement, not reading the constraints carefully, being slow at implementation, etc), and we often laid these out explicitly, but at the end of the day, all of these seemingly disjoint errors would just coalesce into the simple, uncomfortable truth that we were too slow. This was a bit hard to stomach for me, as I tend to be very fast individually in online contests, and all of these novel micro-errors never seemed to appear in that environment.
-
-The objective conclusion to draw here might have always been that we weren't inherently good enough at this format of competition. With that being said, I'm glad we never really accepted this reality, and instead distracted ourselves with all of the useful delusions mentioned previously, as we did finally make it through. To be clear, I don't think we improved all that much as a team despite having significantly improved individually, and this success is likely just a consequence of having shamelessly farmed $k$ to the point where $P(\\text{success})$ being low for a single contest didn't matter all that much to $(1 - P(\\text{success}))^k$. But maintaining, and perhaps slightly increasing this $P(\\text{success})$ across so many contests in the face of repeated failure would probably have not been possible if one acknowledged how low $P(\\text{success})$ was at the very beginning.
-
-But I digress, I promised not to drown myself in self-deprecating irony.
-
-I should talk about the teams I've been a part of.
-
-Note: The names of my teammates have been replaced with pseudonyms.
-
-#### Year 1
-
-For my first year at ICPC, my team was a ragtag group of novices that got together at the very last moment. I had been at college and had been doing CP for just about 4 months, and people were (understandably) not exactly enthusiastic about forming a team with me. It was a miracle that we qualified in the first place, as the team comprised two experts and an inactive newbie (I apologize for my casual CF-ratism), and we somehow managed to edge past way stronger teams (with one literally having a master and a CM).
-
-#### Years 2-3
-
-My team for the next two years was far more respectable. It consisted of me (a master on CF by this time) and two people from the year above me (in college): GeometryDashAddict and WellGroomedHair (master and CM respectively). The structure of the team was promisingly coherent:
-
-- I specialized in "difficult" problems in general, and was strong in knowledge-heavy areas like Data Structures, DP, Graphs/Trees, etc in particular. I was also notoriously unreliable at implementing my (mostly correct) solutions to these difficult problems, but let's not get into that.
-- GeometryDashAddict was a sort of jack-of-all-trades, and the best amongst the three of us at "just getting the thing done". This included, but wasn't restricted to:
-  - Simplifying and implementing problems that me and WellGroomedHair would have implemented long and buggy code for.
-  - Helping debug our solutions, finding blind spots that we formed w.r.t. our solutions due to familiarity, constructing counter-examples to our conjectures, etc.
-  - Solving weird ad-hoc problems that I would instinctively recoil at.
-
-  He also had a penchant for solving geometry problems, which neither WellGroomedHair nor I seemed to have a chance in hell of solving (actually, WellGroomedHair could probably have solved some of them).
-- WellGroomedHair was really good at what I will crudely describe as the more "mathy" problems. By this I mean problems that were "generally algebraic" (for instance, those requiring casework around floors and ceilings), involved number theory, combinatorics, etc. He was also good at weird ad-hoc problems (of a different kind than GeometryDashAddict, it's hard to explain this concretely without giving specific examples). GeometryDashAddict and I would quite frequently buckle under pressure but he seemed quite impervious to the same. He was also by far the most capable one of us in real-world matters, single-handedly managing all the logistics around our annual pilgrimages.
-  
-
-This description of the team probably belies our mixed and somewhat disappointing bag of results. We made it to AWF in both years, with our performance at regionals always leaving much to be desired. While our performance at some regionals was at least partially acceptable (most notably, some last-hour clutches), everything that could go wrong, did at AWF 2024 and 2025. 
-
-In our defense, the room we were assigned in the name of "accommodation" at the venue in 2024 literally had a hive of wasps on the window, with enough pathways through the broken frame for them to pay us a visit whenever we turned the light on. Thankfully, some students at the host university were sympathetic enough to allow us to sleep in a room that they had apparently illegally occupied (after concluding that the smoke produced by smoking cigarettes in our room wouldn't suffice to get rid of the wasps and the mosquitoes). We went to bed around 4 AM on that night, and only had 3 hours of uninterrupted sleep before the contest. Ah, Indian ICPC...
-
-If I was forced to preserve just one memory from all of my experiences with this team, I would probably selfishly select the following:
-
-<details><summary class ="spoiler-summary">This got way too long</summary>
-<div class = "spoiler-content">
-
-Problem H from AWF 2024 reduced to the following:
-
-> You're given a permutation $p$ of integers from $1$ to $n$. You're required to perform $q$ queries of the following kind, **online**:
-> 
-> Given $i, j : 1 \\leq i < j \\leq n$, swap $p_i$ and $p_j$ (updates persist).
-> 
-> Then, consider the cycles in the functional graph formed by this permutation (i.e. add an edge from node $i$ to $p_i$ for every $i$). Report the number of such cycles after every query.
-> 
-> Constraints : $1 \\leq n, q \\leq 10^5$
-
-Even in the infancy of my (then ~1 year old) CP career, I had developed an addiction to DS-bashing and possessed an inappropriate amount of knowledge about data structures relative to my immaturity in other domains. I realized that this would be a trivial application of a Link-Cut Tree... if only we had bothered to include one in our team reference notebook. Funnily enough, despite the straightforward LCT solution, there weren't any solves on the problem in the first half of the contest.
-
-While my teammates devoted themselves to problems that we had a way higher chance of solving, I turned to perhaps an even more potent addiction of mine - Square Root Decomposition. Looking back, me and this technique have always been a match made in heaven, as it often allows one to soothe his ego through the satisfaction of solving "hard" problems bashable by it, in exchange for the sweat and toil that the implementation and casework in overengineered solutions involving it require. This reminds me of a list of "hard" sqrt-bashable problems that I once maintained : [link](https://www.dropbox.com/scl/fi/jq5r7kivnavwftjmvq9k2/SQUARE_ROOT_SUPREMACY.txt?rlkey=75va1w8n6g95qr6va68mhcrvb&st=w93wzo6b&dl=0).
-
-Returning to the problem - I devised a correct strategy using square root decomposition on the query sequence. The high-level idea was the following:
-
-- Let's divide the query sequence into disjoint blocks of $B$ queries. We'll process each block independently.
-- To process the $b$-th block, we do the following:
-  - First, derive the state of the permutation after executing all queries in the $b - 1$ blocks behind it.
-  - Now, for all $i, j$ in queries in the $b$-th block, mark nodes $i$, $j$, $p_i$, $p_j$ ($p_i$ and $p_j$ are the values after executing the first $b - 1$ blocks of queries) as "dirty". Note that a node may be marked "dirty" multiple times. There will be $O(B)$ dirty nodes.
-  - We now have a set of permutation cycles as defined by the permutation state after $b - 1$ blocks, and a set of dirty nodes as defined by block $b$.
-  - The key observation is that throughout updates within block $b$, no edge that doesn't have a dirty node as an endpoint will be affected. As every node has an in-degree and out-degree of $1$ (self-loops being a special case), only $O(B)$ out of $n$ edges are affected.
-  - We can therefore view the set of cycles as some static cycles (with no dirty edges) and a set of $O(B)$ directed chains, which are internally static, but can have the incoming/outgoing edge of their endpoints modified with updates.
-  - So before processing updates for block $b$, we perform some ugly $O(n)$ preprocessing to compress these static chains into their endpoints (as their internal nodes don't matter at all), which then allows us to process queries in $O(\\text{number of static chains}) = O(B)$.
-
-The idea is quite simple but I wasn't really mature enough to cleanly implement this under pressure at the time, and ended up implementing a horrendous mess I couldn't debug. The fact that online handling was enforced through encrypted input made manually debugging the code especially tedious.
-
-On the other hand, the problem ended up being a "team notebook check", as only 5 teams managed to solve the problem during the contest, and all of them shamelessly bashed it with an LCT. I pettily consoled myself with the knowledge that I hadn't resorted to such brutish tactics as them. Upon returning home, I promptly added LCT to our team notebook, only for the ICPC gods to never demand it of me again.
-
-What made this problem memorable is the process of debugging it after the contest. I don't remember why my laptop was inaccessible on the journey home (perhaps I didn't bring it), but it wasn't, and I borrowed WellGroomedHair's laptop. One must remember that this was back in medieval 2024, before we had access to LLMs that could take your code, prove/disprove its theoretical correctness with reasonable accuracy, and also stress-test it on a suite of self-designed tests to find concrete counter-examples. As such, I was left to fend for myself. Divorced from that indescribable obsession of the moment as I now am, it feels strange to not have just slept instead (remember, we only slept for 3 hours before the contest, and I was essentially pulling another all-nighter during travel). I was operating with a terrible headache and the working memory of a goldfish, while intermittently treating myself to sweet microsleep, as annoying babies on our coach wailed their hearts out.
-
-A few hours later, while sitting on a bench at the airport, the judge slowly gave in to me, and the screen flashed green.
-
-I later realized that a few characters of diffs sufficed to correct my original code.
-
-![](https://i.ibb.co/Cpf8tXBc/Photo-31-03-24-3-26-58-PM.jpg)
-
-Note: The site that originally hosted AWF 2024 seems to have been taken down, and I didn't find the problemset anywhere except an archive that may or may not persist, so I've stored a pdf of the same on my own cloud storage : [link](https://www.dropbox.com/scl/fi/6i4cqrxdrivodz7hc1hjk/asiawest2023-2024.pdf?rlkey=e1mkxcsmxa5zs602fcyzc2joz&st=ornhpxxe&dl=0)
-
-</div>
-</details>
-
-#### Year 4
-
-GeometryDashAddict (and to a lesser extent, WellGroomedHair) had stated before AWF 2025, that he was tired of ICPC and failing qualification to WF this year, would definitely quit ICPC and probably stop taking online contests too. I initially assumed that they were being sarcastic, but as the months after the contest dragged on, and the green connected components on their CF heatmaps receded into the past, I realized that they were being serious. In the meantime, another strong competitive programmer from their batch - GrokSponsoredPS5, asked me if I wanted to form a team with him. I agreed and we started searching for a third teammate. We had initially hoped to draft WellGroomedHair back into the mix, but he was non-committal and we were worried. GrokSponsoredPS5 was pretty enthusiastic about giving world-finals a serious shot, as it was his last year in university, but it didn't seem like the two of us alone would have a decent chance.
-
-WellGroomedHair eventually confirmed that he didn't want to take part this year, and we were back to square one. I forget the exact events that transpired in the intervening period (from what I remember, GrokSponsoredPS5 asked some of his former teammates if they'd like to join, but they declined), but we eventually decided to try to convince GeometryDashAddict to join our team. He had been taking contests (and performing well in them), but inexplicably showed no interest in joining. We would shamelessly ask him to join, and he would decline, again and again.
-
-<figure style="text-align: center;">
-  <img
-    src="https://i.ibb.co/R46sSyBf/IMG-0087.jpg"
-    alt="Alt text"
-    width="300"
-    style="display: block; margin: 0 auto;"
-  >
-  <figcaption>
-    Screenshot: me and GrokSponsoredPS5 comically plotting strategies to convince GeometryDashAddict.
-  </figcaption>
-</figure>
-
-However, GeometryDashAddict's resistance wasn't to be the "immovable object" in the face of the "unstoppable force" of our persistent, guilt-tripping requests. He eventually gave in, after GrokSponsoredPS5 just added him to "our" team's WhatsApp group without him having even said "Yes" yet.
-
-Despite having acquired the final piece that we so desperately desired for our team, we still had reason to be a bit pessimistic, as this team had very little experience together. Further, our skillsets didn't diverge nearly as well as they did in the previous team, with me and GrokSponsoredPS5 having a large overlap in our strengths.
-
-We tried to take as many practice contests as we could in the few months we had before regionals, but I was still generally uncomfortable with our consistency and teamwork. This unease was reinforced by a scare at the online prelims itself - we barely qualified *to the regionals*, because I couldn't debug my code for a problem that we mindsolved within a couple of minutes. I eventually gave up on my code, and GeometryDashAddict went ahead and implemented (a slightly different version of) the solution independently, only to be met with WAs like me. Reinspecting our code after the contest revealed that both implementations could be made to AC by just a couple characters worth of diffs, with GeometryDashAddict's version literally only requiring a 0 to be changed to a 1. In the aftermath, we set this horrific contest aside as a freak accident and did our best to forget it.
-
-Returning to the regionals/AWF, we were working against another constraint - GeometryDashAddict and GrokSponsoredPS5 would begin their internships in the beginning of January, just after the second regional, and wouldn't be able to commit a non-trivial amount of time towards team practice for AWF, which was to take place in March. In this case, the silver lining was my eternal N<s>~~E~~</s>ETdom ensuring that I remained unaffected (unemployed) and could practice a lot on my own to try to offset any rust the two of them might inadvertently acquire. This was still less than ideal in any case, so we were aiming to somehow win the regional at Chennai (it had lesser competition than Amritapuri) to secure a direct qualification to world-finals, without needing to risk everything upon our performance at AWF.
-
-... well, it should be evident that we didn't win at Chennai. No more on that.
-
-Our performance in the prelims also condemned us to the ignominy of having to take the Amritapuri regionals from a site that wasn't Bangalore or Amritapuri (sites are allocated based on one's rank in the prelims). In our case, the site was Coimbatore. The host university was nestled within a surprisingly scenic mountainous region. In retrospect, this only added to the whimsical nature of the disaster that followed. Unlike the-regional-that-shall-not-be-named, our performance here was irredeemable. The three of us sucked as a team, and as individuals. To add insult to injury, we were somehow ranked first *within the Coimbatore site* and while this would hardly have been noticed in isolation, the well-meaning director of the site painfully impressed this upon us by presenting us with an award for our "excellent performance" during the final ceremony.
-
-We returned to Bangalore with the same unpleasant uncertainty around our chances of qualification to AWF that had previously plagued us after the prelims. With just around 60 days remaining, I decided that it would be optimal to assume that we had qualified, and solve as many problems as I could.
-
-### AWF 2026
-
-In the weeks leading up to AWF, most of my fears materialized (losing momentum, my teammates not having enough time to practice, etc.). And yet, despite the stakes being as high as they always were, everything seemed to lack the sense of gravity it once possessed. I was practicing pretty hard, but there were also days when I'd just aimlessly study low-level programming, play video games, or read all day. To be more specific, I got into CRPGs during these few months, and also read a lot of science-fiction. My teammates were working really hard at their internships and setting aside entire days for 5-hour practice contests was out of the question for them. I did ask them to take individual contests at a reasonable pace, and their performance in these contests didn't really reveal any significant loss of form. Perhaps not all was lost, even as some part of us had pre-emptively accepted yet another failure as inevitable.
-
-The days eventually trickled by, and as my playtime on DOS2 reached one hundred hours, the week of AWF had already arrived.
-
-A recurrent pattern in my relationship with long-distance, inter-city travel has been that it tends to revolve around easily preventable sleep-deprivation. This has been true for both the journey(s) from our college to the venue (for some reason, I always find excuses to not sleep on the night before the day of travel), and the journey(s) back. The latter has led to some of the most hellish experiences of my life. I don't use the word "hellish" lightly here, these journeys have often involved me marinating in shame and sorrow over a disastrous performance with my aching, sleep-deprived brain, while my body and senses were subjected to the general overstimulation that overcrowded Indian railway stations and airports are infamous for.
-
-The 2025 Chennai regional stands out to me in this regard. We had booked a train from Chennai to Bangalore that left around 10 PM, and after a particularly disappointing showing at the contest, I was eager to get back home and go through the familiar ritual of forgetting painful details. As the railway station didn't exactly offer a pleasant environment to pass time in, we spent time at a 24-hour restaurant until the time of departure was close. We reached the railway station on time, and waited for our train, which seemed to be running late, and hadn't arrived at the station yet. I casually acknowledged how funny it would be if the train right in front of us was the one we were waiting for. Well... yeah. As the train started moving out at the exact time ours was supposed to, WellGroomedHair began to share my growing suspicion about the train's identity. We frantically chased the train for a bit until we were alongside some coaches that confirmed our suspicions (through labels that weren't visible on the coaches we had previously seen). WellGroomedHair wanted to try and board the moving train, but there was no way I was risking death in such a humiliating manner. GeometryDashAddict wasn't on board (excuse the pun) with the idea either, so we just stood there and watched our ride rush by, as a ticket collector stuck his head out and screamed at us to not get on. After some discussion, we decided to take a train at 6 AM on the same day. Perhaps the funniest detail here is that we went right back to the same 24-hour restaurant until our second train arrived. We also spent time at this place when we were in Chennai the year before, so I suppose it deserves a mention by name: [link](https://maps.app.goo.gl/2SeNPUrycBz13FYd8).
-
-Anyway, after a couple of weeks of excellent, regular sleep before AWF, I had the bright (and entirely novel) idea of not sleeping the day before we travelled to the venue. We were taking a plane from Bangalore to Delhi, and reached the airport with almost an hour to spare (before the boarding period for our flight ended), and decided to have some overpriced food before boarding. As luck would have it, we picked the place with the slowest service in the entire airport. GrokSponsoredPS5 and GeometryDashAddict reassured me that there was no way we could miss the plane, as we waited for the terrible Italian food we were to eventually be served. Apparently, airlines no longer have the good grace to make announcements for entitled passengers who show up fashionably late, as they refused to let us board after we showed up a minute or so after boarding officially ended. I was zoned out of my mind by this point, and can only vaguely recall GrokSponsoredPS5 somehow getting us tickets for a flight to Delhi that left an hour later.
-
-Ever since the wasp fiasco at AWF 2024, we've been rather cautious about the "accommodation" provided at the host university (which has been the same for AWF over the last few years), and have opted to instead stay at a hotel the night before the contest. We did the same this year, and I had an excellent night of sleep after about 48 hours of deprivation.
-
-On the next day (7 March), GeometryDashAddict wanted to take a 5-hour practice contest but we realized that there wasn't really enough time if we were to also go to the contest venue for team registration in the afternoon. We opted to take a 3-hour practice contest instead, and there was nothing notable in either direction about our performance.
-
-The rest of the day went pretty smoothly - we went to the venue and registered our team, peeked into one of the rooms allotted to us as "accommodation" to be greeted by the all-too-familiar sight of wasps menacingly pacing the window, and eventually returned to the hotel.
-
-[attach pic]
-
-At night, GeometryDashAddict and GrokSponsoredPS5 told me a bit about their experience at work and, well, perhaps I'm better off as a hikki. In an attempt to cast a sort of "anti-jinx", we discussed embarrassing/unpleasant tasks we would perform in the hypothetical scenario of qualifying to WF (one could think of these as "offerings" to the universe - as some negative experiences we would willingly put ourselves through, in exchange for just a little bit of good fortune the next day). My task was perhaps the hardest, as I promised to give up [REDACTED] and [REDACTED]. GeometryDashAddict said he was exhausted and would quit his internship. GrokSponsoredPS5 posed several less extreme tasks to himself, which was a sneaky strategy because he just chose to do the least embarrassing one after the contest.
-
-For whatever reason, the next day's contest (and its result) wasn't demanding a lot of attention from me. After spending about an hour in the shower, I retired to bed and read some Chesterton before falling asleep around 11:30 PM.
-
-The absence of anxious, jittery excitement that has been typical of me in the past persisted into the next morning. GeometryDashAddict told me to do my best to not get agitated during the contest, as it makes him nervous. I feel that looking outside the window on cab rides introduces a lot of unnecessary clutter to one's mind, so I did my best not to on the ride from the hotel to the venue. My teammates were quite hungry because we hadn't had breakfast at the hotel due to a lack of time, and decided to have the food provided at the venue. I'm used to going without food for long stretches, and didn't find the food there particularly appealing, so I just walked for a while, enjoying the pleasant weather.
-
-GrokSponsoredPS5 didn't want to risk our luggage getting stolen from outside the contest hall, so we decided to stow it away in one of the rooms allotted to us. As GeometryDashAddict and I trudged towards the hostel, the venue made its surreality felt with the sight of dogs and monkeys viciously fighting. The weather was really quite excellent. Storing our bags in the room with the wasps didn't seem like a very good idea, so we put them in one of the other rooms allotted to us. This one happened to house lizards, but we didn't really mind, and I even find the little critters oddly cute. In fact, we later discussed at length how disgusting certain organisms are, and only GrokSponsoredPS5 found lizards disgusting (GeometryDashAddict going so far as to reverently refer to them as "mini-dinosaurs"). I don't know how GrokSponsoredPS5 was also the only one of us who didn't find cockroaches disgusting. Anyway, GeometryDashAddict and I made our way back after a few minutes.
 
 ### The Contest
 
@@ -389,7 +241,7 @@ How do we perform transitions? From $f(a, b - 1)$ and $f(a - 1, b)$ to $f(a, b)$
 
 When placing $s_i$ into $y$, the $b$-th character of $z$ would get fixed to $\\max(x_b, s_i)$. Let's say we have $s_i = $ 'z'. We would have previously (for the state $f(a, b - 1)$) made some decisions that minimized $z$. In other words, we would have minimized the suffix $x[b, a]$ after minimizing the fixed prefix of $z$ of length $b - 1$. This implied that we would previously have accepted any "sacrifices" in minimizing $x[b + 1, a]$ to be able to minimize $x_b$. But if $z_b$ was now being fixed to $\\max(x_b, s_i) = \\max(x_b, \\text{'z'}) = \\text{'z'}$, $x_b$ was irrelevant, and we could have "made sacrifices" w.r.t. $x_b$ in $f(a, b -1)$ to be able to further minimize $x[b + 1, a]$. All of a sudden, my previous assumptions felt comically untrue.
 
-This was confirmed by considering the string "aabaab". Here, the state $f(4, 1)$ should be "aaba" with $x = $ "aaba" and y = "a". However, transitioning from this $(x, y)$ isn't optimal when going to $f(4, 2)$, as it would result in $x = $ "aaba" and $y =$ "ab", leading to $z =$ "abba". Instead, if we had stored information for the state $x = $ "abaa" and $y = $ "a", it would have led to a suboptimal $z = $ "abaa" for $f(4, 1)$, but would allow us to have $x =$ "abaa" and $y =$ "ab", leading to a more optimal $z$ = "abaa". However, I noticed that these even the true values for these incorrectly computed states seemed to lead to strictly less optimal states than the true optimum (for the examples I worked out on paper)... Could it be possible that this was always true?
+This was confirmed by considering the string "aabaab". Here, the state $f(4, 1)$ should be "aaba" with $x = $ "aaba" and y = "a". However, transitioning from this $(x, y)$ isn't optimal when going to $f(4, 2)$, as it would result in $x = $ "aaba" and $y =$ "ab", leading to $z =$ "abba". Instead, if we had stored information for the state $x = $ "abaa" and $y = $ "a", it would have led to a suboptimal $z = $ "abaa" for $f(4, 1)$, but would allow us to have $x =$ "abaa" and $y =$ "ab", leading to a more optimal $z$ = "abaa". However, I noticed that even the true values for these incorrectly computed states seemed to lead to strictly less optimal states than the true optimum (for the examples I worked out on paper)... Could it be possible that this was always true?
 
 <details><summary class ="spoiler-summary">Proving the conjecture</summary>
 <div class = "spoiler-content">

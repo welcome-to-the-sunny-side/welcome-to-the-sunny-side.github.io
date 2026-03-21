@@ -1,0 +1,33 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What This Is
+
+A static, terminal-driven personal website/blog built with Astro + Svelte + Tailwind CSS. Users navigate content via an in-browser terminal emulator (ls, cd, open, pop, help) alongside a content pane. Deployed to GitHub Pages at `welcome-to-the-sunny-side.github.io`.
+
+## Commands
+
+- `npm run dev` — start dev server (runs `build-vfs-date-index.mjs` first via predev hook)
+- `npm run build` — production build to `dist/`
+- `npm run preview` — preview production build
+- `npm run deploy` — build + deploy to GitHub Pages via gh-pages
+
+## Architecture
+
+**Virtual File System (VFS):** `src/lib/virtualFs.ts` maps `src/content/**/*.{md,html}` into a tree where `.md` → `.html`. This powers static path generation, terminal directory listings, and path resolution. A build-time script (`tools/build-vfs-date-index.mjs`) extracts frontmatter dates into `public/vfs-date-index.json` for terminal sorting.
+
+**Routing:** `src/pages/[...slug].astro` is a catch-all that pre-renders every VFS path. Client-side navigation is handled by `src/stores/router.ts` (Svelte writable store + pushState) so the page never reloads after initial load. `/` resolves to `/home.html`.
+
+**Two-pane layout:** `BaseLayout.astro` renders `ContentPane.svelte` (markdown/HTML display with blog layout support via `layout: blog` frontmatter) and `TerminalPane.svelte` (xterm.js-based CLI).
+
+**Skinning:** Two themes (dark, sunny) managed via `src/stores/skin.ts`. Skins define CSS variables and classes; Tailwind config maps semantic tokens (bg, surface, accent, text, etc.) to CSS custom properties.
+
+**Content:** All content lives in `src/content/` as Markdown (with frontmatter) or HTML files. Sections: algo (problems, theory, contests, notes), life, lit, misc, games.
+
+## Key Details
+
+- Tailwind uses CSS custom properties for theming — colors, fonts, spacing are all `var(--*)` based (see `tailwind.config.js`)
+- Markdown rendering uses markdown-it + katex (math) + highlight.js (code)
+- The site uses xterm.js for the terminal UI
+- `site-reference.md` contains comprehensive documentation about all components — consult it for detailed implementation questions

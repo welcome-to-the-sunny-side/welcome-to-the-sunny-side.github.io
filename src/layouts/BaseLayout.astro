@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import TerminalPane from "../components/TerminalPane.svelte";
 import ContentPane from "../components/ContentPane.svelte";
+import MobileNav from "../components/MobileNav.svelte";
 
 ---
 <!DOCTYPE html>
@@ -20,9 +21,14 @@ import ContentPane from "../components/ContentPane.svelte";
         </script>
 </head>
   <body class="h-full">
-    <div class="h-screen w-screen grid grid-cols-1 md:grid-cols-[1fr_auto] md:grid-rows-1">
+    <div class="h-screen w-screen grid grid-cols-1 grid-rows-[auto_1fr] md:grid-cols-[1fr_auto] md:grid-rows-1">
+      <!-- Mobile breadcrumb nav -->
+      <div class="md:hidden">
+        <MobileNav client:load />
+      </div>
+
       <!-- Content -->
-      <main class="overflow-y-auto overflow-x-hidden bg-surface text-text transition-colors duration-150 ease-retro">
+      <main class="overflow-y-auto overflow-x-hidden bg-surface text-text transition-colors duration-150 ease-retro min-h-0">
         <ContentPane client:load />
       </main>
 

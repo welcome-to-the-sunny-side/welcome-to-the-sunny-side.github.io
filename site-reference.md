@@ -1,18 +1,19 @@
 # Welcome to the Sunny Side – Site Reference
 
-_Last updated: 2026-03-21_ (Codebase cleanup & UX fixes: removed dead `ContentPane.astro`; removed unused deps `katex`, `markdown-it-katex`, `markdown-it-texmath`; deduplicated skin application logic (removed inline script from BaseLayout, `applySkin()` in `skin.ts` is the single source); fixed home.html flash on direct URL navigation by initializing `path`/`displayPath` from router store; added inline code styling with per-skin `--code-bg`/`--code-border` CSS variables; global scale via `html { font-size }` in `global.css`; terminal help output reformatted to stacked layout; terminal passes Ctrl/Cmd keys through to browser via `customKeyEventHandler`; terminal bottom padding via `fitWithPadding()` reserving one row; terminal backspace across wrapped lines fixed by detecting `cursorX === 0` and using `\x1b[A` + `\x1b[${cols}G` + `\x1b[J`)
+_Last updated: 2026-03-21_ (Mobile navigation: removed terminal on mobile, added breadcrumb bar + directory nav-view pages) (Codebase cleanup & UX fixes: removed dead `ContentPane.astro`; removed unused deps `katex`, `markdown-it-katex`, `markdown-it-texmath`; deduplicated skin application logic (removed inline script from BaseLayout, `applySkin()` in `skin.ts` is the single source); fixed home.html flash on direct URL navigation by initializing `path`/`displayPath` from router store; added inline code styling with per-skin `--code-bg`/`--code-border` CSS variables; global scale via `html { font-size }` in `global.css`; terminal help output reformatted to stacked layout; terminal passes Ctrl/Cmd keys through to browser via `customKeyEventHandler`; terminal bottom padding via `fitWithPadding()` reserving one row; terminal backspace across wrapped lines fixed by detecting `cursorX === 0` and using `\x1b[A` + `\x1b[${cols}G` + `\x1b[J`)
 
 ## 1 . High-level Overview
 The site is a **static, terminal-driven blog & knowledge base** built with **Astro** for static generation and **Svelte** for the interactive UI. Styling is primarily handled by **Tailwind CSS** (integrated via `@astrojs/tailwind`), utilizing its utility classes and the `@tailwindcss/typography` plugin for Markdown rendering. All human-readable content lives in Markdown files under `src/content` and is presented at URLs that end in `.html`. Additionally, the site now supports rendering of HTML files, allowing for more diverse content presentation. A new Games section has also been added, providing a dedicated space for browser-game adjacent pages.
 
 Key pillars:
 1. **Virtual File System (VFS)** – mirrors `src/content` and maps `*.md` → `*.html`.
-2. **Svelte App** – two panes:
-   * `ContentPane.svelte` renders Markdown for the current route.
-   * `TerminalPane.svelte` (+ `TerminalIsland.svelte`) provides a CLI (`ls`, `cd`, `open`, `pop`, `help`).
-3. **Catch-all Astro Route** – `src/pages/[...slug].astro` pre-renders every `.html` path and decides at runtime which Astro/Svelte layout to use.
-4. **Layouts**
-   * `BaseLayout.astro` – always used, renders both the content pane and terminal.
+2. **Svelte App** – two panes on desktop:
+   * `ContentPane.svelte` renders Markdown for the current route, and also nav-view directory listings.
+   * `TerminalPane.svelte` (+ `TerminalIsland.svelte`) provides a CLI (`ls`, `cd`, `open`, `pop`, `help`) — **desktop only** (`hidden md:block`).
+3. **Mobile navigation** – `MobileNav.svelte` breadcrumb bar replaces the terminal on mobile (`md:hidden`). Tapping a breadcrumb segment navigates to a nav-view page for that directory. Nav-view pages are generated for every VFS directory at `<dir>/index.html`.
+4. **Catch-all Astro Route** – `src/pages/[...slug].astro` pre-renders every `.html` path (files and directory index pages) and decides at runtime which Astro/Svelte layout to use.
+5. **Layouts**
+   * `BaseLayout.astro` – always used, renders MobileNav, ContentPane, and TerminalPane.
    * Blog layout is now handled inside `ContentPane.svelte` when `layout: blog` is present in front-matter.
 
 The site is published via GitHub Pages; Astro’s static output lives in `dist/`.
@@ -24,8 +25,9 @@ The site is published via GitHub Pages; Astro’s static output lives in `dist/`
 /                           project root
 ├─ src/
 │  ├─ components/           shared Svelte components
-│  │   ├─ ContentPane.svelte
-│  │   └─ TerminalPane.svelte
+│  │   ├─ ContentPane.svelte  renders content + nav-view directory listings
+│  │   ├─ MobileNav.svelte    breadcrumb bar (mobile only)
+│  │   └─ TerminalPane.svelte desktop-only terminal
 │  ├─ layouts/              Astro page shells
 │  │   └─ BaseLayout.astro
 │  ├─ lib/
@@ -52,9 +54,10 @@ The site is published via GitHub Pages; Astro’s static output lives in `dist/`
 * Each node records `name`, `path`, `type` (`dir`/`file`) and any `children`.
 * File nodes map `/foo/bar.md` → slug `foo/bar.html`.
 * The VFS powers:
-  * Static path generation in `[...slug].astro`.
-  * Directory listings for the terminal `ls` command.
+  * Static path generation in `[...slug].astro` — both file pages and directory nav-view pages (`<dir>/index.html`).
+  * Directory listings for the terminal `ls` command (desktop) and nav-view pages (mobile).
   * Path resolution for `cd`, `open`, `pop`.
+  * **Note:** Do not create content files named `index.md` — these would collide with auto-generated directory nav-view pages.
 
 ---
 
@@ -74,9 +77,9 @@ B --> T[TerminalPane]
 ```
 
 Explanation:
-1. **Build time:** `[...slug].astro/getStaticPaths` reads the VFS to emit every `.html` path.
-2. **Runtime (server-side render / pre-render):** `[...slug].astro` always renders `<BaseLayout>`, which includes both `ContentPane` and `TerminalPane`. `ContentPane.svelte` checks the markdown’s front-matter. It applies a `.prose` class (from Tailwind Typography) for general Markdown styling, and if `layout: blog` is present, it adds further blog-specific styling.
-3. **Client side:** The embedded Svelte app controls navigation so the page never reloads after the first hit.
+1. **Build time:** `[...slug].astro/getStaticPaths` reads the VFS to emit every `.html` path, including `<dir>/index.html` nav-view pages for each directory.
+2. **Runtime (server-side render / pre-render):** `[...slug].astro` always renders `<BaseLayout>`, which includes `MobileNav` (mobile breadcrumb), `ContentPane`, and `TerminalPane` (desktop only). `ContentPane.svelte` checks the markdown’s front-matter. It applies a `.prose` class (from Tailwind Typography) for general Markdown styling, and if `layout: blog` is present, it adds further blog-specific styling. Paths ending in `/index.html` are detected as directory nav-views and render a clickable file listing instead.
+3. **Client side:** The embedded Svelte app controls navigation so the page never reloads after the first hit. On mobile, navigation uses the breadcrumb bar and nav-view directory listings. On desktop, the terminal CLI remains the primary navigation method.
 
 ---
 
@@ -125,6 +128,16 @@ The terminal keeps history, shows inline autocomplete suggestions while you type
 - **Scrollbars**: Modern gradient styling matching current skin theme
 - **Selection**: Clean teal highlight without borders for proper text alignment
 
+### Mobile Navigation (MobileNav.svelte)
+_Added: 2026-03-21_
+
+The terminal is hidden on mobile (`< 768px`). Instead, a **breadcrumb bar** at the top of the page provides navigation:
+
+* **`MobileNav.svelte`** — renders a horizontal breadcrumb derived from the current router path. Each parent segment is a clickable button that navigates to the corresponding directory's nav-view page (`<dir>/index.html`). The current (last) segment is displayed as plain text.
+* **Nav-view pages** — `ContentPane.svelte` detects paths ending in `/index.html` and renders a directory listing using VFS `list()`. Entries show tree glyphs (`├─` / `└─`), directories first then files. Tapping a directory goes deeper; tapping a file navigates to it via `currentPath.push()`.
+* **Breadcrumb styling** — uses skin CSS variables (`bg-surface`, `text-accent`, `text-text-muted`) so it adapts to dark/sunny skins. Clickable segments have a thin accent-colored underline.
+* **Layout** — `BaseLayout.astro` wraps `MobileNav` in a `md:hidden` div. The grid uses `grid-rows-[auto_1fr]` on mobile so the breadcrumb gets only the height it needs.
+* **Home page** — breadcrumb shows `~ / home.html` with `~` clickable (goes to root nav-view).
 
 ---
 
@@ -224,7 +237,8 @@ The site underwent a significant visual overhaul to implement a retro-dark, mini
     *   Skin application is handled solely by `src/stores/skin.ts` — no inline skin script in BaseLayout.
 
 *   **`src/components/TerminalPane.svelte`:**
-    *   The main wrapper `div` has a conditional `border-b border-zinc-700` applied when in mobile view (`isMobile`) and the terminal is not collapsed (`!isCollapsed`).
+    *   Desktop-only component (`hidden md:block` on `<aside>` in `BaseLayout.astro`). All mobile-specific code (collapse/expand, mobile header) has been removed.
+    *   Supports desktop collapse/expand via side toggle button or `Shift+←`/`Shift+→` shortcuts.
 
 *   **`src/components/ContentPane.svelte`:**
     *   Blog post titles, dates, and tags styled with theme colors and smaller font sizes.

@@ -4,6 +4,7 @@
   import { get } from 'svelte/store';
   import { currentSkin } from '../stores/skin';
   import { currentPath } from '../stores/router';
+  import { list as vfsList, isDir, isFile } from '../lib/virtualFs';
   // Musings is now lazy-loaded; see ensureMusingsLoaded() below
 
   // Import all markdown under src/content as raw strings
@@ -93,6 +94,10 @@ let displayPath = initialPath;
 let frontmatter: Record<string, any> = {};
 let isBlog = false;
 let isMusings = false;
+let isNavView = false;
+type NavEntry = { name: string; path: string; isDir: boolean };
+let navViewEntries: NavEntry[] = [];
+let navViewDir = '';
 let contentHtml: string = '';
 let previousContentHtml: string = '';
 let isLoading = false;
@@ -312,17 +317,49 @@ $: skin = $currentSkin;
   });
 
   async function loadContent() {
-    // Convert "/blogs/algo/treaps.md" -> "../content/blogs/algo/treaps.md"
     let filePath = path;
     if (filePath === '/') filePath = '/home.html'; // default landing page
     const isHome = (filePath === '/home.html' || filePath === '/');
+
+    // Check for nav-view directory pages (e.g. /algo/index.html)
+    if (filePath.endsWith('/index.html')) {
+      const dirPath = filePath === '/index.html' ? '/' : filePath.replace(/\/index\.html$/, '');
+      if (isDir(dirPath)) {
+        const children = vfsList(dirPath) || [];
+        navViewEntries = children.map(name => {
+          const childPath = dirPath === '/' ? '/' + name : dirPath + '/' + name;
+          const dir = isDir(childPath);
+          return {
+            name,
+            path: dir ? childPath + '/index.html' : childPath,
+            isDir: dir,
+          };
+        });
+        navViewDir = dirPath;
+        isNavView = true;
+        isBlog = false;
+        isMusings = false;
+        frontmatter = {};
+        contentHtml = '';
+        if (isLoading) {
+          isLoading = false;
+          previousContentHtml = '';
+          displayPath = path;
+          currentPath.setLoadingComplete();
+        }
+        return true;
+      }
+    }
+
+    isNavView = false;
+
     // Try to resolve Markdown source first
     const mdPath = filePath.replace(/\.html$/, '.md');
     const mdKey = '../content' + mdPath;
     const htmlKey = '../content' + filePath;
-    
+
     let contentFound = false;
-    
+
     if (isHome) {
       // Home: show background (handled via isHomeWithBackground). No HTML body required.
       frontmatter = {};
@@ -457,7 +494,25 @@ $: skin = $currentSkin;
   }
 </script>
 
-{#if isBlog}
+{#if isNavView}
+  <div class="mx-auto max-w-2xl px-4 py-8 bg-surface text-text transition-colors duration-150 ease-retro">
+    <h1 class="font-mono text-accent text-lg mb-6">{navViewDir === '/' ? '~' : navViewDir}</h1>
+    <ul class="list-none p-0 m-0 font-mono text-sm">
+      {#each navViewEntries as entry, i}
+        {@const isLast = i === navViewEntries.length - 1}
+        <li class="m-0 p-0">
+          <button
+            class="w-full text-left px-2 py-2 rounded-sm transition-colors duration-150 hover:bg-accent-subtle flex items-center gap-2"
+            on:click={() => currentPath.push(entry.path)}
+          >
+            <span class="text-text-muted select-none">{isLast ? '└─' : '├─'}</span>
+            <span class={entry.isDir ? 'text-text' : 'text-accent'}>{entry.name}{entry.isDir ? '/' : ''}</span>
+          </button>
+        </li>
+      {/each}
+    </ul>
+  </div>
+{:else if isBlog}
   <section class={`${skin.classes.contentPane} mx-auto max-w-4xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro`}>
     <header class="mb-8">
       <h1 class={`${skin.classes.blogTitle}`}>{frontmatter.title ?? 'Untitled'}</h1>
@@ -487,7 +542,7 @@ $: skin = $currentSkin;
       {/if}
     </div>
   {:else if isHomeWithBackground}
-    <div 
+    <div
       class="h-full w-full bg-cover bg-center bg-no-repeat"
       style="background-image: url('{currentBackgroundImage}');"
     >

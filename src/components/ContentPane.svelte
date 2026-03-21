@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { tick } from 'svelte';
+  import { get } from 'svelte/store';
   import { currentSkin } from '../stores/skin';
   import { currentPath } from '../stores/router';
   // Musings is now lazy-loaded; see ensureMusingsLoaded() below
@@ -85,8 +86,9 @@ const pagesHtml = import.meta.glob('../content/**/*.html', { query: '?raw', impo
     }
   }
 
-let path = '/';
-let displayPath = '/';
+const initialPath = typeof window !== 'undefined' ? get(currentPath) : '/';
+let path = initialPath;
+let displayPath = initialPath;
   let contentRaw: string = '';
 let frontmatter: Record<string, any> = {};
 let isBlog = false;

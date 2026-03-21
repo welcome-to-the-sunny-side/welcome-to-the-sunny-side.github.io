@@ -28,6 +28,6 @@ A static, terminal-driven personal website/blog built with Astro + Svelte + Tail
 ## Key Details
 
 - Tailwind uses CSS custom properties for theming — colors, fonts, spacing are all `var(--*)` based (see `tailwind.config.js`)
-- Markdown rendering uses markdown-it + katex (math) + highlight.js (code)
+- Markdown rendering uses markdown-it + MathJax (math, loaded from CDN) + highlight.js (code)
 - The site uses xterm.js for the terminal UI
-- `site-reference.md` contains comprehensive documentation about all components — consult it for detailed implementation questions
+- `site-reference.md` contains comprehensive documentation about all components — consult it for detailed implementation questions. Keep it updated when making changes to the site.

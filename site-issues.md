@@ -1,2 +1,3 @@
 - refine terminal:
+    - make it usable on mobile
     - improve look of the terminal? change fonts, colors? introduce different terminal skins like we have for the content pane?

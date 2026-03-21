@@ -20,17 +20,33 @@
   let isCollapsed = false;
   collapsed.subscribe(v => (isCollapsed = v));
 
+  let bodyEl: HTMLDivElement;
+
   function toggle() {
     collapsed.update(v => {
       const newVal = !v;
       sessionStorage.setItem('terminalCollapsed', newVal.toString());
-      // When expanding (newVal false) focus terminal and refit on mobile
-      if (!newVal) {
-        // slight delay to allow DOM to render width
-        setTimeout(() => {
-          if (isMobile) islandComp?.resizeTerminal();
+      // When expanding (newVal false) refit terminal after CSS transition completes
+      if (!newVal && isMobile && bodyEl) {
+        const onTransitionEnd = (e: TransitionEvent) => {
+          // Only react to max-height transition on this element
+          if (e.target !== bodyEl) return;
+          bodyEl.removeEventListener('transitionend', onTransitionEnd);
+          islandComp?.resizeTerminal();
           islandComp?.focusTerminal();
-        }, 300); // match CSS transition duration (250ms) + buffer
+        };
+        bodyEl.addEventListener('transitionend', onTransitionEnd);
+        // Safety fallback in case transitionend doesn't fire
+        setTimeout(() => {
+          bodyEl?.removeEventListener('transitionend', onTransitionEnd);
+          islandComp?.resizeTerminal();
+          islandComp?.focusTerminal();
+        }, 500);
+      } else if (!newVal) {
+        setTimeout(() => {
+          islandComp?.resizeTerminal();
+          islandComp?.focusTerminal();
+        }, 300);
       }
       return newVal;
     });
@@ -48,10 +64,12 @@
   onMount(() => {
     const checkMobile = () => {
       isMobile = window.innerWidth < 768; // Match Tailwind's md breakpoint
-      // Trigger a fit after potential breakpoint/size changes; width is CSS-driven.
-      setTimeout(() => {
-        islandComp?.resizeTerminal();
-      }, 100);
+      // Don't resize when collapsed — container has zero height, proposeDimensions returns garbage
+      if (!isCollapsed) {
+        setTimeout(() => {
+          islandComp?.resizeTerminal();
+        }, 100);
+      }
     };
 
     const handleKey = (e: KeyboardEvent) => {
@@ -132,15 +150,21 @@
 </script>
 
 <style>
-  /* Mobile collapse (vertical) */
+  /* Mobile collapse (vertical) – transition both max-height and min-height */
   .body {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                min-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Limit height only on mobile to allow smooth slide animation */
+  /* Fixed height on mobile so xterm has a consistent container to measure */
   @media (max-width: 767px) {
     .body {
       max-height: 400px;
+      min-height: 400px;
+    }
+    .body.mobile-collapsed {
+      max-height: 0;
+      min-height: 0;
     }
   }
   
@@ -197,9 +221,8 @@
     opacity: 1;
   }
   
-  /* Mobile collapse */
+  /* Mobile collapse – height overrides now in the mobile media query above */
   .mobile-collapsed {
-    max-height: 0;
     overflow: hidden;
   }
   
@@ -335,7 +358,7 @@
 
   <!-- Terminal body: hidden on mobile when collapsed -->
   <div class="flex-1 overflow-hidden">
-    <div class="terminal-content body" class:mobile-collapsed={isMobile && isCollapsed}>
+    <div bind:this={bodyEl} class="terminal-content body" class:mobile-collapsed={isMobile && isCollapsed}>
       <TerminalIsland bind:this={islandComp} bind:isFocused />
     </div>
   </div>

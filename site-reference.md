@@ -1,6 +1,6 @@
 # Welcome to the Sunny Side – Site Reference
 
-_Last updated: 2025-01-16_ (Added Codeforces AC Archiver utility tool with CSV export and code fetch modes; prior: Terminal UX improvements: fixed 'open' command getting stuck on current page, dynamic terminal width (30% of window), responsive resizing; prior: Navigation UX improvements: fixed duplicate loading indicators, eliminated 404 flash during page transitions, deferred MathJax typesetting until content is visible, improved terminal spinner behavior)
+_Last updated: 2026-03-21_ (Codebase cleanup & UX fixes: removed dead `ContentPane.astro`; removed unused deps `katex`, `markdown-it-katex`, `markdown-it-texmath`; deduplicated skin application logic (removed inline script from BaseLayout, `applySkin()` in `skin.ts` is the single source); fixed home.html flash on direct URL navigation by initializing `path`/`displayPath` from router store; added inline code styling with per-skin `--code-bg`/`--code-border` CSS variables; global scale via `html { font-size }` in `global.css`; terminal help output reformatted to stacked layout; terminal passes Ctrl/Cmd keys through to browser via `customKeyEventHandler`; terminal bottom padding via `fitWithPadding()` reserving one row; terminal backspace across wrapped lines fixed by detecting `cursorX === 0` and using `\x1b[A` + `\x1b[${cols}G` + `\x1b[J`)
 
 ## 1 . High-level Overview
 The site is a **static, terminal-driven blog & knowledge base** built with **Astro** for static generation and **Svelte** for the interactive UI. Styling is primarily handled by **Tailwind CSS** (integrated via `@astrojs/tailwind`), utilizing its utility classes and the `@tailwindcss/typography` plugin for Markdown rendering. All human-readable content lives in Markdown files under `src/content` and is presented at URLs that end in `.html`. Additionally, the site now supports rendering of HTML files, allowing for more diverse content presentation. A new Games section has also been added, providing a dedicated space for browser-game adjacent pages.
@@ -111,7 +111,11 @@ The terminal keeps history, shows inline autocomplete suggestions while you type
 
 ### Terminal UI Design (2025-09)
 - **Modern retrocomputing aesthetic**: Dark gradient backgrounds with teal accent theme
-- **Typography**: IBM Plex Mono, 14px, enhanced letter spacing
+- **Typography**: IBM Plex Mono, enhanced letter spacing
+- **Ctrl/Cmd passthrough**: Browser shortcuts (Ctrl+R, Ctrl+L, Ctrl+F, etc.) are not captured by the terminal — implemented via `customKeyEventHandler`
+- **Bottom padding**: `fitWithPadding()` reserves one row at the bottom so the cursor doesn't hug the edge
+- **Line-wrap backspace**: When cursor is at column 0 of a wrapped row, backspace moves up one row and to the last column instead of failing silently
+- **Help output**: Stacked format (command on one line, description indented below) instead of columnar layout, to avoid overflow issues
 - **Visual elements**: Rounded corners (8px), sophisticated multi-layer box shadows, glowing focus states
 - **Prompt path and `/`**: Teal (`#64ffda`)
 - **Files**: Yellow (`#ffd43b`)
@@ -204,8 +208,10 @@ The site underwent a significant visual overhaul to implement a retro-dark, mini
 
 *   **`src/styles/global.css`:**
     *   Imports IBM Plex Mono.
+    *   Global scale via `html { font-size }` — affects all rem/em-based sizing site-wide.
     *   Applies global `body` styles: theme background, text color, and `font-mono`.
     *   Custom `::selection` styles using theme colors.
+    *   Inline code styling: removes Tailwind Typography's backtick pseudo-elements, adds per-skin background (`--code-bg`) and border (`--code-border`) with monospace font.
     *   Contains essential Tailwind directives: `@tailwind base;`, `@tailwind components;`, `@tailwind utilities;`.
 
 *   **`src/styles/custom-elements.css`:**
@@ -214,8 +220,8 @@ The site underwent a significant visual overhaul to implement a retro-dark, mini
     *   **Theorem Box:** Styled with a transparent background and a `var(--el-text)` border. **Now supports horizontal scrolling for long lines (e.g., LaTeX) inside the box.**
 
 *   **`src/layouts/BaseLayout.astro`:**
-    *   Applies `dark` class to `<html>` tag.
     *   Sets theme background and text colors on the main content container.
+    *   Skin application is handled solely by `src/stores/skin.ts` — no inline skin script in BaseLayout.
 
 *   **`src/components/TerminalPane.svelte`:**
     *   The main wrapper `div` has a conditional `border-b border-zinc-700` applied when in mobile view (`isMobile`) and the terminal is not collapsed (`!isCollapsed`).

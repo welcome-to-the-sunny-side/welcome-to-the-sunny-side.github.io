@@ -18,6 +18,8 @@ export let isFocused = true;
 // Expose terminal instance for external focus control
 let termInstance: any;
 let fitAddon: any; // store FitAddon instance for external resizing
+// Called after a successful resize to redraw the current input line
+let afterResizeCallback: (() => void) | null = null;
 
 export function focusTerminal() {
   termInstance?.focus();
@@ -26,9 +28,12 @@ export function focusTerminal() {
 // Fit terminal but reserve one row at the bottom for visual breathing room
 function fitWithPadding() {
   if (!fitAddon || !termInstance) return;
+  // Don't resize if the container is hidden (e.g., mobile collapsed state)
+  if (container && (container.offsetHeight === 0 || container.offsetWidth === 0)) return;
   const dims = fitAddon.proposeDimensions();
-  if (dims) {
+  if (dims && dims.cols > 2 && dims.rows > 1) {
     termInstance.resize(dims.cols, Math.max(1, dims.rows - 1));
+    afterResizeCallback?.();
   }
 }
 
@@ -660,6 +665,13 @@ onMount(async () => {
             triggerCompletion();
           }
       }
+    }
+  };
+
+  // Redraw current input after terminal resize to keep cursor in sync
+  afterResizeCallback = () => {
+    if (buffer.length > 0 || cursorPos > 0) {
+      redrawInputLine();
     }
   };
 

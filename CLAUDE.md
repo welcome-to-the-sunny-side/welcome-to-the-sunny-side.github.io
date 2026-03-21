@@ -31,3 +31,8 @@ A static, terminal-driven personal website/blog built with Astro + Svelte + Tail
 - Markdown rendering uses markdown-it + MathJax (math, loaded from CDN) + highlight.js (code)
 - The site uses xterm.js for the terminal UI
 - `site-reference.md` contains comprehensive documentation about all components — consult it for detailed implementation questions. Keep it updated when making changes to the site.
+- `site-issues.md` tracks known bugs and desired improvements
+- Skin system provides per-skin CSS variables including `--code-bg` and `--code-border` for inline code styling
+- Skin application happens in `src/stores/skin.ts` via `applySkin()` — do not duplicate this logic in BaseLayout or elsewhere
+- Global scale is set via `html { font-size }` in `global.css`; terminal font size is separate (`fontSize` in TerminalIsland.svelte xterm config)
+- xterm.js cursor movement escapes (`\x1b[D`, `\x1b[C`) don't wrap across visual rows. When fixing terminal input bugs at line boundaries, handle the boundary case specifically rather than rewriting the whole function.

@@ -20,14 +20,14 @@ import ContentPane from "../components/ContentPane.svelte";
         </script>
 </head>
   <body class="h-full">
-    <div class="h-screen w-screen grid grid-cols-1 md:grid-cols-[1fr_auto] grid-rows-[auto_1fr] md:grid-rows-1">
+    <div class="h-screen w-screen grid grid-cols-1 md:grid-cols-[1fr_auto] md:grid-rows-1">
       <!-- Content -->
-      <main class="overflow-y-auto overflow-x-hidden order-2 md:order-none bg-surface text-text transition-colors duration-150 ease-retro">
+      <main class="overflow-y-auto overflow-x-hidden bg-surface text-text transition-colors duration-150 ease-retro">
         <ContentPane client:load />
       </main>
 
-      <!-- Terminal -->
-      <aside class="order-1 md:order-none">
+      <!-- Terminal (desktop only) -->
+      <aside class="hidden md:block">
         <TerminalPane client:load />
       </aside>
     </div>

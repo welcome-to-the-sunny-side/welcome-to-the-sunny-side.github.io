@@ -10,39 +10,17 @@
     const saved = sessionStorage.getItem('terminalCollapsed');
     if (saved) {
       collapsed.set(saved === 'true');
-    } else if (window.innerWidth < 768) {
-      // Default to collapsed on mobile
-      collapsed.set(true);
-      sessionStorage.setItem('terminalCollapsed', 'true');
     }
   });
 
   let isCollapsed = false;
   collapsed.subscribe(v => (isCollapsed = v));
 
-  let bodyEl: HTMLDivElement;
-
   function toggle() {
     collapsed.update(v => {
       const newVal = !v;
       sessionStorage.setItem('terminalCollapsed', newVal.toString());
-      // When expanding (newVal false) refit terminal after CSS transition completes
-      if (!newVal && isMobile && bodyEl) {
-        const onTransitionEnd = (e: TransitionEvent) => {
-          // Only react to max-height transition on this element
-          if (e.target !== bodyEl) return;
-          bodyEl.removeEventListener('transitionend', onTransitionEnd);
-          islandComp?.resizeTerminal();
-          islandComp?.focusTerminal();
-        };
-        bodyEl.addEventListener('transitionend', onTransitionEnd);
-        // Safety fallback in case transitionend doesn't fire
-        setTimeout(() => {
-          bodyEl?.removeEventListener('transitionend', onTransitionEnd);
-          islandComp?.resizeTerminal();
-          islandComp?.focusTerminal();
-        }, 500);
-      } else if (!newVal) {
+      if (!newVal) {
         setTimeout(() => {
           islandComp?.resizeTerminal();
           islandComp?.focusTerminal();
@@ -51,20 +29,13 @@
       return newVal;
     });
   }
-  
+
   let islandComp: any;
-  // Determine if we're in mobile view based on window width
-  // Initialize mobile detection immediately to prevent layout shift
-  let isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
   // Track focus state from TerminalIsland
   let isFocused = false;
-  // Desktop width is now driven purely by CSS (width: clamp(320px, 30vw, 600px))
-  // to avoid SSR/hydration mismatches and initial flicker.
-  
+
   onMount(() => {
-    const checkMobile = () => {
-      isMobile = window.innerWidth < 768; // Match Tailwind's md breakpoint
-      // Don't resize when collapsed — container has zero height, proposeDimensions returns garbage
+    const onResize = () => {
       if (!isCollapsed) {
         setTimeout(() => {
           islandComp?.resizeTerminal();
@@ -73,7 +44,7 @@
     };
 
     const handleKey = (e: KeyboardEvent) => {
-      if (isMobile || !e.shiftKey) return;
+      if (!e.shiftKey) return;
       if (e.key === 'ArrowRight' && !isCollapsed) {
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -84,7 +55,6 @@
           e.stopImmediatePropagation();
           toggle();
         } else {
-          // Focus terminal if already expanded
           e.preventDefault();
           e.stopImmediatePropagation();
           islandComp?.focusTerminal();
@@ -93,26 +63,16 @@
         if (!isCollapsed) {
           e.preventDefault();
           e.stopImmediatePropagation();
-          // Blur terminal textarea and let focus return to main content
           const active = document.activeElement as HTMLElement | null;
           if (active) active.blur();
         }
       }
     };
 
-    
-    // Check initially and on resize
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    window.addEventListener('keydown', handleKey, true);
-
     const handleVim = (e: KeyboardEvent) => {
-      if (isMobile) return;
-      // Ignore if any input/textarea is focused
       const active = document.activeElement as HTMLElement | null;
       if (active) {
         const tagName = active.tagName.toLowerCase();
-        // Don't intercept hjkl when user is typing in inputs, textareas, or content-editable elements
         if (tagName === 'input' || tagName === 'textarea' || active.isContentEditable ||
             active.classList.contains('xterm-helper-textarea')) {
           return;
@@ -134,15 +94,18 @@
           (pane ?? window).scrollBy({ left: step, behavior: 'smooth' });
           break;
         default:
-          return; // do not prevent default
+          return;
       }
       e.preventDefault();
     };
 
+    onResize();
+    window.addEventListener('resize', onResize);
+    window.addEventListener('keydown', handleKey, true);
     window.addEventListener('keydown', handleVim);
-    
+
     return () => {
-      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('resize', onResize);
       window.removeEventListener('keydown', handleKey, true);
       window.removeEventListener('keydown', handleVim);
     };
@@ -150,24 +113,6 @@
 </script>
 
 <style>
-  /* Mobile collapse (vertical) – transition both max-height and min-height */
-  .body {
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                min-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  /* Fixed height on mobile so xterm has a consistent container to measure */
-  @media (max-width: 767px) {
-    .body {
-      max-height: 400px;
-      min-height: 400px;
-    }
-    .body.mobile-collapsed {
-      max-height: 0;
-      min-height: 0;
-    }
-  }
-  
   /* Desktop collapse (horizontal) */
   .desktop-wrapper {
     position: relative;
@@ -178,32 +123,25 @@
     border: 1px solid rgba(100, 255, 218, 0.15);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 
+    box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.3),
       inset 0 1px 0 rgba(100, 255, 218, 0.1);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: clamp(320px, 30vw, 600px);
   }
-  
-  /* Desktop (md+) specific widths - removed fixed width, now using dynamic width */
-  @media (min-width: 768px) {
-    .desktop-wrapper {
-      /* Drive desktop width purely via CSS to avoid SSR/CSR mismatch */
-      width: clamp(320px, 30vw, 600px);
-    }
-    .desktop-collapsed {
-      width: 32px !important;
-    }
+
+  .desktop-collapsed {
+    width: 32px !important;
   }
-  
-  
+
   .desktop-wrapper.focused {
     border-color: rgba(100, 255, 218, 0.4);
-    box-shadow: 
+    box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.3),
       0 0 0 1px rgba(100, 255, 218, 0.2),
       inset 0 1px 0 rgba(100, 255, 218, 0.1);
   }
-  
+
   .desktop-wrapper::before {
     content: '';
     position: absolute;
@@ -216,16 +154,41 @@
     transition: opacity 0.3s ease;
     pointer-events: none;
   }
-  
+
   .desktop-wrapper.focused::before {
     opacity: 1;
   }
-  
-  /* Mobile collapse – height overrides now in the mobile media query above */
-  .mobile-collapsed {
+
+  /* Terminal content container */
+  .terminal-content {
+    width: 100%;
+    height: 100%;
     overflow: hidden;
   }
-  
+
+  /* Hide terminal contents when collapsed */
+  .desktop-collapsed .terminal-content {
+    display: none;
+  }
+
+  /* Collapsed placeholder label */
+  .collapsed-label {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: rgba(100, 255, 218, 0.6);
+    user-select: none;
+    pointer-events: none;
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 8px rgba(100, 255, 218, 0.3);
+  }
+
   /* Desktop collapse toggle button */
   .desktop-toggle {
     position: absolute;
@@ -248,117 +211,47 @@
     font-size: 10px;
     transition: all 0.2s ease;
     backdrop-filter: blur(8px);
-    box-shadow: 
+    box-shadow:
       0 4px 16px rgba(0, 0, 0, 0.4),
       inset 0 1px 0 rgba(100, 255, 218, 0.1);
   }
-  
+
   .desktop-toggle:hover {
     background: linear-gradient(135deg, #161616 0%, #1a1a1a 100%);
     color: #64ffda;
     border-color: rgba(100, 255, 218, 0.4);
-    box-shadow: 
+    box-shadow:
       0 6px 20px rgba(0, 0, 0, 0.5),
       0 0 0 1px rgba(100, 255, 218, 0.3),
       inset 0 1px 0 rgba(100, 255, 218, 0.2);
   }
-  
-  /* Terminal content container */
-  .terminal-content {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-  
-  /* Hide terminal contents when collapsed on desktop */
-  .desktop-collapsed .terminal-content {
-    display: none;
-  }
-
-  /* Collapsed placeholder label */
-  .collapsed-label {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    writing-mode: vertical-rl;
-    text-orientation: upright;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: rgba(100, 255, 218, 0.6);
-    user-select: none;
-    pointer-events: none;
-    letter-spacing: 0.15em;
-    text-shadow: 0 0 8px rgba(100, 255, 218, 0.3);
-  }
-  
-  /* Mobile header styling */
-  .mobile-header {
-    background: linear-gradient(90deg, #0d0d0d 0%, #161616 100%);
-    border-bottom: 1px solid rgba(100, 255, 218, 0.2);
-    backdrop-filter: blur(8px);
-  }
-  
-  .mobile-toggle {
-    color: rgba(100, 255, 218, 0.8);
-    transition: color 0.2s ease;
-    font-size: 12px;
-  }
-  
-  .mobile-toggle:hover {
-    color: #64ffda;
-  }
-  
-  .mobile-title {
-    color: rgba(100, 255, 218, 0.7);
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: lowercase;
-  }
 </style>
 
-<!-- Wrapper adapts layout via Tailwind breakpoints -->
 <div class="h-full flex flex-col desktop-wrapper"
-     class:desktop-collapsed={!isMobile && isCollapsed}
+     class:desktop-collapsed={isCollapsed}
      class:focused={isFocused}
 >
-  <!-- Header bar only visible on small screens -->
-  <div class="md:hidden flex items-center justify-between px-4 py-3 mobile-header">
-    <span class="mobile-title text-xs">terminal</span>
-    <button class="mobile-toggle" on:click={toggle} aria-label="Toggle terminal">
-      {#if isCollapsed}
-        ▼
-      {:else}
-        ▲
-      {/if}
-    </button>
-  </div>
-
-  <!-- Desktop collapse toggle button (only visible in desktop mode) -->
-  {#if !isMobile && isCollapsed}
-    <button 
-      class="desktop-toggle hidden md:flex" 
-      on:click={toggle} 
+  {#if isCollapsed}
+    <button
+      class="desktop-toggle flex"
+      on:click={toggle}
       aria-label="Expand terminal"
     >
       ◀
     </button>
-    <span class="collapsed-label hidden md:block">terminal</span>
-  {:else if !isMobile}
-    <button 
-      class="desktop-toggle hidden md:flex" 
-      on:click={toggle} 
+    <span class="collapsed-label">terminal</span>
+  {:else}
+    <button
+      class="desktop-toggle flex"
+      on:click={toggle}
       aria-label="Collapse terminal"
     >
       ▶
     </button>
   {/if}
 
-  <!-- Terminal body: hidden on mobile when collapsed -->
   <div class="flex-1 overflow-hidden">
-    <div bind:this={bodyEl} class="terminal-content body" class:mobile-collapsed={isMobile && isCollapsed}>
+    <div class="terminal-content">
       <TerminalIsland bind:this={islandComp} bind:isFocused />
     </div>
   </div>

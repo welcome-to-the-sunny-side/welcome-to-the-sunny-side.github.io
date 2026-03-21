@@ -1,3 +1,2 @@
 - refine terminal:
-    - if you type text in the terminal until we go to a new line, then cannot go back to the previous line using delete 
     - improve look of the terminal? change fonts, colors? introduce different terminal skins like we have for the content pane?

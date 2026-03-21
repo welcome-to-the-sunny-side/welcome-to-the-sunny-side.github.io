@@ -178,7 +178,7 @@ onMount(async () => {
     },
     cursorBlink: false,
     fontFamily: 'IBM Plex Mono, SF Mono, Menlo, Monaco, Consolas, monospace',
-    fontSize: 19,
+    fontSize: 14,
     fontWeight: '400',
     letterSpacing: 0.5,
     cols: 80,
@@ -568,16 +568,25 @@ onMount(async () => {
 
   function deleteChar() {
     if (cursorPos === 0) return;
-    
+
+    const cursorX = termInstance?.buffer?.active?.cursorX ?? 1;
+
     buffer = buffer.slice(0, cursorPos - 1) + buffer.slice(cursorPos);
     cursorPos--;
-    
-    // Redraw from cursor position
-    term.write('\x1b[D'); // move left
-    const remaining = buffer.slice(cursorPos) + ' '; // add space to clear last char
-    term.write(remaining);
-    // Move cursor back to correct position
-    term.write(`\x1b[${remaining.length}D`);
+
+    if (cursorX === 0) {
+      // We're at column 0 of a wrapped row — move up and to end of previous row
+      const cols = termInstance?.cols ?? 80;
+      term.write('\x1b[A');        // move up one row
+      term.write(`\x1b[${cols}G`); // move to last column
+      term.write('\x1b[J');        // clear everything from here down
+    } else {
+      // Normal case — same row
+      term.write('\x1b[D'); // move left
+      const remaining = buffer.slice(cursorPos) + ' ';
+      term.write(remaining);
+      term.write(`\x1b[${remaining.length}D`);
+    }
   }
 
   let escSeq = '';

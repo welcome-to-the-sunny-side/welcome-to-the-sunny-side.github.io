@@ -44,6 +44,10 @@ export const dark: Skin = {
     /* easing */
     'ease-retro': 'cubic-bezier(0.25,0.46,0.45,0.94)',
 
+    /* inline code */
+    'code-bg': 'rgba(255, 255, 255, 0.07)',
+    'code-border': 'rgba(255, 255, 255, 0.1)',
+
     /* scrollbar */
     'scrollbar-track': 'rgba(0, 0, 0, 0.2)',
     'scrollbar-thumb': 'linear-gradient(180deg, rgba(100, 255, 218, 0.3), rgba(100, 255, 218, 0.1))',

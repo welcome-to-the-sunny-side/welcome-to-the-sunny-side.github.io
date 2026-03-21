@@ -58,6 +58,10 @@ export const sunny: Skin = {
     /* easing */
     'ease-retro': 'cubic-bezier(0.25,0.46,0.45,0.94)',
 
+    /* inline code */
+    'code-bg': 'rgba(0, 0, 0, 0.04)',
+    'code-border': 'rgba(0, 0, 0, 0.12)',
+
     /* scrollbar */
     'scrollbar-track': 'rgba(216, 139, 0, 0.1)',
     'scrollbar-thumb': 'linear-gradient(180deg, rgba(216, 139, 0, 0.4), rgba(216, 139, 0, 0.2))',

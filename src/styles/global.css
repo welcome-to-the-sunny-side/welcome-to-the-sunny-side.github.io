@@ -94,6 +94,21 @@ main::-webkit-scrollbar-thumb:hover {
   opacity: 1 !important;
 }
 
+/* Inline code – visible background instead of backtick pseudo-elements */
+.prose :where(code):not(:where([class~="not-prose"],[class~="not-prose"] *)):before,
+.prose :where(code):not(:where([class~="not-prose"],[class~="not-prose"] *)):after {
+  content: none;
+}
+.prose :where(code):not(:where(pre code, [class~="not-prose"],[class~="not-prose"] *)) {
+  background: var(--code-bg);
+  border: 0.5px solid var(--code-border);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  font-size: 0.84em;
+  font-weight: inherit;
+  font-family: var(--font-mono);
+}
+
 /* MathJax overflow/wrapping safeguards */
 /* Ensure inline/display math never forces the page wider than the viewport */
 mjx-container {

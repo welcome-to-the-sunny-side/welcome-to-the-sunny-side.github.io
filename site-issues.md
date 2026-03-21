@@ -1,0 +1,5 @@
+- increase the scale of the entire website by a bit? 
+- refine terminal:
+    - output for the help command overflows
+    - currently captures control, disallowing simple commands like ctrl-r for browser refresh, ctrl-l for switching to address bar, etc
+    - improve look of the terminal? change fonts, colors? introduce different terminal skins like we have for the content pane?

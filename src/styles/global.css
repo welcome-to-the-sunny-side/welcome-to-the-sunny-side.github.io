@@ -6,6 +6,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  font-size: 125%;
+}
+
 body {
   @apply bg-bg text-text font-mono tracking-tight;
   font-size: theme('fontSize.base');

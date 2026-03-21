@@ -458,7 +458,7 @@ $: skin = $currentSkin;
 </script>
 
 {#if isBlog}
-  <section class={`${skin.classes.contentPane} mx-auto max-w-4xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro`}>
+  <section class={`${skin.classes.contentPane} mx-auto max-w-4xl px-20 py-6 bg-surface text-text transition-colors duration-150 ease-retro`}>
     <header class="mb-8">
       <h1 class={`${skin.classes.blogTitle}`}>{frontmatter.title ?? 'Untitled'}</h1>
       {#if frontmatter.date}

@@ -169,7 +169,7 @@ onMount(async () => {
     },
     cursorBlink: false,
     fontFamily: 'IBM Plex Mono, SF Mono, Menlo, Monaco, Consolas, monospace',
-    fontSize: 14,
+    fontSize: 19,
     fontWeight: '400',
     letterSpacing: 0.5,
     cols: 80,

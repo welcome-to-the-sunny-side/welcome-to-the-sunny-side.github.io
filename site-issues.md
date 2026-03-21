@@ -1,5 +1,3 @@
 - refine terminal:
-    - output for the help command overflows
-    - 
-    - currently captures control, disallowing simple commands like ctrl-r for browser refresh, ctrl-l for switching to address bar, etc
+    - if you type text in the terminal until we go to a new line, then cannot go back to the previous line using delete 
     - improve look of the terminal? change fonts, colors? introduce different terminal skins like we have for the content pane?

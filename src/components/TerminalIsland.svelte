@@ -23,9 +23,18 @@ export function focusTerminal() {
   termInstance?.focus();
 }
 
+// Fit terminal but reserve one row at the bottom for visual breathing room
+function fitWithPadding() {
+  if (!fitAddon || !termInstance) return;
+  const dims = fitAddon.proposeDimensions();
+  if (dims) {
+    termInstance.resize(dims.cols, Math.max(1, dims.rows - 1));
+  }
+}
+
 // Re-fit terminal when its container size increases (e.g., after mobile expand)
 export function resizeTerminal() {
-  fitAddon?.fit();
+  fitWithPadding();
 }
 
 // --- Date index (prebuilt at build-time) ---
@@ -181,9 +190,14 @@ onMount(async () => {
   const fit = new FitAddon();
   fitAddon = fit;
   term.loadAddon(fit);
+  // Let browser-native shortcuts pass through instead of being captured by xterm
+  term.attachCustomKeyEventHandler((e: KeyboardEvent) => {
+    if (e.ctrlKey || e.metaKey) return false;
+    return true;
+  });
   term.open(container);
   termInstance = term;
-  fit.fit();
+  fitWithPadding();
   term.focus();
 
   function setFocusStyle(focused: boolean) {
@@ -376,8 +390,6 @@ onMount(async () => {
       }
       // removed: grep
       case 'help': {
-        // Color and align command list
-        const pad = (s: string, n: number) => s + ' '.repeat(Math.max(0, n-s.length));
         const entries = [
           { cmd: 'ls [-r] [-d|-dl|-de] [-v] [path]', desc: 'list directory (tree with -r, date sort, verbose dates)' },
           { cmd: 'cd <dir>', desc: 'change directory' },
@@ -386,15 +398,14 @@ onMount(async () => {
           { cmd: 'skin <name>', desc: 'wear skin' },
           { cmd: 'pop', desc: 'go back' },
           { cmd: 'clear', desc: 'clear terminal' },
-          { cmd: 'help', desc: '-' },
+          { cmd: 'help', desc: 'this message' },
         ];
-        term.writeln(`${PATH_COLOR}COMMAND         DESCRIPTION\x1b[0m`);
+        term.writeln(`${PATH_COLOR}COMMANDS\x1b[0m`);
         for (const {cmd, desc} of entries) {
-          term.writeln(`${FILE_COLOR}${pad(cmd, 14)}\x1b[0m  ${desc}`);
+          term.writeln(`  ${FILE_COLOR}${cmd}\x1b[0m`);
+          term.writeln(`\x1b[2m    ${desc}\x1b[0m`);
         }
-        // Extra blank line before shortcuts
         term.writeln('');
-        term.writeln(`${PATH_COLOR}SHORTCUT        DESCRIPTION\x1b[0m`);
         const sc = [
           { key: 'Tab', desc: 'accept autocomplete' },
           { key: 'Shift+Tab', desc: 'cycle suggestions' },
@@ -404,8 +415,10 @@ onMount(async () => {
           { key: 'Shift+↑', desc: 'focus content pane' },
           { key: 'h/j/k/l', desc: 'scroll content pane (when terminal unfocused)' },
         ];
+        term.writeln(`${PATH_COLOR}SHORTCUTS\x1b[0m`);
         for (const {key, desc} of sc) {
-          term.writeln(`${FILE_COLOR}${pad(key, 14)}\x1b[0m  ${desc}`);
+          term.writeln(`  ${FILE_COLOR}${key}\x1b[0m`);
+          term.writeln(`\x1b[2m    ${desc}\x1b[0m`);
         }
         return false;
       }

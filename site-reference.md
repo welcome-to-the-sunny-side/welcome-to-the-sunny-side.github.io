@@ -1,6 +1,6 @@
 # Welcome to the Sunny Side – Site Reference
 
-_Last updated: 2026-03-21_ (Mobile navigation: removed terminal on mobile, added breadcrumb bar + directory nav-view pages) (Codebase cleanup & UX fixes: removed dead `ContentPane.astro`; removed unused deps `katex`, `markdown-it-katex`, `markdown-it-texmath`; deduplicated skin application logic (removed inline script from BaseLayout, `applySkin()` in `skin.ts` is the single source); fixed home.html flash on direct URL navigation by initializing `path`/`displayPath` from router store; added inline code styling with per-skin `--code-bg`/`--code-border` CSS variables; global scale via `html { font-size }` in `global.css`; terminal help output reformatted to stacked layout; terminal passes Ctrl/Cmd keys through to browser via `customKeyEventHandler`; terminal bottom padding via `fitWithPadding()` reserving one row; terminal backspace across wrapped lines fixed by detecting `cursorX === 0` and using `\x1b[A` + `\x1b[${cols}G` + `\x1b[J`)
+_Last updated: 2026-03-22_ (Terminal themes: independent terminal theme system with 5 themes; renamed skin commands to cskins/cskin, added tskins/tskin) (Mobile navigation: removed terminal on mobile, added breadcrumb bar + directory nav-view pages) (Codebase cleanup & UX fixes: removed dead `ContentPane.astro`; removed unused deps `katex`, `markdown-it-katex`, `markdown-it-texmath`; deduplicated skin application logic (removed inline script from BaseLayout, `applySkin()` in `skin.ts` is the single source); fixed home.html flash on direct URL navigation by initializing `path`/`displayPath` from router store; added inline code styling with per-skin `--code-bg`/`--code-border` CSS variables; global scale via `html { font-size }` in `global.css`; terminal help output reformatted to stacked layout; terminal passes Ctrl/Cmd keys through to browser via `customKeyEventHandler`; terminal bottom padding via `fitWithPadding()` reserving one row; terminal backspace across wrapped lines fixed by detecting `cursorX === 0` and using `\x1b[A` + `\x1b[${cols}G` + `\x1b[J`)
 
 ## 1 . High-level Overview
 The site is a **static, terminal-driven blog & knowledge base** built with **Astro** for static generation and **Svelte** for the interactive UI. Styling is primarily handled by **Tailwind CSS** (integrated via `@astrojs/tailwind`), utilizing its utility classes and the `@tailwindcss/typography` plugin for Markdown rendering. All human-readable content lives in Markdown files under `src/content` and is presented at URLs that end in `.html`. Additionally, the site now supports rendering of HTML files, allowing for more diverse content presentation. A new Games section has also been added, providing a dedicated space for browser-game adjacent pages.
@@ -35,8 +35,10 @@ The site is published via GitHub Pages; Astro’s static output lives in `dist/`
 │  ├─ pages/
 │  │   ├─ index.astro       homepage → BaseLayout
 │  │   └─ [...slug].astro   catch-all for every other page
-│  ├─ stores/               Svelte stores (client-side routing)
-│  │   └─ router.ts
+│  ├─ stores/               Svelte stores (client-side routing, theming)
+│  │   ├─ router.ts
+│  │   ├─ skin.ts            content pane skin store
+│  │   └─ terminalTheme.ts   terminal theme store (independent from skins)
 │  └─ content/              **all markdown lives here**
 │      └─ ...
 ├─ src/styles/
@@ -91,6 +93,10 @@ Explanation:
 | `open <file>`  | Push file path to router and render it                   |
 | `pop`          | Return to previous path                                  |
 | `clear`        | Clear the terminal output                                |
+| `cskins`       | List available content pane skins                        |
+| `cskin <name>` | Switch content pane skin (e.g. `cskin sunny`)            |
+| `tskins`       | List available terminal themes                           |
+| `tskin <name>` | Switch terminal theme (e.g. `tskin dracula`)             |
 | `help`         | Show built-in command help (now formatted, colorized)    |
 
 ### Keyboard Shortcuts & UX Enhancements
@@ -120,13 +126,10 @@ The terminal keeps history, shows inline autocomplete suggestions while you type
 - **Line-wrap backspace**: When cursor is at column 0 of a wrapped row, backspace moves up one row and to the last column instead of failing silently
 - **Help output**: Stacked format (command on one line, description indented below) instead of columnar layout, to avoid overflow issues
 - **Visual elements**: Rounded corners (8px), sophisticated multi-layer box shadows, glowing focus states
-- **Prompt path and `/`**: Teal (`#64ffda`)
-- **Files**: Yellow (`#ffd43b`)
-- **Directories**: Light gray (`#e0e0e0`)
-- **Cursor**: Teal (`#64ffda`), non-blinking
-- **Borders**: Single teal border with focus glow, no double-border effect
-- **Scrollbars**: Modern gradient styling matching current skin theme
-- **Selection**: Clean teal highlight without borders for proper text alignment
+- **Colors are theme-driven**: Prompt path, files, directories, cursor, borders, scrollbars, and selection colors all come from the active terminal theme (see §11b). Defaults (classic theme): path teal `#64ffda`, files yellow `#ffd43b`, directories light gray, cursor teal non-blinking.
+- **Borders**: Single accent-colored border with focus glow, no double-border effect
+- **Scrollbars**: Themed via CSS custom properties, matching active terminal theme
+- **Selection**: Clean accent highlight without borders for proper text alignment
 
 ### Mobile Navigation (MobileNav.svelte)
 _Added: 2026-03-21_
@@ -274,18 +277,67 @@ Introduced a **skin system** that allows live switching between completely diffe
 * **`src/skins/sunny.ts`** – new warm light academic palette.
 * **`src/stores/skin.ts`** – Svelte store now centralises DOM side-effects: applying classes to `<html>/<body>` and writing all `--css-vars` on every change (and on first load via `localStorage`).
 * **Commands** in `TerminalIsland.svelte`:
-  * `skins` – list available skins in a tree view (`├─`/`└─`).
-  * `skin <name>` – activate a skin (no page reload needed).
+  * `cskins` – list available content pane skins in a tree view (`├─`/`└─`).
+  * `cskin <name>` – activate a content pane skin (no page reload needed).
+  * (Previously named `skins`/`skin`, renamed to `cskins`/`cskin` to distinguish from terminal themes.)
 * **Tailwind** refactor – all colour, typography, spacing, radius, easing tokens in `tailwind.config.js` reference CSS variables, so skins can override every visual token.
 * **ContentPane** binds classes reactively to `$currentSkin.classes.contentPane`, so prose enters or leaves `prose-invert` automatically.
 
 ### Usage
 ```
-> skins          # lists dark sunny
-> skin sunny     # instant switch to light mode
-> skin dark     # back to retro dark
+> cskins          # lists dark sunny
+> cskin sunny     # instant switch to light mode
+> cskin dark      # back to retro dark
 ```
 Selection persists between sessions (key `wtss-skin` in localStorage).
+
+---
+
+## 11b. Terminal Themes (Independent from Content Skins)
+_Added: 2026-03-22_
+
+The terminal has its own **independent theme system**, completely decoupled from the content pane skin. This mirrors how a real terminal window and browser window on a PC are independent — you can have a dark terminal with a light content pane, or any combination.
+
+### Architecture
+* **`src/stores/terminalTheme.ts`** — central store defining the `TerminalTheme` interface and all theme definitions.
+* **`TerminalTheme` interface** has three sections:
+  * `xterm` — full xterm.js color palette (background, foreground, cursor, 16 ANSI colors, selection).
+  * `ui` — RGB triples for ANSI escape colors used by terminal output (prompt path color, file listing color, directory color).
+  * `wrapper` — styling for the `TerminalPane.svelte` border, glow, shadow, and toggle button (bg, bgEnd, border, borderFocus, glow, glowStrong, accent, accentMuted, shadow).
+
+### Available Themes
+| Theme | Style | Accent Color |
+|-------|-------|-------------|
+| `classic` (default) | Dark background (`#0a0a0a`) | Teal (`#64ffda`) |
+| `solarized` | Light background (`#fdf6e3`) | Cyan (`#2aa198`) |
+| `gruvbox` | Light background (`#fbf1c7`) | Orange (`#d65d0e`) |
+| `dracula` | Dark background (`#282a36`) | Pink (`#ff79c6`) |
+| `nord` | Dark background (`#2e3440`) | Frost blue (`#88c0d0`) |
+
+### How It Works
+* **Theme subscription** in `TerminalIsland.svelte` reacts to store changes and updates:
+  * xterm.js `options.theme` for terminal colors
+  * ANSI color variables (`PATH_COLOR`, `FILE_COLOR`, `DIR_COLOR`) for prompt/listing output
+  * CSS custom properties on the container element for scrollbar, cursor, and selection styling
+* **Wrapper styling** in `TerminalPane.svelte` uses `style:--tw-*={theme.wrapper.*}` bindings on the wrapper div, driving all border, glow, and shadow colors via CSS custom properties.
+* **Scrollbar theming** uses CSS custom properties (`--tt-scrollbar-thumb`, `--tt-scrollbar-track`, etc.) set on the terminal container, referenced by `::-webkit-scrollbar-*` selectors.
+* **Light theme shadows** use `rgba(0,0,0,0.08)` instead of `rgba(0,0,0,0.3)` to avoid dark shadow artifacts on light backgrounds.
+
+### Theme Switching Behavior
+* Old text already rendered in the terminal retains the previous theme's colors. The `tskin` command message hints: `use "clear" to refresh old text styled by the previous tskin`.
+* New output after switching uses the updated colors immediately.
+* Selection persists between sessions (key `wtss-terminal-theme` in localStorage).
+
+### Usage
+```
+> tskins          # lists classic solarized gruvbox dracula nord
+> tskin dracula   # switch terminal to Dracula theme
+> tskin classic   # back to default
+> clear           # clears old text that still has previous theme colors
+```
+
+### Known Issue
+* **Text overflow behind scrollbar**: A few characters at the end of long lines can be hidden behind the xterm.js scrollbar. Column subtraction in `fitWithPadding()` did not resolve this. The issue appears to be in how xterm internally handles the viewport/scrollbar relationship.
 
 ---
 

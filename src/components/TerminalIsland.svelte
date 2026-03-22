@@ -41,7 +41,7 @@ function fitWithPadding() {
   if (container && (container.offsetHeight === 0 || container.offsetWidth === 0)) return;
   const dims = fitAddon.proposeDimensions();
   if (dims && dims.cols > 2 && dims.rows > 1) {
-    termInstance.resize(dims.cols, Math.max(1, dims.rows - 1));
+    termInstance.resize(dims.cols, dims.rows);
     afterResizeCallback?.();
   }
 }

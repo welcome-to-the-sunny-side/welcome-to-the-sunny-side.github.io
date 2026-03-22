@@ -2,7 +2,7 @@
 displayMode: blog
 title: ICPC
 date: 2026-03-18
-tags: [contest]
+tags: ["sport programming", "contest"]
 ---
 
 ICPC AWF took place on 8 March 2026, and while official confirmation will take some time, my team should almost certainly qualify (based on the ranklist, previous year trends, and unofficial hearsay from the organizers).

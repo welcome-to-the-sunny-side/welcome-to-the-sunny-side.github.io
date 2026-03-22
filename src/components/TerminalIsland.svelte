@@ -396,7 +396,7 @@ onMount(async () => {
         } else {
           try {
             setTerminalTheme(name);
-            term.writeln(`Terminal theme: ${name} (use "clear" to refresh old text styled by the previous tskin)`);
+            term.writeln(`Terminal theme: ${name} (use "clear" to get rid of old text styled by the previous tskin)`);
           } catch (e) {
             term.writeln(String(e));
           }

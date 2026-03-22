@@ -498,7 +498,7 @@ $: skin = $currentSkin;
   <div class="mx-auto max-w-2xl px-4 py-8 bg-surface text-text transition-colors duration-150 ease-retro">
     <h1 class="font-mono text-accent text-lg mb-6">{navViewDir === '/' ? '~' : navViewDir}</h1>
     <ul class="list-none p-0 m-0 font-mono text-sm">
-      {#each navViewEntries as entry, i}
+      {#each navViewEntries as entry, i (entry.path)}
         {@const isLast = i === navViewEntries.length - 1}
         <li class="m-0 p-0">
           <button

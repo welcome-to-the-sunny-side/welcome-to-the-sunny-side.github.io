@@ -1,3 +1,3 @@
-- refine terminal:
-    - make it usable on mobile
-    - improve look of the terminal? change fonts, colors? introduce different terminal skins like we have for the content pane?
+- improve terminal:
+    - lets say i write some commands with a certain skin, and then change the tskin without clearing the terminal - the text from the previous commands still remains the same color
+    - the scroll bar of the terminal seems to always be the green from the classic tskin

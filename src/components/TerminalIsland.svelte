@@ -4,13 +4,22 @@ import { get } from 'svelte/store';
 import { currentPath } from '../stores/router';
 import { list, isFile, isDir, resolvePath } from '../lib/virtualFs';
 import { listSkins, wearSkin } from '../stores/skin';
-
-const PATH_RGB = '100;255;218'; // old green for prompt path and '/'
-const PATH_COLOR = `\x1b[38;2;${PATH_RGB}m`;
-const FILE_RGB = '255;230;120'; // yellowish highlight for files
-const FILE_COLOR = `\x1b[38;2;${FILE_RGB}m`;
-const DIR_COLOR = '\x1b[37m'; // plain white for directories
+import { currentTerminalTheme, listTerminalThemes, setTerminalTheme } from '../stores/terminalTheme';
+import type { TerminalTheme } from '../stores/terminalTheme';
 import 'xterm/css/xterm.css';
+
+// Dynamic color helpers — updated when theme changes
+let ttheme: TerminalTheme = get(currentTerminalTheme);
+let PATH_COLOR = `\x1b[38;2;${ttheme.ui.pathRgb}m`;
+let FILE_COLOR = `\x1b[38;2;${ttheme.ui.fileRgb}m`;
+let DIR_COLOR = ttheme.ui.dirColor;
+
+function updateColors(t: TerminalTheme) {
+  ttheme = t;
+  PATH_COLOR = `\x1b[38;2;${t.ui.pathRgb}m`;
+  FILE_COLOR = `\x1b[38;2;${t.ui.fileRgb}m`;
+  DIR_COLOR = t.ui.dirColor;
+}
 
 let container: HTMLDivElement;
 // reactive focus state for border highlight
@@ -51,6 +60,7 @@ let loadingSpinnerInterval: number | null = null;
 const spinnerFrames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
 let spinnerFrame = 0;
 let unsubLoading: (() => void) | null = null;
+let unsubTheme: (() => void) | null = null;
 let hasShownInitialBanner = false;
 
 // --- Date helpers ---
@@ -156,31 +166,9 @@ onMount(async () => {
   } catch {}
   const { Terminal } = await import('xterm');
   const { FitAddon } = await import('@xterm/addon-fit');
+  const initialTheme = get(currentTerminalTheme);
   const term = new Terminal({
-    theme: {
-      background: '#0a0a0a',
-      foreground: '#e0e0e0',
-      cursor: '#64ffda',
-      cursorAccent: '#0a0a0a',
-      selectionBackground: 'rgba(100, 255, 218, 0.2)',
-      selectionForeground: '#e0e0e0',
-      black: '#0a0a0a',
-      red: '#ff6b6b',
-      green: '#51cf66',
-      yellow: '#ffd43b',
-      blue: '#339af0',
-      magenta: '#f06595',
-      cyan: '#64ffda',
-      white: '#e0e0e0',
-      brightBlack: '#495057',
-      brightRed: '#ff8787',
-      brightGreen: '#69db7c',
-      brightYellow: '#ffe066',
-      brightBlue: '#4dabf7',
-      brightMagenta: '#f783ac',
-      brightCyan: '#7fecec',
-      brightWhite: '#f8f9fa'
-    },
+    theme: initialTheme.xterm,
     cursorBlink: false,
     fontFamily: 'IBM Plex Mono, SF Mono, Menlo, Monaco, Consolas, monospace',
     fontSize: 14,
@@ -221,7 +209,7 @@ onMount(async () => {
   let buffer = '';
   let cursorPos = 0; // cursor position within the buffer
   // --- Autocomplete state ---
-  const COMMANDS = ['ls', 'cd', 'open', 'pop', 'clear', 'help', 'skin', 'skins'];
+  const COMMANDS = ['ls', 'cd', 'open', 'pop', 'clear', 'help', 'cskin', 'cskins', 'tskin', 'tskins'];
   let completions: string[] = [];
   let compIndex = 0;
   let ghostActive = false;
@@ -371,7 +359,7 @@ onMount(async () => {
       case 'clear':
         term.clear();
         return false;
-      case 'skins': {
+      case 'cskins': {
         const names = listSkins();
         names.forEach((name, idx) => {
           const branch = idx === names.length - 1 ? '└─ ' : '├─ ';
@@ -379,28 +367,49 @@ onMount(async () => {
         });
         return false;
       }
-      case 'skin': {
+      case 'cskin': {
         const name = args[0];
         if (!name) {
-          term.writeln('Usage: skin <name>');
+          term.writeln('Usage: cskin <name>');
         } else {
           try {
             wearSkin(name);
-            term.writeln(`Now wearing ${name}`);
+            term.writeln(`Content skin: ${name}`);
           } catch (e) {
             term.writeln(String(e));
           }
         }
         return false;
       }
-      // removed: grep
+      case 'tskins': {
+        const names = listTerminalThemes();
+        names.forEach((name, idx) => {
+          const branch = idx === names.length - 1 ? '└─ ' : '├─ ';
+          term.writeln(branch + name);
+        });
+        return false;
+      }
+      case 'tskin': {
+        const name = args[0];
+        if (!name) {
+          term.writeln('Usage: tskin <name>');
+        } else {
+          try {
+            setTerminalTheme(name);
+            term.writeln(`Terminal theme: ${name} (use "clear" to refresh old text styled by the previous tskin)`);
+          } catch (e) {
+            term.writeln(String(e));
+          }
+        }
+        return false;
+      }
       case 'help': {
         const entries = [
           { cmd: 'ls [-r] [-d|-dl|-de] [-v] [path]', desc: 'list directory (tree with -r, date sort, verbose dates)' },
           { cmd: 'cd <dir>', desc: 'change directory' },
           { cmd: 'open <file>', desc: 'open file in content pane' },
-          { cmd: 'skins', desc: 'list available skins' },
-          { cmd: 'skin <name>', desc: 'wear skin' },
+          { cmd: 'cskins / cskin <name>', desc: 'list / set content pane skin' },
+          { cmd: 'tskins / tskin <name>', desc: 'list / set terminal theme' },
           { cmd: 'pop', desc: 'go back' },
           { cmd: 'clear', desc: 'clear terminal' },
           { cmd: 'help', desc: 'this message' },
@@ -750,12 +759,36 @@ onMount(async () => {
       stopLoadingSpinner(prompt);
     }
   });
-  
+
+  // Live-switch terminal theme — clear old output so stale colors don't linger
+  function applyThemeCssVars(t: TerminalTheme) {
+    if (!container) return;
+    container.style.setProperty('--tt-cursor', t.xterm.cursor);
+    container.style.setProperty('--tt-selection', t.xterm.selectionBackground);
+    container.style.setProperty('--tt-scrollbar-thumb', t.wrapper.glowStrong);
+    container.style.setProperty('--tt-scrollbar-thumb-hover', t.wrapper.borderFocus);
+    container.style.setProperty('--tt-scrollbar-track', t.wrapper.glow);
+  }
+  applyThemeCssVars(get(currentTerminalTheme));
+
+  let isInitialTheme = true;
+  unsubTheme = currentTerminalTheme.subscribe((t) => {
+    updateColors(t);
+    if (termInstance) {
+      termInstance.options.theme = t.xterm;
+      applyThemeCssVars(t);
+    }
+    isInitialTheme = false;
+  });
+
 });
 
 onDestroy(() => {
   if (unsubLoading) {
     unsubLoading();
+  }
+  if (unsubTheme) {
+    unsubTheme();
   }
   if (loadingSpinnerInterval) {
     clearInterval(loadingSpinnerInterval);
@@ -764,55 +797,59 @@ onDestroy(() => {
 </script>
 
 <style>
-  .terminal-shell {
+  .terminal-shell-outer {
     width: 100%;
     height: 100%;
     background: transparent;
     overflow: hidden;
     position: relative;
     padding: 8px;
+    box-sizing: border-box;
+  }
+
+  .terminal-shell {
+    width: 100%;
+    height: 100%;
   }
   
   
-  /* Modern scrollbar */
+  /* Modern scrollbar — colors from terminal theme CSS vars */
   :global(.terminal-shell .xterm-viewport::-webkit-scrollbar) {
     width: 8px;
   }
-  
+
   :global(.terminal-shell .xterm-viewport::-webkit-scrollbar-track) {
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--tt-scrollbar-track, rgba(0, 0, 0, 0.2));
     border-radius: 4px;
   }
-  
+
   :global(.terminal-shell .xterm-viewport::-webkit-scrollbar-thumb) {
-    background: linear-gradient(180deg, rgba(100, 255, 218, 0.3), rgba(100, 255, 218, 0.1));
+    background: var(--tt-scrollbar-thumb, rgba(100, 255, 218, 0.3));
     border-radius: 4px;
-    border: 1px solid rgba(100, 255, 218, 0.1);
     transition: background 0.2s ease;
   }
-  
+
   :global(.terminal-shell .xterm-viewport::-webkit-scrollbar-thumb:hover) {
-    background: linear-gradient(180deg, rgba(100, 255, 218, 0.5), rgba(100, 255, 218, 0.2));
+    background: var(--tt-scrollbar-thumb-hover, rgba(100, 255, 218, 0.5));
   }
-  
+
   /* Do not pad internal xterm layers; padding here breaks selection alignment */
   /* Intentionally empty: keep .xterm-screen without custom padding */
-  
-  /* Cursor styling */
+
+  /* Cursor styling — driven by terminal theme */
   :global(.terminal-shell .xterm-cursor-layer .xterm-cursor-bar) {
-    background-color: #64ffda !important;
+    background-color: var(--tt-cursor, #64ffda) !important;
     width: 2px !important;
   }
-  
+
   :global(.terminal-shell .xterm-cursor-layer .xterm-cursor-block) {
-    background-color: rgba(100, 255, 218, 0.8) !important;
-    border: 1px solid #64ffda !important;
+    background-color: var(--tt-cursor, #64ffda) !important;
+    opacity: 0.8;
   }
-  
-  /* Selection styling */
+
+  /* Selection styling — driven by terminal theme */
   :global(.terminal-shell .xterm-selection div) {
-    background-color: rgba(100, 255, 218, 0.2) !important;
-    /* Borders on selection blocks cause visual offsets; keep clean fill only */
+    background-color: var(--tt-selection, rgba(100, 255, 218, 0.2)) !important;
     border: none !important;
   }
   
@@ -823,4 +860,6 @@ onDestroy(() => {
   }
 </style>
 
-<div bind:this={container} class="terminal-shell h-full w-full" class:focused={isFocused}></div>
+<div class="terminal-shell-outer h-full w-full" class:focused={isFocused}>
+  <div bind:this={container} class="terminal-shell"></div>
+</div>

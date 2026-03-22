@@ -2,6 +2,9 @@
   import { onMount } from 'svelte';
   import TerminalIsland from './TerminalIsland.svelte';
   import { writable } from 'svelte/store';
+  import { currentTerminalTheme } from '../stores/terminalTheme';
+
+  $: theme = $currentTerminalTheme;
 
   // Simple collapsed state – persisted in sessionStorage so it stays while navigating.
   const collapsed = writable<boolean>(false);
@@ -119,13 +122,13 @@
     height: 100%;
     width: 100%;
     box-sizing: border-box;
-    background: linear-gradient(135deg, #0a0a0a 0%, #0d0d0d 100%);
-    border: 1px solid rgba(100, 255, 218, 0.15);
+    background: linear-gradient(135deg, var(--tw-bg) 0%, var(--tw-bg-end) 100%);
+    border: 1px solid var(--tw-border);
     border-radius: 12px;
     overflow: hidden;
     box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(100, 255, 218, 0.1);
+      0 8px 32px var(--tw-shadow),
+      inset 0 1px 0 var(--tw-glow);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     width: clamp(320px, 30vw, 600px);
   }
@@ -135,11 +138,11 @@
   }
 
   .desktop-wrapper.focused {
-    border-color: rgba(100, 255, 218, 0.4);
+    border-color: var(--tw-border-focus);
     box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.3),
-      0 0 0 1px rgba(100, 255, 218, 0.2),
-      inset 0 1px 0 rgba(100, 255, 218, 0.1);
+      0 8px 32px var(--tw-shadow),
+      0 0 0 1px var(--tw-glow),
+      inset 0 1px 0 var(--tw-glow);
   }
 
   .desktop-wrapper::before {
@@ -149,7 +152,7 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(100, 255, 218, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, var(--tw-glow-strong), transparent);
     opacity: 0;
     transition: opacity 0.3s ease;
     pointer-events: none;
@@ -182,11 +185,10 @@
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.7rem;
     font-weight: 500;
-    color: rgba(100, 255, 218, 0.6);
+    color: var(--tw-accent-muted);
     user-select: none;
     pointer-events: none;
     letter-spacing: 0.15em;
-    text-shadow: 0 0 8px rgba(100, 255, 218, 0.3);
   }
 
   /* Desktop collapse toggle button */
@@ -197,8 +199,8 @@
     transform: translateY(-50%);
     width: 22px;
     height: 64px;
-    background: linear-gradient(135deg, #0d0d0d 0%, #161616 100%);
-    border: 1px solid rgba(100, 255, 218, 0.2);
+    background: linear-gradient(135deg, var(--tw-bg) 0%, var(--tw-bg-end) 100%);
+    border: 1px solid var(--tw-border);
     border-right: none;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
@@ -206,30 +208,38 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: rgba(100, 255, 218, 0.7);
+    color: var(--tw-accent-muted);
     z-index: 10;
     font-size: 10px;
     transition: all 0.2s ease;
     backdrop-filter: blur(8px);
     box-shadow:
-      0 4px 16px rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(100, 255, 218, 0.1);
+      0 4px 16px var(--tw-shadow),
+      inset 0 1px 0 var(--tw-glow);
   }
 
   .desktop-toggle:hover {
-    background: linear-gradient(135deg, #161616 0%, #1a1a1a 100%);
-    color: #64ffda;
-    border-color: rgba(100, 255, 218, 0.4);
+    color: var(--tw-accent);
+    border-color: var(--tw-border-focus);
     box-shadow:
-      0 6px 20px rgba(0, 0, 0, 0.5),
-      0 0 0 1px rgba(100, 255, 218, 0.3),
-      inset 0 1px 0 rgba(100, 255, 218, 0.2);
+      0 6px 20px var(--tw-shadow),
+      0 0 0 1px var(--tw-glow-strong),
+      inset 0 1px 0 var(--tw-glow);
   }
 </style>
 
 <div class="h-full flex flex-col desktop-wrapper"
      class:desktop-collapsed={isCollapsed}
      class:focused={isFocused}
+     style:--tw-bg={theme.wrapper.bg}
+     style:--tw-bg-end={theme.wrapper.bgEnd}
+     style:--tw-border={theme.wrapper.border}
+     style:--tw-border-focus={theme.wrapper.borderFocus}
+     style:--tw-glow={theme.wrapper.glow}
+     style:--tw-glow-strong={theme.wrapper.glowStrong}
+     style:--tw-accent={theme.wrapper.accent}
+     style:--tw-accent-muted={theme.wrapper.accentMuted}
+     style:--tw-shadow={theme.wrapper.shadow}
 >
   {#if isCollapsed}
     <button

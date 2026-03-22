@@ -324,7 +324,7 @@ The terminal has its own **independent theme system**, completely decoupled from
 * **Light theme shadows** use `rgba(0,0,0,0.08)` instead of `rgba(0,0,0,0.3)` to avoid dark shadow artifacts on light backgrounds.
 
 ### Theme Switching Behavior
-* Old text already rendered in the terminal retains the previous theme's colors. The `tskin` command message hints: `use "clear" to refresh old text styled by the previous tskin`.
+* Old text already rendered in the terminal retains the previous theme's colors. The `tskin` command message hints: `use "clear" to get rid of old text styled by the previous tskin`.
 * New output after switching uses the updated colors immediately.
 * Selection persists between sessions (key `wtss-terminal-theme` in localStorage).
 

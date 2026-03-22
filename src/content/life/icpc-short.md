@@ -37,7 +37,7 @@ void _print(const A&... a) {((__print(a), cerr << ", "), ...);}
 #define debug(...) cerr << "[" << #__VA_ARGS__ << "] = ["; _print(__VA_ARGS__); cerr << "]\n";
 ```
 
-Here's a blog I wrote asking for help on this : [link](https://codeforces.com/blog/entry/135911)
+Here's a blog I wrote asking for help on this: [link](https://codeforces.com/blog/entry/135911)
 
 
 </div>
@@ -233,7 +233,7 @@ When adding $s_i$, what decisions of the past matter? WLOG assume $\vert x \vert
 - Add $s_i$ to $x$, further increasing the "overhang" of $x$ over $y$.
 - Add $s_i$ to $y$, fixing the $\vert y \vert$-character of $z$.
 
-I now considered the simplest DP I could think of : define $f(a, b)$ (assume $a \geq b$) to be the lexicographically smallest possible $z$ we can obtain from partitioning the first $a + b$ characters of $s$ into subsequences of length $a$ and $b$.
+I now considered the simplest DP I could think of: define $f(a, b)$ (assume $a \geq b$) to be the lexicographically smallest possible $z$ we can obtain from partitioning the first $a + b$ characters of $s$ into subsequences of length $a$ and $b$.
 
 Somewhere in the background, my teammates got another WA on C.
 

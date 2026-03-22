@@ -13,7 +13,7 @@ I hate forgetting the details of "important" events of my life, and then later h
 
 I am, in the most extreme sense of the word, a filthy *tryhard* at ICPC. I've been to the regionals seven times now, and to AWF thrice.
 
-Unlike my performance in online contests, where I can clearly recognize periods where I've under/overperformed, it has always seemed like my team has, with the exception of this last contest, severely underperformed relative to other teams at an apparently similar level of strength (with this perception of strength being drawn from our performance in practice contests, and the CF ratings of individual team members). On the journey home after almost every ICPC contest, we would be plagued by a vague sense of disappointment and gloom - the mistakes we made would appear so infuriatingly simple and preventable in hindsight, the process of correcting trivial mistakes during the contest so glacial, the problem selection so unfortunate. The observations we made about our shortcomings in the aftermath of these contests were rather similar after every one of them, but we would fail similarly and draw similar conclusions time and time again. It didn't help that a lot of these shortcomings had no obvious remedies.
+Unlike my performance in online contests, where I can clearly recognize periods where I've under/overperformed, it has always seemed like my team has, with the exception of this last contest, severely underperformed relative to other teams at an apparently similar level of strength. On the journey home after almost every ICPC contest, we would be plagued by a vague sense of disappointment and gloom - the mistakes we made would appear so infuriatingly simple and preventable in hindsight, the process of correcting trivial mistakes during the contest so glacial, the problem selection so unfortunate. The observations we made about our shortcomings in the aftermath of these contests were rather similar after every one of them, but we would fail similarly and draw similar conclusions time and time again. It didn't help that a lot of these shortcomings had no obvious remedies.
 
 For instance, we were slow at everything except mindsolving problems. One could attribute it to a variety of micro-errors (like initially misinterpreting the problem statement, not reading the constraints carefully, being slow at implementation, etc), and we often laid these out explicitly, but at the end of the day, all of these seemingly disjoint errors would just coalesce into the simple, uncomfortable truth that we were too slow. This was a bit hard to stomach for me, as I tend to be very fast individually in online contests, and all of these novel micro-errors never seemed to appear in that environment.
 
@@ -27,11 +27,11 @@ Note: The names of my teammates have been replaced with pseudonyms.
 
 #### Year 1
 
-For my first year at ICPC, my team was a ragtag group of novices that got together at the very last moment. I had been at college and had been doing CP for just about 4 months, and people were (understandably) not exactly enthusiastic about forming a team with me. It was a miracle that we qualified in the first place, as the team comprised two experts and an inactive newbie (I apologize for my casual CF-ratism), and we somehow managed to edge past way stronger teams (with one literally having a master and a CM).
+For my first year at ICPC, my team was a ragtag group of novices that got together at the very last moment. I had been at college and had been doing CP for just about 4 months, and people were (understandably) not exactly enthusiastic about forming a team with me. It was a miracle that we qualified in the first place, as the team comprised two experts and an inactive newbie (I apologize for my casual ratism). We somehow managed to edge past way stronger teams, with one literally having a master and a CM.
 
 #### Years 2-3
 
-My team for the next two years was far more respectable. It consisted of me (a master on CF by this time) and two people from the year above me (in college): GeometryDashAddict and WellGroomedHair (master and CM respectively). The structure of the team was promisingly coherent:
+My team for the next two years was far more respectable. It consisted of me (a master on CF by this time) and two people from the year above me: GeometryDashAddict and WellGroomedHair (master and CM respectively). The structure of the team was promisingly coherent:
 
 - I specialized in "difficult" problems in general, and was strong in knowledge-heavy areas like Data Structures, DP, Graphs/Trees, etc in particular. I was also notoriously unreliable at implementing my (mostly correct) solutions to these difficult problems, but let's not get into that.
 - GeometryDashAddict was a sort of jack-of-all-trades, and the best amongst the three of us at "just getting the thing done". This included, but wasn't restricted to:
@@ -60,11 +60,11 @@ Problem H from AWF 2024 reduced to the following:
 > 
 > Then, consider the cycles in the functional graph formed by this permutation (i.e. add an edge from node $i$ to $p_i$ for every $i$). Report the number of such cycles after every query.
 > 
-> Constraints : $1 \leq n, q \leq 10^5$
+> Constraints: $1 \leq n, q \leq 10^5$
 
 Even in the infancy of my (then ~1 year old) CP career, I had developed an addiction to DS-bashing and possessed an inappropriate amount of knowledge about data structures relative to my immaturity in other domains. I realized that this would be a trivial application of a Link-Cut Tree... if only we had bothered to include one in our team reference notebook. Funnily enough, despite the straightforward LCT solution, there weren't any solves on the problem in the first half of the contest.
 
-While my teammates devoted themselves to problems that we had a way higher chance of solving, I turned to perhaps an even more potent addiction of mine - Square Root Decomposition. Looking back, me and this technique have always been a match made in heaven, as it often allows one to soothe his ego through the satisfaction of solving "hard" problems bashable by it, in exchange for the sweat and toil that the implementation and casework in overengineered solutions involving it require. This reminds me of a list of "hard" sqrt-bashable problems that I once maintained : [link](https://www.dropbox.com/scl/fi/jq5r7kivnavwftjmvq9k2/SQUARE_ROOT_SUPREMACY.txt?rlkey=75va1w8n6g95qr6va68mhcrvb&st=w93wzo6b&dl=0).
+While my teammates devoted themselves to problems that we had a way higher chance of solving, I turned to perhaps an even more potent addiction of mine - Square Root Decomposition. Looking back, me and this technique have always been a match made in heaven, as it often allows one to soothe his ego through the satisfaction of solving "hard" problems bashable by it, in exchange for the sweat and toil that the implementation and casework in overengineered solutions involving it require. This reminds me of a list of "hard" sqrt-bashable problems that I once maintained: [link](https://www.dropbox.com/scl/fi/jq5r7kivnavwftjmvq9k2/SQUARE_ROOT_SUPREMACY.txt?rlkey=75va1w8n6g95qr6va68mhcrvb&st=w93wzo6b&dl=0).
 
 Returning to the problem - I devised a correct strategy using square root decomposition on the query sequence. The high-level idea was the following:
 
@@ -79,7 +79,7 @@ Returning to the problem - I devised a correct strategy using square root decomp
 
 The idea is quite simple but I wasn't really mature enough to cleanly implement this under pressure at the time, and ended up implementing a horrendous mess I couldn't debug. The fact that online handling was enforced through encrypted input made manually debugging the code especially tedious.
 
-On the other hand, the problem ended up being a "team notebook check", as only 5 teams managed to solve the problem during the contest, and all of them shamelessly bashed it with an LCT. I pettily consoled myself with the knowledge that I hadn't resorted to such brutish tactics as them. Upon returning home, I promptly added LCT to our team notebook, only for the ICPC gods to never demand it of me again.
+On the other hand, the problem ended up being a "team notebook check", as only 5 teams managed to solve the problem during the contest, and all of them shamelessly bashed it with an LCT. I pettily consoled myself with the knowledge that I hadn't resorted to such brutish tactics as them. Upon returning home, I promptly added LCT to our team notebook. The ICPC gods never demanded it of me again.
 
 What made this problem memorable is the process of debugging it after the contest. I don't remember why my laptop was inaccessible on the journey home (perhaps I didn't bring it), but it wasn't, and I borrowed WellGroomedHair's laptop. One must remember that this was back in medieval 2024, before we had access to LLMs that could take your code, prove/disprove its theoretical correctness with reasonable accuracy, and also stress-test it on a suite of self-designed tests to find concrete counter-examples. As such, I was left to fend for myself. Divorced from that indescribable obsession of the moment as I now am, it feels strange to not have just slept instead (remember, we only slept for 3 hours before the contest, and I was essentially pulling another all-nighter during travel). I was operating with a terrible headache and the working memory of a goldfish, while intermittently treating myself to sweet microsleep, as annoying babies on our coach wailed their hearts out.
 
@@ -89,7 +89,7 @@ I later realized that a few characters of diffs sufficed to correct my original 
 
 ![](https://i.ibb.co/Cpf8tXBc/Photo-31-03-24-3-26-58-PM.jpg)
 
-Note: The site that originally hosted AWF 2024 seems to have been taken down, and I didn't find the problemset anywhere except an archive that may or may not persist, so I've stored a pdf of the same on my own cloud storage : [link](https://www.dropbox.com/scl/fi/6i4cqrxdrivodz7hc1hjk/asiawest2023-2024.pdf?rlkey=e1mkxcsmxa5zs602fcyzc2joz&st=ornhpxxe&dl=0)
+Note: The site that originally hosted AWF 2024 seems to have been taken down, and I didn't find the problemset anywhere except an archive that may or may not persist, so I've stored a pdf of the same on my own cloud storage: [link](https://www.dropbox.com/scl/fi/6i4cqrxdrivodz7hc1hjk/asiawest2023-2024.pdf?rlkey=e1mkxcsmxa5zs602fcyzc2joz&st=ornhpxxe&dl=0)
 
 </div>
 </details>
@@ -185,7 +185,7 @@ void _print(const A&... a) {((__print(a), cerr << ", "), ...);}
 #define debug(...) cerr << "[" << #__VA_ARGS__ << "] = ["; _print(__VA_ARGS__); cerr << "]\n";
 ```
 
-Here's a blog I wrote asking for help on this : [link](https://codeforces.com/blog/entry/135911)
+Here's a blog I wrote asking for help on this: [link](https://codeforces.com/blog/entry/135911)
 
 
 </div>
@@ -381,7 +381,7 @@ When adding $s_i$, what decisions of the past matter? WLOG assume $\vert x \vert
 - Add $s_i$ to $x$, further increasing the "overhang" of $x$ over $y$.
 - Add $s_i$ to $y$, fixing the $\vert y \vert$-character of $z$.
 
-I now considered the simplest DP I could think of : define $f(a, b)$ (assume $a \geq b$) to be the lexicographically smallest possible $z$ we can obtain from partitioning the first $a + b$ characters of $s$ into subsequences of length $a$ and $b$.
+I now considered the simplest DP I could think of: define $f(a, b)$ (assume $a \geq b$) to be the lexicographically smallest possible $z$ we can obtain from partitioning the first $a + b$ characters of $s$ into subsequences of length $a$ and $b$.
 
 Somewhere in the background, my teammates got another WA on C.
 

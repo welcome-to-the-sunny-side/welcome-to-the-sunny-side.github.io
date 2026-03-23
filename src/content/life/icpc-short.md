@@ -186,7 +186,7 @@ In what was to be a successful attempt to calm down, I excused myself to the bat
 
 As I returned to the contest hall, the solution came to me in that inexplicable and annoyingly natural way that solutions to problems like these do, making the prior drought of ideas seem so utterly pointless. Perhaps the problem felt that my miserable devotion over the last few hours had proved me worthy, or perhaps it was made jealous by me wondering if I would return to an unexpected AC on C.
 
-Progress required considering $k$ once again. When the naive strategy ended with multiple components in the case of a false negative, the heavy node had exactly $k$ children. This allowed the following (simple) strategy to work* (Note: my initial proof for why this is correct was flawed, feel free to try and prove/disprove the solution if you would like. The code can be found [here](https://www.codechef.com/viewsolution/1245882783)):
+Progress required considering $k$ once again. When the naive strategy ended with multiple components in the case of a false negative, the heavy node had exactly $k$ children. This allowed the following (simple) strategy to work:
 
 - Run a naive first pass like before to get an edge set $P$.
 - Then, remove all the static edges incident to the heavy node from $P$. Run a second pass where you add edges with the exact same logic as the first, but instead of doing it for all ghost edges in $[1, i)$, do it only for the ghost edges in this range that aren't incident to the heavy node.

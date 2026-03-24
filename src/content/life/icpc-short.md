@@ -5,6 +5,7 @@ date: 2026-03-18
 tags: ["contest"]
 ---
 
+
 ### The Contest
 
 
@@ -71,7 +72,7 @@ This is the sort of problem for which you find some plausible construction(s) fr
 
 While I had been implementing E, A had also received a few solves, and upon noticing this, GeometryDashAddict and GrokSponsoredPS5 mindsolved it within a couple of minutes. I promptly gave up the PC to them and began going through the printed copy of the problemset. They discussed the solution for a few minutes and one of them implemented a few lines of code (I didn't remember which one of them implemented it, as I wasn't observing them at the time. Looking at our submission now, it was obviously GrokSponsoredPS5, as the code follows the objectively inferior convention of not putting a newline before opening braces). They submitted the code at 10:38 AM, and we were pleasantly greeted with another AC.
 
-In the past, GeometryDashAddict and I have been wary of "exposing ourselves" to the ranklist during the contest. For me, this goes beyond just ICPC &mdash; I hate having information about how I'm performing relative to other participants in any competitive activity, during the period of participation. Imposing this restriction upon me is simple enough during online contests, as a browser extension can easily block specific HTML on troublesome webpages, but such luxuries as uBlock Origin aren't made available during ICPC. This had been especially troublesome because CodeChef shows your current rank on the same page that displays invaluable information about solve counts, and not visiting this page was out of the question. In the past, we had tried some (admittedly insane) workarounds at my behest, with the most effective being increasing the zoom of the webpage to 200% to make the site serve the mobile version of the webpage. None of these worked well though (in particular, the zoom trick didn't work because it would also increase the zoom of the problem statement pages), and I was forced to learn to not freak out upon being made aware of our exceptionally good/bad pace. Funnily enough, neither of our third teammates (previously WellGroomedHair, and now GrokSponsoredPS5) faced this problem. Many of these thoughts rushed through my mind as we saw our rank jump to 6 after the AC on A.
+In the past, GeometryDashAddict and I have been wary of "exposing ourselves" to the ranklist during the contest. For me, this goes beyond just ICPC &mdash; I hate having information about how I'm performing relative to other participants in any competitive activity, during the period of participation. Imposing this restriction upon me is simple enough during online contests, as a browser extension can easily block specific HTML on troublesome webpages, but such luxuries as uBlock Origin aren't made available during ICPC. This had been especially annoying because CodeChef shows your current rank on the same page that displays invaluable information about solve counts, and not visiting this page was out of the question. In previous editions, we had tried some (admittedly insane) workarounds at my behest, with the most effective being increasing the zoom of the webpage to 200% to make the site serve the mobile version of the webpage. None of these worked well though (in particular, the zoom trick didn't work because it would also increase the zoom of the problem statement pages), and I was forced to learn to not freak out upon being made aware of our exceptionally good/bad pace. Funnily enough, neither of our third teammates (previously WellGroomedHair, and now GrokSponsoredPS5) faced this problem. Many of these thoughts rushed through my mind as we saw our rank jump to 6 after the AC on A.
 
 Throughout my ICPC career, good starts have been scarce, with the best we've had ending in disaster at the-regional-that-shall-not-be-named. Knowing this, I kept my expectations in check. As we enthusiastically resumed our perusal of the problemset, D received its first solve about a minute after our solve on A.
 
@@ -270,7 +271,7 @@ My teammates had been almost entirely unaware of what I had been up to for the l
 
 In what GrokSponsoredPS5 later described as a stereotypical scene depicting a twist in the plot of a movie, I tapped him on the back, and just pointed at the screen. For a moment, he seemed to think that I was showing him an AC on one of the three problems we had previously solved. As I pointed to the title of the page, a bewildered smile formed on his face. Where there had previously been vague, intangible delusions about qualification, there was now a terribly real path forward, and very little time to traverse it. In the potential aftermath of failing to do so, there would also be an abundance of a previously unknown flavour of self-hatred to flagellate myself with.
 
-Once again, our rank barely changed due to several teams having solves on A, E, and 2 of \{B, C, D\}. Feeling a bit frustrated with the delay on C, I asked my teammates if they wanted me to examine their solution, with the hope that I wouldn't also be led astray by any blindspots they may have developed out of familiarity. GeometryDashAddict agreed, so I quickly read the problem again.
+Once again, our rank barely changed due to several teams having solves on A, E, and 2 of \{B, C, D\}. Feeling a bit frustrated with the delay on C, I asked my teammates if they wanted me to examine their solution, with the hope that I wouldn't also be led astray by any blind spots they may have developed out of familiarity. GeometryDashAddict agreed, so I quickly read the problem again.
 
 The statement was as follows:
 
@@ -285,9 +286,10 @@ The statement was as follows:
 
 GeometryDashAddict's solution, as I imagine every solution for this problem to be, involved casework that enforced pairwise constraints between $op_{l_i}$ and $op_{r_i}$ for some $i$ and just fixed the values of $op_{l_i}$ and $op_{r_i}$ for others. Once these constraints were in place, he used BFS to propagate values without ambiguity.
 
-The only part of the solution with any potential for errors seemed to be the casework for enforcing pairwise constraints. He first normalized every equation by sorting the operands on each side lexicographically (bitwise operators are commutative), and then swapped the sides and operators themselves if it made the equation lexicographically smaller.
+The only part of the solution with any potential for errors seemed to be the casework for enforcing pairwise constraints. 
 
-We first initialized all operators with value $\vert$ and then did the following casework for every equation:
+
+We first normalized every equation by sorting the operands on each side lexicographically (bitwise operators are commutative), and then swapped the sides and operators themselves if it made the equation lexicographically smaller. After this, we initialized all operators with value $\vert$ and then did the following casework for every equation:
 
 - If the operand set on the LHS and the RHS are equal, then do not enforce any constraints.
 - Otherwise, do the following
@@ -300,7 +302,7 @@ We first initialized all operators with value $\vert$ and then did the following
 
 - Any operand that isn't touched after we propagate changes from the fixed values can be safely left with value $\vert$.
 
-An observant reader will immediately protest after having read this, and so did I to GeometryDashAddict. They had indeed developed a blindspot out of familiarity. The casework for unequal operand sets was fine, but one couldn't just ignore the equations for all equal operand sets!
+An observant reader will immediately protest after having read this, and so did I to GeometryDashAddict. They had indeed developed a blind spot out of familiarity. The casework for unequal operand sets was fine, but one couldn't just ignore the equations for all equal operand sets!
 
 It seemed like $\lbrace 0, 0 \rbrace$ had poisoned the well here, as it's the first set of operands one considers when going in lexicographical order, and when the LHS and RHS were both equal to this set, one could indeed ignore the equation. However, this wasn't the case for $\lbrace 0, 1 \rbrace$ and $\lbrace 1, 1 \rbrace$. 
 
@@ -327,7 +329,7 @@ In particular, it involved the following subproblem:
 
 > Given a DAG $G(V, E)$, find the smallest number of vertex-disjoint paths one can decompose $G$ into, such that every vertex is a part of some path.
 
-Being rather weak at flows, I had been pleasantly surprised when I realized the admittedly simple solution to this problem: build a bipartite graph with partitions $L, R$ where $L = \lbrace v_{out} : v \in V \rbrace$, $R = \lbrace v_{in} : v \in V \rbrace$ and edges $\lbrace (u_{out}, v_{in})  : (u, v) \in E \rbrace$. The answer is equal to maximum matching on this bipartite graph. 
+Being rather weak at flows, I had been pleasantly surprised when I realized the admittedly simple solution to this problem: build a bipartite graph with partitions $L, R$ where $L = \lbrace v_{out} : v \in V \rbrace$, $R = \lbrace v_{in} : v \in V \rbrace$ and edges $\lbrace (u_{out}, v_{in})  : (u, v) \in E \rbrace$. The answer is equal to the size of the maximum matching on this bipartite graph. 
 
 WHAT. THE. FUCK.
 
@@ -337,7 +339,7 @@ Even as my heartbeat rose with the knowledge of what this meant, I hesitated in 
 
 We first build the exact auxiliary bipartite graph defined earlier from our DAG. And then we just... find the minimum vertex cover.
 
-Performing an operation on $u$ that deletes outgoing edges is equivalent to selecting the vertex $u_{out}$ in the bipartite graph, and performing one that deletes incoming edges is equivalent to selecting $u_{in}$. The objective in the problem (deleting edges) is clearly equivalent to that of a vertex cover.
+Performing an operation on $u$ that deletes outgoing edges is equivalent to selecting the vertex $u_{out}$ in the bipartite graph, and performing one that deletes incoming edges is equivalent to selecting $u_{in}$. The objective in the problem (deleting edges) is clearly equivalent to that of vertex cover.
 
 I pulled GrokSponsoredPS5 over and explained the solution to him. His eyes lit up as he nodded along. There was no way this was actually happening. Where was the caveat? The one thing that went wrong at the very last moment?
 
@@ -571,7 +573,7 @@ public:
 
 I had already made a few typos, and subsequently corrected them as I typed the dense code out. I shuddered with dread. What if WellGroomedHair had accidentally deleted a character while formatting the code last year? All it would have taken was an accidental backspace to convert a `-1` into a `1`.
 
-Some part of me hoped against hope that this had actually happened, even as another annoyingly rational part reminded me that it was very unlikely, and even in the case that it had happened, I could easily find the error in the time that remained.
+Some part of me hoped against hope that this had actually happened, even as another annoyingly rational part reminded me that it was highly unlikely, and even in the case that it had happened, I could easily find the error in the time that remained.
 
 My heartbeat had been doing its best to mimic the [Shepard Tone](https://en.wikipedia.org/wiki/Shepard_tone) as I finished implementing the code and ran it against the samples. Why was the output nonsensical? Was this the caveat from earlier? Surely, we had collectively hallucinated a laughably invalid solution in the style of an LLM?
 

@@ -316,7 +316,7 @@ GeometryDashAddict shook me out of this spiral with a constraint-conforming exam
 </figure>
 
 
-Of course it was an embarrassingly trivial oversight that either one of us could have easily resolved in a couple of minutes, if this had happened in an online contest. Instead, I had spent the last two hours idly watching our rank plummet to the late twenties as I daydreamt of increasingly novel methods of self-sabotage at my disposal.
+Of course it was an embarrassingly trivial oversight that either one of us could have easily resolved in a couple of minutes, if this had happened in an online contest. Instead, I had spent the last two hours idly watching our rank plummet to the late twenties as I daydreamed of increasingly novel methods of self-sabotage at my disposal.
 
 As I write this, I feel the urge to replace this detailed exposition on how thoroughly I fucked up on D with something vaguer. Something like a short paragraph that sarcastically plays these mistakes off as a "cute" scare which never posed any real threat. Something that while technically true, allows me to cower behind plausible deniability and allude to some more respectable explanations, instead of having the workings of my imperfect mind laid out bare.
 

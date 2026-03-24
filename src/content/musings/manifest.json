@@ -1,0 +1,74 @@
+[
+  {
+    "id": "2025-09-26-0911",
+    "ts": "2025-09-26T03:41:00Z",
+    "tier": "master",
+    "path": "data/2025-09-26-0911.json",
+    "size": 352,
+    "hash": "c6a3236510b1699ddc60e37545af0a7292cdff43929ae3dbde574cebc5d127c7"
+  },
+  {
+    "id": "2025-09-21-0528",
+    "ts": "2025-09-20T23:58:44Z",
+    "tier": "public",
+    "path": "data/2025-09-21-0528.json",
+    "size": 90,
+    "hash": "62a72375f6153dd5ae87b69627e248a71c2607c2be775b22aff91b11253e9075"
+  },
+  {
+    "id": "2025-09-20-0409",
+    "ts": "2025-09-19T22:39:00Z",
+    "tier": "public",
+    "path": "data/2025-09-20-0409.json",
+    "size": 110,
+    "hash": "fd0ef506c98df8be72982de600698f72ac56e37d2b7c386214e608725da2a1fd"
+  },
+  {
+    "id": "2025-08-31-0440",
+    "ts": "2025-08-30T23:10:00Z",
+    "tier": "public",
+    "path": "data/2025-08-31-0440.json",
+    "size": 268,
+    "hash": "899e9cbe883fc20a4f01c13bfb04b3834bb744223ca7420b744bbd8fbd0c02bb"
+  },
+  {
+    "id": "2025-08-30-1454",
+    "ts": "2025-08-30T09:24:00Z",
+    "tier": "public",
+    "path": "data/2025-08-30-1454.json",
+    "size": 1741,
+    "hash": "c6b5eda58e7c78bde5f7ab5644958a94874c37d56b97f168f71dcd178d26986c"
+  },
+  {
+    "id": "2025-08-25-1505",
+    "ts": "2025-08-25T09:35:00Z",
+    "tier": "public",
+    "path": "data/2025-08-25-1505.json",
+    "size": 144,
+    "hash": "41b8b8e2422ede157007e63bacb7059cb21549dbb02b8fbb8be5449d45eb7ecc"
+  },
+  {
+    "id": "2025-08-25-1413",
+    "ts": "2025-08-25T08:43:00Z",
+    "tier": "master",
+    "path": "data/2025-08-25-1413.json",
+    "size": 484,
+    "hash": "855a163fdfceeb715d430db8e7b274ea6bef7574f5501b0acc340f91143ff1ba"
+  },
+  {
+    "id": "second",
+    "ts": "2025-08-24T22:02:00Z",
+    "tier": "master",
+    "path": "data/second.json",
+    "size": 314,
+    "hash": "596911357e032d441a750e6b50f5a49e54b40e5d36e6be3d48d86136db28eee0"
+  },
+  {
+    "id": "first",
+    "ts": "2025-08-24T22:01:00Z",
+    "tier": "public",
+    "path": "data/first.json",
+    "size": 107,
+    "hash": "7cb98cc6f50dc0682a89094566415262ecab2db85c05fb8d4ef614318df9db5d"
+  }
+]

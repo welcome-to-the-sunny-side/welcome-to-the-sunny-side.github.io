@@ -156,7 +156,6 @@ GrokSponsoredPS5 didn't want to risk our luggage getting stolen from outside the
 
 ### The Contest
 
-
 Some parts of the building that contained the contest hall seemed to be under renovation, and as we coughed our way through the dusty corridors in search of our destination, I wondered if the loud noises being made by power tools yesterday would trouble us during the contest. The dysfunction in this country would appear charming on paper if I didn't have to live in it. We eventually found the right room around 9:15 AM, and settled ourselves in for the next 6 hours or so (the contest was to take place from 10 AM to 3 PM).
 
 Typing out templates in the allotted 15-30 minutes before the contest begins has always been one of those things that I imagine a layman would naively predict to matter a lot (even if only in the initial few hours), but doesn't quite seem to in practice. Nevertheless, I typed some boilerplate code to be used across all files, a fenwick tree, and a modular arithmetic template (I always ask GeometryDashAddict to type the modular inverse function for some reason). In previous editions, most of this time would have been spent typing some over-engineered debug helpers. It's hard to explain why I *absolutely needed* these without sounding like an obstinate asshole, so I won't.

@@ -87,7 +87,17 @@ A few hours later, while sitting on a bench at the airport, the judge slowly gav
 
 I later realized that a few characters of diffs sufficed to correct my original code.
 
-![](https://i.ibb.co/Cpf8tXBc/Photo-31-03-24-3-26-58-PM.jpg)
+<figure style="text-align: center;">
+  <img
+    src="https://i.ibb.co/Cpf8tXBc/Photo-31-03-24-3-26-58-PM.jpg"
+    alt="Alt text"
+    width="300"
+    style="display: block; margin: 0 auto;"
+  >
+  <figcaption>
+    Screenshot: the diffs required for my code to AC
+  </figcaption>
+</figure>
 
 Note: The site that originally hosted AWF 2024 seems to have been taken down, and I didn't find the problemset anywhere except an archive that may or may not persist, so I've stored a pdf of the same on my own cloud storage: [link](https://www.dropbox.com/scl/fi/6i4cqrxdrivodz7hc1hjk/asiawest2023-2024.pdf?rlkey=e1mkxcsmxa5zs602fcyzc2joz&st=ornhpxxe&dl=0)
 
@@ -191,7 +201,7 @@ Here's a blog I wrote asking for help on this: [link](https://codeforces.com/blo
 </details>
 
 
-Previously, I've tried to avoid spending time at the keyboard for as long as possible (out of a belief that it exhausted me and degraded my mindsolving ability), and instead preferred to delegate the implementation of mindsolved solutions to my teammates. This had always seemed pretty irrational to my teammates as I was the fastest amongst us in individual contests, but as you might be beginning to understand &mdash; I'm a pretty stubborn person. Anyway, I had been gradually made to see reason over the practice contests we took in the last few months, and was going into the contest with the knowledge that I would be implementing the bulk of the code we submitted.
+Previously, I've tried to avoid spending time at the keyboard for as long as possible (out of a belief that it exhausted me and degraded my mindsolving ability), and instead preferred to delegate the implementation of mindsolved solutions to my teammates. This had always seemed pretty irrational to my teammates as I was the fastest amongst us in individual contests, but as you might be beginning to understand - I'm a pretty stubborn person. Anyway, I had been gradually made to see reason over the practice contests we took in the last few months, and was going into the contest with the knowledge that I would be implementing the bulk of the code we submitted.
 
 A few minutes before 10:00 AM, it was announced that the contest was to be delayed by 15 minutes, so I typed as much of our lazy segment tree as I could before the contest started.
 
@@ -219,7 +229,7 @@ This is the sort of problem for which you find some plausible construction(s) fr
 
 While I had been implementing E, A had also received a few solves, and upon noticing this, GeometryDashAddict and GrokSponsoredPS5 mindsolved it within a couple of minutes. I promptly gave up the PC to them and began going through the printed copy of the problemset. They discussed the solution for a few minutes and one of them implemented a few lines of code (I didn't remember which one of them implemented it, as I wasn't observing them at the time. Looking at our submission now, it was obviously GrokSponsoredPS5, as the code follows the objectively inferior convention of not putting a newline before opening braces). They submitted the code at 10:38 AM, and we were pleasantly greeted with another AC.
 
-In the past, GeometryDashAddict and I have been wary of "exposing ourselves" to the ranklist during the contest. For me, this goes beyond just ICPC &mdash; I hate having information about how I'm performing relative to other participants in any competitive activity, during the period of participation. Imposing this restriction upon me is simple enough during online contests, as a browser extension can easily block specific HTML on troublesome webpages, but such luxuries as uBlock Origin aren't made available during ICPC. This had been especially annoying because CodeChef shows your current rank on the same page that displays invaluable information about solve counts, and not visiting this page was out of the question. In previous editions, we had tried some (admittedly insane) workarounds at my behest, with the most effective being increasing the zoom of the webpage to 200% to make the site serve the mobile version of the webpage. None of these worked well though (in particular, the zoom trick didn't work because it would also increase the zoom of the problem statement pages), and I was forced to learn to not freak out upon being made aware of our exceptionally good/bad pace. Funnily enough, neither of our third teammates (previously WellGroomedHair, and now GrokSponsoredPS5) faced this problem. Many of these thoughts rushed through my mind as we saw our rank jump to 6 after the AC on A.
+In the past, GeometryDashAddict and I have been wary of "exposing ourselves" to the ranklist during the contest. For me, this goes beyond just ICPC - I hate having information about how I'm performing relative to other participants in any competitive activity, during the period of participation. Imposing this restriction upon me is simple enough during online contests, as a browser extension can easily block specific HTML on troublesome webpages, but such luxuries as uBlock Origin aren't made available during ICPC. This had been especially annoying because CodeChef shows your current rank on the same page that displays invaluable information about solve counts, and not visiting this page was out of the question. In previous editions, we had tried some (admittedly insane) workarounds at my behest, with the most effective being increasing the zoom of the webpage to 200% to make the site serve the mobile version of the webpage. None of these worked well though (in particular, the zoom trick didn't work because it would also increase the zoom of the problem statement pages), and I was forced to learn to not freak out upon being made aware of our exceptionally good/bad pace. Funnily enough, neither of our third teammates (previously WellGroomedHair, and now GrokSponsoredPS5) faced this problem. Many of these thoughts rushed through my mind as we saw our rank jump to 6 after the AC on A.
 
 Throughout my ICPC career, good starts have been scarce, with the best we've had ending in disaster at the-regional-that-shall-not-be-named. Knowing this, I kept my expectations in check. As we enthusiastically resumed our perusal of the problemset, D received its first solve about a minute after our solve on A.
 
@@ -242,11 +252,11 @@ At first glance, it seemed fairly plausible that the high-level strategy would b
 
 Now, only one question remained: how to implement \`check(i, S)\` efficiently?
 
-I decided to think about what could "go wrong" if one tried a naive strategy &mdash; iterate over the edges in $[1, i)$ in increasing order of $i$, and simply add edges to the spanning tree if they: (i) unite two disconnected components (ii) do not lead to a violation of the degree constraints.
+I decided to think about what could "go wrong" if one tried a naive strategy - iterate over the edges in $[1, i)$ in increasing order of $i$, and simply add edges to the spanning tree if they: (i) unite two disconnected components (ii) do not lead to a violation of the degree constraints.
 
 Well, the only way it would go wrong was if there were multiple connected components at the end. We're only interested in false negatives here, as there is no possibility of a false positive. In the case of a false negative, some subset from $[1, i)$ would be valid, but our naively chosen one wouldn't.
 
-I was only a few minutes into the problem at this point, and all of this seemed rather abstract, so I asked GeometryDashAddict to just construct some concrete examples that showcased the failure of the naive strategy. As he worked on this, I pre-emptively wrote some code that we would almost certainly use, no matter our final solution &mdash; I/O and a DSU. A few minutes later, he showed me the following, with $n = 7$ and $k = 3$:
+I was only a few minutes into the problem at this point, and all of this seemed rather abstract, so I asked GeometryDashAddict to just construct some concrete examples that showcased the failure of the naive strategy. As he worked on this, I pre-emptively wrote some code that we would almost certainly use, no matter our final solution - I/O and a DSU. A few minutes later, he showed me the following, with $n = 7$ and $k = 3$:
 
 <figure style="text-align: center;">
   <img
@@ -265,7 +275,7 @@ The issue here was that the only valid selection of edges is $\\lbrace 1, 2, 3, 
 
 $k \\geq \\lceil n/2 \\rceil$ had seemed obviously important from the very beginning and we knew that our strategy wasn't exploiting it at all. I suddenly realized that it was impossible for more than one node to have a degree greater than or equal to $k$ in any spanning tree, as it was guaranteed that $k \\geq \\lceil n/2 \\rceil$. This meant that in the case of a false-negative, the forest induced by the naively chosen edge-set took on a very specific structure:
 
-- We're referring to the internal execution of a call to \`check(i, s)\` here. Let's call edges in $S$ "static edges", edges in $[1, i)$ that we include within $P$ &mdash; "taken edges", and edges from $[1, i)$ that we don't include &mdash; "ghost edges".
+- We're referring to the internal execution of a call to \`check(i, s)\` here. Let's call edges in $S$ "static edges", edges in $[1, i)$ that we include within $P$ - "taken edges", and edges from $[1, i)$ that we don't include - "ghost edges".
 - There would be more than one connected component in the forest defined by $S \\cup P$.
 - There would be exactly one node with degree equal to $k$, and all other nodes would have a strictly smaller degree. Let's call this node "heavy", the connected component contained it "big", and the other connected components "small".
 - There would obviously be no static or taken edges between different connected components, but the key observation is that **all** the inter-component ghost edges take the form $(\\text{heavy node}, \\text{some node in a small component})$.
@@ -329,7 +339,7 @@ The problem was that \`check(i, S)\` was still producing false-negatives. Say we
 
 After some more unpleasant analysis, I realized that performing these "rebalancing" operations was indeed enough to always produce a valid spanning tree in \`check(i, S)\` if one existed. However, a concrete solution still wasn't in sight, as a naive implementation of this strategy would run in cubic time. By this point, my dread for this problem had turned into an impatient annoyance. I knew that I had all but solved the problem. The problem knew that I had all but solved it. And yet, it continued to teasingly dart out of reach whenever I made an advance.
 
-In what was to be a successful attempt to calm down, I excused myself to the bathroom. Strolling through the corridors at a leisurely pace, I was reminded of something from the distant past of 4 hours ago &mdash; my concerns about noise from the power tools had been pleasingly unfounded.
+In what was to be a successful attempt to calm down, I excused myself to the bathroom. Strolling through the corridors at a leisurely pace, I was reminded of something from the distant past of 4 hours ago - my concerns about noise from the power tools had been pleasingly unfounded.
 
 As I returned to the contest hall, the solution came to me in that inexplicable and annoyingly natural way that solutions to problems like these do, making the prior drought of ideas seem so utterly pointless. Perhaps the problem felt that my miserable devotion over the last few hours had proved me worthy, or perhaps it was made jealous by me wondering if I would return to an unexpected AC on C.
 
@@ -353,9 +363,9 @@ Whatever the reason, I suddenly found myself able, and in fact compelled, to cal
 
 In graph problems with as simple, and general reductions as this one, it's hard to get any "handholds" of specificity that you can use to put said problem into a chokehold that would make it tractable. There's always this suspicion that you might have missed a few details that would prevent you from needing to solve the fully general version of the reduction. This anxiety combined with some unpleasant associations I had built between B and D from my brief encounter with the former during the painful process of solving the latter, and led to me setting aside the problem once again.
 
-As I went through the set of "hard" problems with non-zero solves, my teammates made more progress on C. At 1:15 PM, they made our first submission for the problem, and were promptly met with a WA. Unlike our previous submissions, where every WA felt like a punch to the gut, our response was more calibrated to the actual banality of a single WA &mdash; mild displeasure, and an eagerness to resolve it. They began examining the code for bugs, and I returned to my own search for a problem to solve.
+As I went through the set of "hard" problems with non-zero solves, my teammates made more progress on C. At 1:15 PM, they made our first submission for the problem, and were promptly met with a WA. Unlike our previous submissions, where every WA felt like a punch to the gut, our response was more calibrated to the actual banality of a single WA - mild displeasure, and an eagerness to resolve it. They began examining the code for bugs, and I returned to my own search for a problem to solve.
 
-G called once again. I knew that I would almost certainly mindsolve it quickly, but I hesitated in committing to it. It was clear that the solution would involve DFS over a trie in some capacity, and I have had an unpleasant relationship with tries throughout my entire career. We simply didn't have the time for me to write long and buggy code that I then spent tens of minutes laboriously debugging. I turned to the other hard problems &mdash; I had already seen L at the beginning of the contest and it had seemed cancerous even then, so the only real choice was between J and H. Both of them had just one solve till that point. Scarier yet, the only solve on both of them was from what was by far the strongest team in the entire continental region &mdash; a team being carried by India's only LGM.
+G called once again. I knew that I would almost certainly mindsolve it quickly, but I hesitated in committing to it. It was clear that the solution would involve DFS over a trie in some capacity, and I have had an unpleasant relationship with tries throughout my entire career. We simply didn't have the time for me to write long and buggy code that I then spent tens of minutes laboriously debugging. I turned to the other hard problems - I had already seen L at the beginning of the contest and it had seemed cancerous even then, so the only real choice was between J and H. Both of them had just one solve till that point. Scarier yet, the only solve on both of them was from what was by far the strongest team in the entire continental region - a team being carried by India's only LGM.
 
 I pettily reminded myself of the fact that [I had technically AKed a div-2 before him once](https://codeforces.com/contest/2173/standings) and read H. 
 

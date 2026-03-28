@@ -95,7 +95,7 @@ I later realized that a few characters of diffs sufficed to correct my original 
     style="display: block; margin: 0 auto;"
   >
   <figcaption>
-    Screenshot: the diffs required for my code to AC
+    Screenshot: the diffs required for my code to AC.
   </figcaption>
 </figure>
 
@@ -355,7 +355,7 @@ Even after testing the code against a few hand-crafted samples, I wasn't quite s
 
 AC.
 
-The change in the atmosphere was immediate. At least we weren't going to end the contest with a humiliating total of 2 solves. I heaved a sigh of relief, and was suddenly all too aware of the fact that my head had been painfully throbbing for the last few hours. My teammates, appearing somewhat hopeful after the suffocating monotony of the last few hours, immediately took back the keyboard to implement C. While this solve had mattered a lot to our emotional state, it barely registered on the scoreboard. We had simply gone from being amongst the teams with 2 solves and really low penalty, to having 3 solves with really high penalty, and still remained in the late twenties.
+The change in the atmosphere was immediate. At least we weren't going to end the contest with a humiliating total of 2 solves. I heaved a sigh of relief, and was suddenly all too aware of a sensation I had been inured to over the last few hours - my head was painfully throbbing. My teammates, appearing somewhat hopeful after the suffocating monotony of the last few hours, immediately took back the keyboard to implement C. While this solve had mattered a lot to our emotional state, it barely registered on the scoreboard. We had simply gone from being amongst the teams with 2 solves and really low penalty, to having 3 solves with really high penalty, and still remained in the late twenties.
 
 In hindsight, it's quite unusual that I didn't just give up at this point (even if in a passive, unspoken manner). With little more than 100 minutes remaining, we were languishing in the midwit's zone of the scoreboard with 3 solves, and several teams already had \\>= 5. It's not really the case that I was consciously making some sort of conscientious decision to do my best till the very end, I was probably just too emotionally exhausted to even be able to care any more.
 
@@ -420,7 +420,7 @@ All seemed lost for a moment until I realized that I had just restated a prior o
 
 The conjecture was true after all!
 
-Feeling slightly giddy with excitement, I informed my teammates that I *might* have solved H, in as unoptimistic a manner as I could. I did not want to get their hopes up, in the likely case that something had gone terribly wrong in the last 25 minutes of breathless analysis. This caution was probably unwarranted, as they didn't exactly respond in the most enthusiastic manner anyway (my antics in the past have conditioned them to not get their hopes up at me claiming to have solved a hard problem, better than any effort on my part could).
+Feeling slightly giddy with excitement, I informed my teammates that I *might* have solved H, in as modestly unoptimistic a manner as I could. I did not want to get their hopes up, in the likely case that something had gone terribly wrong in the last 25 minutes of breathless analysis. This caution was probably unwarranted, as they didn't exactly respond in the most enthusiastic manner anyway (my antics in the past have conditioned them to not get their hopes up at me claiming to have solved a hard problem, better than any effort on my part could).
 
 The issues in GeometryDashAddict's solution to C still hadn't been resolved, and it increasingly seemed like it had a logical mistake, so I took over the PC. 5 minutes and 20 lines of code later, I was... done? Despite being almost certain that the DP was correct, I took pause. The problem still remained at a single solve. This was surely a grand, elaborate ruse to gaslight me, with all the organizers and participants involved, right? HOW THE FUCK WAS H STILL AT ONE SOLVE?
 
@@ -500,7 +500,7 @@ Performing an operation on $u$ that deletes outgoing edges is equivalent to sele
 
 I pulled GrokSponsoredPS5 over and explained the solution to him. His eyes lit up as he nodded along. There was no way this was actually happening. Where was the caveat? The one thing that went wrong at the very last moment?
 
-I wondered if it would be C, as GeometryDashAddict submitted his code at 1:15 PM, to be met with a... why was the spinner in the UI still spinning? As a few seconds passed, our disappointed expectation of a TLE turned into a more hopeful annoyance. We had encountered a CodeChef bug at the-regional-that-shall-not-be-named where the spinner kept spinning regardless of the result. The actual result could be confirmed by looking at the top left of the scre- GrokSponsoredPS5 exclaimed with joy a little too loudly. AC. The PC was quickly freed for me.
+I wondered if it would be C, as GeometryDashAddict submitted his code at 2:15 PM, to be met with a... why was the spinner in the UI still spinning? As a few seconds passed, our disappointed expectation of a TLE turned into a more hopeful annoyance. We had encountered a CodeChef bug at the-regional-that-shall-not-be-named where the spinner kept spinning regardless of the result. The actual result could be confirmed by looking at the top left of the scre- GrokSponsoredPS5 exclaimed with joy a little too loudly. AC. The PC was quickly freed for me.
 
 I began typing out Hopcroft-Karp from our team notebook with shaking hands. Suddenly, it was our contest to somehow throw away in the hour that remained. In what was a comical overcorrection to ensure the absence of any more fuck-ups, I asked GrokSponsoredPS5 to explain the solution to GeometryDashAddict and have him mentally verify it too, and for GrokSponsoredPS5 to then examine my code line-by-line as I typed.
 

@@ -1,6 +1,6 @@
 const e=`---
 displayMode: blog
-title: ARC-205.md
+title: ARC-205
 date: 2025-09-07
 tags: [contest]
 ---

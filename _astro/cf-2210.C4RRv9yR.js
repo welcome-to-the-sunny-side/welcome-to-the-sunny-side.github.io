@@ -1,0 +1,115 @@
+const e=`---
+displayMode: blog
+title: CF-2210
+date: 2026-03-29
+tags: [contest]
+---
+
+## Thoughts
+
+I have begun training for WF, and want my practice to take a more structured form. Hence this recapitulation, and any others that may follow.
+
+## Solutions
+
+
+### A
+
+Reversing the identity sequence clearly works.
+
+### B
+
+Let's say that the optimal sequence of operations results in us stopping at position $i$.
+
+Then it's optimal to have sat at all chairs $j$ behind us such that either $p_j \\leq j$ or $i \\leq p_j$. The first category doesn't prevent us from going forward at all (as they mark chairs behind or at our current position), and the second category won't prevent us from reaching $i$.
+
+The optimal score for every stopping point can therefore be computed by iterating over $i$ in increasing order, and using either a \`std::set\` or a range query DS.
+
+### C1
+
+Notice that the condition:
+
+> $\\operatorname{gcd}(a_l,a_{l+1},\\ldots,{a_r})=\\operatorname{gcd}(a'_l,a'_{l+1},\\ldots,a'_r)$ for all $1 \\leq l < r \\leq n$
+
+is equivalent to 
+
+> $\\operatorname{gcd}(a_i, a_{i + 1}) = \\operatorname{gcd}(a'_i, a'_{i + 1})$ for all $1 \\leq i < n$
+
+Now, for a particular $1 < i < n$, its value in the second array, $a'_i$ only matters to two conditions:
+
+1. $\\operatorname{gcd}(a_i, a_{i - 1}) = \\operatorname{gcd}(a'_i, a'_{i - 1})$
+2. $\\operatorname{gcd}(a_i, a_{i + 1}) = \\operatorname{gcd}(a'_i, a'_{i + 1})$
+
+We notice that $a'_i$ must therefore be divisible by $c_i = \\operatorname{lcm}(\\operatorname{gcd}(a_i, a_{i - 1}), \\operatorname{gcd}(a_i, a_{i + 1}))$.
+
+$c_i$ is also the smallest value for $a'_i$ that satisfies both these conditions (at least from $i$'s side). 
+
+If $c_i < a_i = b_i$, we simply set $a'_i = c_i$, and this increases our score by 1.
+
+Otherwise, we have $c_i = a_i$. In this case:
+
+1. We cannot set $a'_i$ to anything less than $c_i$, as we have shown $c_i$ to be the smallest valid value of $c_i$.
+2. We cannot set $a'_i$ to any other multiple of $c_i$ as $c_i = a_i = b_i$.
+
+Therefore, we are forced to set $a'_i = a_i$ (not make a move).
+
+
+### C2
+
+The harder version decouples $a_i$ and $b_i$.
+
+This only affects our previous analysis at one place: previously, when we had $c_i = a_i$, in point 2, we argued that we cannot set $a'_i$ to some non-trivial multiple of $c_i$, as we had $c_i = a_i = b_i$. 
+
+But now, we can have $a_i < b_i$, which will allow us to set $a'_i = m_i \\cdot c_i$ (where $m_i > 1$).
+
+##### Lemma 1:
+> There exists an optimal solution wherein the chosen $m_i$ for all $i$ at which we set $a'_i = m_i \\cdot c_i$ ($m_i > 1$) is prime.
+
+Proof: easy enough to show, but left as an exercise to the reader.
+
+##### Lemma 2:
+
+> There exists an optimal solution wherein the set of used $m_i$ is a subset of the first $P = 25$ primes.
+
+Proof: left as an exercise to the reader (hint: $m_i$ is only restricted by $m_{i - 1}, a_{i - 1}, c_i, m_{i + 1}, a_{i + 1}$, and any number up to $10^{18}$ cannot have too many distinct prime factors).
+
+We can therefore do a dynamic programming with the following state:
+
+- $f(i)$ = maximum number of moves we can make in the prefix $i$, if we make no move at position $i$.
+- $g(i, x)$ = maximum number of moves we can make in the prefix $i$, if we set $a'_i = c_i \\cdot p_x$ (where $p_x$ is the $x$-th smallest prime).
+
+Computing all of these states takes $O(n \\cdot P ^ 2 \\cdot \\log{10^9})$ time, which is fast enough.
+
+### D
+
+Firstly, let $f(s)$ be the maximum $x \\leq n/2$ such that for all $i \\leq x$, $s_i$ gets matched to $s_{n - i + 1}$ by RBS rules.
+
+##### Lemma 1:
+
+> $f(s) = f(t)$ is a necessary requirement for $s$ and $t$ to be interconvertible, as $f(s) = f(s')$ after any operation that converts $s$ to $s'$
+
+Proof: Exercise for the reader (hint: this outer section can never be modified by any operation).
+
+If $f(s) \\neq f(t)$, we're done. Otherwise, we get rid of the first and last $f(s)$ characters from both $s$ and $t$.
+
+Now, consider the RBS trees $T(s)$ and $T(t)$ built from $s$ and $t$ (note that since we removed the first/last $f(s)$ characters, these trees will either be empty, or the root will have > 1 child).
+
+The equivalent problem on these trees is the following:
+
+> You can perform any number of the following operations on either tree:
+> 
+> Select nodes $u$ and $v$ such that neither is an ancestor of the either, and attach some "adjacent" children of $v$ (in the ordered child sequence) to the parent of $u$, and attach $v$ to $u$.
+>
+> Can the two trees be made isomorphic?
+
+
+Now, notice the following invariant: The number of leaf nodes remains the same after every operation.
+
+While obviously necessary, it turns out that having an equal number of leaf nodes is sufficient for two trees to be interconvertible.
+
+Proof:
+
+Let's say a tree has $l$ leaves.
+
+Regardless of the initial structure of the tree, we can always convert it to the following equivalence class representative:
+
+A tree with $l - 1$ leaves hanging from the root, and a chain containing the remaining nodes.`;export{e as default};

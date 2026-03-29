@@ -262,7 +262,7 @@ All seemed lost for a moment until I realized that I had just restated a prior o
 
 The conjecture was true after all!
 
-Feeling slightly giddy with excitement, I informed my teammates that I *might* have solved H, in as modestly unoptimistic a manner as I could. I did not want to get their hopes up, in the likely case that something had gone terribly wrong in the last 25 minutes of breathless analysis. This caution was probably unwarranted, as they didn't exactly respond in the most enthusiastic manner anyway (my antics in the past have conditioned them to not get their hopes up at me claiming to have solved a hard problem, better than any effort on my part could).
+Feeling slightly giddy with excitement, I informed my teammates that I *might* have solved H, in as modestly unoptimistic a manner as I could. I did not want to get their hopes up, in the likely case that something had gone terribly wrong in the last 25 minutes of breathless analysis. This caution was probably unwarranted, as they didn't exactly respond in the most enthusiastic manner (my antics in the past have conditioned them to not get their hopes up at me claiming to have solved a hard problem, better than any effort on my part could).
 
 The issues in GeometryDashAddict's solution to C still hadn't been resolved, and it increasingly seemed like it had a logical mistake, so I took over the PC. 5 minutes and 20 lines of code later, I was... done? Despite being almost certain that the DP was correct, I took pause. The problem still remained at a single solve. This was surely a grand, elaborate ruse to gaslight me, with all the organizers and participants involved, right? HOW THE FUCK WAS H STILL AT ONE SOLVE?
 

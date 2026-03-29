@@ -9,6 +9,8 @@ tags: [contest]
 
 I have begun training for WF, and want my practice to take a more structured form. Hence this recapitulation, and any others that may follow.
 
+I wasn't as fast as I could have been today. The WA on D was also pointless. It could have been easily avoided by looking at my code for 2 seconds before submitting.
+
 ## Solutions
 
 

@@ -1,11 +1,19 @@
 [
   {
+    "id": "2026-04-01-0104",
+    "ts": "2026-03-31T19:34:00Z",
+    "tier": "master",
+    "path": "data/2026-04-01-0104.json",
+    "size": 376,
+    "hash": "cda7e2fefffb428e1a999906c20bac2a0cf2bbc3f670a78913f27af6e6fc3b2e"
+  },
+  {
     "id": "2025-09-26-0911",
     "ts": "2025-09-26T03:41:00Z",
     "tier": "master",
     "path": "data/2025-09-26-0911.json",
     "size": 352,
-    "hash": "c6a3236510b1699ddc60e37545af0a7292cdff43929ae3dbde574cebc5d127c7"
+    "hash": "a58c885d7c88a46d0e4f6e60b0e2ae02f40d611539611431f3fe57dfb3a6bb36"
   },
   {
     "id": "2025-09-21-0528",
@@ -53,7 +61,7 @@
     "tier": "master",
     "path": "data/2025-08-25-1413.json",
     "size": 484,
-    "hash": "855a163fdfceeb715d430db8e7b274ea6bef7574f5501b0acc340f91143ff1ba"
+    "hash": "f1c631570e6eb39c4de4f1c220df75790e966ade04e3ce813ab4005aefaeb876"
   },
   {
     "id": "second",
@@ -61,7 +69,7 @@
     "tier": "master",
     "path": "data/second.json",
     "size": 314,
-    "hash": "596911357e032d441a750e6b50f5a49e54b40e5d36e6be3d48d86136db28eee0"
+    "hash": "055d7ad21a3a35d816a5e4cf40f25789cca3d2e42e7bec671426ad4c25a78a72"
   },
   {
     "id": "first",

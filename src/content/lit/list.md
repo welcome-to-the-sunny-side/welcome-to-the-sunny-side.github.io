@@ -4,3 +4,4 @@
 | Permutation City | Greg Egan | 2026-02-19 | Y |
 | Schild's Ladder | Greg Egan | 2026-02-26 | Y |
 | The Man Who Was Thursday | G.K. Chesterton | 2026-03-28 | Y |
+| Hunger | Knut Hamsun | 2026-03-31 | Y |

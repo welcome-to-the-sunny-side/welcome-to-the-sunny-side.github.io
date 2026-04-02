@@ -1,3 +1,9 @@
+"""
+JUST RUN THIS COMMAND TO REBUILD THE MUSINGS PAYLOAD
+if there are some files for which the original source doesn't exist any more (but the converted version does), this preserves them
+python tools/musings/main.py build --src misc_assets/musings_src --out public/musings
+"""
+
 #!/usr/bin/env python3
 """
 Musings CLI: build encrypted/public blobs and manifest for the Musings page.

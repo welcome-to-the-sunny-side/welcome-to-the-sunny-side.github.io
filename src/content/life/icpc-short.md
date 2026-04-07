@@ -572,7 +572,7 @@ public:
 
 I had already made a few typos, and subsequently corrected them as I typed the dense code out. I shuddered with dread. What if WellGroomedHair had accidentally deleted a character while formatting the code last year? All it would have taken was an accidental backspace to convert a `-1` into a `1`.
 
-Some part of me hoped against hope that this had actually happened, even as another annoyingly rational part reminded me that it was highly unlikely, and even in the case that it had happened, I could easily find the error in the time that remained.
+Some part of me hoped against hope that this had actually happened, even as another annoyingly rational part reminded me that it was highly unlikely, and in the case that it had happened, I could easily find the error in the time that remained.
 
 My heartbeat had been doing its best to mimic the [Shepard Tone](https://en.wikipedia.org/wiki/Shepard_tone) as I finished implementing the code and ran it against the samples. Why was the output nonsensical? Was this the caveat from earlier? Surely, we had collectively hallucinated a laughably invalid solution in the style of an LLM?
 

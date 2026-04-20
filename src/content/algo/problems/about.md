@@ -13,3 +13,4 @@ queue:
 - https://codeforces.com/contest/1943/problem/E2
 - https://codeforces.com/contest/1973/problem/F
 - https://codeforces.com/contest/2021/problem/E3
+- https://codeforces.com/contest/1981/problem/E

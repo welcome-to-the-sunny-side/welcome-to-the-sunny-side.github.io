@@ -105,7 +105,7 @@ let pendingTypeset = false;
 let pendingScriptExec = false;
 type Device = 'pc' | 'mobile';
 // Collect all home background images at build time (hashed URLs)
-const imageModules = import.meta.glob('../../public/assets/home/active/**/*.{jpg,jpeg,png,webp}', { as: 'url', eager: true });
+const imageModules = import.meta.glob('../../public/assets/home/active/**/*.{jpg,jpeg,png,webp}', { query: '?url', import: 'default', eager: true });
 const imagesBySkin: Record<string, Record<Device, string[]>> = {};
 for (const [absPath, url] of Object.entries(imageModules)) {
   const parts = absPath.split('/');

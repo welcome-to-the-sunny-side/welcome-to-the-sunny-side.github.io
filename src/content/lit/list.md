@@ -6,3 +6,4 @@
 | The Man Who Was Thursday | G.K. Chesterton | 2026-03-28 | Y |
 | Hunger | Knut Hamsun | 2026-03-31 | Y |
 | The Invention of Morel | Adolfo Bioy Casares | 2026-04-20 | Y |
+| The Invincible | Stanislaw Lem | 2026-04-26 | Y |

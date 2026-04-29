@@ -1,0 +1,17 @@
+const o=`- https://codeforces.com/contest/1270/problem/H
+- https://codeforces.com/contest/1209/problem/G2
+- https://codeforces.com/problemset/problem/1787/G
+- https://codeforces.com/contest/1588/problem/F
+- https://codeforces.com/contest/453/problem/E
+- https://codeforces.com/problemset/problem/1887/D
+- https://codedrills.io/contests/icpc-asia-west-continent-final-contest-2023/problems/the-cabins-in-the-woods
+- https://codeforces.com/contest/1340/problem/F
+- https://codeforces.com/contest/1208/problem/H
+- https://codeforces.com/problemset/problem/1540/D
+- https://codeforces.com/contest/2147/problem/F
+- https://codeforces.com/contest/2152/problem/F
+- https://codeforces.com/contest/2155/problem/F
+- https://codeforces.com/contest/2206/problem/D
+- https://codeforces.com/contest/2153/problem/F
+- https://codeforces.com/contest/1787/problem/G
+`;export{o as default};

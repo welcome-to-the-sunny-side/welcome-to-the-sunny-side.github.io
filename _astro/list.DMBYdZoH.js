@@ -7,4 +7,5 @@ const n=`| Book | Author | Finish Date | Rating (/5) | First Time? |
 | Hunger | Knut Hamsun | 2026-03-31 | 4.5 | Y |
 | The Invention of Morel | Adolfo Bioy Casares | 2026-04-20 | 4 | Y |
 | The Invincible | Stanislaw Lem | 2026-04-26 | 3.5 | Y |
+| Mysteries | Knut Hamsun | 2026-04-29 | 4.5 | Y |
 `;export{n as default};

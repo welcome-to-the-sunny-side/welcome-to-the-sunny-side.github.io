@@ -7,12 +7,13 @@
 |:-------|:-----:|
 | https://codeforces.com/contest/1458/problem/F | A couple of nice observations around diameters |
 | https://codeforces.com/contest/1583/problem/G | Cute |
-| https://codeforces.com/problemset/problem/2068/E | Surprisingly good for an ICPC problem |
+| https://codeforces.com/contest/2068/problem/E | Surprisingly good for an ICPC problem |
 | https://codeforces.com/contest/1548/problem/E | Working memory test | 
 | https://codeforces.com/contest/2021/problem/E3 | A lot of little subproblems |
 | https://codeforces.com/contest/1973/problem/F | Memorable to me because my solution for this was hilariously contrived |
-| https://codeforces.com/problemset/problem/2164/F2 | Beautiful, I was stuck on this for a while | 
+| https://codeforces.com/contest/2164/problem/F2 | Beautiful, I was stuck on this for a while | 
 | https://codeforces.com/contest/1981/problem/E | Easy but I like how trivial it becomes with a certain geometric visualization |
 | https://codeforces.com/contest/1562/problem/F | Nice |
 | https://codeforces.com/contest/1710/problem/D | I distinctly remember solving this (I was extremely depressed for a few weeks while at home, and this problem made me quite happy for a while) |
 | https://codeforces.com/contest/1827/problem/E | I'm a sucker for small-to-large merging. Also, I was quite weak when I solved this. | 
+| https://codeforces.com/contest/2147/problem/F | Elegant | 

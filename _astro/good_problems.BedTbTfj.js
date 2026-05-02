@@ -16,4 +16,5 @@ const e=`1. I created this list on 2026/04/30, and retrospective inclusion of pr
 | https://codeforces.com/contest/1562/problem/F | Nice |
 | https://codeforces.com/contest/1710/problem/D | I distinctly remember solving this (I was extremely depressed for a few weeks while at home, and this problem made me quite happy for a while) |
 | https://codeforces.com/contest/1827/problem/E | I'm a sucker for small-to-large merging. Also, I was quite weak when I solved this. | 
-| https://codeforces.com/contest/2147/problem/F | Elegant | `;export{e as default};
+| https://codeforces.com/contest/2147/problem/F | Elegant | 
+| https://codeforces.com/problemset/problem/1654/F | There's an extraordinarily elegant solution, and there's an extraordinarily inelegant solution |`;export{e as default};

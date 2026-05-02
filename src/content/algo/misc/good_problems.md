@@ -17,3 +17,4 @@
 | https://codeforces.com/contest/1710/problem/D | I distinctly remember solving this (I was extremely depressed for a few weeks while at home, and this problem made me quite happy for a while) |
 | https://codeforces.com/contest/1827/problem/E | I'm a sucker for small-to-large merging. Also, I was quite weak when I solved this. | 
 | https://codeforces.com/contest/2147/problem/F | Elegant | 
+| https://codeforces.com/problemset/problem/1654/F | There's an extraordinarily elegant solution, and there's an extraordinarily inelegant solution |

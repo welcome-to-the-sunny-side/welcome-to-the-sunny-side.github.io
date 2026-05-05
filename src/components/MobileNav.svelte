@@ -1,9 +1,17 @@
 <script lang="ts">
   import { currentPath } from '../stores/router';
-  import { currentSkin } from '../stores/skin';
+  import { currentSkin, listSkins, wearSkin } from '../stores/skin';
   import { isDir } from '../lib/virtualFs';
 
   $: skin = $currentSkin;
+
+  function cycleSkin() {
+    const names = listSkins();
+    if (names.length < 2) return;
+    const idx = names.indexOf(skin.name);
+    const next = names[(idx + 1) % names.length];
+    wearSkin(next);
+  }
 
   // Derive breadcrumb segments from the current path
   $: segments = buildSegments($currentPath);
@@ -59,18 +67,25 @@
   }
 </style>
 
-<nav class="md:hidden flex items-center gap-0 px-3 py-2 bg-surface border-b border-accent-subtle overflow-x-auto whitespace-nowrap font-mono text-sm">
-  {#each segments as seg, i}
-    {#if i > 0}
-      <span class="text-accent mx-1 select-none">/</span>
-    {/if}
-    {#if seg.isLast}
-      <span class="text-text font-medium">{seg.label}</span>
-    {:else}
-      <button
-        class="crumb-link text-text-muted hover:text-accent transition-colors duration-150"
-        on:click={() => navigate(seg)}
-      >{seg.label}</button>
-    {/if}
-  {/each}
+<nav class="md:hidden flex items-center px-3 py-2 bg-surface border-b border-accent-subtle font-mono text-sm">
+  <div class="flex-1 flex items-center min-w-0 overflow-x-auto whitespace-nowrap">
+    {#each segments as seg, i}
+      {#if i > 0}
+        <span class="text-accent mx-1 select-none">/</span>
+      {/if}
+      {#if seg.isLast}
+        <span class="text-text font-medium">{seg.label}</span>
+      {:else}
+        <button
+          class="crumb-link text-text-muted hover:text-accent transition-colors duration-150"
+          on:click={() => navigate(seg)}
+        >{seg.label}</button>
+      {/if}
+    {/each}
+  </div>
+  <button
+    class="flex-shrink-0 ml-3 text-text-muted hover:text-accent transition-colors duration-150 text-base leading-none"
+    on:click={cycleSkin}
+    aria-label="Switch skin (current: {skin.name})"
+  >{skin.name === 'sunny' ? '☀' : '☾'}</button>
 </nav>

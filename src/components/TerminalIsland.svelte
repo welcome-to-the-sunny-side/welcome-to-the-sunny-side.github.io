@@ -185,7 +185,16 @@ onMount(async () => {
   term.loadAddon(fit);
   // Let browser-native shortcuts pass through instead of being captured by xterm
   term.attachCustomKeyEventHandler((e: KeyboardEvent) => {
-    if (e.ctrlKey || e.metaKey) return false;
+    if (e.ctrlKey || e.metaKey) {
+      // Ctrl+Backspace: delete the previous word in our input buffer instead
+      // of letting the browser handle it (xterm's hidden textarea makes the
+      // browser default a no-op anyway).
+      if (e.type === 'keydown' && e.ctrlKey && !e.metaKey && e.key === 'Backspace') {
+        e.preventDefault();
+        if (!isLoading) deleteWord();
+      }
+      return false;
+    }
     return true;
   });
   term.open(container);
@@ -578,6 +587,59 @@ onMount(async () => {
       // Move cursor back to correct position
       term.write(`\x1b[${remaining.length - 1}D`);
     }
+  }
+
+  // Ctrl+Backspace: delete the previous word. Walk back over trailing
+  // whitespace, then one contiguous run of either word-chars (\w) or
+  // separator-chars — whichever class precedes the cursor. Matches the
+  // segmented behavior of typical browser textboxes (e.g. typing
+  // `cd /algo/problems/cf-2056f1.html` and hitting Ctrl+Backspace four
+  // times eats `html`, `.`, `2056f1`, `-`).
+  //
+  // We can't loop deleteChar() here: deleteChar's wrap branch uses
+  // `\x1b[J` (erase to end of screen), which is fine when the cursor is
+  // at the visual end of the buffer (single-backspace case), but when
+  // the buffer wraps across multiple rows and we're peeling chars off
+  // the end, the second wrap-up walks into the row above — eventually
+  // chewing into prior terminal output. So we compute the new state and
+  // do one full redraw from the prompt's start row.
+  function deleteWord() {
+    if (cursorPos === 0) return;
+    let target = cursorPos;
+    const isSpace = (c: string) => /\s/.test(c);
+    const isWord = (c: string) => /\w/.test(c);
+    while (target > 0 && isSpace(buffer[target - 1])) target--;
+    if (target > 0) {
+      const wordRun = isWord(buffer[target - 1]);
+      while (target > 0 && !isSpace(buffer[target - 1]) && isWord(buffer[target - 1]) === wordRun) {
+        target--;
+      }
+    }
+    if (target === cursorPos) target = cursorPos - 1; // safety: always make progress
+
+    const cols = termInstance?.cols ?? 80;
+    const promptLen = ('/' + cwd.join('/')).length + 3; // path + " $ "
+    const rowsUp = Math.floor((promptLen + cursorPos) / cols);
+
+    buffer = buffer.slice(0, target) + buffer.slice(cursorPos);
+    cursorPos = target;
+
+    if (rowsUp > 0) term.write(`\x1b[${rowsUp}A`);
+    term.write('\r');         // to col 0 of prompt's row
+    term.write('\x1b[J');     // clear from prompt-start to end of screen
+    prompt();
+    term.write(buffer);
+    if (cursorPos < buffer.length) {
+      // Cursor sits at end of buffer after deletion; if the buffer has
+      // tail chars (from when cursor was mid-buffer), back up to its
+      // logical position. Use absolute column + row moves so we don't
+      // hit the no-wrap-on-\x1b[D xterm gotcha.
+      const tailRows = Math.floor((promptLen + buffer.length) / cols) - Math.floor((promptLen + cursorPos) / cols);
+      const targetCol = (promptLen + cursorPos) % cols;
+      if (tailRows > 0) term.write(`\x1b[${tailRows}A`);
+      term.write(`\x1b[${targetCol + 1}G`);
+    }
+    triggerCompletion();
   }
 
   function deleteChar() {

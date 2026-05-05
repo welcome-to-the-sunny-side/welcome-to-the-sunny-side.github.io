@@ -1,13 +1,7 @@
 <script lang="ts">
   import { onMount, tick, onDestroy } from 'svelte';
-  import MarkdownIt from 'markdown-it';
-  import hljsCore from 'highlight.js/lib/core';
-  import cpp from 'highlight.js/lib/languages/cpp';
   import { currentSkin } from '../stores/skin';
-
-  // Register only the C++ language to keep bundle size small
-  const hljs: any = hljsCore as any;
-  hljs.registerLanguage('cpp', cpp as any);
+  import { getRenderer } from '../lib/markdown';
 
   type Tier = 'public' | 'master';
   type ManifestEntry = {
@@ -40,20 +34,7 @@
     ct: string; // base64 (ciphertext+tag)
   };
 
-  const md = new MarkdownIt({
-    html: true,
-    linkify: true,
-    highlight: (str: string, lang: string): string => {
-      const norm = (lang || '').toLowerCase();
-      const isCpp = ['cpp', 'c++', 'cc', 'cxx', 'hpp', 'hxx'].includes(norm);
-      if (isCpp) {
-        try {
-          return `<pre class="hljs"><code>${hljs.highlight(str, { language: 'cpp' }).value}</code></pre>`;
-        } catch {}
-      }
-      return `<pre class="hljs"><code>${md.utils.escapeHtml(str)}</code></pre>`;
-    },
-  });
+  let md: any = null;
 
   // Load manifest from public directory at runtime
   let entries: ManifestEntry[] = [];
@@ -233,8 +214,6 @@
     }
   }
 
-  // Removed unused decryptBlob() and scrypt-js main-thread dependency; decryption is handled in the worker.
-
   async function unlockPost(postId: string, passphrase: string) {
     if (!passphrase.trim()) return;
     
@@ -294,7 +273,7 @@
   }
 
   onMount(async () => {
-    // Load manifest from public directory
+    md = await getRenderer();
     try {
       const response = await fetch('/musings/manifest.json');
       if (response.ok) {
@@ -371,7 +350,7 @@
       {:else if decryptedMd[e.id]}
         <div class="mt-1">
           <article class="{$currentSkin.classes.contentPane} max-w-none">
-            {@html md.render(decryptedMd[e.id].md)}
+            {@html md ? md.render(decryptedMd[e.id].md) : ''}
           </article>
         </div>
       {:else if e.tier === 'public'}

@@ -2,7 +2,6 @@
 module.exports = {
   content: [
     './src/**/*.{astro,html,js,jsx,ts,tsx,vue,svelte,md}',
-    './site-reference.md'
   ],
   darkMode: 'class',
   theme: {

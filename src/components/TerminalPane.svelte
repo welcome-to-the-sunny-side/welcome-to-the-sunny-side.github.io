@@ -1,49 +1,33 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import TerminalIsland from './TerminalIsland.svelte';
-  import { writable } from 'svelte/store';
   import { currentTerminalTheme } from '../stores/terminalTheme';
 
   $: theme = $currentTerminalTheme;
 
-  // Simple collapsed state – persisted in sessionStorage so it stays while navigating.
-  const collapsed = writable<boolean>(false);
+  let islandComp: any;
+  let isFocused = false;
+  let isCollapsed = false;
+
+  function setCollapsed(v: boolean) {
+    isCollapsed = v;
+    sessionStorage.setItem('terminalCollapsed', String(v));
+    if (!v) {
+      setTimeout(() => {
+        islandComp?.resizeTerminal();
+        islandComp?.focusTerminal();
+      }, 300);
+    }
+  }
+
+  function toggle() { setCollapsed(!isCollapsed); }
 
   onMount(() => {
     const saved = sessionStorage.getItem('terminalCollapsed');
-    if (saved) {
-      collapsed.set(saved === 'true');
-    }
-  });
+    if (saved) isCollapsed = saved === 'true';
 
-  let isCollapsed = false;
-  collapsed.subscribe(v => (isCollapsed = v));
-
-  function toggle() {
-    collapsed.update(v => {
-      const newVal = !v;
-      sessionStorage.setItem('terminalCollapsed', newVal.toString());
-      if (!newVal) {
-        setTimeout(() => {
-          islandComp?.resizeTerminal();
-          islandComp?.focusTerminal();
-        }, 300);
-      }
-      return newVal;
-    });
-  }
-
-  let islandComp: any;
-  // Track focus state from TerminalIsland
-  let isFocused = false;
-
-  onMount(() => {
     const onResize = () => {
-      if (!isCollapsed) {
-        setTimeout(() => {
-          islandComp?.resizeTerminal();
-        }, 100);
-      }
+      if (!isCollapsed) setTimeout(() => islandComp?.resizeTerminal(), 100);
     };
 
     const handleKey = (e: KeyboardEvent) => {
@@ -53,51 +37,32 @@
         e.stopImmediatePropagation();
         toggle();
       } else if (e.key === 'ArrowLeft') {
-        if (isCollapsed) {
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          toggle();
-        } else {
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          islandComp?.focusTerminal();
-        }
-      } else if (e.key === 'ArrowUp') {
-        if (!isCollapsed) {
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          const active = document.activeElement as HTMLElement | null;
-          if (active) active.blur();
-        }
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        if (isCollapsed) toggle();
+        else islandComp?.focusTerminal();
+      } else if (e.key === 'ArrowUp' && !isCollapsed) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        (document.activeElement as HTMLElement | null)?.blur();
       }
     };
 
     const handleVim = (e: KeyboardEvent) => {
       const active = document.activeElement as HTMLElement | null;
       if (active) {
-        const tagName = active.tagName.toLowerCase();
-        if (tagName === 'input' || tagName === 'textarea' || active.isContentEditable ||
-            active.classList.contains('xterm-helper-textarea')) {
-          return;
-        }
+        const tag = active.tagName.toLowerCase();
+        if (tag === 'input' || tag === 'textarea' || active.isContentEditable ||
+            active.classList.contains('xterm-helper-textarea')) return;
       }
-      const pane = document.querySelector('main');
+      const pane = document.querySelector('main') ?? window;
       const step = 60;
       switch (e.key) {
-        case 'j':
-          (pane ?? window).scrollBy({ top: 2*step, behavior: 'smooth' });
-          break;
-        case 'k':
-          (pane ?? window).scrollBy({ top: -2*step, behavior: 'smooth' });
-          break;
-        case 'h':
-          (pane ?? window).scrollBy({ left: -step, behavior: 'smooth' });
-          break;
-        case 'l':
-          (pane ?? window).scrollBy({ left: step, behavior: 'smooth' });
-          break;
-        default:
-          return;
+        case 'j': pane.scrollBy({ top:  2 * step, behavior: 'smooth' }); break;
+        case 'k': pane.scrollBy({ top: -2 * step, behavior: 'smooth' }); break;
+        case 'h': pane.scrollBy({ left: -step, behavior: 'smooth' }); break;
+        case 'l': pane.scrollBy({ left:  step, behavior: 'smooth' }); break;
+        default: return;
       }
       e.preventDefault();
     };
@@ -241,23 +206,15 @@
      style:--tw-accent-muted={theme.wrapper.accentMuted}
      style:--tw-shadow={theme.wrapper.shadow}
 >
+  <button
+    class="desktop-toggle flex"
+    on:click={toggle}
+    aria-label={isCollapsed ? 'Expand terminal' : 'Collapse terminal'}
+  >
+    {isCollapsed ? '◀' : '▶'}
+  </button>
   {#if isCollapsed}
-    <button
-      class="desktop-toggle flex"
-      on:click={toggle}
-      aria-label="Expand terminal"
-    >
-      ◀
-    </button>
     <span class="collapsed-label">terminal</span>
-  {:else}
-    <button
-      class="desktop-toggle flex"
-      on:click={toggle}
-      aria-label="Collapse terminal"
-    >
-      ▶
-    </button>
   {/if}
 
   <div class="flex-1 overflow-hidden">

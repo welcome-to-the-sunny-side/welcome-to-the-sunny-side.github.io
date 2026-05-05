@@ -3,9 +3,9 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "predev": "node tools/build-vfs-date-index.mjs",
+    "predev": "node tools/build-vfs-date-index.mjs && node tools/build-home-bg-index.mjs",
     "dev": "astro dev",
-    "prebuild": "node tools/build-vfs-date-index.mjs",
+    "prebuild": "node tools/build-vfs-date-index.mjs && node tools/build-home-bg-index.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -26,7 +26,6 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.16",
-    "@types/highlight.js": "^9.12.4",
     "@types/markdown-it": "^14.1.2",
     "gh-pages": "^6.3.0"
   }

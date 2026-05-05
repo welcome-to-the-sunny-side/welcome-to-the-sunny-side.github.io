@@ -4,49 +4,50 @@
   import { get } from 'svelte/store';
   import { currentSkin } from '../stores/skin';
   import { currentPath } from '../stores/router';
-  import { list as vfsList, isDir, isFile } from '../lib/virtualFs';
-  // Musings is now lazy-loaded; see ensureMusingsLoaded() below
+  import { list as vfsList, isDir } from '../lib/virtualFs';
+  import { getRenderer } from '../lib/markdown';
 
-  // Import all markdown under src/content as raw strings
-  // load all markdown as raw strings (Vite 5 syntax)
-const pagesMd = import.meta.glob('../content/**/*.md', { query: '?raw', import: 'default' });
-const pagesHtml = import.meta.glob('../content/**/*.html', { query: '?raw', import: 'default' });
+  // We import .md as raw text and parse the small frontmatter ourselves.
+  // (Letting Astro compile the markdown bundles ~2.5x more JS per page since
+  // each module would also include compiled HTML + a Content component we
+  // don't use.) HTML files are imported raw too.
+  const pagesMd = import.meta.glob('../content/**/*.md', { query: '?raw', import: 'default' });
+  const pagesHtml = import.meta.glob('../content/**/*.html', { query: '?raw', import: 'default' });
 
-  // Lazy singletons
+  // Strip-and-parse a minimal YAML front matter. Supports:
+  //   key: value
+  //   key: "value" or 'value'   (quotes stripped if matched pair)
+  //   key: [a, "b", 'c']        (one-line list, comma-separated)
+  function parseFrontmatter(raw: string): { fm: Record<string, any>; body: string } {
+    if (!raw.startsWith('---')) return { fm: {}, body: raw };
+    const end = raw.indexOf('\n---', 3);
+    if (end === -1) return { fm: {}, body: raw };
+    const yaml = raw.slice(3, end).trim();
+    const body = raw.slice(end + 4);
+    const fm: Record<string, any> = {};
+    const stripQuotes = (s: string) => s.replace(/^(['"])(.*)\1$/, '$2');
+    for (const line of yaml.split(/\r?\n/)) {
+      const colon = line.indexOf(':');
+      if (colon === -1) continue;
+      const key = line.slice(0, colon).trim();
+      const val = line.slice(colon + 1).trim();
+      if (val.startsWith('[') && val.endsWith(']')) {
+        fm[key] = val.slice(1, -1).split(',').map((s) => stripQuotes(s.trim()));
+      } else {
+        fm[key] = stripQuotes(val);
+      }
+    }
+    return { fm, body };
+  }
+
   let md: any = null;
-  let hljs: any = null;
-  let enginesLoaded = false;
   let mathjaxLoading: Promise<void> | null = null;
 
-  // Lazy-load Musings component only when needed
   let MusingsStreamComponent: any = null;
   let musingsLoadPromise: Promise<any> | null = null;
 
-  async function ensureRenderEnginesLoaded() {
-    if (enginesLoaded) return;
-    const [MarkdownItMod, hljsCore, cppMod] = await Promise.all([
-      import('markdown-it'),
-      import('highlight.js/lib/core'),
-      import('highlight.js/lib/languages/cpp'),
-    ]);
-    hljs = (hljsCore as any).default;
-    hljs.registerLanguage('cpp', (cppMod as any).default);
-    const { default: MarkdownIt } = MarkdownItMod as any;
-    md = new MarkdownIt({
-      html: true,
-      linkify: true,
-      highlight: (str: string, lang: string): string => {
-        const norm = (lang || '').toLowerCase();
-        const isCpp = ['cpp', 'c++', 'cc', 'cxx', 'hpp', 'hxx'].includes(norm);
-        if (isCpp) {
-          try {
-            return `<pre class="hljs"><code>${hljs.highlight(str, { language: 'cpp' }).value}</code></pre>`;
-          } catch {}
-        }
-        return `<pre class="hljs"><code>${md.utils.escapeHtml(str)}</code></pre>`;
-      },
-    });
-    enginesLoaded = true;
+  async function ensureRenderer() {
+    if (!md) md = await getRenderer();
   }
 
   async function ensureMathJaxLoaded() {
@@ -90,7 +91,6 @@ const pagesHtml = import.meta.glob('../content/**/*.html', { query: '?raw', impo
 const initialPath = typeof window !== 'undefined' ? get(currentPath) : '/';
 let path = initialPath;
 let displayPath = initialPath;
-  let contentRaw: string = '';
 let frontmatter: Record<string, any> = {};
 let isBlog = false;
 let isMusings = false;
@@ -104,17 +104,17 @@ let isLoading = false;
 let pendingTypeset = false;
 let pendingScriptExec = false;
 type Device = 'pc' | 'mobile';
-// Collect all home background images at build time (hashed URLs)
-const imageModules = import.meta.glob('../../public/assets/home/active/**/*.{jpg,jpeg,png,webp}', { query: '?url', import: 'default', eager: true });
-const imagesBySkin: Record<string, Record<Device, string[]>> = {};
-for (const [absPath, url] of Object.entries(imageModules)) {
-  const parts = absPath.split('/');
-  const idx = parts.indexOf('active'); // .../home/active/<skin>/<device>/<file>
-  if (idx !== -1 && parts.length >= idx + 3) {
-    const skinName = parts[idx + 1];
-    const device = parts[idx + 2] as Device;
-    (imagesBySkin[skinName] ??= { pc: [], mobile: [] })[device].push(url as string);
-  }
+// Home background image URLs are listed in /home-bg-index.json (built by
+// tools/build-home-bg-index.mjs). We fetch the manifest on first home view
+// instead of bundling every URL into this component's chunk. Reassigning
+// `imagesBySkin` after the fetch triggers the reactive block below.
+let imagesBySkin: Record<string, Record<Device, string[]>> = {};
+let imagesBySkinPromise: Promise<void> | null = null;
+function ensureHomeBgIndex() {
+  imagesBySkinPromise ??= fetch('/home-bg-index.json')
+    .then((r) => (r.ok ? r.json() : {}))
+    .then((data) => { imagesBySkin = data ?? {}; })
+    .catch(() => { /* leave imagesBySkin empty */ });
 }
 
 let currentBackgroundImage: string | null = null;
@@ -128,6 +128,7 @@ $: skin = $currentSkin;
   $: {
     const isHome = displayPath === '/' || displayPath === '/home.html';
     if (isHome) {
+      ensureHomeBgIndex();
       const device: Device = isMobileView ? 'mobile' : 'pc';
       const list = imagesBySkin[$currentSkin.name]?.[device] ?? [];
       currentBackgroundImage = list.length ? list[Math.floor(Math.random() * list.length)] : null;
@@ -139,151 +140,6 @@ $: skin = $currentSkin;
 
   // When musings mode is active, ensure its component is loaded
   $: if (isMusings) { ensureMusingsLoaded(); }
-
-  function parseFrontmatter(raw: string) {
-    if (raw.startsWith('---')) {
-      const end = raw.indexOf('\n---', 3);
-      if (end !== -1) {
-        const yaml = raw.slice(3, end).trim();
-        const body = raw.slice(end + 4); // skip newline
-        const obj: Record<string, any> = {};
-        for (const line of yaml.split(/\r?\n/)) {
-          const idx = line.indexOf(':');
-          if (idx === -1) continue;
-          const key = line.slice(0, idx).trim();
-          let val: any = line.slice(idx + 1).trim();
-          // strip quotes
-          val = val.replace(/^['\"]|['\"]$/g, '');
-          // try JSON parse for arrays
-          if (val.startsWith('[') && val.endsWith(']')) {
-            // naive list parsing: [a, b, c]
-            val = val.slice(1, -1).split(',').map((s: string) => s.trim().replace(/^['\\"]|['\\"]$/g, ''));
-          }
-          obj[key] = val;
-        }
-        return { fm: obj, body };
-      }
-    }
-    return { fm: {}, body: raw };
-  }
-
-  // Protect inline/display math from Markdown emphasis parsing by temporarily
-  // replacing math segments with unique placeholders before md.render(), then
-  // restoring the original TeX delimiters back into the resulting HTML string.
-  // Supported delimiters: $...$, $$...$$, \(...\), \[...\]
-  function protectMathSegments(input: string): { placeholderText: string; restore: (html: string) => string } {
-    const placeholders: string[] = [];
-    const MARKER = '§§MATH§§';
-    let counter = 0;
-
-    function makeKey(idx: number): string {
-      return `${MARKER}${idx}§§`;
-    }
-
-    function pushPlaceholder(raw: string): string {
-      const key = makeKey(counter);
-      placeholders.push(raw);
-      counter++;
-      return key;
-    }
-
-    function isEscaped(src: string, pos: number): boolean {
-      // Count preceding backslashes
-      let backslashes = 0;
-      for (let i = pos - 1; i >= 0 && src[i] === '\\'; i--) backslashes++;
-      return (backslashes % 2) === 1;
-    }
-
-    let i = 0;
-    let out = '';
-    const n = input.length;
-
-    while (i < n) {
-      const ch = input[i];
-
-      // Skip code spans/fences delimited by backticks `...` or ```...```
-      if (ch === '`') {
-        // Count backticks length
-        let btCount = 1;
-        let j = i + 1;
-        while (j < n && input[j] === '`') { btCount++; j++; }
-        // Find closing sequence of same length
-        const fence = '`'.repeat(btCount);
-        let k = input.indexOf(fence, j);
-        if (k === -1) {
-          // No closing fence; append rest and break
-          out += input.slice(i);
-          break;
-        } else {
-          // Include closing fence
-          out += input.slice(i, k + btCount);
-          i = k + btCount;
-          continue;
-        }
-      }
-
-      // MathJax \(...\)
-      if (ch === '\\' && i + 1 < n && input[i + 1] === '(') {
-        const start = i;
-        const end = input.indexOf('\\)', i + 2);
-        if (end !== -1) {
-          const raw = input.slice(start, end + 2);
-          out += pushPlaceholder(raw);
-          i = end + 2;
-          continue;
-        }
-      }
-
-      // MathJax \[...\]
-      if (ch === '\\' && i + 1 < n && input[i + 1] === '[') {
-        const start = i;
-        const end = input.indexOf('\\]', i + 2);
-        if (end !== -1) {
-          const raw = input.slice(start, end + 2);
-          out += pushPlaceholder(raw);
-          i = end + 2;
-          continue;
-        }
-      }
-
-      // Dollar-delimited: $...$ or $$...$$
-      if (ch === '$') {
-        // Count consecutive dollars (1 or 2 supported)
-        let d = 1;
-        if (i + 1 < n && input[i + 1] === '$') d = 2;
-        const start = i;
-        let j = i + d;
-        let found = -1;
-        while (true) {
-          j = input.indexOf('$'.repeat(d), j);
-          if (j === -1) break;
-          if (!isEscaped(input, j)) { found = j; break; }
-          j += d;
-        }
-        if (found !== -1) {
-          const raw = input.slice(start, found + d);
-          out += pushPlaceholder(raw);
-          i = found + d;
-          continue;
-        }
-      }
-
-      // Default: copy one char
-      out += ch;
-      i++;
-    }
-
-    function restore(html: string): string {
-      let result = html;
-      for (let idx = 0; idx < placeholders.length; idx++) {
-        const key = makeKey(idx);
-        result = result.split(key).join(placeholders[idx]);
-      }
-      return result;
-    }
-
-    return { placeholderText: out, restore };
-  }
 
   const unsub = currentPath.subscribe(async (p) => {
     // Always mark loading on path change so we don't flash 404 even from home
@@ -368,21 +224,16 @@ $: skin = $currentSkin;
       // Keep contentHtml as-is (previous page) until displayPath switches; then template shows background.
       contentFound = true;
     } else if (mdKey in pagesMd) {
-      await ensureRenderEnginesLoaded();
+      await ensureRenderer();
       await ensureMathJaxLoaded();
-      contentRaw = (await (pagesMd as any)[mdKey]()) as string;
-      const { fm, body } = parseFrontmatter(contentRaw);
+      const raw = (await (pagesMd as any)[mdKey]()) as string;
+      const { fm, body } = parseFrontmatter(raw);
       frontmatter = fm;
       isBlog = frontmatter.displayMode === 'blog';
       isMusings = frontmatter.displayMode === 'musings';
       if (isMusings) { await ensureMusingsLoaded(); }
-      
-      // Protect math before Markdown parsing, then restore and let MathJax typeset
-      const { placeholderText, restore } = protectMathSegments(body);
-      contentHtml = md.render(placeholderText);
-      contentHtml = restore(contentHtml);
+      contentHtml = md.render(body);
       await tick();
-      // Defer typesetting if we're in loading mode (page not yet swapped in DOM)
       if (isLoading) {
         pendingTypeset = true;
       } else {
@@ -390,16 +241,12 @@ $: skin = $currentSkin;
       }
       contentFound = true;
     } else if (htmlKey in pagesHtml) {
-      // Raw HTML file – execute as-is
-      contentRaw = (await (pagesHtml as any)[htmlKey]()) as string;
+      const raw = (await (pagesHtml as any)[htmlKey]()) as string;
       frontmatter = {};
       isBlog = false;
       isMusings = false;
-      
-      
-      contentHtml = contentRaw;
+      contentHtml = raw;
       await tick();
-      // Defer script execution until content is visible (after isLoading = false)
       if (isLoading) {
         pendingScriptExec = true;
       } else {
@@ -415,18 +262,13 @@ $: skin = $currentSkin;
       }
       contentFound = true;
     } else {
-      // Only show 404 if we're not loading (to prevent flash)
       if (!isLoading) {
-        await ensureRenderEnginesLoaded();
+        await ensureRenderer();
         await ensureMathJaxLoaded();
-        contentRaw = `# 404\nPath not found: ${path}`;
         frontmatter = {};
         isBlog = false;
         isMusings = false;
-        
-        const { placeholderText, restore } = protectMathSegments(contentRaw);
-        contentHtml = md.render(placeholderText);
-        contentHtml = restore(contentHtml);
+        contentHtml = md.render(`# 404\nPath not found: ${path}`);
         await tick();
         await typesetMath();
       }

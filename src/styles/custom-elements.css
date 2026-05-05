@@ -1,16 +1,11 @@
-/* ───────────────────────────────────────────────
-   Minimal retro-dark custom elements
-   (spoiler + theorem)
-   ─────────────────────────────────────────────── */
+/* Custom Markdown elements (spoiler + theorem). The skin store sets
+   --el-accent / --el-surface / --el-text / --el-radius per skin; the only
+   var defined here is --el-time, which neither skin needs to override. */
 
-   :root {
-    --el-accent: #3fa7ff;   /* cool blue highlight – change once if desired */
-    --el-surface: #0f0f0f;  /* matches dark background */
-    --el-text:    #d0d0d0;
-    --el-radius:  2px;
-    --el-time:    140ms ease-out;
-  }
-  
+:root {
+  --el-time: 140ms ease-out;
+}
+
   /* ===== SPOILER ===== */
   
   details.spoiler {

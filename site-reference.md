@@ -348,7 +348,7 @@ Historically, **all authored content lived in Markdown** and was compiled into `
 * Terminal commands (`ls`, `open`) treat `.html` the same as generated pages.
 * This enables hand-crafted mini-apps or embedded widgets without a Markdown wrapper – see the new **Games** section below.
 
-## 12 . Games & Utilities (`/content/games` & `/content/misc`)
+## 12b. Games & Utilities (`/content/games` & `/content/misc`)
 Interactive HTML pages that live alongside blog posts, including games and utility tools.
 
 | Name | Path | Tech | Notes |

@@ -607,23 +607,17 @@ onMount(async () => {
   const writeChar = (data: string) => {
     // Disable input during loading
     if (isLoading) return;
-    
+
     for (const char of data) {
       const code = char.charCodeAt(0);
-      // Handle ESC sequence for arrow keys (\x1b[C and \x1b[D)
+      // xterm fires onData alongside onKey, so escape sequences for arrow keys
+      // and Shift+Tab still arrive here. Swallow them so they don't get
+      // inserted as literal text — the actual handling is done in term.onKey.
       if (escSeq) {
         escSeq += char;
-        if (escSeq === '\x1b[C' || escSeq === '\x1b[D') {
-          // Arrow Right/Left handled in term.onKey; just reset sequence.
-          escSeq = '';
-          continue;
-        } else if (escSeq.length >= 3) {
-          // Unrecognized sequence, reset
-          escSeq = '';
-        }
+        if (escSeq.length >= 3) escSeq = '';
         continue;
       }
-
       if (char === '\x1b') {
         escSeq = '\x1b';
         continue;
@@ -771,14 +765,12 @@ onMount(async () => {
   }
   applyThemeCssVars(get(currentTerminalTheme));
 
-  let isInitialTheme = true;
   unsubTheme = currentTerminalTheme.subscribe((t) => {
     updateColors(t);
     if (termInstance) {
       termInstance.options.theme = t.xterm;
       applyThemeCssVars(t);
     }
-    isInitialTheme = false;
   });
 
 });

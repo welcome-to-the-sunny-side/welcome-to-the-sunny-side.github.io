@@ -1,0 +1,18 @@
+{
+  "dark": {
+    "pc": [
+      "/assets/home/active/dark/pc/expoutput-1500w.webp"
+    ],
+    "mobile": [
+      "/assets/home/active/dark/mobile/mobileoutput1.jpg"
+    ]
+  },
+  "sunny": {
+    "pc": [
+      "/assets/home/active/sunny/pc/bwsunny-1500w.webp"
+    ],
+    "mobile": [
+      "/assets/home/active/sunny/mobile/bwsunnymobile.jpg"
+    ]
+  }
+}

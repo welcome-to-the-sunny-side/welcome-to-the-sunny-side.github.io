@@ -286,6 +286,12 @@
   });
 
   onDestroy(() => {
+    // Animation intervals normally clear in stopDecryptAnimation's finally,
+    // but if we unmount mid-decryption they'd otherwise fire forever.
+    for (const id of Object.keys(animationIntervals)) {
+      window.clearInterval(animationIntervals[id]);
+      delete animationIntervals[id];
+    }
     if (worker) {
       worker.terminate();
       worker = null;

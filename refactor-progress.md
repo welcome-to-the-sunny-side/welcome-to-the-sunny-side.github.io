@@ -73,9 +73,26 @@ Substages: A = shared markdown renderer, B = frontmatter parsing, C = math escap
 - E: `TerminalPane.svelte` 268 → 232 lines. Merged the two `onMount` blocks. Replaced the `writable` `collapsed` store + subscribe with a plain `let isCollapsed` + `setCollapsed()` helper that also writes sessionStorage. Collapsed the duplicated `{#if isCollapsed}/{:else}` toggle buttons into one button with reactive icon/aria-label.
 - F: new `tools/build-home-bg-index.mjs` walks `public/assets/home/active/<skin>/<device>/` and emits `public/home-bg-index.json`; wired into `predev`/`prebuild`. `ContentPane.svelte` now fetches the manifest the first time the home page renders, instead of using an eager `import.meta.glob` that bundled every image URL into its JS chunk. ContentPane chunk: 14.2KB → 13.1KB. Saving scales linearly with the image count.
 
-## Stage 3 — State-machine fixes (planned, not yet scoped)
+## Stage 3 — State-machine fixes
 
-Placeholder — will be detailed once stage 2 lands.
+Status: **complete** (2026-05-05) — scoped down significantly from the original proposal.
+
+Original draft listed six items (loading-state simplification, terminal `pop` ↔ browser back, MusingsStream interval cleanup, dir-date cache simplification, mobile detection via matchMedia, terminal `deleteChar` line-wrap rewrite). On review, only one was a real bug; the rest were polish or risky-without-cause.
+
+### What we did
+
+- **MusingsStream interval cleanup** — `animationIntervals` are normally cleared by `stopDecryptAnimation` in `unlockPost`'s `finally`, but if the user navigates away mid-decryption the interval keeps firing. Extended `onDestroy` to clear all outstanding intervals before terminating the worker.
+
+### What we deliberately skipped
+
+- **Loading-state simplification.** Original proposal: drop `previousContentHtml` / `pendingTypeset` / `pendingScriptExec` / the `path`-`displayPath` split, replace with CSS opacity fade. On second look, each piece exists for a real reason — `displayPath` keeps the home background stable during nav, `previousContentHtml` prevents a blank flash during the await chain, and `pending*` flags coordinate "run side effect on visible DOM." The savings were ~30 lines for non-trivial behavioral risk. Skipped.
+- **Terminal `pop` ↔ `history.back`.** Real divergence between in-memory `pop` history and browser back stack, but narrow flow and touches two files. Low priority, deferred.
+- **`getDirDate` cache, mobile-detection matchMedia, terminal `deleteChar` rewrite.** Pure polish or speculative; skipped. CLAUDE.md explicitly warns against rewriting the cursor function.
+
+### Documentation
+
+- Rewrote `site-reference.md` (~440 → ~300 lines): trimmed historical narrative, fixed stale references (`SpoilerBox`/`TheoremBox`, `pendingTypeset` troubleshooting row, removed `ContentPane.astro` mention, etc.), promoted xterm gotchas + markdown pipeline to their own sections.
+- Lightly updated `CLAUDE.md`: added the `home-bg-index.json` build step, the markdown-renderer-singleton rule, the warning against Astro's compiled-frontmatter API, and the `onKey`/`onData` dual-dispatch footgun.
 
 ---
 
@@ -106,3 +123,9 @@ _Entries appended as work completes. Format: date — what changed — why._
   - E: `src/components/TerminalPane.svelte` 268 → 232 lines. Merged two `onMount` blocks; replaced `writable` `collapsed` store with plain `let isCollapsed` + `setCollapsed()` helper; collapsed duplicated toggle button into one with reactive icon and aria-label.
   - F: new `tools/build-home-bg-index.mjs` enumerates `public/assets/home/active/<skin>/<device>/` and writes `public/home-bg-index.json`. Wired into `predev`/`prebuild`. `ContentPane.svelte` now fetches the manifest on first home view instead of bundling every URL via eager `import.meta.glob`. ContentPane chunk shrank 14.2KB → 13.1KB; the saving grows with the number of background images.
   - Verified: `npm run build` clean (42 pages, 3.0s).
+
+- **2026-05-05 — Stage 3 + doc rewrite complete.**
+  - `MusingsStream.svelte` `onDestroy` now clears all outstanding `animationIntervals` before terminating the worker. Fixes a leak where `setInterval`s started by `startDecryptAnimation` would survive component unmount if the user navigated away from `/void.html` mid-decryption.
+  - Rewrote `site-reference.md` (~440 → ~300 lines). Fixed stale references, dropped historical narrative, added markdown-pipeline and xterm-gotchas sections.
+  - Updated `CLAUDE.md` with `home-bg-index.json` step, markdown-singleton rule, Astro-compiled-frontmatter warning, and `onKey`/`onData` dual-dispatch note. Removed reference to `site-issues.md` (deleted in Stage 1).
+  - Verified: `npm run build` clean (42 pages, 11.8s).

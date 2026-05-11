@@ -8,3 +8,4 @@
 | The Invention of Morel | Adolfo Bioy Casares | 2026-04-20 | 4 | Y |
 | The Invincible | Stanislaw Lem | 2026-04-26 | 3.5 | Y |
 | Mysteries | Knut Hamsun | 2026-04-29 | 4.5 | Y |
+| His Master's Voice | Stanislaw Lem | 2026-05-11 | 3.5 | Y |

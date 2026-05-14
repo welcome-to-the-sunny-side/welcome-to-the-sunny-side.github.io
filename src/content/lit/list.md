@@ -10,3 +10,4 @@
 | Mysteries | Knut Hamsun | 2026-04-29 | 4.5 | Y |
 | His Master's Voice | Stanislaw Lem | 2026-05-11 | 3 | Y |
 | Pan | Knut Hamsun | 2026-05-14 | 4 | Y |
+| Victoria | Knut Hamsun | 2026-05-15 | 1 | Y |

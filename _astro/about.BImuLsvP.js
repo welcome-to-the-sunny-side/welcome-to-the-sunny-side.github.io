@@ -1,8 +1,10 @@
-const t=`---
+const o=`---
 title: About
 ---
+
+nonadhocproblems
 
 - codeforces: https://codeforces.com/profile/DNR
 - github: https://github.com/welcome-to-the-sunny-side/
 - youtube: https://www.youtube.com/@welcome-to-the-sunny-side
-`;export{t as default};
+`;export{o as default};

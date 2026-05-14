@@ -11,9 +11,9 @@ const SKINS: Record<string, Skin> = {
 
 // Persist choice in localStorage so the user keeps their preference across refreshes.
 const loadInitial = () => {
-  if (typeof localStorage === 'undefined') return sunny;
+  if (typeof localStorage === 'undefined') return dark;
   const saved = localStorage.getItem('wtss-skin');
-  return (saved && SKINS[saved]) ? SKINS[saved] : sunny;
+  return (saved && SKINS[saved]) ? SKINS[saved] : dark;
 };
 
 function applySkin(skin: Skin) {

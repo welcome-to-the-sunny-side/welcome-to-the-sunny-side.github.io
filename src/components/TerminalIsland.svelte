@@ -57,7 +57,7 @@ let DATE_INDEX: Record<string, number> = {};
 // --- Loading state ---
 let isLoading = false;
 let loadingSpinnerInterval: number | null = null;
-const spinnerFrames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+const spinnerFrames = ['⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷'];
 let spinnerFrame = 0;
 let unsubLoading: (() => void) | null = null;
 let unsubTheme: (() => void) | null = null;

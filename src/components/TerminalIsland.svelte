@@ -167,11 +167,13 @@ onMount(async () => {
   const { Terminal } = await import('xterm');
   const { FitAddon } = await import('@xterm/addon-fit');
   const initialTheme = get(currentTerminalTheme);
+  // xterm fontSize is a JS number, so it can't follow the clamp() on :root directly — read it once at mount.
+  const rootPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
   const term = new Terminal({
     theme: initialTheme.xterm,
     cursorBlink: false,
     fontFamily: 'IBM Plex Mono, SF Mono, Menlo, Monaco, Consolas, monospace',
-    fontSize: 14,
+    fontSize: Math.round(rootPx * 0.875),
     fontWeight: '400',
     letterSpacing: 0.5,
     cols: 80,

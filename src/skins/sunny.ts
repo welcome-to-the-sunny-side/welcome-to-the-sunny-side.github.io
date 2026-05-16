@@ -38,7 +38,7 @@ export const sunny: Skin = {
     /* typography & sizing */
     'font-mono': 'IBM Plex Mono, ui-monospace, SFMono-Regular, Menlo, monospace',
     // serif stack only used via Tailwind's built-in font-serif class
-    'fs-base': '15px',
+    'fs-base': '0.9375rem',
     'lh-base': '1.7',
     'fs-sm': '0.85rem',
     'lh-sm': '1.35rem',

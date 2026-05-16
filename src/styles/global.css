@@ -6,9 +6,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* html {
-  font-size: 125%;
-} */
+html {
+  font-size: clamp(16px, calc(0.5rem + 0.7vw), 22px);
+}
 
 body {
   @apply bg-bg text-text font-mono tracking-tight;

@@ -24,7 +24,7 @@ export const dark: Skin = {
 
     /* typography & sizing */
     'font-mono': 'IBM Plex Mono, ui-monospace, SFMono-Regular, Menlo, monospace',
-    'fs-base': '14px',
+    'fs-base': '0.875rem',
     'lh-base': '1.5',
     'fs-sm': '0.8125rem',
     'lh-sm': '1.25rem',

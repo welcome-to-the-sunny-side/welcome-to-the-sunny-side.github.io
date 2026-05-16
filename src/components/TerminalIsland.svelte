@@ -175,7 +175,7 @@ onMount(async () => {
     fontFamily: 'IBM Plex Mono, SF Mono, Menlo, Monaco, Consolas, monospace',
     fontSize: Math.round(rootPx * 0.875),
     fontWeight: '400',
-    letterSpacing: 0.5,
+    letterSpacing: 0,
     cols: 80,
     rows: 24,
     convertEol: true,
@@ -407,7 +407,7 @@ onMount(async () => {
         } else {
           try {
             setTerminalTheme(name);
-            term.writeln(`Terminal theme: ${name} (use "clear" to get rid of old text styled by the previous tskin)`);
+            term.writeln(`Terminal theme: ${name}`);
           } catch (e) {
             term.writeln(String(e));
           }
@@ -416,7 +416,7 @@ onMount(async () => {
       }
       case 'help': {
         const entries = [
-          { cmd: 'ls [-r] [-d|-dl|-de] [-v] [path]', desc: 'list directory (tree with -r, date sort, verbose dates)' },
+          { cmd: 'ls [-r] [-d|-dl|-de] [-v] [path]', desc: 'list directory' },
           { cmd: 'cd <dir>', desc: 'change directory' },
           { cmd: 'open <file>', desc: 'open file in content pane' },
           { cmd: 'cskins / cskin <name>', desc: 'list / set content pane skin' },
@@ -438,7 +438,7 @@ onMount(async () => {
           { key: 'Shift+→', desc: 'collapse terminal' },
           { key: 'Shift+←', desc: 'expand / focus terminal' },
           { key: 'Shift+↑', desc: 'focus content pane' },
-          { key: 'h/j/k/l', desc: 'scroll content pane (when terminal unfocused)' },
+          { key: 'h/j/k/l', desc: 'scroll focused content pane' },
         ];
         term.writeln(`${PATH_COLOR}SHORTCUTS\x1b[0m`);
         for (const {key, desc} of sc) {
@@ -829,12 +829,18 @@ onMount(async () => {
   }
   applyThemeCssVars(get(currentTerminalTheme));
 
+  // Subscribe fires synchronously with current value — skip clearing on that initial call.
+  let isInitialThemeSubscribe = true;
   unsubTheme = currentTerminalTheme.subscribe((t) => {
     updateColors(t);
     if (termInstance) {
       termInstance.options.theme = t.xterm;
       applyThemeCssVars(t);
+      if (!isInitialThemeSubscribe) {
+        termInstance.clear();
+      }
     }
+    isInitialThemeSubscribe = false;
   });
 
 });
@@ -909,11 +915,16 @@ onDestroy(() => {
     border: none !important;
   }
   
-  /* Terminal text enhancements */
-  :global(.terminal-shell .xterm-rows) {
-    font-variant-ligatures: normal;
-    text-rendering: optimizeLegibility;
+  /* xterm relies on fixed cell measurements; isolate it from page typography. */
+  :global(.terminal-shell .xterm),
+  :global(.terminal-shell .xterm *) {
+    box-sizing: content-box;
+    font-kerning: none !important;
+    font-variant-ligatures: none !important;
+    letter-spacing: 0 !important;
+    text-rendering: geometricPrecision !important;
   }
+
 </style>
 
 <div class="terminal-shell-outer h-full w-full" class:focused={isFocused}>

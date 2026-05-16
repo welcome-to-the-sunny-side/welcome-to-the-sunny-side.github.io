@@ -14,12 +14,23 @@
   }
   
   details > summary.spoiler-summary {
-    list-style: none;             /* remove default caret */
+    display: block;               /* suppress default ::marker (standards-compliant engines) */
+    list-style: none;             /* belt-and-suspenders for engines keeping list-item display */
     cursor: pointer;
     padding-left: 1rem;           /* space for custom caret */
     color: var(--el-text);
     transition: color var(--el-time);
     position: relative;
+  }
+
+  /* hide proprietary disclosure marker in older Safari / WebKit */
+  details > summary.spoiler-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* hide standard ::marker in newer Safari (17+) — defensive */
+  details > summary.spoiler-summary::marker {
+    content: '';
   }
   
   /* custom caret */

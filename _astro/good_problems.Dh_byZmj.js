@@ -1,4 +1,4 @@
-const e=`1. I created this list on 2026/04/30, and  inclusion of problems (that were solved by me in the past) will obviously select for different things relative to the problems I solve hereafter. 
+const e=`1. I created this list on 2026/04/30, and retrospective inclusion of problems (that were solved by me in the past) will obviously select for different things relative to the problems I solve hereafter. 
 2. I must also stress that this list isn't ordered by any metric (including solve date or quality).
 3. As a matter of principle, this list will not contain any problem that I didn't solve unassisted.
 

@@ -22,4 +22,5 @@ const e=`1. I created this list on 2026/04/30, and retrospective inclusion of pr
 | https://codeforces.com/contest/2147/problem/F | Elegant | 
 | https://codeforces.com/problemset/problem/1654/F | There's an extraordinarily elegant solution, and there's an extraordinarily inelegant solution |
 | https://codeforces.com/contest/1062/problem/F | I solved this a long time ago and remember being shocked when I realized the solution |
-| https://codeforces.com/contest/2228/problem/E1 | Cute interleaving argument |`;export{e as default};
+| https://codeforces.com/contest/2228/problem/E1 | Cute interleaving argument |
+| https://codeforces.com/contest/1975/problem/F | Surprising solution |`;export{e as default};

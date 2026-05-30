@@ -2,7 +2,7 @@
 title: About
 ---
 
-nonadhocproblems
+Welcome to the sunny side.
 
 - codeforces: https://codeforces.com/profile/DNR
 - github: https://github.com/welcome-to-the-sunny-side/

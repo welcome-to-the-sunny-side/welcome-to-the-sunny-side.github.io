@@ -1,5 +1,13 @@
 [
   {
+    "id": "2026-06-01-1158",
+    "ts": "2026-06-01T06:28:00Z",
+    "tier": "public",
+    "path": "data/2026-06-01-1158.json",
+    "size": 266,
+    "hash": "2f612b30217e39edc4db1b7b14f05ecc52db01401c5876c295c9165c24ae4895"
+  },
+  {
     "id": "2026-05-17-1127",
     "ts": "2026-05-17T05:57:00Z",
     "tier": "public",
@@ -37,7 +45,7 @@
     "tier": "master",
     "path": "data/2026-04-29-1725.json",
     "size": 568,
-    "hash": "e854f24a315135c946e62831158283c3ed2ad28c7caca4c08351619b2aa85b84"
+    "hash": "6db4c411638a5f9b32039a0842d88ec2e82ccab49c5041703e297be4703feed0"
   },
   {
     "id": "2026-04-28-1633",
@@ -45,7 +53,7 @@
     "tier": "master",
     "path": "data/2026-04-28-1633.json",
     "size": 388,
-    "hash": "c9b1088000b6a494eb2cd927fd5b348573fc2d5af2c1411aa7cc92e32941f445"
+    "hash": "c7dfa0e2ecf01063b5dd1ceeafe712e2609609f8df979ea25a95bbf80de39ed6"
   },
   {
     "id": "2026-04-07-1305",
@@ -69,7 +77,7 @@
     "tier": "master",
     "path": "data/2026-04-01-0104.json",
     "size": 376,
-    "hash": "dc5521e47070a2e4526f6136fe2301d29ec6e80d6ea39cfcf9ddd50f0c4af2d3"
+    "hash": "f03beabd805d2571ed5f6249a1dec0948078d2716349b1e8192dec9d3413868f"
   },
   {
     "id": "2025-09-26-0911",
@@ -77,7 +85,7 @@
     "tier": "master",
     "path": "data/2025-09-26-0911.json",
     "size": 352,
-    "hash": "94bf1258897b26be93282125f8a5f2aa8d6303886d3980c66e953759e4c6280d"
+    "hash": "a54bef941f6fd5127a600ee93c608a0dace1154a46033127fa16b3dbe4fbc0c6"
   },
   {
     "id": "2025-09-21-0528",
@@ -125,7 +133,7 @@
     "tier": "master",
     "path": "data/2025-08-25-1413.json",
     "size": 484,
-    "hash": "60dab398aaf9dc7a14f7f6ee4d26bee9250ed76a35bbe72bc1c152e64ccd8422"
+    "hash": "6dd7b29b6acb8b16c570c8eb3626c3f6efec97f780de3b6d76e6a47f06aba216"
   },
   {
     "id": "second",
@@ -133,7 +141,7 @@
     "tier": "master",
     "path": "data/second.json",
     "size": 314,
-    "hash": "bf4c810179b1108d8b9331cffb42e25782534a9019fd86c362b6df4efc28e5fb"
+    "hash": "da01c18df1b7bac2bf9880ed6fa55eebc7b6b0800268442bf37f9e5a4482b008"
   },
   {
     "id": "first",

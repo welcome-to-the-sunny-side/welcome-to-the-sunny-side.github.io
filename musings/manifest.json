@@ -1,5 +1,13 @@
 [
   {
+    "id": "2026-06-05-2315",
+    "ts": "2026-06-05T17:45:00Z",
+    "tier": "public",
+    "path": "data/2026-06-05-2315.json",
+    "size": 92,
+    "hash": "14d4b8881d3c039fde6eb62dd6fa2642efae7d5ae248d62f51819095a85e31cb"
+  },
+  {
     "id": "2026-06-01-1648",
     "ts": "2026-06-01T11:18:00Z",
     "tier": "public",
@@ -53,7 +61,7 @@
     "tier": "master",
     "path": "data/2026-04-29-1725.json",
     "size": 568,
-    "hash": "65a62a23538a7a1f77dac41d39b5d7e70eb64c5d78982ab17015d16ce4d28484"
+    "hash": "6b536c658a14e8a79b2852342531427cfcf3dace51cb585b7816bc7ff2bdbbd3"
   },
   {
     "id": "2026-04-28-1633",
@@ -61,7 +69,7 @@
     "tier": "master",
     "path": "data/2026-04-28-1633.json",
     "size": 388,
-    "hash": "886f8d7e9aec09d43ff62ace16532d289d63afbf4221de731f3145dc6b85738b"
+    "hash": "4be55851414956521b6348306d2261ec00d425f84f7074731a074ed169354357"
   },
   {
     "id": "2026-04-07-1305",
@@ -85,7 +93,7 @@
     "tier": "master",
     "path": "data/2026-04-01-0104.json",
     "size": 376,
-    "hash": "ea01e4dad9dc611e2e0411786036011a9861f7ea8455c6b84ee571da19536e18"
+    "hash": "efd03e893626597da37ac68a06b1f8fbddd0e52a5c08a2280a4bf70646a8b049"
   },
   {
     "id": "2025-09-26-0911",
@@ -93,7 +101,7 @@
     "tier": "master",
     "path": "data/2025-09-26-0911.json",
     "size": 352,
-    "hash": "586c6ddc58b9b431535e844c1f85533174d19a850812e3d8046ec13af1e40b90"
+    "hash": "ce9ee5680a205bb091069f50ba017eee4eb342d6323fa20a2c0dc937f00540f5"
   },
   {
     "id": "2025-09-21-0528",
@@ -141,7 +149,7 @@
     "tier": "master",
     "path": "data/2025-08-25-1413.json",
     "size": 484,
-    "hash": "3d69d0281c5799739b1376ba3511dc7315871687b5ccaab59d98056f604dd0f6"
+    "hash": "a992fa05be7cf9bfb58b1f2e89cdd464f9de512c4c49602b81a982bfff6b6a0d"
   },
   {
     "id": "second",
@@ -149,7 +157,7 @@
     "tier": "master",
     "path": "data/second.json",
     "size": 314,
-    "hash": "b77f1f5d33563c73e944e3ee347126878ecb64bdaddaa81925a054cc3b881030"
+    "hash": "af6e7807a4fb49ae21dd2c03b49799a84b1ae8bcf91abd6e8c21abfed8e7ec92"
   },
   {
     "id": "first",

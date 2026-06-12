@@ -1,5 +1,13 @@
 [
   {
+    "id": "2026-06-12-1737",
+    "ts": "2026-06-12T12:07:00Z",
+    "tier": "public",
+    "path": "data/2026-06-12-1737.json",
+    "size": 100,
+    "hash": "d134d664d9a73fbb7cfacb949401ab2e3889d9f206e3a8518053e172ffc3d90c"
+  },
+  {
     "id": "2026-06-10-2229",
     "ts": "2026-06-10T16:59:00Z",
     "tier": "public",
@@ -21,7 +29,7 @@
     "tier": "master",
     "path": "data/2026-06-07-1708.json",
     "size": 2308,
-    "hash": "1689eaa48c60325f32ed48cd8c7bfc88e57a6aacaf54778c0b8b66a24dd66534"
+    "hash": "73a72b89786cf2c60170567812863351635bd42b6417520a129413ae2101b415"
   },
   {
     "id": "2026-06-05-2315",
@@ -85,7 +93,7 @@
     "tier": "master",
     "path": "data/2026-04-29-1725.json",
     "size": 568,
-    "hash": "a529204ec2251ecbd486ea39d5fe6e9d7cc48b9e01ede208ab36bd911518258d"
+    "hash": "e5ffd2593f9d40ad731dd155127d44cf09c4b2f4bff10a3ac8652d46514511b6"
   },
   {
     "id": "2026-04-28-1633",
@@ -93,7 +101,7 @@
     "tier": "master",
     "path": "data/2026-04-28-1633.json",
     "size": 388,
-    "hash": "e5bf37a63bf01e6ed0cae9644aa17dfd94c770910d506d001f21ae84b174ba1f"
+    "hash": "16b01d21ed9a3f8577c0a2c2fe9df30b7a995993afa54cd0d4a625f5914be1b2"
   },
   {
     "id": "2026-04-07-1305",
@@ -117,7 +125,7 @@
     "tier": "master",
     "path": "data/2026-04-01-0104.json",
     "size": 376,
-    "hash": "99ae78576f8c2aa5728c1d9ae062a1454c9a0a74c037db94dff27cacf2fceb7b"
+    "hash": "cffcc45f312241bba3f52ddf514e57ebbfd45bb79f726f6bb889459833ccd169"
   },
   {
     "id": "2025-09-26-0911",
@@ -125,7 +133,7 @@
     "tier": "master",
     "path": "data/2025-09-26-0911.json",
     "size": 352,
-    "hash": "567633ff42e0929af0ca561ee8c67c05ebb753264927e2ec1b89ed9480a9df8c"
+    "hash": "6e705812dcc0ae28a6662b99d73c45278b4b7d9b6312fe09edf45a90672036e1"
   },
   {
     "id": "2025-09-21-0528",
@@ -173,7 +181,7 @@
     "tier": "master",
     "path": "data/2025-08-25-1413.json",
     "size": 484,
-    "hash": "fa867f7cc31c54d62ff84c4cefdd6dbe7016c8b51ef047c7c25ec42a3e4929b2"
+    "hash": "c5e44751afb3d030a00e4490563a542315bddc2888435b0563d023be7fbfaa77"
   },
   {
     "id": "second",
@@ -181,7 +189,7 @@
     "tier": "master",
     "path": "data/second.json",
     "size": 314,
-    "hash": "62dfb7d607e6d53ea449d8a728e539023aabd31e7709cd0d82610cc3300ccb98"
+    "hash": "ff58752c3895c201e42d17e2fbba9ac8d5c98d549697596a8453f6d804a235d5"
   },
   {
     "id": "first",

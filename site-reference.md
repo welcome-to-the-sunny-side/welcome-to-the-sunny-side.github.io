@@ -219,6 +219,7 @@ A page (`/void.html`) that displays a stream of posts; some are public markdown,
 - **`tools/musings/main.py`** processes those sources and writes:
   - `public/musings/manifest.json` — list of entries (`id`, `ts`, `tier`, `path`).
   - `public/musings/data/*.json` — one blob per post. Public posts contain raw markdown; private posts contain `{ kdf, iv, ad, ct }` (scrypt N=32768/r=8/p=1, AES-256-GCM, AAD `musings:<id>:v1`).
+- **Idempotent re-encryption.** Private posts are randomized (fresh salt+IV each encryption), which would otherwise make every blob — and the manifest's `size`/`hash` — change on every rebuild, polluting git history. `try_reuse_private_blob()` avoids this: before encrypting, it decrypts the existing committed blob and, if the plaintext is unchanged, reuses the stored ciphertext (refreshing only the cleartext `ts`). So a blob's bytes change only when its content actually changes. This is safe — the same key+IV only ever re-encrypts the *same* plaintext (no GCM nonce reuse); a missing/corrupted/tampered blob or a rotated passphrase fails to decrypt and falls back to a fresh encrypt.
 
 ### Frontend
 

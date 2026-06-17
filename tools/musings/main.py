@@ -149,6 +149,44 @@ def encrypt_private_blob(post: frontmatter.Post, post_id: str, ts_iso: str, pass
     return blob
 
 
+def try_reuse_private_blob(
+    blob_path: Path, post_id: str, ts_iso: str, content: str, passphrase: bytes
+) -> Optional[Dict[str, Any]]:
+    """Return the existing encrypted blob (with cleartext ts refreshed) when it
+    decrypts to the same plaintext, so unchanged private posts keep stable
+    ciphertext across rebuilds instead of re-randomizing every run.
+
+    Returns None — signalling the caller to encrypt fresh — whenever there is no
+    reusable blob: missing file, wrong tier, undecryptable (corrupted, tampered,
+    or a different passphrase), or the content actually changed.
+
+    Security: we reuse the stored (salt, iv, ct) only when the decrypted plaintext
+    is byte-identical to `content`. That is the *same* key+iv encrypting the *same*
+    plaintext, i.e. the ciphertext already on disk — we never reuse an (key, iv)
+    pair for a different plaintext, so this cannot trigger AES-GCM nonce reuse.
+    """
+    if not blob_path.exists():
+        return None
+    try:
+        obj = json.loads(blob_path.read_text(encoding="utf-8"))
+        if obj.get("tier") != "master":
+            return None
+        salt = base64.b64decode(obj["kdf"]["salt"])
+        iv = base64.b64decode(obj["iv"])
+        ct = base64.b64decode(obj["ct"])
+        key = derive_key_scrypt(passphrase, salt)
+        ad = (obj.get("ad") or f"musings:{post_id}:v1").encode("utf-8")
+        pt = AESGCM(key).decrypt(iv, ct, ad)
+        existing = json.loads(pt.decode("utf-8"))
+    except Exception:
+        return None
+    if existing.get("md") != content:
+        return None
+    # plaintext unchanged: keep ciphertext, refresh only the cleartext ts metadata
+    obj["ts"] = ts_iso
+    return obj
+
+
 def public_blob(post: frontmatter.Post, post_id: str, ts_iso: str) -> Dict[str, Any]:
     return {
         "v": 1,
@@ -201,7 +239,9 @@ def process_post_file(md_path: Path, src_dir: Path, out_dir: Path, passphrase: O
     else:
         if passphrase is None:
             raise ValueError("passphrase required for private posts")
-        blob = encrypt_private_blob(post, post_id, ts_iso, passphrase)
+        blob = try_reuse_private_blob(blob_path, post_id, ts_iso, post.content, passphrase)
+        if blob is None:
+            blob = encrypt_private_blob(post, post_id, ts_iso, passphrase)
 
     # write blob
     raw = json.dumps(blob, ensure_ascii=False, separators=(",", ":")).encode("utf-8")

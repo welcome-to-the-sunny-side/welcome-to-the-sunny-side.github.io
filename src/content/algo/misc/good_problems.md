@@ -24,3 +24,4 @@
 | https://codeforces.com/contest/1062/problem/F | I solved this a long time ago and remember being shocked when I realized the solution |
 | https://codeforces.com/contest/2228/problem/E1 | Cute interleaving argument |
 | https://codeforces.com/contest/1975/problem/F | Surprising solution | 
+| https://codeforces.com/contest/1430/problem/G | Cute |

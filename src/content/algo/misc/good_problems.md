@@ -25,3 +25,4 @@
 | https://codeforces.com/contest/2228/problem/E1 | Cute interleaving argument |
 | https://codeforces.com/contest/1975/problem/F | Surprising solution | 
 | https://codeforces.com/contest/1430/problem/G | Cute |
+| https://codeforces.com/contest/1408/problem/G | I have no shame, I must put this here... |

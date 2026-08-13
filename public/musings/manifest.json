@@ -1,5 +1,13 @@
 [
   {
+    "id": "2026-08-13-2307",
+    "ts": "2026-08-13T17:37:00Z",
+    "tier": "public",
+    "path": "data/2026-08-13-2307.json",
+    "size": 87,
+    "hash": "0459a48aa27f8fd4dfba0cca33fe7d4ff3a96ae06f5aee6ee79ff5669eb82f4a"
+  },
+  {
     "id": "2026-08-13-1645",
     "ts": "2026-08-13T11:15:00Z",
     "tier": "public",

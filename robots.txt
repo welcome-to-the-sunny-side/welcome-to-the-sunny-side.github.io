@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.welcome-to-the-sunny-side.com/sitemap.xml

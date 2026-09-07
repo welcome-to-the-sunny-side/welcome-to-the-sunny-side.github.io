@@ -9,7 +9,7 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   trailingSlash: 'never',
   build: { format: 'file' },
-  site: 'https://welcome-to-the-sunny-side.github.io',
+  site: 'https://www.welcome-to-the-sunny-side.com',
   output: 'static',
   integrations: [svelte(), tailwind()],
 

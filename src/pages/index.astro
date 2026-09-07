@@ -1,6 +1,11 @@
 ---
+// Serves "/" (dist/index.html). The client router maps "/" to "/home.html",
+// so this is the home page: no article body, just the shell + background.
 import BaseLayout from "../layouts/BaseLayout.astro";
-export const prerender = true;
----
+import type { InitialContent } from "../lib/contentTypes.ts";
 
-<BaseLayout />
+export const prerender = true;
+
+const initial: InitialContent = { kind: 'home', path: '/home.html' };
+---
+<BaseLayout {initial} canonicalPath="/" />

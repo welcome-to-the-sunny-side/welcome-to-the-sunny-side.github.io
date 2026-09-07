@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getVirtualFs, type FsNode } from "../lib/virtualFs.ts";
+import { prerenderPath, pageTitle, pageDescription } from "../lib/prerender.ts";
 
 export const prerender = true;
 
@@ -20,5 +21,13 @@ export async function getStaticPaths() {
   walk(root);
   return paths;
 }
+
+// Render the page's content at build time so the static HTML carries the
+// article body (readable without JS). ContentPane hydrates over it.
+const slug = Astro.params.slug ?? 'index.html';
+const initial = await prerenderPath('/' + slug);
+const title = pageTitle(initial);
+const description = pageDescription(initial);
+const canonicalPath = initial.kind === 'home' ? '/' : initial.path;
 ---
-<BaseLayout />
+<BaseLayout {initial} {title} {description} {canonicalPath} />

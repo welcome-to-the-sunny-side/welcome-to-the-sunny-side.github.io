@@ -7,6 +7,7 @@
     "dev": "astro dev",
     "prebuild": "node tools/build-vfs-date-index.mjs && node tools/build-home-bg-index.mjs",
     "build": "astro build",
+    "postbuild": "node tools/fix-html-filenames.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "serve": "astro preview --port 4321",

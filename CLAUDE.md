@@ -17,7 +17,7 @@ A static, terminal-driven personal website/blog built with Astro + Svelte + Tail
 
 **Virtual File System (VFS):** `src/lib/virtualFs.ts` maps `src/content/**/*.{md,html}` into a tree where `.md` → `.html`. This powers static path generation, terminal directory listings, and path resolution. Two build-time scripts feed the VFS at runtime: `tools/build-vfs-date-index.mjs` extracts frontmatter dates into `public/vfs-date-index.json` (terminal sorting), and `tools/build-home-bg-index.mjs` lists home background images into `public/home-bg-index.json` (so URLs are not bundled into the JS chunk). Both run via `predev`/`prebuild` hooks.
 
-**Routing:** `src/pages/[...slug].astro` is a catch-all that pre-renders every VFS path. Client-side navigation is handled by `src/stores/router.ts` (Svelte writable store + pushState) so the page never reloads after initial load. `/` resolves to `/home.html`.
+**Routing:** `src/pages/[...slug].astro` is a catch-all that pre-renders every VFS path. At build time it also renders each markdown page to HTML (`src/lib/prerender.ts`, server-only) and passes it to `ContentPane` as the `initial` prop, so the static HTML contains the article body, `<title>`, description, and canonical — agents and crawlers see content without JS, and hydration is a no-op. Musings and raw `.html` pages stay client-rendered on purpose. Client-side navigation is handled by `src/stores/router.ts` (Svelte writable store + pushState) so the page never reloads after initial load. `/` resolves to `/home.html`. `src/pages/sitemap.xml.ts` emits the sitemap.
 
 **Two-pane layout:** `BaseLayout.astro` renders `ContentPane.svelte` (markdown/HTML display with blog layout support via `layout: blog` frontmatter) and `TerminalPane.svelte` (xterm.js-based CLI).
 
@@ -29,7 +29,8 @@ A static, terminal-driven personal website/blog built with Astro + Svelte + Tail
 
 - Tailwind uses CSS custom properties for theming — colors, fonts, spacing are all `var(--*)` based (see `tailwind.config.js`)
 - Markdown rendering uses markdown-it + MathJax (math, loaded from CDN) + highlight.js (code). The renderer is a shared singleton in `src/lib/markdown.ts` — do not build a second markdown-it instance elsewhere.
-- Markdown source is loaded via `import.meta.glob('...', { query: '?raw' })` and parsed by a tiny custom YAML parser in `ContentPane.svelte`. Do *not* switch to Astro's compiled-frontmatter API — it inflates per-page chunks ~2.5×.
+- Markdown source is loaded via `import.meta.glob('...', { query: '?raw' })` and parsed by a tiny custom YAML parser in `src/lib/frontmatter.ts`. Do *not* switch to Astro's compiled-frontmatter API — it inflates per-page chunks ~2.5×. The *eager* raw glob in `src/lib/prerender.ts` is server-only: never import that module from a Svelte component or the whole content tree lands in the client bundle.
+- `build.format: 'file'` plus `.html` slugs makes Astro emit `dist/foo.html.html`; the `postbuild` hook (`tools/fix-html-filenames.mjs`) renames these to `foo.html` so `dist/` matches the site's URLs on any static host, including `astro preview`.
 - The site uses xterm.js for the terminal UI
 - `site-reference.md` contains comprehensive documentation about all components — consult it for detailed implementation questions. Keep it updated when making changes to the site.
 - Skin system provides per-skin CSS variables including `--code-bg` and `--code-border` for inline code styling

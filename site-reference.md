@@ -11,7 +11,7 @@ This file documents how the site is organized today. For prescriptive rules Clau
 Four moving pieces:
 
 1. **Virtual File System (VFS)** — `src/lib/virtualFs.ts` mirrors `src/content/**/*.{md,html}` into a tree where `.md` is mapped to `.html`. The VFS drives static path generation, terminal listings, and path resolution.
-2. **Catch-all Astro route** — `src/pages/[...slug].astro` pre-renders every `.html` path the VFS exposes, including `<dir>/index.html` directory pages. It always renders `BaseLayout`.
+2. **Catch-all Astro route** — `src/pages/[...slug].astro` pre-renders every `.html` path the VFS exposes, including `<dir>/index.html` directory pages. It always renders `BaseLayout`, and since 2026-09 it also renders the page's markdown to HTML at build time (`src/lib/prerender.ts`) so the static file carries the article body, a per-page `<title>`, a meta description, and a canonical URL. Agents, crawlers, and link previews read the content without running JavaScript.
 3. **Two-pane Svelte app** — `BaseLayout.astro` mounts `MobileNav` (mobile only), `ContentPane` (markdown/HTML viewer), and `TerminalPane` (xterm.js CLI, desktop only).
 4. **Client-side router** — `src/stores/router.ts` is a Svelte store + `pushState`. After the first page load, navigation never reloads the page.
 
@@ -33,12 +33,17 @@ Four moving pieces:
 │  ├─ layouts/
 │  │   └─ BaseLayout.astro            the only layout
 │  ├─ lib/
+│  │   ├─ contentTypes.ts             InitialContent type shared by prerender + ContentPane
+│  │   ├─ frontmatter.ts              tiny YAML front-matter parser (build + client)
 │  │   ├─ markdown.ts                 shared markdown-it singleton renderer
 │  │   ├─ musingsWorker.ts            scrypt + AES-GCM decryption (off-thread)
+│  │   ├─ pageTitle.ts                <title> format shared by build + client
+│  │   ├─ prerender.ts                build-time markdown → HTML (server-only)
 │  │   └─ virtualFs.ts                VFS construction + helpers
 │  ├─ pages/
-│  │   ├─ index.astro                 → BaseLayout
-│  │   └─ [...slug].astro             catch-all → BaseLayout
+│  │   ├─ index.astro                 "/" → BaseLayout (home)
+│  │   ├─ [...slug].astro             catch-all → prerenderPath() → BaseLayout
+│  │   └─ sitemap.xml.ts              static sitemap of every VFS page
 │  ├─ skins/
 │  │   ├─ types.ts                    Skin interface
 │  │   ├─ dark.ts                     retro-dark palette
@@ -58,6 +63,7 @@ Four moving pieces:
 ├─ tools/
 │  ├─ build-vfs-date-index.mjs        scans frontmatter dates → vfs-date-index.json
 │  ├─ build-home-bg-index.mjs         scans home assets → home-bg-index.json
+│  ├─ fix-html-filenames.mjs          postbuild: dist/*.html.html → *.html
 │  └─ musings/main.py                 encrypts musings sources → public/musings
 ├─ tailwind.config.js
 ├─ CLAUDE.md
@@ -88,8 +94,14 @@ Both scripts run via `predev` and `prebuild` hooks in `package.json`.
 ## 4. Routing & layouts
 
 - **Build time.** `getStaticPaths` in `[...slug].astro` reads the VFS and emits every `.html` path, including a synthetic `<dir>/index.html` for each directory.
-- **Pre-render.** Every page renders the same shell: `BaseLayout.astro`. `BaseLayout` mounts `MobileNav` (wrapped in `md:hidden`), `ContentPane`, and `TerminalPane` (`hidden md:block`). There is no per-page layout decision in Astro; layout choices happen inside `ContentPane` based on frontmatter.
-- **Client.** After first paint, navigation goes through `currentPath` in `src/stores/router.ts`. Terminal commands, mobile breadcrumb taps, and nav-view clicks all call `currentPath.push(path)`, which updates the URL via `pushState` and triggers `ContentPane.loadContent()`.
+- **Pre-render.** Every page renders the same shell: `BaseLayout.astro`. `BaseLayout` mounts `MobileNav` (wrapped in `md:hidden`), `ContentPane`, and `TerminalPane` (`hidden md:block`). Layout choices (blog header, nav-view, musings) happen inside `ContentPane` based on frontmatter — but the *content* is now rendered at build time too: `[...slug].astro` calls `prerenderPath()` from `src/lib/prerender.ts`, which resolves the slug against the VFS and returns an `InitialContent` value:
+  - `md` — markdown rendered to HTML with the same `getRenderer()` singleton the client uses, plus parsed frontmatter;
+  - `nav` — the directory listing entries for `<dir>/index.html`;
+  - `home` — `/`, `/index.html`, `/home.html` (the router maps `/` to `/home.html`, so the root `index.html` file is pre-rendered as home, not as the root listing);
+  - `client` — left empty for the browser: `displayMode: musings` pages and raw `.html` content (whose inline scripts would otherwise run twice).
+  `BaseLayout` passes `initial` into `ContentPane` as a prop and sets `<title>` (`src/lib/pageTitle.ts`), `<meta name="description">` (first substantial paragraph), and `<link rel="canonical">` (built from `site` in `astro.config.mjs`, the custom domain). `prerender.ts` holds an *eager* raw glob of all markdown; it is only imported from the Astro route, so it never enters a client chunk — keep it that way.
+- **Hydration.** `ContentPane` adopts `initial` as its starting state when `initial.path` matches the browser URL, so Svelte hydrates over the static markup without re-rendering. For `md` pages `loadContent()` serves the pre-rendered HTML instead of importing markdown-it, then loads MathJax and typesets. The markdown-it chunk is prefetched via `requestIdleCallback` so the first terminal navigation is still instant. Net effect versus the old empty-shell build: text paints before any JS runs, ~5 KB gzipped more HTML per article, ~0.7 KB more JS total.
+- **Client.** After first paint, navigation goes through `currentPath` in `src/stores/router.ts`. Terminal commands, mobile breadcrumb taps, and nav-view clicks all call `currentPath.push(path)`, which updates the URL via `pushState` and triggers `ContentPane.loadContent()`, which also updates `document.title`. Nav-view entries are real `<a href>` links (click is intercepted with `preventDefault`) so crawlers can follow them.
 
 `ContentPane` keeps a `displayPath` separate from `path` during loads so the previous page (and its background image) stays visible while the next one fetches. MathJax typeset and inline `<script>` execution are deferred until the new content is mounted.
 
@@ -175,7 +187,8 @@ For raw `.html` files under `src/content/`, an optional `<meta name="wtss:date" 
 Worth its own section because the choices here are non-obvious.
 
 - **Source loading.** `ContentPane` and `MusingsStream` both `import.meta.glob('...', { query: '?raw', import: 'default' })` to pull markdown as raw strings. We do *not* use Astro's compiled-frontmatter API — switching to it inflated per-page chunks ~2.5× because each module bundled compiled HTML and a Content component we don't render.
-- **Frontmatter parsing.** A small custom YAML parser in `ContentPane.svelte` (`parseFrontmatter`) handles `key: value`, quoted strings, and one-line `[a, b]` lists. That's the entire surface we use; no need for a YAML library.
+- **Frontmatter parsing.** A small custom YAML parser in `src/lib/frontmatter.ts` (`parseFrontmatter`, shared by `ContentPane` and `prerender.ts`) handles `key: value`, quoted strings, and one-line `[a, b]` lists. That's the entire surface we use; no need for a YAML library.
+- **Build-time vs runtime rendering.** The same `getRenderer()` runs in Node at build time (`prerender.ts`) and in the browser after client-side navigation, so output is identical and hydration is a no-op. Only markdown pages are pre-rendered; musings and raw `.html` pages stay client-only (see §4).
 - **Renderer.** `src/lib/markdown.ts` exports a single async `getRenderer()` that lazily builds a `markdown-it` instance with:
   - `highlight.js` (core only, C++ language registered — aliases `cpp`, `c++`, `cc`, `cxx`, `hpp`, `hxx`). Other code blocks are escaped, not highlighted, to keep the bundle small.
   - A small inline-rule plugin that wraps `$...$`, `$$...$$`, `\(...\)`, `\[...\]` segments as `html_inline` tokens. This stops markdown-it from interpreting `_` inside math as emphasis.
@@ -255,6 +268,10 @@ npm run deploy   # build + push dist/ to gh-pages
 
 `predev` and `prebuild` both run `tools/build-vfs-date-index.mjs` and `tools/build-home-bg-index.mjs`. If you add or rename content (or home backgrounds) outside the dev server, restart it so the indexes regenerate.
 
+**Output filenames.** `build.format: 'file'` plus slugs that already end in `.html` makes Astro write `dist/foo.html.html`. The `postbuild` hook runs `tools/fix-html-filenames.mjs`, which renames those to `foo.html` (and drops the root `index.html.html`, a duplicate of the `index.astro` output) so `dist/` matches the site's URLs without relying on GitHub Pages' append-`.html` fallback. `astro preview` therefore serves article URLs correctly.
+
+**Crawler surface.** `src/pages/sitemap.xml.ts` emits `dist/sitemap.xml` listing every VFS page (using `site` from `astro.config.mjs`), and `public/robots.txt` points at it. The live domain's `robots.txt` is fronted by Cloudflare's managed content-signals block; our file is appended after it.
+
 ---
 
 ## 13. Troubleshooting
@@ -288,6 +305,7 @@ npm run deploy   # build + push dist/ to gh-pages
 
 ## 15. Recent overhauls (changelog summary)
 
+- **2026-09-07 — Build-time content rendering.** `[...slug].astro` now renders each markdown page to HTML at build (`src/lib/prerender.ts`) and passes it to `ContentPane` as `initial`; static pages carry the article body, per-page `<title>`, description, and canonical. Fixes AI agents / crawlers seeing only the empty shell. Added `sitemap.xml`, `robots.txt`, real `<a>` links in nav-view, `document.title` updates on navigation; `site` switched to the custom domain; `postbuild` renames `*.html.html` → `*.html`. Musings (`/misc/void.html`) and raw `.html` pages intentionally remain client-rendered.
 - **2026-05-05 — Refactor sweep.** Three-stage cleanup tracked in `refactor-progress.md`: (1) deletions of unused files / dead code, (2) markdown-renderer consolidation into `src/lib/markdown.ts`, skin/CSS dedup, `TerminalPane` simplification, eager home-bg glob → fetched manifest, (3) `MusingsStream` interval cleanup on destroy.
 - **2026-03-22 — Independent terminal themes.** `tskins` / `tskin` commands; renamed previous `skins` / `skin` to `cskins` / `cskin`.
 - **2026-03-21 — Mobile navigation.** Removed terminal on mobile; added `MobileNav` breadcrumb and `<dir>/index.html` nav-view pages.

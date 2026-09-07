@@ -6,6 +6,15 @@
   import { currentPath } from '../stores/router';
   import { list as vfsList, isDir } from '../lib/virtualFs';
   import { getRenderer } from '../lib/markdown';
+  import { parseFrontmatter } from '../lib/frontmatter';
+  import type { InitialContent } from '../lib/contentTypes';
+  import { titleForPage } from '../lib/pageTitle';
+
+  // Build-time pre-rendered content for this page (see src/lib/prerender.ts).
+  // The static HTML already contains it; we adopt it as initial state so
+  // hydration doesn't re-render and the markdown-it chunk isn't needed until
+  // the first client-side navigation.
+  export let initial: InitialContent | null = null;
 
   // We import .md as raw text and parse the small frontmatter ourselves.
   // (Letting Astro compile the markdown bundles ~2.5x more JS per page since
@@ -13,32 +22,6 @@
   // don't use.) HTML files are imported raw too.
   const pagesMd = import.meta.glob('../content/**/*.md', { query: '?raw', import: 'default' });
   const pagesHtml = import.meta.glob('../content/**/*.html', { query: '?raw', import: 'default' });
-
-  // Strip-and-parse a minimal YAML front matter. Supports:
-  //   key: value
-  //   key: "value" or 'value'   (quotes stripped if matched pair)
-  //   key: [a, "b", 'c']        (one-line list, comma-separated)
-  function parseFrontmatter(raw: string): { fm: Record<string, any>; body: string } {
-    if (!raw.startsWith('---')) return { fm: {}, body: raw };
-    const end = raw.indexOf('\n---', 3);
-    if (end === -1) return { fm: {}, body: raw };
-    const yaml = raw.slice(3, end).trim();
-    const body = raw.slice(end + 4);
-    const fm: Record<string, any> = {};
-    const stripQuotes = (s: string) => s.replace(/^(['"])(.*)\1$/, '$2');
-    for (const line of yaml.split(/\r?\n/)) {
-      const colon = line.indexOf(':');
-      if (colon === -1) continue;
-      const key = line.slice(0, colon).trim();
-      const val = line.slice(colon + 1).trim();
-      if (val.startsWith('[') && val.endsWith(']')) {
-        fm[key] = val.slice(1, -1).split(',').map((s) => stripQuotes(s.trim()));
-      } else {
-        fm[key] = stripQuotes(val);
-      }
-    }
-    return { fm, body };
-  }
 
   let md: any = null;
   let mathjaxLoading: Promise<void> | null = null;
@@ -88,17 +71,19 @@
     }
   }
 
-const initialPath = typeof window !== 'undefined' ? get(currentPath) : '/';
+const initialPath = typeof window !== 'undefined' ? get(currentPath) : (initial?.path ?? '/home.html');
+// Only trust the pre-rendered payload if it was built for the URL we're on.
+const preRendered: InitialContent | null = initial && initial.path === initialPath ? initial : null;
 let path = initialPath;
 let displayPath = initialPath;
-let frontmatter: Record<string, any> = {};
-let isBlog = false;
+let frontmatter: Record<string, any> = preRendered?.kind === 'md' ? preRendered.frontmatter : {};
+let isBlog = frontmatter.displayMode === 'blog';
 let isMusings = false;
-let isNavView = false;
+let isNavView = preRendered?.kind === 'nav';
 type NavEntry = { name: string; path: string; isDir: boolean };
-let navViewEntries: NavEntry[] = [];
-let navViewDir = '';
-let contentHtml: string = '';
+let navViewEntries: NavEntry[] = preRendered?.kind === 'nav' ? preRendered.entries : [];
+let navViewDir = preRendered?.kind === 'nav' ? preRendered.navDir : '';
+let contentHtml: string = preRendered?.kind === 'md' ? preRendered.html : '';
 let previousContentHtml: string = '';
 let isLoading = false;
 let pendingTypeset = false;
@@ -155,6 +140,15 @@ $: skin = $currentSkin;
   onMount(() => {
     loadContent();
 
+    // The first page came pre-rendered, so markdown-it wasn't needed yet.
+    // Fetch it once the browser is idle so the first terminal navigation is
+    // as snappy as it was when the chunk loaded up front.
+    if (preRendered?.kind === 'md') {
+      const idle = (cb: () => void) =>
+        'requestIdleCallback' in window ? (window as any).requestIdleCallback(cb) : setTimeout(cb, 1500);
+      idle(() => { ensureRenderer().catch(() => {}); });
+    }
+
     const checkMobile = () => {
       isMobileView = typeof window !== 'undefined' && window.innerWidth < 768; // md: 768px
     };
@@ -173,6 +167,8 @@ $: skin = $currentSkin;
   });
 
   async function loadContent() {
+    // During SSR the markup comes entirely from `initial`; nothing to load.
+    if (typeof window === 'undefined') return true;
     let filePath = path;
     if (filePath === '/') filePath = '/home.html'; // default landing page
     const isHome = (filePath === '/home.html' || filePath === '/');
@@ -222,6 +218,21 @@ $: skin = $currentSkin;
       isBlog = false;
       isMusings = false;
       // Keep contentHtml as-is (previous page) until displayPath switches; then template shows background.
+      contentFound = true;
+    } else if (preRendered?.kind === 'md' && filePath === preRendered.path) {
+      // Serve the build-time render: same HTML markdown-it would produce,
+      // without downloading markdown-it/highlight.js first.
+      frontmatter = preRendered.frontmatter;
+      isBlog = frontmatter.displayMode === 'blog';
+      isMusings = false;
+      contentHtml = preRendered.html;
+      await ensureMathJaxLoaded();
+      await tick();
+      if (isLoading) {
+        pendingTypeset = true;
+      } else {
+        await typesetMath();
+      }
       contentFound = true;
     } else if (mdKey in pagesMd) {
       await ensureRenderer();
@@ -275,6 +286,10 @@ $: skin = $currentSkin;
       contentFound = false;
     }
     
+    // Keep the tab title in step with client-side navigation (the static
+    // <title> only covers the page that was loaded directly).
+    if (contentFound) document.title = titleForPage(filePath, frontmatter);
+
     // Mark loading as complete and notify router
     if (isLoading) {
       isLoading = false;
@@ -343,13 +358,15 @@ $: skin = $currentSkin;
       {#each navViewEntries as entry, i (entry.path)}
         {@const isLast = i === navViewEntries.length - 1}
         <li class="m-0 p-0">
-          <button
-            class="w-full text-left px-2 py-2 rounded-sm transition-colors duration-150 hover:bg-accent-subtle flex items-center gap-2"
-            on:click={() => currentPath.push(entry.path)}
+          <!-- Real href so crawlers can follow it; click is intercepted for client-side routing. -->
+          <a
+            href={entry.path}
+            class="w-full px-2 py-2 rounded-sm transition-colors duration-150 hover:bg-accent-subtle flex items-center gap-2 no-underline"
+            on:click|preventDefault={() => currentPath.push(entry.path)}
           >
             <span class="text-text-muted select-none">{isLast ? '└─' : '├─'}</span>
             <span class={entry.isDir ? 'text-text' : 'text-accent'}>{entry.name}{entry.isDir ? '/' : ''}</span>
-          </button>
+          </a>
         </li>
       {/each}
     </ul>

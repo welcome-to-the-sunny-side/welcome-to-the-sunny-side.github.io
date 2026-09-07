@@ -3,14 +3,33 @@ import '../styles/global.css';
 import TerminalPane from "../components/TerminalPane.svelte";
 import ContentPane from "../components/ContentPane.svelte";
 import MobileNav from "../components/MobileNav.svelte";
+import type { InitialContent } from "../lib/prerender.ts";
 
+interface Props {
+  initial?: InitialContent | null;
+  title?: string;
+  description?: string | null;
+  canonicalPath?: string | null;
+}
+
+const {
+  initial = null,
+  title = 'Welcome to the Sunny Side!',
+  description = null,
+  canonicalPath = null,
+} = Astro.props;
+
+const site = Astro.site ? Astro.site.toString().replace(/\/$/, '') : '';
+const canonical = canonicalPath ? site + canonicalPath : null;
 ---
 <!DOCTYPE html>
 <html lang="en" class="h-full">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Welcome to the Sunny Side!</title>
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    {canonical && <link rel="canonical" href={canonical} />}
     <link rel="icon" href="/favicon.ico" />
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-FDGES615HV"></script>
         <script>
@@ -29,7 +48,7 @@ import MobileNav from "../components/MobileNav.svelte";
 
       <!-- Content -->
       <main class="overflow-y-auto overflow-x-hidden bg-surface text-text transition-colors duration-150 ease-retro min-h-0">
-        <ContentPane client:load />
+        <ContentPane client:load {initial} />
       </main>
 
       <!-- Terminal (desktop only) -->

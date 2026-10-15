@@ -1,6 +1,6 @@
 ---
 displayMode: blog
-title: "Suffix arrays in O(n) using SAIS"
+title: "Suffix arrays in O(n) using SA-IS"
 date: 2026-08-11
 tags: [algorithm]
 ---
@@ -9,7 +9,7 @@ tags: [algorithm]
 
 While the usual $O(n \log{n})$ suffix array algorithm described [here](https://cp-algorithms.com/string/suffix-array.html) suffices for almost all of one's competitive-programming needs, suffix structures turn out to be useful in several other fields which require faster algorithms. Lossless compression is one such field, and I happened to need a faster SA algorithm in an LZ-compressor I've [been working on recently](https://github.com/welcome-to-the-sunny-side/misa77).
 
-In this blog, we'll learn how to build suffix arrays in linear time, using the algorithm I learned for this purpose. It's called SAIS ("Suffix Array by Induced Sorting"), and was originally described [in this paper](https://ieeexplore.ieee.org/document/4976463).
+In this blog, we'll learn how to build suffix arrays in linear time, using the algorithm I learned for this purpose. It's called SA-IS ("Suffix Array by Induced Sorting", by Nong, Zhang, and Chan), and was originally described [in this paper](https://ieeexplore.ieee.org/document/4976463).
 
 # 1. Preliminaries
 
@@ -19,13 +19,13 @@ For the sake of convenience:
 
 - We assume that $T_i \in \lbrace 1, 2, \dots n \rbrace$ for all $ i \in [0, n)$.
 - We add a unique sentinel element with value $0$ at the end of $T$. Note that this sentinel is the unique minimum in $T$ and the length now becomes $n + 1$.
-- We define $S_i$ to be the $i$-th suffix, ie. $T_i T_{i + 1} \dots T_n$. At several places ahead, I will simply use "$i$-th suffix" or "suffix $i$" to refer to $S_i$.
+- We define $S_i$ to be the $i$-th suffix, i.e. $T_i T_{i + 1} \dots T_n$. At several places ahead, I will simply use "$i$-th suffix" or "suffix $i$" to refer to $S_i$.
 
 The goal is to construct the suffix array of $T$ in $O(n)$ time. The suffix array is defined as the array $A$ of length $n + 1$, where $A_i$ corresponds to the index of the $i$-th smallest suffix amongst all suffixes of $T$ (when compared lexicographically). One can note that the last character being unique ensures that no suffix is a prefix of another.
 
 # 2. L and S-type suffixes
 
-The key insight that SAIS is built around is that there's a *lot* of information hidden in comparisons of adjacent suffixes of a string (ie. $S_i$ vs $S_{i + 1}$).
+The key insight that SAIS is built around is that there's a *lot* of information hidden in comparisons of adjacent suffixes of a string (i.e. $S_i$ vs $S_{i + 1}$).
 
 As such, we define two types of suffixes:
 
@@ -34,37 +34,34 @@ As such, we define two types of suffixes:
 
 We will now make a series of observations about these two types in quick succession, so buckle up.
 
-First, we characterise the structure of both types in theorems 2.1 and 2.2.
+First, we characterise the structure of both types.
 
-#### Theorem 2.1:
+#### Theorem 2.1
 
-> Suffix $i$ is L-type iff $i < n$ and $T_j < T_i$ for the smallest $j \geq i$ such that $T_j \neq T_i$.
+> Suffix $i$ is L-type iff $i < n$ and $T_i > T_j$ for the smallest $j \geq i$ such that $T_j \neq T_i$.
 
-Simply put, all L-type suffixes have the form `[>= 1 occurrences of symbol b][1 occurrence of a]...` where $b > a$.
+Simply put, all L-type suffixes have the form `[>= 1 occurrences of symbol b][1 occurrence of a]...` where $b > a$ ($b$ is the first character of the suffix here).
 
 <details><summary class ="spoiler-summary">Proof</summary>
 <div class = "spoiler-content">
 
-[tba]
+Let $x \geq 0$ be the smallest index where $T_{i + x} \neq T_{i + 1 + x}$. There must exist such an $x$ because the last element is unique.
+If $i$ is L-type, then we definitionally need $T_{i + x} > T_{i + 1 + x}$ (as $S_i > S_{i + 1}$). Therefore, we have $T_i = T_{i + y}$ for all $0 \leq y \leq x$ and $T_i > T_{i + x + 1}$.
+
+Now, the other direction - if $S_i$ takes the form `[x >= 1 occurrences of b] [1 occurrence of a]` where $b > a$, then $S_i > S_{i + 1}$ because $x$ is the smallest non-negative integer where $T_{i + x} \neq T_{i + 1 + x}$, and we have $T_{i + x} > T_{i + 1 + x}$.
 
 </div>
 </details>
 
-#### Theorem 2.2:
+#### Theorem 2.2
 
 > Suffix $i$ is S-type iff $i = n$ or $T_j > T_i$ for the smallest $j \geq i$ such that $T_j \neq T_i$.
 
 Simply put, all S-type suffixes, save for the sentinel, have the form `[>= 1 occurrences of symbol b][1 occurrence of c]...` where $b < c$.
 
-<details><summary class ="spoiler-summary">Proof</summary>
-<div class = "spoiler-content">
+The proof is symmetrical to 2.1.
 
-[tba]
-
-</div>
-</details>
-
-#### Theorem 2.3:
+#### Theorem 2.3
 
 > All the positions in $T$ can be classified as L or S-type in $O(n)$. 
 
@@ -79,23 +76,32 @@ Denote the type of the $i$-th suffix by $Q_i$. Then:
 <details><summary class ="spoiler-summary">Proof</summary>
 <div class = "spoiler-content">
 
-[tba]
+We simply use 2.1 and 2.2 for all $i < n$ here:
+
+- If $T_i < T_{i + 1}$, then suffix $i$ is of the form `b c ...` where $b < c$ and therefore must be S-type.
+- If $T_i > T_{i + 1}$, then suffix $i$ is of the form `b a ...` where $b > a$ and therefore must be L-type.
+- If $T_i == T_{i + 1}$, then suffix $i + 1$ is either of the form `[>= 1 occurrences of b][1 occurrence of a]...` or `[>= 1 occurrences of b][1 occurrence of c]...`, and this determines its type. If we prepend one `b` to either form ($S_i = bS_{i + 1}$), then the form doesn't change and neither does the type.
 
 </div>
 </details>
 
 
-#### Theorem 2.4:
+#### Theorem 2.4
 
 > If $T_i = T_j$, suffix $i$ is of L-type, and suffix $j$ is of S-type, then $S_i < S_j$.
 
 <details><summary class ="spoiler-summary">Proof</summary>
 <div class = "spoiler-content">
 
-[tba]
-S_i looks like bbbbbb...a....
-S_j looks like bbbbbb...c....
-yada yada
+$S_i$ has the form `[>= 1 occurrences of b] [1 occurrence of a]...` and $S_j$ has the form `[>= 1 occurrences of b][1 occurrence of c]...`. 
+It's easy to see that at the smallest $x \geq 0$ where $T_{i + x} \neq T_{j + x}$, we have one of the following:
+
+- $T_{i + x} = b, T_{j + x} = c$
+- $T_{i + x} = a, T_{j + x} = b$
+- $T_{i + x} = a, T_{j + x} = c$
+
+In every case, we have $T_{i + x} < T_{j + x}$, and therefore $S_i < S_j$.
+
 </div>
 </details>
 
@@ -115,7 +121,7 @@ In other words:
 - The buckets are ordered by the starting symbol. 
 - Within a particular bucket, we first have all the L-type suffixes, and then all the S-type suffixes.
 
-It's easy to see that these bucket boundaries can also be computed in O(n). It might seem odd that I'm mentioning this, but it's important for the implementation later.
+It's easy to see that these bucket boundaries can also be computed in $O(n)$. It might seem odd that I'm mentioning this, but it's important for the implementation later.
 
 <details><summary class ="spoiler-summary">Code</summary>
 <div class = "spoiler-content">
@@ -145,9 +151,9 @@ for(int i = 0; i <= n; i ++)
 </details>
 
 
-# 3. LMS-types and LMS-substrings
+# 3. LMS-types
 
-We define a suffix $i$ to be of **LMS-type** (ie. "Leftmost-S-type") iff:
+We define a suffix $i$ to be of **LMS-type** (i.e. "Leftmost-S-type") iff:
 
 - $i > 0$
 - Suffix $i$ is of S-type.
@@ -157,9 +163,23 @@ Let $l_0 < l_1 < \dots < l_{m - 1}$ be the LMS positions of $T$.
 
 A key observation is that there are $m \leq \frac{n + 1}{2} $ LMS positions (the existence of each LMS position "consumes" a unique L-type and S-type). As you will later see, the efficiency of SAIS is dependent on this.
 
-Now, let's introduce a very helpful visualisation for strings that I'll just call a "slope view". The slope view of any given string will be obtained by us drawing downward or upward slants between two adjacent suffixes based on the result of their comparison (ie. the type of the left suffix).
+#### Theorem 3.1
 
-Going forward, we'll be using $T = $ `baacbcbacbccdaa$` as a concrete anchor (where `$` is the appended unique minimum). I know I said that $T$ will have integer elements, but an english alphabet string is just nicer to look at, and is no different computationally.
+> If $i$ is LMS-type, then $T_{i - 1} > T_i$.
+
+<details><summary class ="spoiler-summary">Proof</summary>
+<div class = "spoiler-content">
+
+If $i$ is LMS, then $i > 0$ and $i - 1$ is L-type.
+By theorem 2.3, we cannot have $T_{i - 1} \leq T_i$ because then $i - 1$ would have been S-type.
+
+</div>
+</details>
+
+
+Now, let's introduce a very helpful visualisation for strings that I'll just call a "slope view". The slope view of any given string will be obtained by us drawing downward or upward slants between two adjacent suffixes based on the result of their comparison (i.e. the type of the left suffix).
+
+Let's look at some visualisations for $T = $ `baacbcbacbccdaa$` (where `$` is the appended unique minimum). I know I said that $T$ will have integer elements, but an english alphabet string is just nicer to look at, and is no different computationally (just assign some integer to every letter).
 
 <figure style="text-align: center;">
   <img
@@ -203,7 +223,7 @@ Say we were tasked with producing $A$ partially, i.e. only at positions $i$ such
 
 The observation that the entire algorithm is built upon is that *we don't need any S-type suffixes except the LMS-types to induce the sorted order of L-type suffixes*.
 
-### Theorem 4.1 
+#### Theorem 4.1 
 
 > Given the sorted order of LMS-suffixes (a permutation $G$ of $l_0, l_1 \dots l_{m - 1}$ where $S_{G_i} < S_{G_{i + 1}}$ for $i + 1 < m$), we can compute in $O(n)$ time all $A_i$ where $A_i$ is an L-type position. Less formally, we can fill out all the "L-buckets" of $A$ in $O(n)$ time.
 
@@ -318,13 +338,13 @@ Why is this procedure correct? First, observe that elements are still deleted fr
 
 All L-type positions are necessarily placed within their buckets in $A$, so for any two L-type positions $i$ and $j$ with $T_i < T_j$, $i$ will necessarily be placed before $j$ in $A$. Therefore, we need only show that the relative placement of L-type positions *within* buckets is correct.
 
-Consider any two L-type positions $i$ and $j$ with $T_i = T_j = c$. Since $T_i = T_j$, $(S_i < S_j) \iff (S_{i + 1} < S_{j + 1})$. But recall that elements are still deleted from the heap in non-decreasing order! Since $i$ and $j$ are L-type, $i + 1$ and $j + 1$ are L or LMS-type, and pass through the heap before $i$ and $j$ respectively ($S_i > S_{i + 1}$ and $S_j > S_{j + 1}$). Assume WLOG $S_{i + 1} < S_{j + 1}$. But then, $S_{i + 1}$ is deleted before $S_{j + 1}$, and $i$ is placed in the L-bucket of $c$ before $j$, just like we require. Therefore, suffixes are placed in the correct order within buckets.
+Consider any two L-type positions $i$ and $j$ with $T_i = T_j = c$. Since $T_i = T_j$, $S_i < S_j \iff S_{i + 1} < S_{j + 1}$. But recall that elements are still deleted from the heap in non-decreasing order! Since $i$ and $j$ are L-type, $i + 1$ and $j + 1$ are L or LMS-type, and pass through the heap before $i$ and $j$ respectively ($S_i > S_{i + 1}$ and $S_j > S_{j + 1}$). Assume WLOG $S_{i + 1} < S_{j + 1}$. But then, $S_{i + 1}$ is deleted before $S_{j + 1}$, and $i$ is placed in the L-bucket of $c$ before $j$, just like we require. Therefore, suffixes are placed in the correct order within buckets.
 
 This proves that the L-regions of $A$ are correctly filled by this procedure too.
 
 Notice that our proof only relied on suffixes being deleted from the heap in non-decreasing order.
 
-### Theorem 4.2
+#### Theorem 4.2
 
 > Sequentially calling `extend2(i)` on some non-decreasing sequence of suffixes $i_1, i_2, i_3, \dots$ which contains all L/LMS-type positions exactly once results in the L-regions of $A$ being correctly filled.
 
@@ -387,9 +407,21 @@ for character c from 0 to n:
 </div>
 </details>
 
-Why is this correct? Because `extend2(i)` is called on exactly the same sequence of $i$ in both, procedure 2 and 2.5. You might feel some discomfort at us calling `extend2(A[i])` though - are we really sure that `A[i]` has been correctly computed yet? Assume that it hasn't been correctly computed, and consider the first occurrence of this happening for our $T$ as we run 2.5. Notice that until this point, both procedures would have called `extend2()` on exactly the same set of $i$ in the same order, and since $A_i$ would have been computed by this point (we would be deleting $S_{A_i}$ from the heap in procedure 2 at this point), `A[i]` would have been correctly computed in this new procedure too.
+Why is this correct? Because `extend2(i)` is called on exactly the same sequence of $i$ in both, procedure 2 and 2.5.
 
-Looking at the second stage for each $c$, it's easy to see that the heap was only really responsible for sorting the LMS-suffixes (all insertions are before all deletions). This brings us back to theorem 4.1. We don't really need the entirety of a pre-built $A'$ - we only need $G$!
+<details><summary class ="spoiler-summary">Annoying Proof</summary>
+<div class = "spoiler-content">
+
+We can prove this using induction. Assume that the first $k$ calls to `extend2()` are made on the exact same sequence of indices in both procedures. Then let the $k + 1$-th call in procedure 2 be on index $i$. 
+
+1. If $i$ is LMS type: Suffix $i$ is then present within both heaps from the very beginning. We will make use of the fact that no two suffixes can be equal. Procedure 2 would have already deleted all strings strictly smaller than it from the heap (remember that it calls `extend2()` in strictly increasing order of suffixes), and since 2.5 also called `extend2()` for the same indices, it would also have deleted all suffixes smaller than $S_i$ from its own heap. Therefore, at this point of time $S_i$ must be the smallest string in procedure 2.5's heap, and we will pop it out now.   
+2. If $i$ is L-type: Then it will be placed somewhere in the L-region of $T_i$. Notice that its position in both procedures is determined solely by the number of times we call `extend2(j)` for $j$ such that $j > 0, Q_{j - 1} = \text{L}, T_{j - 1} = T_i$ before we call `extend2(i + 1)`. All of these calls lie within the first $k$ calls ($i$ is L-type so $S_i > S_{i + 1}$), and are therefore the same for both procedures, implying that $i$ gets placed at the same position in both.
+
+</div>
+</details>
+
+
+Looking at the second stage for each $c$, it's easy to see that the heap was only really responsible for sorting the LMS-suffixes (all insertions are before all deletions now, so we don't need its "online" nature, we just need the sorted order of all LMS suffixes). This brings us back to theorem 4.1. We don't really need the entirety of a pre-built $A'$ - we only need $G$!
 
 Let's finally look at the L-induce procedure, which takes $G$ and computes the L-regions of $A$. An implementation choice here is that since the S-regions of $A$ are otherwise unused during this phase, we just put all LMS positions from the given $G$ at the ends of their respective S-buckets in $A$, preserving their order.
 
@@ -445,9 +477,9 @@ It's easy to see that this procedure is correct (it's just the previous procedur
 
 Let us now deal with the S regions. 
 
-The basic idea is symmetrical - just like we processed suffixes in non-decreasing order to fill the L-regions (left to right in $A$), we will process them in non-increasing order to fill the S-regions (right to left). In the slope view, we inched upwards on slopes that were slanted upward from right to left, after having seeded the valleys ($G$). Now, we will inch downwards on slopes that are slanted downward from right to left (remember the slant of slopes for S-suffixes). We have an advantage here though! The analagous seeds are going to be the "leftmost L, LML" positions (peaks in the slope view), which lie in the L-regions of $A$. Since we have already computed the L-regions, we already have the analogue of $G$ here!
+The basic idea is symmetrical - just like we processed L-suffixes in non-decreasing order to fill the L-regions (left to right in $A$), we will process S-suffixes in *non-increasing* order to fill the S-regions (right to left). In the slope view, we previously inched upwards on slopes that were slanted upward from right to left, after having seeded the valleys ($G$). Now, we will inch downwards on slopes that are slanted downward from right to left (remember the slant of slopes for S-suffixes). We have an advantage here though! The analogous seeds are going to be the "leftmost L" (LML) positions (peaks in the slope view), which lie in the L-regions of $A$. Since we have already computed the L-regions, we already have the analogue of $G$ here!
 
-Anyway, let's look at the procedure and then discuss in more formally in brief:
+Anyway, let's look at the procedure and then talk about it:
 
 <details><summary class ="spoiler-summary">Procedure 4</summary>
 <div class = "spoiler-content">
@@ -488,8 +520,8 @@ Why does this work? The proof is structurally symmetric to that of L-induce (we 
 
 Thankfully:
 
-- $T_n$ is the unique minimum and must therefore be the very first element in $X$, so we manually place it.
-- Because it's the unique minimum, $n - 1$ is L-type, and must be part of an upward slope that culminates in a peak before any L position occurs. Therefore, all other S-type positions have some peak after them. 
+- $T_n$ is the unique minimum and must therefore be the very first element in $A$, so we manually place it.
+- Because it's the unique minimum, $n - 1$ is L-type. Therefore, all other S-type positions have some peak after them (a "Leftmost L type"). 
 
 I leave the formal proof of correctness to the reader, and return to the broader picture. 
 
@@ -499,281 +531,262 @@ We now know that just having $G$ would allow us to set off a convenient chain of
 
 Okay, so how do we sort LMS suffixes efficiently? The S induce would of course give us their sorted order, but that needs the L induce, which needs the sorted order... It's a bit of a chicken-and-egg problem.
 
-Let's think outside the box. The observant reader will remember that the number of LMS positions, $m$ is no more than $\frac{n + 1}{2}$. What if we could somehow "compress" $T$ to $T'$ of length $m$, where the $i$-th suffix of $T'$ corresponded to $S_{l_i}$, and the sorted order of the suffixes of $T'$ gave us the sorted order of the corresponding LMS-suffixes of $T$? If we could create such a $T'$, then finding its suffix array would just be an identical subproblem to our original task, but with smaller size!
+Let's think outside the box. The observant reader will remember that the number of LMS positions, $m$ is no more than $\frac{n + 1}{2}$. What if we could somehow "compress" $T$ to $T'$ of length $m$, where the $i$-th suffix of $T'$ corresponded to $S_{l_i}$, and the sorted order of the suffixes of $T'$ gave us the sorted order of the corresponding LMS-suffixes of $T$ (that is, the $i$-th suffix of $T'$ is smaller than the $j$-th, iff $S_{l_i} < S_{l_j}$)? If we could create such a $T'$, then finding its suffix array would just be an identical subproblem to our original task, but with smaller size!
 
 Let's imagine a magical procedure `compress(T)` which gives us such a $T'$ *in linear time*. Then we can define `SA(T)`, which computes the SA of $T$ (assuming that $T$ satisfies the conditions in section 1) in the following manner:
 
 ```python
+#input T satisfies properties from section 1
 SA(T):
+  N = |T|
+
+  #base case
+  if N == 1:
+    return [0]
+
   T2 = compress(T)
 
   G = SA(T2)
   for i from 0 to |G| - 1:
-      G_i = (G_i)-th lms position of T
+    G[i] = l[G[i]]    #G[i]-th LMS position in T
 
-  A = [-1] * (n)
+  A = [-1] * (N)
   run L induce on A using G
   run S induce
 
   return A
 ```
 
-What would the time complexity of `SA(T)`, $f(n)$ ($n = \vert T \vert$) be? We have $f(n) = O(n) + f(n/2) + O(n) + O(n) + O(n)$ (the recursive call takes $f(n/2)$ time, and every other phase takes linear time). Therefore, $f(n) = O(n) + f(n/2)$. It's also easy to see that $f(1) = O(1)$ (when the string has size 1, the suffix array is trivial and we handle it separately). Since $O(n) + O(n/2) + O(n/4) + \dots = O(n)$, we have $f(n) = O(n)$.
+What would the time complexity of `SA(T)`, $f(N)$ ($N = \vert T \vert$) be? We have $f(N) = O(N) + f(N/2) + O(N) + O(N) + O(N)$ (the recursive call takes $f(N/2)$ time, and every other phase takes linear time). Therefore, $f(N) = O(N) + f(N/2)$. Also, the base case is handled with $f(1) = O(1)$. Since $O(N) + O(N/2) + O(N/4) + \dots = O(N)$, we have $f(N) = O(N)$.
 
 All that remains is to design such a `compress(T)`.
 
+Since the $i$-th suffix of $T'$ = `compress(T)` is going to correspond to the $i$-th LMS suffix of $T$ (which starts with $l_i$), it should be reasonably intuitive that we try to assign $T'_i$ a symbol that somehow represents the substring from the $i$-th LMS position to the $(i + 1)$-th (or if $i = m - 1$, the end of the string). Note that choosing this particular substring to be represented by $T'_i$ is only a design choice here.
+
 ## 5.1 LMS Substrings
 
-Since the $i$-th suffix of $T'$ = `compress(T)` is going to correspond to the $i$-th LMS suffix of $T$ (which starts with $l_i$), it should be reasonably intuitive that we try to assign $T'_i$ a symbol that somehow represents the substring from the $i$-th lms position to the $(i + 1)$-th (or to the end of the string).
-
-We define the **LMS-end** of position $i$, $E_i$, as the leftmost LMS-position such that $i < E_i$. For $i = n$, we separately define $E_i = i$.
+We define the **LMS-end** of position $i$, $E_i$, as the smallest LMS-position such that $i < E_i$. For $i = n$, we separately define $E_i = i$.
 The **LMS-substring** of position $i$, $P_i$ is defined as $T[i, E_i]$. Additionally, we refer to $P_i$ as a "full" LMS-substring if $i$ is LMS-type.
 
-Some simple observations:
+Now, return to `compress(T)`. We wish to find a labelling function $R : \lbrace P_i \rbrace \rightarrow Z$ that will assign an integer label to each full LMS-substring such that the resultant string, $T'$ ($T'_i = R(P_{l_i})$) meets the following conditions:
 
-- In the slope-view, $P_i$ is just the substring starting at $i$, and ending at the first valley after $i$ ($E_i$).
-- Since the last position in the string is LMS-type, all $E_i$ and $P_i$ are well-defined.
+1. $T'_i$ is an integer in $[0, \vert T' \vert)$
+2. The last element of $T'$ is the unique minimum.
+3. The $i$-th suffix of $T'$ is smaller than the $j$-th, iff $S_{l_i} < S_{l_j}$.
 
+To recap, why do we need these conditions? The first and second are needed so that $T' =$ `compress(T)` can directly be passed to `SA(T)` (which assumes that the conditions from section 1 are met). The third is needed so that $G$ can be computed from the suffix array of $T'$.
 
+The first and second conditions are relatively simple to satisfy, but the third isn't. A condition on $R$ that naively seems helpful for the third is $R(P_i) < R(P_j) \iff P_i < P_j$, let's try to build $R$ around it.
 
+Consider the labelling function: $R(P_i) = \vert \lbrace P_j : P_j < P_i, Q_j = \text{LMS} \rbrace  \vert$ (the number of unique full LMS substrings that are strictly smaller than it). It trivially satisfies the first two conditions, but what about the third?
 
-I won't pretend to offer motivation on how sorting LMS-substrings is important at this point. I just request that you trust me on this being important for sorting LMS-suffixes.
+Let's compare the $i$-th and $j$-th suffixes of $T'$.
 
-Recall that the suffix array $A$ gives us the position of each string in sorted order of all suffixes $T[i, n]$. Our goal in this section is to produce a "partially sorted" suffix array $X$, which gives us the position of each string in the sorted order of all LMS-substrings $P_i = T[i, E_i]$ ("partially sorted" because we only sort suffixes up to the ends of their LMS-substrings). 
+- Since the last character of $T'$ is the unique minimum, no suffix of $T'$ can be a proper prefix of another suffix.
+- Therefore, consider the smallest $x \geq 0$ such that $T'_{i + x} \neq T'_{j + x}$. Clearly  $T'[i, m) < T'[j, m) \iff T'_{i + x} < T'_{j + x}$.
+- Let $u = l_{i + x}, v = l_{j + x}$. Since $T'[i, i + x - 1] = T'[j, j + x - 1]$, we have $T[l_i, u) = T[l_j, v)$ (easy to prove, left as an exercise). Now, $T[l_i, n] < T[l_j, n] \iff T[u, n] < T[v, n]$.
+- We know that $P_{u} \neq P_{v}$ ($T'_{i + x} \neq T'_{j + x}$). There are two cases:
+  - If neither $P_{u}$ nor $P_{v}$ is a proper prefix of the other, then $ T[u, n] < T[v, n] \iff P_{u} < P_{v} \iff R(P_{u}) < R(P_{v}) \iff T'_{i + x} < T'_{j + x}$! Therefore, in this case, we have $T'[i, m) < T'[j, m) \iff T[l_i, n] < T[l_j, n]$.
+  - Otherwise, WLOG assume $P_{u}$ is a proper prefix of $P_{v}$. In this case, the lex comparator says $P_{u} < P_{v} \implies R(P_{u}) < R(P_{v}) \implies T'_{i + x} < T'_{j + x} \implies T'[i, m) < T'[j, m)$. For $T'[i, m) < T'[j, m) \iff T[l_i, n] < T[l_j, n]$ to now be satisfied, we need $T[l_i, n] < T[l_j, n]$. Let's examine this in more detail.
 
+Surprisingly, properties of the L/S classification trivialise this. Let $p = \vert P_{u} \vert$. Notice that $P_{u} = T[u, u + p - 1] = T[v, v + p - 1]$, so $T[l_i, n] < T[l_j, n] \iff T[u + p - 1, n] < T[v + p - 1, n]$. We know that $T_{u + p - 1} = T_{v + p - 1}$ and  position $(u + p - 1)$ is LMS-type (it's the end of an LMS-substring). What about position $v + p - 1$? Using theorem 3.1, $T_{u + p - 2} > T_{u + p - 1} \implies T_{v + p - 2} > T_{v + p - 1}$, so position $v + p - 2$ must be L-type. Recall that the types of positions in an LMS substring take the following form: `LMS S S S S ... L L L L LMS`. Since $P_v$ doesn't end at $v + p - 1$, position $v + p - 1$ must be L-type too!
 
+Recall theorem 2.4! Since $S_{u + p - 1}$ and $S_{v + p - 1}$ begin with the same character, and the former is S-type while the latter is L-type, we must have $T[u + p - 1, n] > T[v + p - 1, n] \implies T[l_i, n] > T[l_j, n]$! which is... the exact opposite of what we wanted. But since the issue is so localised (i.e. in the comparison of full LMS substrings where one is a proper prefix of the other), could we make do with a localised fix?
 
-Let's now define LMS-substrings.
+We indeed can! We introduce the **alex** comparator, $\prec$. For strings $a$ and $b$, it is defined in the following manner:
 
+- If $a = b$ under lex, then they're equal under alex too.
+- Otherwise if neither $a$ nor $b$ is a proper prefix of the other, then $a \prec b \iff a < b$.
+- Otherwise, $a \prec b \iff \vert a \vert > \vert b \vert$.
 
+Simply put, it's just the standard lexicographical comparator, except we flip the comparison result when one string is a proper prefix of the other.
 
+Also, we can show that alex imposes a *total order*. Why? Because $A \prec B \iff A\infty < B \infty$ and $A = B \iff A\infty = B \infty$. That is, the result of alex comparison is equal to the result of lex comparison if you append a character that's larger than all others to the end of both strings. Since lex imposes a total order, alex does too.
 
+Redefine $R$ as $R(P_i) = \vert \lbrace P_j : P_j \prec P_i, Q_j = \text{LMS} \rbrace  \vert$, and recall the three required conditions on $R$:
 
----
-EVERYTHING BELOW IS OUTDATED, TO BE REWORKED
+1. $T'_i$ is an integer in $[0, \vert T' \vert)$ - trivially satisfied.
+2. The last element of $T'$ is the unique minimum - satisfied because $P_{l_{m - 1}}$ remains the unique minimum amongst all full LMS substrings, so $R(P_{l_{m - 1}}) = 0$.
+3. The $i$-th suffix of $T'$ is smaller than the $j$-th, iff $S_{l_i} < S_{l_j}$.
 
+Consider the third condition. When we previously attempted to prove $T'[i, m) < T'[j, m) \iff T[l_i, n] < T[l_j, n]$ for $T'$ defined using the old definition of $R$ (using the regular lex comparator), there were only four relevant properties:
 
-# 4. Sorting LMS-substrings
+- For character $c$, and strings $A$ and $B$, $cA < cB \iff A < B$, and $cA = cB \iff A = B$.
+- For full LMS substrings $A$ and $B$:
+  - If neither was a prefix of the other, $R(A) < R(B) \iff A < B$.
+  - $R(A) = R(B) \iff A = B$.
+  - When $A$ is a proper prefix of $B$, we required $R(A) > R(B)$, but our old $R$ yielded $R(A) < R(B)$.
 
-I won't pretend to offer any motivation on why sorting LMS-substrings is important at this point. I just request that you trust me when I say it's important. The deeper reason behind this will become apparent when you internalise the entire algorithm.
+Clearly, our new definition of $R$ satisfies all four! I won't restate the entire proof again, but encourage you to go through the argument again to convince yourself of this.
 
-Recall that the suffix array $A$ gives us the position of each string in sorted order of all suffixes $T[i, n]$. Our goal in this section is to produce a "partially sorted" suffix array $X$, which gives us the position of each string in the sorted order of all LMS-substrings $P_i = T[i, E_i]$ ("partially sorted" because we only sort suffixes up to the ends of their LMS-substrings). 
+## 5.2 Sorting LMS Substrings under alex
 
-Note that unlike with entire suffixes, certain LMS substrings might be prefixes of others. We define a new comparator $\prec$ for strings $a$ and $b$, called **alex** (and we use $<$ for regular lexicographical comparison), in the following manner:
+Okay, so we've finally found a suitable definition for $R$ - $R(P_i) = \vert \lbrace P_j : P_j \prec P_i, Q_j = \text{LMS} \rbrace  \vert$ where $\prec$ is the alex comparator. But how do we efficiently compute it?
 
-- If either $a$ or $b$ is a prefix of the other:
-    - If $\vert a \vert = \vert b \vert$, then $a = b$ under alex.
-    - Else, $a \prec b$ iff $\vert a \vert > \vert b \vert$.
-- Else, $a \prec b$ iff $a < b$.
+What if we just sort full LMS substrings in alex order, and then label them? Namely, compute an array $X$ of length $m$ where $P_{X_i} \preceq P_{X_j} \forall i \leq j$, and $X_i$ is an LMS position in $T$ for all $i$. Consider the following procedure:
 
-(so essentially lex comparison but with the opposite result for proper-prefixes)
+```python
+N = |T|
 
-A simple observation (that we'll use a lot!):
+somehow compute X
 
-> For any strings $A, B$ and character $c$, the result of alex comparison of $A$ and $B$ is equal to that of $cA$ and $cB$.
+R = [-1] * N
+label = -1, last = -1
 
-Call a sequence **alex-valid** if for any pair of strings $a$ and $b$ (with $a$ occurring before $b$ in the sequence), either $a = b$, or $a \prec b$. Our goal is to find an alex-valid $X$.
+for i in X:
+  if last == -1 or !equal(P[last], P[i])
+    label += 1
+  R[i] = label
+  last = i
+```
 
-An observant reader might feel some discomfort at our new goal of finding $X$ instead of $A$, because Theorem 2.4 applies when we're sorting entire suffixes, and not LMS-substrings. Worry not, we can show that it applies for LMS-substrings too!
+One concern is that assuming $X$ is given to us, is the labelling procedure efficient? What if the `equal(A, B)` function is implemented naively, i.e. in $O(\vert A \vert + \vert B \vert)$ time? Since each full LMS substring contributes its length at most twice, and $\sum{\vert P_{l_i} \vert} = O(n)$, the total time taken is $O(n)$.
 
-### Theorem 4.1
+Alright, so we just need to sort full LMS substrings under alex now. It shouldn't be surprising that we'll lean on the machinery (L and S induce) we built for sorting *suffixes* previously. Further, we'll sort *all* LMS substrings, and then just extract the subsequence of full LMS substrings from this sorted order.
 
-> If position $i$ is LMS-type, then $T_{i - 1} > T_i$. Therefore, any LMS substring $P_i$ ($i \neq n$) contains at least two different characters.
+Let's state our goal more formally. We want to compute array $C$ of length $n + 1$, which will contain every index in $[0, n]$ exactly once, and satisfy $i \leq j \implies T[C_i, E_{C_i}] \preceq T[C_j, E_{C_j}]$. A "partial suffix array" of sorts.
+
+Now, consider the L-induce, which was previously used to sort L-type suffixes. Can we repurpose it to sort L-type LMS-substrings instead? When we previously discussed it, we seeded $A$ with $G$, which contained the sorted order of all the LMS suffixes. Why? Because for every L-type suffix $T[i, n]$, its final position in $A$ depended on the LMS suffix $T[E_i, n]$ having been seeded correctly relative to the other LMS suffixes. In a certain sense, the position of $T[E_i, n]$ (relative to other LMS suffixes) was storing all that the L-induce needed about its value when implicitly comparing $T[i, n]$ against other suffixes. 
+
+But now that we're sorting $T[i, E_i]$ instead of $T[i, n]$, would it do to seed our array with $T[E_i, E_i]$ instead?
+
+The answer is yes, but we'll need to first prove some facts about LMS substrings.
+
+#### Theorem 5.1
+
+> For any LMS-substring $T[i, E_i]$ with $i \neq n$, its second-to-last character is strictly greater than the last.
+
+This is just theorem 3.1 again, but it's quite fundamental to our arguments ahead, so I restate it.
+
+#### Theorem 5.2
+
+> If position $i$ is L-type, then $T[i + 1, E_i] \prec T[i, E_i]$.
 
 <details><summary class ="spoiler-summary">Proof</summary>
 <div class = "spoiler-content">
 
-[tba]
-If position $i$ is LMS type, then $T_{i - 1} \neq T_i$ because if they were, then they would have same type
-and every LMS substring contains its $T_{E_i}$ and $T_{E_{i} - 1}$
+Since position $i$ is L-type, $i + 1$ can either be L or LMS-type.
+
+- If $i + 1$ is LMS type, then $T_i > T_{i + 1} \implies T[i + 1, E_i] \prec T[i, E_i]$
+- Otherwise, $T_i \geq T_{i + 1}$.
+  - If $T_{i} > T_{i + 1}$, then $T[i + 1, E_i] \prec T[i, E_i]$ trivially.
+  - Otherwise, we know that for the smallest $x \geq 0$ where $T_{i + x} \neq T_{i + x + 1}$, we have $T_{i + x} > T_{i + x + 1}$ (definition of L-type suffixes). Since $T_{E_i - 1} \neq T_{E_i}$, we must have $i + x + 1 \leq E_i$, and the two strings differ before either ends.
+
 </div>
 </details>
 
-### Theorem 4.2 
 
-> If $i$ and $j$ ($i < j$) lie on the same "downward slope" (i.e. $i$ is L-type and there lie no S-type positions between $i$ and $j$), then $P_j < P_i$, and neither is a prefix of the other (so $P_j \prec P_i$ too).
+#### Theorem 5.3
 
-<details><summary class ="spoiler-summary">Proof</summary>
-<div class = "spoiler-content">
-[tba]
-</div>
-</details>
-
-### Theorem 4.3
-
-> If $T_i = T_j$, suffix $i$ is of L-type, and suffix $j$ is of S-type, then $P_i < P_j$, and neither is a prefix of the other (so $P_i \prec P_j$ too).
+> (Analogue of theorem 2.4) If $T_i = T_j$, suffix $i$ is of L-type, and suffix $j$ is of S-type, then $P_i \prec P_j$.
 
 <details><summary class ="spoiler-summary">Proof</summary>
 <div class = "spoiler-content">
 
-[tba]
-the argument from proof of 2.4 applies here too, because it only depends on both having same starting character, different type, and having the first non-equal character within them
+Consider the proof of theorem 2.4. It applies to any strings which have prefixes of the form `[>= 1 occurrences of b][1 occurrence of a]...` and `[>= 1 occurrences of b][1 occurrence of c]...` respectively. We know that $S_i$ and $S_j$ have this form, but do $P_i$ and $P_j$ do?
+
+Since $P_i$ is a prefix of $S_i$, the only way it cannot be of this form is if it consists only of $b$-s. But since $P_i = T[i, E_i]$ contains both $T_{E_i - 1}$ and $T_{E_i}$, and $T_{E_i - 1} > T_{E_i}$, it cannot possibly consist of only one character.
+
+The same argument applies to $P_j$.
+
+Therefore, the two must have the same form and the proof of theorem 2.4 applies.
+
 </div>
 </details>
 
-Now that we've made the powerful result from Theorem 2.4 accessible in this setting too, we may proceed. 
+Consequently, $C$ can be divided into buckets just like $A$. That is, it takes the following form:
 
-## 4.1. L-induce
+- First, we have L-type suffixes that start with symbol $0$.
+- Then, we have S-type suffixes that start with symbol $0$.
+- Then, L-type suffixes that start with symbol $1$.
+- Then, S-type suffixes that start with symbol $1$.
+- Then, L-type suffixes that start with symbol $2$.
+- Then, S-type suffixes that start with symbol $2$.
+- ...and so on
 
-We'll start off by sorting all the L-suffixes (i.e. computing $X$ at all positions $i$ where $X_i$ is L-type). This corresponds to filling the L-type-prefixes within the buckets of $X$.
+Now, let's try to adapt our old procedure 2 to produce $C$:
 
-Let's first consider an inefficient way to do this, and then optimise it.
-
-<details><summary class ="spoiler-summary">Procedure 1</summary>
+<details><summary class ="spoiler-summary">Procedure 5</summary>
 <div class = "spoiler-content">
 
-```cpp
-// Given n, T, Q, P and the bucket boundaries (see code in theorem 2.4)
-int n;
-vector<int> T, Q, head, tail;
-vector<vector<int>> P;          //LMS substrings
+```python
+C = [-1] * (n + 1)
 
-vector<int> X(n + 1, -1);       //suffix array
+put {T[i, i], i} for all LMS-type i into heap H, which uses the alex comparator
 
-//ASSUME THAT THE C++ COMPARATOR FOR VECTOR<INT> IS ALEX!!!
-set<pair<vector<int>, int>> q;
+# just like our previous extend2 function, except here we insert T[j, E[j]] into the heap
+def extend2(i):
+  j = i - 1
+  if (j >= 0) and (position j is L-type)
+    place j in the first empty position of the bucket of T[j] in C
+    put {T[j, E[j]], j} into H
 
-auto extend = [&](int i) -> void
-{
-  int j = i - 1;
-  if(j >= 0 and is_L_type(Q[j]))
-    q.insert({P[j], j});
-};
-
-for(int i = 0; i <= n; i ++)
-  if(is_LMS_type(Q[i]))
-    q.insert({{T[i]}, i});
-
-while(!q.empty())
-{
-  auto [v, i] = *q.begin();
-  q.erase(q.begin());
-
-  //we do not place the LMS types into X 
-  if(is_L_type(Q[i]))
-  {
-    X[head[T[i]]] = i;
-    head[T[i]] ++;
-  }
-
-  extend(i);
-}
+while H is not empty:
+  pop out {v, i}, the smallest element of H
+  extend2(i)
 ```
 
 </div>
 </details>
 
-This inefficient procedure essentially does the following:
-1. It first inserts the ends of all LMS substrings (ie. $T[i, i]$ for LMS-types $i$) into a heap.
-2. Then, it repeatedly picks the smallest substring from the heap (assuming the alex comparator) and:
-    1. If the substring corresponds to an L-type position $i$, it places $i$ at the first free position in the bucket corresponding to $T_i$ in $X$.
-    2. Then, if position $i - 1$ is L-type, it inserts $P_{i - 1}$ into the heap (i.e. it extends the removed substring by one character on the left, or equivalently in the slope-view - moves one step up to the left).
+The proof for procedure 5 correctly filling the L-regions of $C$ is quite similar to that for procedure 2 correctly producing $A$.
 
-<figure style="text-align: center;">
-  <img
-    src="/assets/sais/l-induce-1.gif"
-    alt="Procedure 1: place each L-position into X when it is removed from the queue. The slope view and bucket view update together."
-    style="display: block; margin: 0 auto;"
-  >
-  <figcaption>Procedure 1: place each L-position into X when it is removed from the queue.</figcaption>
-</figure>
+First, notice that the deletion of any string from the heap can only result in the insertion of a strictly larger substring under alex (or no insertion at all):
+- If the string being deleted is $T[i, i]$ with LMS $i$, then by theorem 5.1, we have $T[i, i] \prec T[i - 1, E_{i - 1}]$.
+- Otherwise, $T[i, E_i]$ ($i$ is L-type) being deleted results in the insertion of $T[i - 1, E_{i - 1}]$, then $T[i, E_i] \prec T[i - 1, E_{i - 1}]$ (theorem 5.2).
 
-Why is this procedure correct?
+Since we always erase the alex-smallest substring from the heap, the order in which we delete LMS substrings from the heap is alex-non-decreasing. Coverage (every L-type LMS substring is inserted into the heap at some point) is also guaranteed for the same reason as before.
 
-From theorem 4.2, $P_i \prec P_{i - 1}$ when $i - 1$ and $i$ lie on the same downward slope (also, $T[i, i] \prec P_{i - 1}$ when $i$ is LMS-type from theorem 4.1). In our procedure, the selection of $\lbrace P_i, i \rbrace$ (or $T[i, i]$ when $i$ is LMS-type) from the heap only results in the insertion of $\lbrace P_{i - 1}, i - 1 \rbrace$ if $i - 1$ and $i$ lie on the same downward slope. Therefore, the deletion of an element from the heap can only result in the insertion of a *strictly greater* element under the alex comparator.
-Since we always delete the smallest element from the heap, this implies that all elements to ever be inserted in the heap are deleted in non-decreasing alex order (for any two L-type positions $i$ and $j$, if $P_i \prec P_j$, then $i$ is deleted from the heap before $j$).
+Now, consider any two L-type LMS substrings $T[i, E_i]$ and $T[j, E_j]$. We will show that their relative position in $C$ aligns with the result of their comparison under alex.
 
-Consider the placement of L-type positions within $X$. For any character $c$, we know that all L-type LMS-substrings that begin with $c$ (a) will be deleted from the heap in non-decreasing order and (b) lie within the L-prefix of $c$'s bucket in $X$ (theorem 4.3). Therefore, step 2.1 is correct (placing L-type position $i$ at the first available position in the bucket of $T_i$ in $X$, when we're deleting $\lbrace P_i, i \rbrace$ from the heap).
+- If $T[i, E_i] = T[j, E_j]$, then their relative order doesn't matter.
+- Otherwise, if $T_i \neq T_j$, WLOG assume $T_i < T_j$. Then we necessarily have $T[i, E_i] \prec T[j, E_j]$, and the two are placed in different buckets, with the former's bucket lying to the left of the latter's.
+- Otherwise, if $T_i = T_j$, then $T[i, E_i]$ and $T[j, E_j]$ will be placed in the same bucket. Recall that for any character $c$ and strings $A, B$, we have $cA \prec cB \iff A \prec B$. Therefore, $T[i, E_i] \prec T[j, E_j] \iff T[i + 1, E_i] \prec T[j + 1, E_j]$. Note that we cannot have $T[i + 1, E_i] = T[j + 1, E_j]$ here. Consider the other two cases
+  - If $T[i + 1, E_i] \prec T[j + 1, E_j]$, then the former is deleted before the latter from the heap, and $T[i, E_i]$ is placed in their common bucket before $T[j, E_j]$. Since we also have $T[i + 1, E_i] \prec T[j + 1, E_j] \implies T[i, E_i] \prec T[j, E_j]$ here, their relative order in $C$ is valid.
+  - If $T[j + 1, E_j] \prec T[i + 1, E_i]$, then the former is deleted before the latter from the heap, and $T[j, E_j]$ is placed in their common bucket before $T[i, E_i]$. Since we also have $T[j + 1, E_j] \prec T[i + 1, E_i] \implies T[j, E_j] \prec T[i, E_i]$ here, their relative order in $C$ is valid.
 
-Further, all L-type LMS substrings do get placed into $X$ because every downward slope ends in an LMS position (valley).
+This implies $i \leq j \implies T[C_i, E_{C_i}] \preceq T[C_j, E_{C_j}]$ for the placed L-type LMS substrings $C_i, C_j$ so far.
 
-Now, let's make a subtle modification to this procedure that preserves correctness, but allows us to later optimise it. Consider the following.
+The observant reader will have noticed that our arguments have been almost identical to the initial use of L-induce. We shall continue in a similar vein. Consider this optimised version of procedure 5 (adapted from procedure 2.5):
 
-<details><summary class ="spoiler-summary">Procedure 2</summary>
+<details><summary class ="spoiler-summary">Procedure 5.5</summary>
 <div class = "spoiler-content">
 
-```cpp
-// Given n, T, Q, P and the bucket boundaries (see code in theorem 2.4)
-int n;
-vector<int> T, Q, head, tail;
-vector<vector<int>> P;          //LMS substrings
+```python
+C = [-1] * (n + 1)
 
-vector<int> X(n + 1, -1);       //suffix array
+put {T[i, i], i} for all LMS-type i into heap H
 
+# once again, we don't place anything into the heap any more
+def extend2(i):
+  j = i - 1
+  if (j >= 0) and (position j is L-type)
+    place j in the first empty position of the bucket of T[j] in C
 
-//ASSUME THAT THE C++ COMPARATOR FOR VECTOR<INT> IS ALEX!!!
-set<pair<vector<int>, int>> q;
+# we iterate over the first character of the suffix
+for character c from 0 to n:
 
-auto extend2 = [&](int i) -> void
-{
-  int j = i - 1;
-  if(j >= 0 and is_L_type(Q[j]))
-  {
-    X[head[T[j]]] = j;
-    head[T[j]] ++;
-    q.insert({P[j], j});
-  }
-};
-
-for(int i = 0; i <= n; i ++)
-  if(is_LMS_type(Q[i]))
-    q.insert({{T[i]}, i});
-
-while(!q.empty())
-{
-  auto [v, i] = *q.begin();
-  q.erase(q.begin());
-
-  extend2(i);
-}
+  # we first process the L-region of c
+  let C[l, r] be the L-region for c
+  for i from l to r:
+    extend2(C[i])
+  
+  # we then process the LMS-types of c, naively
+  while H is not empty and the smallest string in H begins with c:
+    pop out {T[i, i], i}, the smallest element of H
+    extend2(i)
 ```
 
 </div>
 </details>
 
-<figure style="text-align: center;">
-  <img
-    src="/assets/sais/l-induce-2.gif"
-    alt="Procedure 2: place each L-position into X when it is added to the queue. The slope view and bucket view update together."
-    style="display: block; margin: 0 auto;"
-  >
-  <figcaption>Procedure 2: place each L-position into X when it is added to the queue.</figcaption>
-</figure>
+Why is this correct? The proof is almost identical to that of procedure 2.5 - `extend2(i)` is called over the same sequence of $i$. The only subtlety is that while the strings in 2.5 were suffixes and could therefore not be equal to each other, strings here can be equal. Fortunately, the order in which equal strings are processed doesn't matter at all (so it's technically not the exact same sequence of $i$, you can swap indices which correspond to the same string). All of this should be fairly natural by now, so I'll leave the formal proof to the reader.
 
-What changed? Instead of placing L-type $i$ into $X$ when $P_i$ gets deleted from the heap, we place $i$ into $X$ (using the same rule as before: place it at the first available position within its bucket) *when it gets inserted into the heap*. When does it get inserted into the heap? When $T[i + 1, E_i]$ is deleted from the heap.
+Now, recall that at this point in the old L-induce, we revealed the need for $G$, as in procedure 2.5, we *needed* the heap to sort the LMS suffixes $T[E_i, n]$ for us. But now? We're only using the heap to sort $T[E_i, E_i]$! There's no chicken-and-egg problem like before with $T[E_i, n]$, because since these are just length-1 strings, we can easily sort them in $O(n)$ using counting-sort instead!
 
-Why is this procedure correct? First, observe that elements are still deleted from the heap in non-decreasing alex order.
+This allows us to easily optimise procedure 5.5 to the following $O(n)$ procedure (note that we don't explicitly sort $T[E_i, E_i]$, instead we just place each LMS position at the tail of its respective bucket).
 
-All L-type positions are necessarily placed within their buckets in $X$, so for any two L-type positions $i$ and $j$ with $T_i < T_j$, $i$ will necessarily be placed before $j$ in $X$. Therefore, we need only show that the relative placement of L-type positions *within* buckets is correct.
-
-Consider any two L-type positions $i$ and $j$ with $T_i = T_j = c$. 
-
-- If $P_i = P_j$, then their relative order in $X$ doesn't matter (recall alex-validity).
-- Else if WLOG $P_i$ is a proper prefix of $P_j$, $P_j \prec P_i$. Notice that then $T[i + 1, E_i]$ must be a proper prefix of $T[j + 1, E_j]$ and $T[j + 1, E_j] \prec T[i + 1, E_i]$. Since substrings are deleted in non-decreasing alex order, `extend2(j + 1)` is called before `extend2(i + 1)`, and $j$ is correctly placed into $X$ before $i$.
-- Else, $T[i + 1, E_i] \neq T[j + 1, E_j]$. Assume WLOG $T[i + 1, E_i] < T[j + 1, E_j]$. As substrings are deleted from the heap in non-decreasing alex order, `extend2(i + 1)` is called before `extend2(j + 1)`, so $i$ occurs before $j$ in their bucket in $X$. Since $P_i = c + T[i + 1, E_i]$ and $P_j = c + T[j + 1, E_j]$, we have $P_i < P_j$. As $P_i < P_j$ and $i$ occurs before $j$ in $X$, their relative order is correct.
-
-Just like procedure 1, all L-type positions are eventually placed into $X$.
-
-This proves that the L-regions of $X$ are correctly filled by this procedure too.
-
-Notice that our proof only relied on substrings being deleted from the heap in non-decreasing alex order.
-
-### Theorem 4.4 
-
-> Sequentially calling `extend2(i)` on some alex-valid sequence $i_1, i_2, i_3, \dots$ (an index $i_j$ represents $P_{i_j}$ if $i_j$ is L-type, and $T[i_j, i_j]$ otherwise) which contains all L/LMS-type positions exactly once results in the L-regions of $X$ being correctly filled.
-
-Now, how can we do this faster? 
-
-Let's make use of Theorem 4.4. Imagine that we had access to some pre-built, valid $X'$. We could then simply call `extend2(X'[i])` in increasing order of $i$, where $X'_i$ was L or LMS-type. Alas, we do not have access to a pre-built $X'$... But we notice that calling `extend2(X'[i])` only possibly places an element into $X$ to the right of $i$ (so as we walk from left to right, we only place elements to our right, and there are no "circular dependencies").
-
-What if we could do the following at the same time?:
-
-- Build $X$.
-- *Use $X$ itself as a pre-built $X'$* that we walk from left to right and call `extend2(X'[i])` on?   
-
-We can indeed make this work. Let's look at a correct application of this idea, and then understand why it works.
-
-<details><summary class ="spoiler-summary">Procedure 3</summary>
+<details><summary class ="spoiler-summary">Procedure 6</summary>
 <div class = "spoiler-content">
 
 ```cpp
@@ -781,264 +794,97 @@ We can indeed make this work. Let's look at a correct application of this idea, 
 int n;
 vector<int> T, Q, head, tail;
 
-vector<int> X(n + 1, -1);       //suffix array
+vector<int> C(n + 1, -1);
 
-// insert LMS positions into X
+// Seeding - we put LMS positions at the tails of their S-buckets 
 for(int i = 0; i <= n; i ++)
   if(is_LMS_type(Q[i]))
-    X[--tail[T[i]]] = i;
+    C[--tail[T[i]]] = i;
 
 auto extend2 = [&](int i) -> void
 {
   int j = i - 1;
-  if(j >= 0 and Q[j] == L_TYPE)
+  if(j >= 0 and is_L_type(Q[j]))
   {
-    X[head[T[j]]] = j;
+    C[head[T[j]]] = j;
     head[T[j]] ++;
-    // q.insert({P[j], j}); no heap here!
   }
 };
 
-// induce L positions into X
+// induce L positions into C
 auto l_induce = [&]() -> void
 {
   for(int i = 0; i <= n; i ++)
-    if(X[i] != -1)
-      extend2(X[i]);
+    if(C[i] != -1)
+      extend2(C[i]);
 };
 l_induce();
 
-// clean up LMS types from X
+// clean up LMS types from C
 for(int i = 0; i <= n; i ++)
-  if(X[i] != -1 and is_LMS_type(Q[X[i]]))
-    X[i] = -1;
+  if(C[i] != -1 and is_LMS_type(Q[C[i]]))
+    C[i] = -1;
 ```
 
 </div>
 </details>
 
-First, let's consider the insertion of LMS positions into $X$. We simply place all LMS-types at the tails of their buckets in $X$.
+The justification of its correctness is basically identical to that of procedure 3, and is left as an exercise to the reader.
 
-<figure style="text-align: center;">
-  <img
-    src="/assets/sais/lms-seeding.gif"
-    alt="Alt text"
-    style="display: block; margin: 0 auto;"
-  >
-  <figcaption>
-    Animation showing LMS positions being seeded.
-  </figcaption>
-</figure>
+Now that we have filled the L-regions of $C$, we turn our attention back to the S-induce. A (perhaps) surprising fact - we don't need to change anything at all in procedure 4. Once again, the proof is very similar to what we've done before (one change to note is that the position of an L-type $i$ within the suffix array previously encoded information about $S_i$, but now encodes information about $P_i$), and is left as an exercise to the reader.
 
-Why is this valid? In this context, any LMS-type position $i$ just corresponds to string $T[i, i]$, that is, a single character $c$. By Theorem 4.4, we just need alex-validity for $X$. Consider any character $c$ and its bucket (all strings that begin with $c$). It's easy to see that for any bucket within an alex-valid sequence, all the length-1 strings must be at the end of their buckets (and they're alex-equal to each other, so their relative order can be anything). In this context, all the substrings corresponding to L-type positions will have a length of at least 2. Therefore, this initial placement is safe.  
+And... we end up with $C$, correctly and efficiently computed.
 
-<figure style="text-align: center;">
-  <img
-    src="/assets/sais/l-induce-3.gif"
-    alt="Procedure 3: scan X from left to right, induce L-predecessors, then remove the LMS seeds. The slope view and bucket view update together."
-    style="display: block; margin: 0 auto;"
-  >
-  <figcaption>Procedure 3: scan X from left to right, induce L-predecessors, then remove the LMS seeds.</figcaption>
-</figure>
+# 6. Putting it all together
 
-But is this initial placement *enough* to make `l_induce()` correctly fill the L-regions of $X$?
+Let's finally assemble our algorithm from the pieces we've painstakingly built:
 
-It indeed is!
+```python
+# T satisfies conditions from section 1
+SA(T):
+  N = |T|
+  n = N - 1
 
-First, we show that `extend2(X[i])` can only place something into $X$ after $i$:
+  if N == 1:
+    return [0]
 
-- If $X[i]$ is LMS type: From theorem 4.1, $T_{j - 1} > T_j$ for LMS position $X[i] = j$, so $P_{j - 1}$ is only ever placed in a bucket to the right of that of $T[j, j]$ (so, necessarily after $i$, as $j$ is in its bucket).
-- If $X[i]$ is L-type: Let $X[i] = j$. We only need to consider the case where $j - 1 \geq 0$ and $j - 1$ is L-type. From theorem 4.2, $P_{j - 1} > P_{j}$. So we either have $T_{j - 1} = T_j$ (`head[T[j]]` only increases, so $j - 1$ gets placed after $j$, in the same bucket) or $T_{j - 1} > T_j$ (so $j - 1$ gets placed in a bucket to the right of that of $j$, so necessarily to the right).
+  classify L, S, LMS types in O(n)
 
-This implies that for every position $i$ that gets inserted into $X$, we eventually call `extend2(i)` (as we move from left to right). 
+#PHASE 1: sort LMS substrings under alex
+  C = [-1] * (n + 1)
+  seed C with T[i, i] for all LMS positions i, in O(n)
+  run L induce on C   # we compute fresh bucket boundaries before every L and S induce
+  run S induce on C
 
-But does every L-position eventually get inserted into $X$? Yes, because we initially insert all LMS positions into $X$, and every sequence of L-positions ends in an LMS position (the same coverage argument as for procedure 1).
+#PHASE 2: construct T2 and sort its suffixes to get G
+  #label full LMS substrings
+  R = [-1] * (n + 1)
+  label = -1, last = -1
+  for i from 0 to n:
+    if C[i] is LMS type:
+      j = C[i]
+      if last == -1 or !equal(last, j):     #equal(i, j) compares P[i] and P[j]
+        label += 1
+      R[j] = label
+      last = j
+  #construct T2 and sort its suffixes
+  T2 = []
+  for i from 0 to n:
+    if i is LMS type:
+      T2.append(R[i])
+  A2 = SA(T2)
+  #construct G from A2
+  G = A2
+  for i from 0 to |G| - 1:
+    G[i] = l[G[i]]  #l[i] is i-th LMS position in T
 
-Ok, so we've shown that every L-position eventually gets inserted into $X$, but zoom out a bit - is it still true that the L-regions in $X$ are being filled in an alex-valid manner?
+#PHASE 3: seed A with G and run the final L and S induce 
+  A = [-1] * (n + 1)
+  seed A with G
+  run L induce on A
+  run S induce on A
 
-Recall the proof of Theorem 4.4. All we needed was an alex-valid sequence to repeatedly call `extend2()` upon. Consider the sequence formed by filled entries in any intermediate state of $X$ after any number of `extend2()` operations in `l_induce()`.
-
-We can show that all such intermediate sequences are alex-valid by induction.
-
-- The base case is the initial placement of the LMS positions. This placement is trivially alex-valid due to buckets.
-- Consider the inductive step - a position $i$ that gets placed into $X$ due to the call `extend2(i + 1)`. The intermediate sequence before this step was alex-valid. Does it still remain alex valid? Let's compare $P_i$ to all the already placed strings:
-  - For placed $j$ such that $T_i \neq T_j$, their relative order is trivially correct due to bucketing.
-  - For placed LMS positions $j$ with $T_i = T_j$, their relative order doesn't violate alex-validity (as shown previously for length-1 strings).
-  - For placed L-position $j$ with $T_i = T_j = c$, $j$ lies behind $i$ in $X$ (as `head[T[i]]` only increases). This implies that $T[i + 1, E_i]$ occurred after $T[j + 1, E_j]$ in $X$ (as `extend2(i + 1)` is called after `extend2(j + 1)`). Since the sequence was previously alex-valid, we have $T[j + 1, E_j] \preceq T[i + 1, E_i]$. But then $c + T[j + 1, E_j] \preceq c + T[i + 1, E_i] \implies P_j \preceq P_i$, and therefore placing $i$ after $j$ in $X$ doesn't violate alex-validity.
-
-Therefore, the final filled sequence in $X$ is alex-valid. For the sake of clarity, we do a final cleanup pass where we remove the LMS-type positions from $X$.
-
-It's easy to see that this entire procedure runs in $O(n)$ (placing LMS-positions, L-induce, cleanup).
-.
-## 4.2. S-induce
-
-Let us now deal with the S regions. We will use a symmetrical procedure to `l_induce` called `s_induce`, which runs from *right to left* instead.
-
-<details><summary class ="spoiler-summary">Procedure 4</summary>
-<div class = "spoiler-content">
-
-```cpp
-// Given n, T, Q, bucket boundaries, and X with L-regions computed
-// Note that these are freshly computed bucket boundaries, not those
-// modified in the L phase. 
-int n;
-vector<int> T, Q, head, tail, X;
-
-
-auto extend3 = [&](int i) -> void
-{
-  int j = i - 1;
-  if(j >= 0 and is_S_type(Q[j]))
-  {
-    tail[T[j]] --;
-    X[tail[T[j]]] = j;
-  }
-};
-
-// place the sentinel position separately
-X[0] = n;
-
-// induce S positions into X
-auto s_induce = [&]() -> void
-{
-  for(int i = n; i >= 0; i --)
-    if(X[i] != -1)
-      extend3(X[i]);
-};
-s_induce();
-```
-</div>
-</details>
-
-<figure style="text-align: center;">
-  <img
-    src="/assets/sais/s-induce.gif"
-    alt="The sentinel is restored, then a right-to-left scan fills S-regions while moving leftward down the upward slopes."
-    style="display: block; margin: 0 auto;"
-  >
-  <figcaption>Procedure 4: restore the sentinel, then scan X from right to left to induce S-positions.</figcaption>
-</figure>
-
-Why does this work? The proof is structurally symmetric to that of `l_induce` (we now process strings in non-increasing alex order, so we go from right to left in $X$, and every call to `extend3(X[i])` can only add something to $X$ strictly before $i$), but with one caveat: coverage (i.e. all L-positions eventually get placed into $X$) previously relied on the fact that every sequence of L positions ended in an LMS position (every downward slope ends in a valley), and us manually placing the LMS positions into $X$ first. The equivalent requirement here would be every upward slope ending in a peak, and us having placed every peak first. As all L regions have already been computed, all the peaks have been placed into $X$. The only source of nuisance is the very last position, which is LMS-type and doesn't have an L-type peak after it. Thankfully, $T_n$ is the unique minimum and must therefore be the very first element in $X$, so we manually place it.
-
-I'll leave the complete proof to the reader but will just add a few observations that should seem natural if you've internalised the details:
-
-- If we ran `s_induce()` after removing all the non-peak L-type positions from $X$, the resultant $X$ would still have its S regions correctly filled.
-- For `l_induce()`, adding the LMS-type seeds (valleys) into $X$ was quite simple as their corresponding strings had a length of 1. Here, the "seeds" for the induction phase are L-type peaks whose corresponding strings are their LMS-substrings, whose relative order in $X$ cannot be trivially determined in the same way.
-
-# 5. Sorting suffixes for LMS positions
-
-Our goal in this section is to sort an important subset of entire suffixes - those that begin at LMS positions. We'll refer to these as LMS-suffixes. The importance of these LMS-suffixes might seem arbitrary now, but will become apparent in section 6 just like how the importance of having sorted LMS-substrings under the alex-comparator in section 4 will become apparent now.
-
-### Theorem 5.1 
-
-> Full LMS-substrings can be assigned alex-order-preserving integer labels in O(n). More formally, each LMS position $i$ can be assigned integer $R_i$ such that for any two LMS positions $i$ and $j$, $R_i = R_j \iff P_i = P_j$, and $R_i < R_j \iff P_i \prec P_j$.
-
-How can we do this? We just go over the subsequence of LMS positions in $X$, and assign $R_i$ in an increasing fashion. The only subtlety is assigning equal labels when two adjacent LMS positions in this subsequence have equal LMS-substrings. Since the sum of sizes of all full LMS-substrings is $O(n)$ (notice that a full LMS-substring only intersects with at most two other full LMS-substrings, and only at the boundaries), we can naively compare all adjacent LMS-substrings in the subsequence for equality.
-
-<details><summary class ="spoiler-summary">Code</summary>
-<div class = "spoiler-content">
-
-```cpp
-// Given all of this
-int n;
-vector<int> T, Q, X;
-vector<vector<int>> P;
-
-vector<int> R(n + 1, 0);
-int label = 0;
-int last = -1;
-
-for(int i = 0; i <= n; i ++)
-{
-  int j = X[i];
-  if(is_LMS_type(Q[j]))
-  {
-    if(last == -1)
-      R[j] = label;
-    else
-    {
-      //O(n) in total over all iterations
-      if(P[last] != P[j])
-        ++ label;
-      R[j] = label;
-    }
-    last = j;
-  }
-}
-
+  return A
 ```
 
-</div>
-</details>
-
-Using these labels, we now reduce $T$ to a "LMS-reduced" string, $T'$. We do this by going over all LMS positions $i$ in $T$ from left to right, and appending $R_i$ to $T'$ (which starts off empty).
-
-More formally, let $l_0 < l_1 \dots < l_{m - 1}$ be all the LMS positions in $T$. Then $T'$ is a string of length $m$ where $T'_i = R_{l_i}$.
-
-What's so special about $T'$? Three things:
-
-1. We built it in $O(n)$ time.
-2. $\vert T' \vert \leq \frac{n + 1}{2}$, as it is equal to the number of LMS positions in $T$. Further, $0 \leq T'_{i} < \vert T' \vert$, and the last element in $T'$ is the unique minimum within it, as the last full LMS-substring is just $T[n, n]$ and therefore the only one beginning with the unique minimum of $T$.
-3. As we will show below, us having assigned $R_i$'s in alex order will have a delightful consequence - the sorted order of suffixes of $T'$ will correspond to the sorted order of LMS-suffixes of $T$!!!
-
-Let's restate point 3 formally.
-
-### Theorem 5.2
-
-> For any two positions $0 \leq a < b < m$, the suffix of $T'$ beginning at $a$ is lexicographically smaller than the suffix beginning at $b$ iff $S_{l_a} < S_{l_b}$.
-
-We prove this after proving the following Theorem.
-
-### Theorem 5.3
-
-> If $P_i \neq P_j$, then $P_i \prec P_j \iff S_i < S_j$.
-
-If you were previously confused by the seemingly arbitrary decision to use the alex comparator, abandon your confusion here! This is the beautiful payoff for having used it.
-
-<details><summary class ="spoiler-summary">Proof</summary>
-<div class = "spoiler-content">
-
-1. If neither $P_i$ nor $P_j$ is a proper prefix of the other, then the definition of the alex comparator suffices.
-2. Otherwise WLOG, assume $P_i$ is a proper prefix of $P_j$.
-
-[tba]
-
-</div>
-</details>
-
-We now prove Theorem 5.2. Consider comparing the suffixes of $T'$ beginning at $a$ and $b$ ($a < b$). Let's call these $p$ and $q$ respectively.
-
-1. Clearly, $p \neq q$ as $\vert p \vert \neq \vert q \vert$. Further, as the last element of $T'$ is unique, neither can be a proper prefix of the other. 
-2. Therefore, they must differ at some point before either ends. Let $x$ be the smallest non-negative integer such that $T'_{a + x} \neq T'_{b + x}$. Clearly, $(p < q) \iff (T'_{a + x} < T'_{b + x}) \iff (R_{l_{a + x}} < R_{l_{b + x}})$.
-3. It's easy to see that $T[l_a, l_{a + x}) = T[l_b, l_{b + x}) = C$. Since $S_{l_a} = T[l_a, l_{a + x}) + T[l_{a + x}, n] = C + S_{l_{a + x}}$ and $S_{l_b} = T[l_b, l_{b + x}) + T[l_{b + x}, n] = C + S_{l_{b + x}}$, we have $(S_{l_a} < S_{l_b}) \iff (S_{l_{a + x}} < S_{l_{b + x}})$.
-4. Using Theorems 5.1 and 5.3, we have $(p < q) \iff (S_{l_a} < S_{l_b})$.
-
-We have therefore shown that the sorted order of suffixes of $T'$ is equal to the sorted order of the corresponding LMS-suffixes of $T$.
-
-## Time for a subproblem!
-
-Let's play a game. I hand you a string $T$ meeting the conditions described in section 1, and demand its suffix-array in $O(\vert T \vert)$ time. However, I'm feeling particularly generous and allow you to access a blackbox `SA_BLACKBOX(T')` that returns the suffix array of $T'$ in $O(\vert T' \vert)$ time, given that $T'$ also meets the section 1 conditions. You look at me incredulously - surely, there's a catch? You could just use this box on $T$ after all! I confirm your fears with the following condition: you can only call `SA_BLACKBOX(T')` once, with $\vert T' \vert \leq \lceil \frac{\vert T \vert}{2} \rceil$.
-
-You quickly whip out your phone and open this blog. As you read these words, you heave a sigh of relief - you've come to the right place! We're constructing a function `SA(T)` that essentially does the following:
-
-1. Construct the LMS reduced string $T'$ from $T$ in $O(n)$ time.
-2. Use `SA_BLACKBOX()` on $T'$ to get its suffix array in $O(\vert T' \vert) = O(n/2)$ time.
-3. Use the suffix array of $T'$ to construct that of $T$ by doing some additional things in $O(n)$ time.
-
-Assuming we can do step 3 (section 6), we'll clearly be done! Displeased at you having cheated, I snatch the blackbox away from you. "No blackbox for you, give me the SA without using it! \>\:\(". You're rattled for but a moment, before realisation dawns. "I'll just use `SA()` instead of `SA_BLACKBOX()` in step 2".
-
-I groan, remembering that $T(n) = O(n) + T(n/2)$ with $T(1) = O(1)$ implies that $T(n) = O(n)$.
-
-# 6. Finally producing $A$
-
-[we will now use this]
-
-[then circle back to the crude LMS seeding done for the first L-induce, and how the correct LMS seeding before this L-induce will indeed sort entire L suffixes]
-
-[then circle back to the crude L seeding done for the first S-induce, same argument, now S-induce sorts entire S suffixes]
-
-[should be technically done]
-
-# 7. Parting thoughts
-
+Here's a fast implementation that may not fully match the blog's exposition: [Code](https://github.com/welcome-to-the-sunny-side/libra/blob/main/string/suffix_array.cpp).

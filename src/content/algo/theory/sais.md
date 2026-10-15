@@ -184,7 +184,7 @@ Let's look at some visualisations for $T = $ `baacbcbacbccdaa$` (where `$` is th
 <figure style="text-align: center;">
   <img
     src="/assets/sais/slope-view.png"
-    alt="Alt text"
+    alt="Slope view of baacbcbacbccdaa$: rising (S-type) and falling (L-type) slants between adjacent positions, with flags on the LMS valleys at positions 1, 4, 7, 9 and 15"
     style="display: block; margin: 0 auto;"
   >
   <figcaption>
@@ -204,7 +204,7 @@ Also recall theorem 2.4. The buckets in the SA for $T$ take the following form.
 <figure style="text-align: center;">
   <img
     src="/assets/sais/bucket-view.png"
-    alt="Alt text"
+    alt="Suffix array of baacbcbacbccdaa$ split into buckets by first character ($, a, b, c, d), with L-type suffixes before S-type suffixes inside each bucket"
     style="display: block; margin: 0 auto;"
   >
   <figcaption>
@@ -215,7 +215,7 @@ Also recall theorem 2.4. The buckets in the SA for $T$ take the following form.
 
 # 4. Induced sorting
 
-Now, after having tunnel visioned on the classification of these L/S types for so long, let's return to our original goal of finding $A$. Why did we do all of this? As it turns out, it's really convenient to sort L-suffixes and S-suffixes separately.
+Now, after having tunnel-visioned on the classification of these L/S types for so long, let's return to our original goal of finding $A$. Why did we do all of this? As it turns out, it's really convenient to sort L-suffixes and S-suffixes separately.
 
 ## 4.1 L-induce
 
@@ -887,4 +887,220 @@ SA(T):
   return A
 ```
 
-Here's a fast implementation that may not fully match the blog's exposition: [Code](https://github.com/welcome-to-the-sunny-side/libra/blob/main/string/suffix_array.cpp).
+My own [implementation](https://github.com/welcome-to-the-sunny-side/libra/blob/main/string/suffix_array.cpp) of SAIS was unfortunately created before I wrote this blog, and doesn't really follow the exposition, but here's a highly readable one by my friend Opus 5.5 that does:
+
+<details><summary class ="spoiler-summary">Code</summary>
+<div class = "spoiler-content">
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+// Types of positions (section 2, 3). An LMS position is also S-type.
+enum Type : uint8_t { L_TYPE, S_TYPE, LMS_TYPE };
+
+// Computes the suffix array of T.
+// T must satisfy the conditions from section 1: with n = |T| - 1,
+//   - T[n] == 0 is the sentinel (the unique minimum), and
+//   - T[i] lies in [1, n] for all i < n.
+vector<int> SA(const vector<int> &T)
+{
+    const int N = (int)T.size(), n = N - 1;
+
+    // base case
+    if(N == 1)
+        return {0};
+
+    // ---------------------------------------------------------------
+    // Classify positions as L / S / LMS (theorem 2.3, section 3)
+    // ---------------------------------------------------------------
+    vector<Type> Q(N);
+    Q[n] = S_TYPE;
+    for(int i = n - 1; i >= 0; i --)
+    {
+        if(T[i] < T[i + 1])
+            Q[i] = S_TYPE;
+        else if(T[i] > T[i + 1])
+            Q[i] = L_TYPE;
+        else
+            Q[i] = Q[i + 1];
+    }
+
+    vector<int> l;      // l[k] = k-th LMS position, so l = {l_0 < l_1 < ... < l_{m - 1}}
+    for(int i = 1; i <= n; i ++)
+        if(Q[i] == S_TYPE and Q[i - 1] == L_TYPE)
+        {
+            Q[i] = LMS_TYPE;
+            l.push_back(i);
+        }
+    const int m = (int)l.size();
+
+    auto is_L = [&](int i) { return Q[i] == L_TYPE; };
+    auto is_S = [&](int i) { return Q[i] != L_TYPE; };
+    auto is_LMS = [&](int i) { return Q[i] == LMS_TYPE; };
+
+    // ---------------------------------------------------------------
+    // Bucket boundaries (section 2): the bucket for symbol c is [head[c], tail[c])
+    // ---------------------------------------------------------------
+    vector<int> cnt(N, 0);      // symbols lie in [0, n]
+    for(int x : T)
+        cnt[x] ++;
+
+    // induce L/S both modify the boundaries, so we hand out fresh copies every time
+    auto get_buckets = [&](vector<int> &head, vector<int> &tail) -> void
+    {
+        head.assign(N, 0);
+        tail.assign(N, 0);
+        for(int c = 0, sum = 0; c < N; c ++)
+        {
+            head[c] = sum;
+            sum += cnt[c];
+            tail[c] = sum;
+        }
+    };
+
+    // ---------------------------------------------------------------
+    // Induced sorting (section 4)
+    //
+    // `seeds` contains the LMS positions, in sorted order. Returns the array
+    // obtained by seeding them at the tails of their S-buckets, then running
+    // L-induce (procedure 3) followed by S-induce (procedure 4).
+    //
+    // Phase 1 and phase 3 differ *only* in the seeds they pass here.
+    // ---------------------------------------------------------------
+    auto induced_sort = [&](const vector<int> &seeds) -> vector<int>
+    {
+        vector<int> A(N, -1);
+        vector<int> head, tail;
+
+        // seeding: walk the seeds from largest to smallest, filling each S-bucket from its tail
+        get_buckets(head, tail);
+        for(int k = (int)seeds.size() - 1; k >= 0; k --)
+        {
+            int i = seeds[k];
+            A[-- tail[T[i]]] = i;
+        }
+
+        // L-induce: walk left to right; if A[i] - 1 is L-type, append it to the
+        // first free slot of its L-bucket (this is extend2)
+        for(int i = 0; i < N; i ++)
+        {
+            if(A[i] == -1)
+                continue;
+            int j = A[i] - 1;
+            if(j >= 0 and is_L(j))
+                A[head[T[j]] ++] = j;
+        }
+
+        // clean up: remove the seeded LMS positions, the S-induce places them again
+        for(int i = 0; i < N; i ++)
+            if(A[i] != -1 and is_LMS(A[i]))
+                A[i] = -1;
+
+        // S-induce: walk right to left; if A[i] - 1 is S-type, prepend it to the
+        // last free slot of its S-bucket (this is extend3)
+        get_buckets(head, tail);
+        A[0] = n;               // the sentinel is the smallest suffix, place it manually
+        for(int i = n; i >= 0; i --)
+        {
+            if(A[i] == -1)
+                continue;
+            int j = A[i] - 1;
+            if(j >= 0 and is_S(j))
+                A[-- tail[T[j]]] = j;
+        }
+
+        return A;
+    };
+
+    // ---------------------------------------------------------------
+    // PHASE 1: sort all LMS substrings under alex (section 5.2)
+    //
+    // Seeding with T[i, i] for each LMS position i: these are single
+    // characters, so any order works, as long as each one lands in its own
+    // bucket (procedure 6).
+    // ---------------------------------------------------------------
+    vector<int> C = induced_sort(l);
+
+    // ---------------------------------------------------------------
+    // PHASE 2: label full LMS substrings, build T2, recurse (sections 5.1, 6)
+    // ---------------------------------------------------------------
+
+    // equal(i, j) checks whether P_i == P_j for LMS positions i != j.
+    // P_i = T[i, E_i] ends at the next LMS position, so we walk both substrings
+    // together until one of them ends. They are equal iff both end at the same
+    // offset with all characters equal along the way.
+    // (If one of them is the sentinel n, the very first characters differ, so
+    // we never read past the end of T.)
+    auto equal = [&](int i, int j) -> bool
+    {
+        for(int k = 0; ; k ++)
+        {
+            if(T[i + k] != T[j + k])
+                return false;
+            bool end_i = (k > 0 and is_LMS(i + k));
+            bool end_j = (k > 0 and is_LMS(j + k));
+            if(end_i or end_j)
+                return end_i and end_j;
+        }
+    };
+
+    // walk C (which is alex-sorted) and give equal full LMS substrings equal labels
+    // R[i] = label of P_i, for LMS positions i
+    vector<int> R(N, -1);
+    int label = -1, last = -1;
+    for(int k = 0; k < N; k ++)
+    {
+        int j = C[k];
+        if(!is_LMS(j))
+            continue;
+        if(last == -1 or !equal(last, j))
+            label ++;
+        R[j] = label;
+        last = j;
+    }
+    // C[0] = n is the first LMS position seen, so the sentinel gets label 0,
+    // and every other label lies in [1, m - 1]: T2 satisfies section 1
+
+    // T2[k] = label of the k-th full LMS substring
+    vector<int> T2(m);
+    for(int k = 0; k < m; k ++)
+        T2[k] = R[l[k]];
+
+    // G = LMS positions in sorted order of their suffixes
+    vector<int> G = SA(T2);
+    for(int k = 0; k < m; k ++)
+        G[k] = l[G[k]];
+
+    // ---------------------------------------------------------------
+    // PHASE 3: seed with G and induce the actual suffix array (section 4)
+    // ---------------------------------------------------------------
+    return induced_sort(G);
+}
+
+// Convenience wrapper for arbitrary non-negative input: s[i] in [0, K).
+// Remaps s to satisfy section 1 in O(n + K), and drops the sentinel from the result.
+vector<int> suffix_array(const vector<int> &s, int K)
+{
+    const int n = (int)s.size();
+
+    // rank[x] = 1 + number of distinct symbols in s smaller than x
+    vector<int> rank(K, 0);
+    for(int x : s)
+        rank[x] = 1;
+    for(int x = 0, r = 0; x < K; x ++)
+        if(rank[x])
+            rank[x] = ++ r;
+
+    vector<int> T(n + 1);
+    for(int i = 0; i < n; i ++)
+        T[i] = rank[s[i]];
+    T[n] = 0;
+
+    vector<int> A = SA(T);
+    return vector<int>(A.begin() + 1, A.end());     // A[0] is always the sentinel
+}
+```
+
+</div>
+</details>

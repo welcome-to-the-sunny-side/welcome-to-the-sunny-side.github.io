@@ -272,9 +272,19 @@ This inefficient procedure essentially does the following:
     1. If the suffix corresponds to an L-type position $i$, it places $i$ at the first free position in the L-bucket corresponding to $T_i$ in $A$.
     2. Then, if position $i - 1$ is L-type, it inserts $S_{i - 1}$ into the heap (i.e. it extends the removed suffix by one character on the left, or equivalently in the slope-view - moves one step up to the left).
 
-Before we prove that this procedure is correct, I encourage you to intuit why this is correct by visualising the slope view. We essentially "seed" the heap by inserting all the valley positions, and then inch up each L-type slope to the left (remember, L-type slopes slant upwards from right to left).
+Before we prove that this procedure is correct, I encourage you to intuit why this is correct by visualising the slope view. 
 
-Anyway, why is the procedure correct?
+<details><summary class ="spoiler-summary">Intuition</summary>
+<div class = "spoiler-content">
+
+
+We essentially "seed" the heap by inserting all the valley positions, and then inch up each L-type slope to the left (remember, L-type slopes slant upwards from right to left). Alternatively, you can think of it this way - imagine every upward (right to left) slope of consecutive L-types to be an increasing array. The suffix array is constructed by interleaving all of these into one big increasing array where all the arrays exist as disjoint increasing subsequences. Then we're simply using the heap to help us do this interleaving - we start off by inserting the smallest (first) element from every array into the heap, and then we always delete the smallest element from it. Also, whenever we delete an element from the heap, we insert the next element from that element's array into the heap.
+
+</div>
+</details>
+
+
+Anyway, how do we formally prove correctness?
 
 Notice that when suffix $S_i$ is deleted from the heap, it can only result in the insertion of a *strictly greater suffix* back into the heap ($S_{i - 1}$, where $i - 1$ must be L-type, so $S_{i - 1} > S_i$. In the slope view, $i - 1$ must be above $i$). Since we always delete the smallest suffix from the heap, this implies that all suffixes to ever be inserted in the heap are deleted in non-decreasing order (for any two L or LMS-type positions $i$ and $j$, if $S_i < S_j$, then $i$ is deleted from the heap before $j$).
 

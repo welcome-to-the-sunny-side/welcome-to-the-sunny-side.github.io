@@ -1,7 +1,7 @@
 ---
 displayMode: blog
 title: "Suffix arrays in O(n) using SA-IS"
-date: 2026-08-11
+date: 2026-10-16
 tags: [algorithm]
 ---
 

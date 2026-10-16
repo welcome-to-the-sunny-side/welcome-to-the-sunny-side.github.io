@@ -246,28 +246,28 @@ set<pair<vector<int>, int>> q;
 
 auto extend = [&](int i) -> void
 {
-  int j = i - 1;
-  if(j >= 0 and is_L_type(Q[j]))
-    q.insert({S[j], j});
+    int j = i - 1;
+    if(j >= 0 and is_L_type(Q[j]))
+        q.insert({S[j], j});
 };
 
 for(int i = 0; i <= n; i ++)
-  if(is_LMS_type(Q[i]))
-    q.insert({S[i], i});
+    if(is_LMS_type(Q[i]))
+        q.insert({S[i], i});
 
 while(!q.empty())
 {
-  auto [v, i] = *q.begin();
-  q.erase(q.begin());
+    auto [v, i] = *q.begin();
+    q.erase(q.begin());
 
-  //we do not place the LMS types into A
-  if(is_L_type(Q[i]))
-  {
-    A[head[T[i]]] = i;
-    head[T[i]] ++;
-  }
+    //we do not place the LMS types into A
+    if(is_L_type(Q[i]))
+    {
+        A[head[T[i]]] = i;
+        head[T[i]] ++;
+    }
 
-  extend(i);
+    extend(i);
 }
 ```
 
@@ -307,25 +307,25 @@ set<pair<vector<int>, int>> q;
 
 auto extend2 = [&](int i) -> void
 {
-  int j = i - 1;
-  if(j >= 0 and is_L_type(Q[j]))
-  {
-    A[head[T[j]]] = j;
-    head[T[j]] ++;
-    q.insert({S[j], j});
-  }
+    int j = i - 1;
+    if(j >= 0 and is_L_type(Q[j]))
+    {
+        A[head[T[j]]] = j;
+        head[T[j]] ++;
+        q.insert({S[j], j});
+    }
 };
 
 for(int i = 0; i <= n; i ++)
-  if(is_LMS_type(Q[i]))
-    q.insert({S[i], i});
+    if(is_LMS_type(Q[i]))
+        q.insert({S[i], i});
 
 while(!q.empty())
 {
-  auto [v, i] = *q.begin();
-  q.erase(q.begin());
+    auto [v, i] = *q.begin();
+    q.erase(q.begin());
 
-  extend2(i);
+    extend2(i);
 }
 ```
 
@@ -364,8 +364,8 @@ Effectively (and I switch to pseudo-code now):
 ```pseudo
 A = [-1] * (n + 1)
 for i from 0 to n:
-  if (A[i] != -1) and (A[i] is L or LMS type):
-    extend2(A[i])
+    if (A[i] != -1) and (A[i] is L or LMS type):
+        extend2(A[i])
 ```
 
 This is of course incorrect, for the simple reason that everything remains -1, but the fix is smaller than you might expect. 
@@ -393,15 +393,15 @@ put {S[i], i} for all LMS-type i into heap H
 # we iterate over the first character of suffixes
 for character c from 0 to n:
 
-  # we first process the L-region of c
-  let A[l, r] be the L-region for c
-  for i from l to r:
-    extend2(A[i])
+    # we first process the L-region of c
+    let A[l, r] be the L-region for c
+    for i from l to r:
+        extend2(A[i])
   
-  # we then process the LMS-types of c, naively
-  while H is not empty and the smallest suffix in H begins with c:
-    pop out {S[i], i}, the smallest element of H
-    extend2(i)
+    # we then process the LMS-types of c, naively
+    while H is not empty and the smallest suffix in H begins with c:
+        pop out {S[i], i}, the smallest element of H
+        extend2(i)
 ```
 
 </div>
@@ -441,31 +441,31 @@ vector<int> A(n + 1, -1);       //suffix array
 // Seeding - we put LMS positions at the tails of their S-buckets 
 reverse(G.begin(), G.end());
 for(auto i : G)
-  A[--tail[T[i]]] = i;
+    A[--tail[T[i]]] = i;
 
 auto extend2 = [&](int i) -> void
 {
-  int j = i - 1;
-  if(j >= 0 and is_L_type(Q[j]))
-  {
-    A[head[T[j]]] = j;
-    head[T[j]] ++;
-  }
+    int j = i - 1;
+    if(j >= 0 and is_L_type(Q[j]))
+    {
+        A[head[T[j]]] = j;
+        head[T[j]] ++;
+    }
 };
 
 // induce L positions into A
 auto l_induce = [&]() -> void
 {
-  for(int i = 0; i <= n; i ++)
-    if(A[i] != -1)
-      extend2(A[i]);
+    for(int i = 0; i <= n; i ++)
+        if(A[i] != -1)
+            extend2(A[i]);
 };
 l_induce();
 
 // clean up LMS types from A
 for(int i = 0; i <= n; i ++)
-  if(A[i] != -1 and is_LMS_type(Q[A[i]]))
-    A[i] = -1;
+    if(A[i] != -1 and is_LMS_type(Q[A[i]]))
+        A[i] = -1;
 ```
 
 </div>
@@ -493,12 +493,12 @@ vector<int> T, Q, head, tail, A;
 
 auto extend3 = [&](int i) -> void
 {
-  int j = i - 1;
-  if(j >= 0 and is_S_type(Q[j]))
-  {
-    tail[T[j]] --;
-    A[tail[T[j]]] = j;
-  }
+    int j = i - 1;
+    if(j >= 0 and is_S_type(Q[j]))
+    {
+        tail[T[j]] --;
+        A[tail[T[j]]] = j;
+    }
 };
 
 // place the sentinel position separately
@@ -507,9 +507,9 @@ A[0] = n;
 // induce S positions into A
 auto s_induce = [&]() -> void
 {
-  for(int i = n; i >= 0; i --)
-    if(A[i] != -1)
-      extend3(A[i]);
+    for(int i = n; i >= 0; i --)
+        if(A[i] != -1)
+            extend3(A[i]);
 };
 s_induce();
 ```
@@ -538,23 +538,23 @@ Let's imagine a magical procedure `compress(T)` which gives us such a $T'$ *in l
 ```pseudo
 #input T satisfies properties from section 1
 SA(T):
-  N = |T|
+    N = |T|
 
-  #base case
-  if N == 1:
-    return [0]
+    #base case
+    if N == 1:
+        return [0]
 
-  T2 = compress(T)
+    T2 = compress(T)
 
-  G = SA(T2)
-  for i from 0 to |G| - 1:
-    G[i] = l[G[i]]    #G[i]-th LMS position in T
+    G = SA(T2)
+    for i from 0 to |G| - 1:
+        G[i] = l[G[i]]    #G[i]-th LMS position in T
 
-  A = [-1] * (N)
-  run L induce on A using G
-  run S induce
+    A = [-1] * (N)
+    run L induce on A using G
+    run S induce
 
-  return A
+    return A
 ```
 
 What would the time complexity of `SA(T)`, $f(N)$ ($N = \vert T \vert$) be? We have $f(N) = O(N) + f(N/2) + O(N) + O(N) + O(N)$ (the recursive call takes $f(N/2)$ time, and every other phase takes linear time). Therefore, $f(N) = O(N) + f(N/2)$. Also, the base case is handled with $f(1) = O(1)$. Since $O(N) + O(N/2) + O(N/4) + \dots = O(N)$, we have $f(N) = O(N)$.
@@ -586,8 +586,8 @@ Let's compare the $i$-th and $j$-th suffixes of $T'$.
 - Therefore, consider the smallest $x \geq 0$ such that $T'_{i + x} \neq T'_{j + x}$. Clearly  $T'[i, m) < T'[j, m) \iff T'_{i + x} < T'_{j + x}$.
 - Let $u = l_{i + x}, v = l_{j + x}$. Since $T'[i, i + x - 1] = T'[j, j + x - 1]$, we have $T[l_i, u) = T[l_j, v)$ (easy to prove, left as an exercise). Now, $T[l_i, n] < T[l_j, n] \iff T[u, n] < T[v, n]$.
 - We know that $P_{u} \neq P_{v}$ ($T'_{i + x} \neq T'_{j + x}$). There are two cases:
-  - If neither $P_{u}$ nor $P_{v}$ is a proper prefix of the other, then $ T[u, n] < T[v, n] \iff P_{u} < P_{v} \iff R(P_{u}) < R(P_{v}) \iff T'_{i + x} < T'_{j + x}$! Therefore, in this case, we have $T'[i, m) < T'[j, m) \iff T[l_i, n] < T[l_j, n]$.
-  - Otherwise, WLOG assume $P_{u}$ is a proper prefix of $P_{v}$. In this case, the lex comparator says $P_{u} < P_{v} \implies R(P_{u}) < R(P_{v}) \implies T'_{i + x} < T'_{j + x} \implies T'[i, m) < T'[j, m)$. For $T'[i, m) < T'[j, m) \iff T[l_i, n] < T[l_j, n]$ to now be satisfied, we need $T[l_i, n] < T[l_j, n]$. Let's examine this in more detail.
+    - If neither $P_{u}$ nor $P_{v}$ is a proper prefix of the other, then $ T[u, n] < T[v, n] \iff P_{u} < P_{v} \iff R(P_{u}) < R(P_{v}) \iff T'_{i + x} < T'_{j + x}$! Therefore, in this case, we have $T'[i, m) < T'[j, m) \iff T[l_i, n] < T[l_j, n]$.
+    - Otherwise, WLOG assume $P_{u}$ is a proper prefix of $P_{v}$. In this case, the lex comparator says $P_{u} < P_{v} \implies R(P_{u}) < R(P_{v}) \implies T'_{i + x} < T'_{j + x} \implies T'[i, m) < T'[j, m)$. For $T'[i, m) < T'[j, m) \iff T[l_i, n] < T[l_j, n]$ to now be satisfied, we need $T[l_i, n] < T[l_j, n]$. Let's examine this in more detail.
 
 Surprisingly, properties of the L/S classification trivialise this. Let $p = \vert P_{u} \vert$. Notice that $P_{u} = T[u, u + p - 1] = T[v, v + p - 1]$, so $T[l_i, n] < T[l_j, n] \iff T[u + p - 1, n] < T[v + p - 1, n]$. We know that $T_{u + p - 1} = T_{v + p - 1}$ and  position $(u + p - 1)$ is LMS-type (it's the end of an LMS-substring). What about position $v + p - 1$? Using theorem 3.1, $T_{u + p - 2} > T_{u + p - 1} \implies T_{v + p - 2} > T_{v + p - 1}$, so position $v + p - 2$ must be L-type. Recall that the types of positions in an LMS substring take the following form: `LMS S S S S ... L L L L LMS`. Since $P_v$ doesn't end at $v + p - 1$, position $v + p - 1$ must be L-type too!
 
@@ -613,9 +613,9 @@ Consider the third condition. When we previously attempted to prove $T'[i, m) < 
 
 - For character $c$, and strings $A$ and $B$, $cA < cB \iff A < B$, and $cA = cB \iff A = B$.
 - For full LMS substrings $A$ and $B$:
-  - If neither was a prefix of the other, $R(A) < R(B) \iff A < B$.
-  - $R(A) = R(B) \iff A = B$.
-  - When $A$ is a proper prefix of $B$, we required $R(A) > R(B)$, but our old $R$ yielded $R(A) < R(B)$.
+    - If neither was a prefix of the other, $R(A) < R(B) \iff A < B$.
+    - $R(A) = R(B) \iff A = B$.
+    - When $A$ is a proper prefix of $B$, we required $R(A) > R(B)$, but our old $R$ yielded $R(A) < R(B)$.
 
 Clearly, our new definition of $R$ satisfies all four! I won't restate the entire proof again, but encourage you to go through the argument again to convince yourself of this.
 
@@ -634,10 +634,10 @@ R = [-1] * N
 label = -1, last = -1
 
 for i in X:
-  if last == -1 or !equal(P[last], P[i])
-    label += 1
-  R[i] = label
-  last = i
+    if last == -1 or !equal(P[last], P[i])
+        label += 1
+    R[i] = label
+    last = i
 ```
 
 One concern is that assuming $X$ is given to us, is the labelling procedure efficient? What if the `equal(A, B)` function is implemented naively, i.e. in $O(\vert A \vert + \vert B \vert)$ time? Since each full LMS substring contributes its length at most twice, and $\sum{\vert P_{l_i} \vert} = O(n)$, the total time taken is $O(n)$.
@@ -669,8 +669,8 @@ Since position $i$ is L-type, $i + 1$ can either be L or LMS-type.
 
 - If $i + 1$ is LMS type, then $T_i > T_{i + 1} \implies T[i + 1, E_i] \prec T[i, E_i]$
 - Otherwise, $T_i \geq T_{i + 1}$.
-  - If $T_{i} > T_{i + 1}$, then $T[i + 1, E_i] \prec T[i, E_i]$ trivially.
-  - Otherwise, we know that for the smallest $x \geq 0$ where $T_{i + x} \neq T_{i + x + 1}$, we have $T_{i + x} > T_{i + x + 1}$ (definition of L-type suffixes). Since $T_{E_i - 1} \neq T_{E_i}$, we must have $i + x + 1 \leq E_i$, and the two strings differ before either ends.
+    - If $T_{i} > T_{i + 1}$, then $T[i + 1, E_i] \prec T[i, E_i]$ trivially.
+    - Otherwise, we know that for the smallest $x \geq 0$ where $T_{i + x} \neq T_{i + x + 1}$, we have $T_{i + x} > T_{i + x + 1}$ (definition of L-type suffixes). Since $T_{E_i - 1} \neq T_{E_i}$, we must have $i + x + 1 \leq E_i$, and the two strings differ before either ends.
 
 </div>
 </details>
@@ -716,14 +716,14 @@ put {T[i, i], i} for all LMS-type i into heap H, which uses the alex comparator
 
 # just like our previous extend2 function, except here we insert T[j, E[j]] into the heap
 def extend2(i):
-  j = i - 1
-  if (j >= 0) and (position j is L-type)
-    place j in the first empty position of the bucket of T[j] in C
-    put {T[j, E[j]], j} into H
+    j = i - 1
+    if (j >= 0) and (position j is L-type)
+        place j in the first empty position of the bucket of T[j] in C
+        put {T[j, E[j]], j} into H
 
 while H is not empty:
-  pop out {v, i}, the smallest element of H
-  extend2(i)
+    pop out {v, i}, the smallest element of H
+    extend2(i)
 ```
 
 </div>
@@ -742,8 +742,8 @@ Now, consider any two L-type LMS substrings $T[i, E_i]$ and $T[j, E_j]$. We will
 - If $T[i, E_i] = T[j, E_j]$, then their relative order doesn't matter.
 - Otherwise, if $T_i \neq T_j$, WLOG assume $T_i < T_j$. Then we necessarily have $T[i, E_i] \prec T[j, E_j]$, and the two are placed in different buckets, with the former's bucket lying to the left of the latter's.
 - Otherwise, if $T_i = T_j$, then $T[i, E_i]$ and $T[j, E_j]$ will be placed in the same bucket. Recall that for any character $c$ and strings $A, B$, we have $cA \prec cB \iff A \prec B$. Therefore, $T[i, E_i] \prec T[j, E_j] \iff T[i + 1, E_i] \prec T[j + 1, E_j]$. Note that we cannot have $T[i + 1, E_i] = T[j + 1, E_j]$ here. Consider the other two cases
-  - If $T[i + 1, E_i] \prec T[j + 1, E_j]$, then the former is deleted before the latter from the heap, and $T[i, E_i]$ is placed in their common bucket before $T[j, E_j]$. Since we also have $T[i + 1, E_i] \prec T[j + 1, E_j] \implies T[i, E_i] \prec T[j, E_j]$ here, their relative order in $C$ is valid.
-  - If $T[j + 1, E_j] \prec T[i + 1, E_i]$, then the former is deleted before the latter from the heap, and $T[j, E_j]$ is placed in their common bucket before $T[i, E_i]$. Since we also have $T[j + 1, E_j] \prec T[i + 1, E_i] \implies T[j, E_j] \prec T[i, E_i]$ here, their relative order in $C$ is valid.
+    - If $T[i + 1, E_i] \prec T[j + 1, E_j]$, then the former is deleted before the latter from the heap, and $T[i, E_i]$ is placed in their common bucket before $T[j, E_j]$. Since we also have $T[i + 1, E_i] \prec T[j + 1, E_j] \implies T[i, E_i] \prec T[j, E_j]$ here, their relative order in $C$ is valid.
+    - If $T[j + 1, E_j] \prec T[i + 1, E_i]$, then the former is deleted before the latter from the heap, and $T[j, E_j]$ is placed in their common bucket before $T[i, E_i]$. Since we also have $T[j + 1, E_j] \prec T[i + 1, E_i] \implies T[j, E_j] \prec T[i, E_i]$ here, their relative order in $C$ is valid.
 
 This implies $i \leq j \implies T[C_i, E_{C_i}] \preceq T[C_j, E_{C_j}]$ for the placed L-type LMS substrings $C_i, C_j$ so far.
 
@@ -759,22 +759,22 @@ put {T[i, i], i} for all LMS-type i into heap H
 
 # once again, we don't place anything into the heap any more
 def extend2(i):
-  j = i - 1
-  if (j >= 0) and (position j is L-type)
-    place j in the first empty position of the bucket of T[j] in C
+    j = i - 1
+    if (j >= 0) and (position j is L-type)
+        place j in the first empty position of the bucket of T[j] in C
 
 # we iterate over the first character of the suffix
 for character c from 0 to n:
 
-  # we first process the L-region of c
-  let C[l, r] be the L-region for c
-  for i from l to r:
-    extend2(C[i])
+    # we first process the L-region of c
+    let C[l, r] be the L-region for c
+    for i from l to r:
+        extend2(C[i])
   
-  # we then process the LMS-types of c, naively
-  while H is not empty and the smallest string in H begins with c:
-    pop out {T[i, i], i}, the smallest element of H
-    extend2(i)
+    # we then process the LMS-types of c, naively
+    while H is not empty and the smallest string in H begins with c:
+        pop out {T[i, i], i}, the smallest element of H
+        extend2(i)
 ```
 
 </div>
@@ -798,32 +798,32 @@ vector<int> C(n + 1, -1);
 
 // Seeding - we put LMS positions at the tails of their S-buckets 
 for(int i = 0; i <= n; i ++)
-  if(is_LMS_type(Q[i]))
-    C[--tail[T[i]]] = i;
+    if(is_LMS_type(Q[i]))
+        C[--tail[T[i]]] = i;
 
 auto extend2 = [&](int i) -> void
 {
-  int j = i - 1;
-  if(j >= 0 and is_L_type(Q[j]))
-  {
-    C[head[T[j]]] = j;
-    head[T[j]] ++;
-  }
+    int j = i - 1;
+    if(j >= 0 and is_L_type(Q[j]))
+    {
+        C[head[T[j]]] = j;
+        head[T[j]] ++;
+    }
 };
 
 // induce L positions into C
 auto l_induce = [&]() -> void
 {
-  for(int i = 0; i <= n; i ++)
-    if(C[i] != -1)
-      extend2(C[i]);
+    for(int i = 0; i <= n; i ++)
+        if(C[i] != -1)
+            extend2(C[i]);
 };
 l_induce();
 
 // clean up LMS types from C
 for(int i = 0; i <= n; i ++)
-  if(C[i] != -1 and is_LMS_type(Q[C[i]]))
-    C[i] = -1;
+    if(C[i] != -1 and is_LMS_type(Q[C[i]]))
+        C[i] = -1;
 ```
 
 </div>
@@ -842,49 +842,49 @@ Let's finally assemble our algorithm from the pieces we've painstakingly built:
 ```pseudo
 # T satisfies conditions from section 1
 SA(T):
-  N = |T|
-  n = N - 1
+    N = |T|
+    n = N - 1
 
-  if N == 1:
-    return [0]
+    if N == 1:
+        return [0]
 
-  classify L, S, LMS types in O(n)
+    classify L, S, LMS types in O(n)
 
 #PHASE 1: sort LMS substrings under alex
-  C = [-1] * (n + 1)
-  seed C with T[i, i] for all LMS positions i, in O(n)
-  run L induce on C   # we compute fresh bucket boundaries before every L and S induce
-  run S induce on C
+    C = [-1] * (n + 1)
+    seed C with T[i, i] for all LMS positions i, in O(n)
+    run L induce on C   # we compute fresh bucket boundaries before every L and S induce
+    run S induce on C
 
 #PHASE 2: construct T2 and sort its suffixes to get G
-  #label full LMS substrings
-  R = [-1] * (n + 1)
-  label = -1, last = -1
-  for i from 0 to n:
-    if C[i] is LMS type:
-      j = C[i]
-      if last == -1 or !equal(last, j):     #equal(i, j) compares P[i] and P[j]
-        label += 1
-      R[j] = label
-      last = j
-  #construct T2 and sort its suffixes
-  T2 = []
-  for i from 0 to n:
-    if i is LMS type:
-      T2.append(R[i])
-  A2 = SA(T2)
-  #construct G from A2
-  G = A2
-  for i from 0 to |G| - 1:
-    G[i] = l[G[i]]  #l[i] is i-th LMS position in T
+    #label full LMS substrings
+    R = [-1] * (n + 1)
+    label = -1, last = -1
+    for i from 0 to n:
+        if C[i] is LMS type:
+            j = C[i]
+            if last == -1 or !equal(last, j):     #equal(i, j) compares P[i] and P[j]
+                label += 1
+            R[j] = label
+            last = j
+    #construct T2 and sort its suffixes
+    T2 = []
+    for i from 0 to n:
+        if i is LMS type:
+            T2.append(R[i])
+    A2 = SA(T2)
+    #construct G from A2
+    G = A2
+    for i from 0 to |G| - 1:
+        G[i] = l[G[i]]  #l[i] is i-th LMS position in T
 
 #PHASE 3: seed A with G and run the final L and S induce 
-  A = [-1] * (n + 1)
-  seed A with G
-  run L induce on A
-  run S induce on A
+    A = [-1] * (n + 1)
+    seed A with G
+    run L induce on A
+    run S induce on A
 
-  return A
+    return A
 ```
 
 My own [implementation](https://github.com/welcome-to-the-sunny-side/libra/blob/main/string/suffix_array.cpp) of SAIS was unfortunately created before I wrote this blog, and doesn't really follow the exposition, but here's a highly readable one by my friend Opus 5.5 that does:

@@ -159,6 +159,7 @@ The terminal is hidden below 768px. In its place:
 - **`MobileNav.svelte`** renders a horizontal breadcrumb derived from the current path. Each parent segment is a button that navigates to that directory's `<dir>/index.html` nav-view page; the last segment is plain text.
 - **Nav-view pages.** `ContentPane` detects paths ending in `/index.html` and renders a tree-glyph directory listing using `vfsList()`. Tapping a directory navigates deeper; tapping a file opens it.
 - **Layout.** `BaseLayout` puts `MobileNav` in a `md:hidden` div and uses `grid-rows-[auto_1fr]` so the breadcrumb takes only the height it needs.
+- **Mobile scrolling.** Below `md` the *document* scrolls. The grid is `min-h-[100dvh]` and `main` grows (`overflow-x-clip`, no `overflow-y`). The breadcrumb wrapper is `sticky top-0`. From `md` up the grid is `h-screen` and `main` is the scroll container beside the terminal. Why: on iOS WebKit, scrolling a math-heavy `main` that also holds nested horizontal scroll areas (code blocks, spoilers) lagged badly on SA-IS, while Android/Blink was fine. Any one of these fixed it in on-device tests: document scroll, removing the nested scrollers, removing the math, or `content-visibility: auto`. The hidden assistive MathML was not the cause. The scrollbar styles in `global.css` target both `main` and `html` for this reason.
 
 ---
 
@@ -324,6 +325,7 @@ npm run deploy   # build + push dist/ to gh-pages
 
 ## 15. Recent overhauls (changelog summary)
 
+- **2026-10-16 — Mobile document scroll.** Below `md` the page scrolls instead of `main`, fixing iOS scroll lag on math-heavy posts (see §Mobile scrolling).
 - **2026-10-16 — Build-time math.** Markdown pages ship with math already typeset (`src/lib/typesetMath.ts`). Client navigation uses `/prerendered/*.json`. Display equations that overflow are re-broken client-side from `data-tex`. Article HTML is no longer duplicated in island props.
 - **2026-09-07 — Build-time content rendering.** `[...slug].astro` now renders each markdown page to HTML at build (`src/lib/prerender.ts`) and passes it to `ContentPane` as `initial`; static pages carry the article body, per-page `<title>`, description, and canonical. Fixes AI agents / crawlers seeing only the empty shell. Added `sitemap.xml`, `robots.txt`, real `<a>` links in nav-view, `document.title` updates on navigation; `site` switched to the custom domain; `postbuild` renames `*.html.html` → `*.html`. Musings (`/misc/void.html`) and raw `.html` pages intentionally remain client-rendered.
 - **2026-05-05 — Refactor sweep.** Three-stage cleanup tracked in `refactor-progress.md`: (1) deletions of unused files / dead code, (2) markdown-renderer consolidation into `src/lib/markdown.ts`, skin/CSS dedup, `TerminalPane` simplification, eager home-bg glob → fetched manifest, (3) `MusingsStream` interval cleanup on destroy.

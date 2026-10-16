@@ -40,14 +40,17 @@ const canonical = canonicalPath ? site + canonicalPath : null;
         </script>
 </head>
   <body class="h-full">
-    <div class="h-screen w-screen grid grid-cols-1 grid-rows-[auto_1fr] md:grid-cols-[1fr_auto] md:grid-rows-1">
+    <!-- Below md the document itself scrolls (main just grows): iOS WebKit lags
+         scrolling a math-heavy <main> that holds nested scroll areas (code,
+         spoilers). From md up, main is the scroll container next to the terminal. -->
+    <div class="min-h-[100dvh] md:h-screen w-screen grid grid-cols-1 grid-rows-[auto_1fr] md:grid-cols-[1fr_auto] md:grid-rows-1">
       <!-- Mobile breadcrumb nav -->
-      <div class="md:hidden">
+      <div class="md:hidden sticky top-0 z-10">
         <MobileNav client:load />
       </div>
 
       <!-- Content -->
-      <main class="overflow-y-auto overflow-x-hidden bg-surface text-text transition-colors duration-150 ease-retro min-h-0">
+      <main class="overflow-x-clip md:overflow-x-hidden md:overflow-y-auto bg-surface text-text transition-colors duration-150 ease-retro min-h-0">
         <ContentPane client:load {initial} />
       </main>
 

@@ -458,6 +458,11 @@ $: skin = $currentSkin;
           {/each}
         </ul>
       {/if}
+      <!-- the post's markdown, served at <path>.md (src/pages/[...slug].md.ts) -->
+      <!-- proseBody so it gets the article's body font (dark sets it per element, under <article>) -->
+      <div class={skin.classes.proseBody}>
+        <p>Raw Markdown for this page can be found <a href={displayPath.replace(/\.html$/, '.md')}>here</a>.</p>
+      </div>
     </header>
     <article class={`${skin.classes.contentPane} ${skin.classes.proseBody} max-w-none`}>
       {@html isLoading && previousContentHtml ? previousContentHtml : contentHtml}

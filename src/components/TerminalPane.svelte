@@ -49,6 +49,8 @@
     };
 
     const handleVim = (e: KeyboardEvent) => {
+      // leave browser shortcuts alone (Ctrl+L address bar, Ctrl+H history, ...)
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
       const active = document.activeElement as HTMLElement | null;
       if (active) {
         const tag = active.tagName.toLowerCase();

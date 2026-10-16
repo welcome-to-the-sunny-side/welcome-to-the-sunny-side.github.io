@@ -173,7 +173,7 @@ onMount(async () => {
     theme: initialTheme.xterm,
     cursorBlink: false,
     fontFamily: 'IBM Plex Mono, SF Mono, Menlo, Monaco, Consolas, monospace',
-    fontSize: Math.round(rootPx * 0.875),
+    fontSize: Math.round(rootPx), // 1rem, same as dark-skin body text
     fontWeight: '400',
     letterSpacing: 0,
     cols: 80,

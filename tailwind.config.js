@@ -25,16 +25,31 @@ module.exports = {
         ],
       },
       fontSize: {
-        base: ['var(--fs-base)', 'var(--lh-base)'],
-        sm: ['var(--fs-sm)', 'var(--lh-sm)'],
-        lg: ['var(--fs-lg)', 'var(--lh-lg)'],
-        xl: ['var(--fs-xl)', 'var(--lh-xl)'],
-        '2xl': ['var(--fs-2xl)', 'var(--lh-2xl)'],
+        // sizes are per-skin; line heights are unitless so both skins share them
+        xs: ['var(--fs-xs)', '1.35'],
+        sm: ['var(--fs-sm)', '1.55'],
+        base: ['var(--fs-base)', '1.7'],
+        lg: ['var(--fs-lg)', '1.55'],
+        xl: ['var(--fs-xl)', '1.45'],
+        '2xl': ['var(--fs-2xl)', '1.3'],
       },
       typography: ({ theme }) => ({
         DEFAULT: {
           css: {
             fontSize: 'var(--prose-font-size)',
+            // skin-driven prose colors (prose-invert reads the -invert- set)
+            '--tw-prose-body': 'var(--text)',
+            '--tw-prose-headings': 'var(--title)',
+            '--tw-prose-bold': 'var(--title)',
+            '--tw-prose-code': 'var(--title)',
+            '--tw-prose-bullets': 'var(--text-muted)',
+            '--tw-prose-counters': 'var(--text-muted)',
+            '--tw-prose-invert-body': 'var(--text)',
+            '--tw-prose-invert-headings': 'var(--title)',
+            '--tw-prose-invert-bold': 'var(--title)',
+            '--tw-prose-invert-code': 'var(--title)',
+            '--tw-prose-invert-bullets': 'var(--text-muted)',
+            '--tw-prose-invert-counters': 'var(--text-muted)',
             p: {
               fontSize: 'var(--prose-font-size)',
             },

@@ -18,6 +18,7 @@ export const dark: Skin = {
     accent: '#64ffda',
     'accent-subtle': 'rgba(100,255,218,0.15)',
     link: '#7dd3fc',
+    title: '#ffffff', // headings, bold, inline code (the post title uses accent)
     /* custom-elements */
     'el-accent': '#3fa7ff',
     'el-surface': '#0f0f0f',
@@ -26,16 +27,12 @@ export const dark: Skin = {
 
     /* typography & sizing */
     'font-mono': 'IBM Plex Mono, ui-monospace, SFMono-Regular, Menlo, monospace',
-    'fs-base': '0.875rem',
-    'lh-base': '1.5',
+    'fs-xs': '0.75rem',
     'fs-sm': '0.8125rem',
-    'lh-sm': '1.25rem',
+    'fs-base': '0.875rem',
     'fs-lg': '1.125rem',
-    'lh-lg': '1.75rem',
     'fs-xl': '1.25rem',
-    'lh-xl': '1.75rem',
     'fs-2xl': '1.5rem',
-    'lh-2xl': '2rem',
     'prose-font-size': '1rem',
 
     /* spacing & radius */

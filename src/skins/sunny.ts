@@ -11,9 +11,9 @@ export const sunny: Skin = {
   name: 'sunny',
   classes: {
     body: 'font-serif',
-    contentPane: 'prose [--tw-prose-bullets:rgba(43,43,43,1)] [--tw-prose-counters:rgba(43,43,43,1)]',
+    contentPane: 'prose',
     proseBody: '',
-    blogTitle: 'font-semibold leading-tight tracking-tight mb-3 text-[2.5rem] md:text-[3rem] text-[color:var(--title)]',
+    blogTitle: 'font-bold leading-tight tracking-tight mb-3 text-[2.5rem] md:text-[3rem] text-[color:var(--title)]',
   },
   cssVars: {
     /* core palette*/
@@ -24,31 +24,24 @@ export const sunny: Skin = {
     accent: '#D88B00',
     'accent-subtle': 'rgba(216,139,0,0.14)',
     link: '#0077CC',
-
-    /* list markers */
-    '--tw-prose-bullets': 'rgba(43,43,43,1)',
-    '--tw-prose-counters': 'rgba(43,43,43,1)',
+    title: '#1F1F1F', // title, headings, bold, inline code
 
     /* custom-elements */
     'el-accent': '#D88B00',
     'el-surface': '#FFFDF8',
     'el-text': '#2B2B2B',
-    'title': '#1F1F1F',
     'el-radius': '4px',
 
     /* typography & sizing */
     'font-mono': 'IBM Plex Mono, ui-monospace, SFMono-Regular, Menlo, monospace',
     // serif stack only used via Tailwind's built-in font-serif class
-    'fs-base': '0.9375rem',
-    'lh-base': '1.7',
-    'fs-sm': '0.85rem',
-    'lh-sm': '1.35rem',
-    'fs-lg': '1.125rem',
-    'lh-lg': '1.8rem',
-    'fs-xl': '1.3rem',
-    'lh-xl': '1.9rem',
-    'fs-2xl': '1.6rem',
-    'lh-2xl': '2.1rem',
+    // every size is dark's x1.11: the serif runs smaller than Plex at equal size
+    'fs-xs': '0.83rem',
+    'fs-sm': '0.9rem',
+    'fs-base': '0.97rem',
+    'fs-lg': '1.25rem',
+    'fs-xl': '1.39rem',
+    'fs-2xl': '1.67rem',
     'prose-font-size': '1.11rem',
 
     /* spacing & radius */

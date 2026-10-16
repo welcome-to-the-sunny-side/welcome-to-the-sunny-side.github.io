@@ -32,6 +32,7 @@ A static, terminal-driven personal website/blog built with Astro + Svelte + Tail
 - Markdown source is loaded via `import.meta.glob('...', { query: '?raw' })` and parsed by a tiny custom YAML parser in `src/lib/frontmatter.ts`. Do *not* switch to Astro's compiled-frontmatter API — it inflates per-page chunks ~2.5×. The *eager* raw glob in `src/lib/prerender.ts` is server-only: never import that module from a Svelte component or the whole content tree lands in the client bundle.
 - `build.format: 'file'` plus `.html` slugs makes Astro emit `dist/foo.html.html`; the `postbuild` hook (`tools/fix-html-filenames.mjs`) renames these to `foo.html` so `dist/` matches the site's URLs on any static host, including `astro preview`.
 - The site uses xterm.js for the terminal UI
+- Parked experiment: recolouring the dark home image for the sunny skin (`tools/experiments/home-bg-tritone.py`). Findings and why it stalled are under "Parked: sunny recolour of the dark home image" in `site-reference.md`; read them before retrying.
 - `site-reference.md` contains comprehensive documentation about all components — consult it for detailed implementation questions. Keep it updated when making changes to the site.
 - Skin system provides per-skin CSS variables including `--code-bg` and `--code-border` for inline code styling
 - Skin application happens in `src/stores/skin.ts` via `applySkin()` — do not duplicate this logic in BaseLayout or elsewhere

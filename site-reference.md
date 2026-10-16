@@ -208,7 +208,19 @@ Two independent theming systems. The split exists because a real terminal window
 - `src/stores/skin.ts` is the single source of DOM side effects: `applySkin()` writes the classes and CSS variables to `<html>` / `<body>`. Do not duplicate this logic elsewhere (in particular, `BaseLayout.astro` should never have an inline skin script).
 - Tailwind tokens (color, font, spacing, radius, easing) reference these CSS variables, so a skin can override every visual token without rebuilding.
 - Selection persists in `localStorage` under `wtss-skin`.
+- Prose colours come from the skin, not the typography plugin's greys: `tailwind.config.js` maps `--tw-prose-{body,headings,bold,code,bullets,counters}` (and their `-invert-` twins) to `--text`, `--title`, `--text-muted`. Every skin must define `--title`.
+- Font sizes `fs-{xs,sm,base,lg,xl,2xl}` are per-skin (sunny = dark ×1.11, same as prose); their line heights are unitless and shared, set in `tailwind.config.js`.
 - `classes.proseBody` is added only to the blog `<article>` and musings articles (not raw `.html` pages). The dark skin uses it to set headings, paragraphs, list items, blockquotes and table cells in IBM Plex Sans (Tailwind `font-sans`, loaded in `global.css`; the dark `blogTitle` uses it too) while code, the post date/tags and the terminal stay in IBM Plex Mono. Plex Sans runs larger than sunny's serif at the same size, so sunny's `prose-font-size` (`1.11rem`) is set ~1/0.9× dark's (`1rem`) to keep the two skins visually matched. Sunny sets it to `''`.
+
+### Parked: sunny recolour of the dark home image
+
+Tried 2026-10-16 and frozen; sunny still uses its own home image (`active/sunny/`). Script kept at `tools/experiments/home-bg-tritone.py` (usage in its docstring).
+
+- **Goal:** give the sunny skin a version of the dark home image (`expoutput-1500w.webp`) in the sunny palette. Two directions: a "vanilla" port (same light/dark layout) and an inverted, "dark heaven cyberpunk" port.
+- **Key finding:** the dark image is a *tritone*: solid black, bright teal, and scanlines that are a dark shade of the teal, not black. A two-colour (duotone) map sends scanlines and solids to the same dark, and the scanline areas average into mud. Mapping the three luminance stops (about 0 / 37 / 230) to three colours keeps the original's clean look.
+- **Best result:** "v4", vanilla: solid `#2A1A0A`, scanlines `#D9A441`, light `#FAF8F4`. Inverted favourites were "i1" (solid `#F6F2EC`, scanlines `#8A520F`, dark `#121110`) and "i4" (`#F6F2EC`, `#6A3C08`, `#0B0907`).
+- **Why it stalled:** v4's light areas average out to tan (about `#EAD09F`), clearly darker than the blog background `#F6F2EC`. Lightening it (paler scanline colour, and/or reaching cream earlier in the luminance ramp so the lines thin out) made the image look rough and patchy in places, already at "v4c" (scanlines `#E6BF73`, cream reached at L150). Untested guess: the steep ramp is amplifying compression noise in the source webp's teal fields.
+- **Ideas if resumed:** start from a less-compressed or higher-resolution master; smooth or denoise the luminance before mapping; or keep v4's colours and lighten with a cream overlay in CSS instead of changing the ramp. The mobile image (`mobileoutput1.jpg`) was never converted.
 
 ### Terminal themes (`tskins` / `tskin`)
 

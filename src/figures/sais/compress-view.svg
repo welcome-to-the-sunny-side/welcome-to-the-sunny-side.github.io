@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 608">
+<text x="120" y="136.0" text-anchor="middle" font-style="italic" font-size="52" style="font-family:var(--fig-serif);fill:var(--fig-ink)">T</text>
+<text x="120" y="496.0" text-anchor="middle" font-style="italic" font-size="52" style="font-family:var(--fig-serif);fill:var(--fig-ink)">T′</text>
+<g opacity=".4">
+<text x="255.0" y="66" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">0</text>
+<rect x="221" y="85" width="68" height="68" stroke-opacity=".25" stroke-width="2" style="fill:var(--fig-tile);stroke:var(--fig-ink)"/>
+<text x="255.0" y="132.0" text-anchor="middle" font-weight="600" font-size="36" style="font-family:var(--font-mono);fill:var(--fig-ink)">b</text>
+<text x="255.0" y="188" text-anchor="middle" font-style="italic" font-weight="600" font-size="22" style="font-family:var(--fig-serif);fill:var(--fig-l-text)">L</text>
+</g>
+<g>
+<text x="333.0" y="66" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">1</text>
+<rect x="298" y="84" width="70" height="70" style="fill:var(--fig-s)"/>
+<text x="333.0" y="132.0" text-anchor="middle" font-weight="600" font-size="36" style="font-family:var(--font-mono);fill:var(--fig-on-s)">a</text>
+<text x="333.0" y="188" text-anchor="middle" font-style="italic" font-weight="600" font-size="22" style="font-family:var(--fig-serif);fill:var(--fig-s-text)">S</text>
+</g>
+<g>
+<text x="411.0" y="66" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">2</text>
+<rect x="377" y="85" width="68" height="68" stroke-opacity=".25" stroke-width="2" style="fill:var(--fig-tile);stroke:var(--fig-ink)"/>
+<text x="411.0" y="132.0" text-anchor="middle" font-weight="600" font-size="36" style="font-family:var(--font-mono);fill:var(--fig-ink)">a</text>
+<text x="411.0" y="188" text-anchor="middle" font-style="italic" font-weight="600" font-size="22" style="font-family:var(--fig-serif);fill:var(--fig-s-text)">S</text>
+</g>
+<g>
+<text x="489.0" y="66" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">3</text>
+<rect x="455" y="85" width="68" height="68" stroke-opacity=".25" stroke-width="2" style="fill:var(--fig-tile);stroke:var(--fig-ink)"/>
+<text x="489.0" y="132.0" text-anchor="middle" font-weight="600" font-size="36" style="font-family:var(--font-mono);fill:var(--fig-ink)">c</text>
+<text x="489.0" y="188" text-anchor="middle" font-style="italic" font-weight="600" font-size="22" style="font-family:var(--fig-serif);fill:var(--fig-l-text)">L</text>
+</g>
+<g>
+<text x="567.0" y="66" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">4</text>
+<rect x="532" y="84" width="70" height="70" style="fill:var(--fig-s)"/>
+<text x="567.0" y="132.0" text-anchor="middle" font-weight="600" font-size="36" style="font-family:var(--font-mono);fill:var(--fig-on-s)">b</text>
+<text x="567.0" y="188" text-anchor="middle" font-style="italic" font-weight="600" font-size="22" style="font-family:var(--fig-serif);fill:var(--fig-s-text)">S</text>
+</g>
+<g>
+<text x="645.0" y="66" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">5</text>
+<rect x="611" y="85" width="68" height="68" stroke-opacity=".25" stroke-width="2" style="fill:var(--fig-tile);stroke:var(--fig-ink)"/>
+<text x="645.0" y="132.0" text-anchor="middle" font-weight="600" font-size="36" style="font-family:var(--font-mono);fill:var(--fig-ink)">c</text>
+<text x="645.0" y="188" text-anchor="middle" font-style="italic" font-weight="600" font-size="22" style="font-family:var(--fig-serif);fill:var(--fig-l-text)">L</text>
+</g>
+<g>
+<text x="723.0" y="66" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">6</text>
+<rect x="689" y="85" width="68" height="68" stroke-opacity=".25" stroke-width="2" style="fill:var(--fig-tile);stroke:var(--fig-ink)"/>
+<text x="723.0" y="132.0" text-anchor="middle" font-weight="600" font-size="36" style="font-family:var(--font-mono);fill:var(--fig-ink)">b</text>
+<text x="723.0" y="188" text-anchor="middle" font-style="italic" font-weight="600" font-size="22" style="font-family:var(--fig-serif);fill:var(--fig-l-text)">L</text>
+</g>
+<g>
+<text x="801.0" y="66" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">7</text>
+<rect x="766" y="84" width="70" height="70" style="fill:var(--fig-s)"/>
+<text x="801.0" y="132.0" text-anchor="middle" font-weight="600" font-size="36" style="font-family:var(--font-mono);fill:var(--fig-on-s)">a</text>
+<text x="801.0" y="188" text-anchor="middle" font-style="italic" font-weight="600" font-size="22" style="font-family:var(--fig-serif);fill:var(--fig-s-text)">S</text>
+</g>
+<g>
+<text x="879.0" y="66" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">8</text>
+<rect x="845" y="85" width="68" height="68" stroke-opacity=".25" stroke-width="2" style="fill:var(--fig-tile);stroke:var(--fig-ink)"/>
+<text x="879.0" y="132.0" text-anchor="middle" font-weight="600" font-size="36" style="font-family:var(--font-mono);fill:var(--fig-ink)">c</text>
+<text x="879.0" y="188" text-anchor="middle" font-style="italic" font-weight="600" font-size="22" style="font-family:var(--fig-serif);fill:var(--fig-l-text)">L</text>
+</g>
+<g>
+<text x="957.0" y="66" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">9</text>
+<rect x="922" y="84" width="70" height="70" style="fill:var(--fig-s)"/>
+<text x="957.0" y="132.0" text-anchor="middle" font-weight="600" font-size="36" style="font-family:var(--font-mono);fill:var(--fig-on-s)">b</text>
+<text x="957.0" y="188" text-anchor="middle" font-style="italic" font-weight="600" font-size="22" style="font-family:var(--fig-serif);fill:var(--fig-s-text)">S</text>
+</g>
+<g>
+<text x="1035.0" y="66" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">10</text>
+<rect x="1001" y="85" width="68" height="68" stroke-opacity=".25" stroke-width="2" style="fill:var(--fig-tile);stroke:var(--fig-ink)"/>
+<text x="1035.0" y="132.0" text-anchor="middle" font-weight="600" font-size="36" style="font-family:var(--font-mono);fill:var(--fig-ink)">c</text>
+<text x="1035.0" y="188" text-anchor="middle" font-style="italic" font-weight="600" font-size="22" style="font-family:var(--fig-serif);fill:var(--fig-s-text)">S</text>
+</g>
+<g>
+<text x="1113.0" y="66" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">11</text>
+<rect x="1079" y="85" width="68" height="68" stroke-opacity=".25" stroke-width="2" style="fill:var(--fig-tile);stroke:var(--fig-ink)"/>
+<text x="1113.0" y="132.0" text-anchor="middle" font-weight="600" font-size="36" style="font-family:var(--font-mono);fill:var(--fig-ink)">c</text>
+<text x="1113.0" y="188" text-anchor="middle" font-style="italic" font-weight="600" font-size="22" style="font-family:var(--fig-serif);fill:var(--fig-s-text)">S</text>
+</g>
+<g>
+<text x="1191.0" y="66" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">12</text>
+<rect x="1157" y="85" width="68" height="68" stroke-opacity=".25" stroke-width="2" style="fill:var(--fig-tile);stroke:var(--fig-ink)"/>
+<text x="1191.0" y="132.0" text-anchor="middle" font-weight="600" font-size="36" style="font-family:var(--font-mono);fill:var(--fig-ink)">d</text>
+<text x="1191.0" y="188" text-anchor="middle" font-style="italic" font-weight="600" font-size="22" style="font-family:var(--fig-serif);fill:var(--fig-l-text)">L</text>
+</g>
+<g>
+<text x="1269.0" y="66" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">13</text>
+<rect x="1235" y="85" width="68" height="68" stroke-opacity=".25" stroke-width="2" style="fill:var(--fig-tile);stroke:var(--fig-ink)"/>
+<text x="1269.0" y="132.0" text-anchor="middle" font-weight="600" font-size="36" style="font-family:var(--font-mono);fill:var(--fig-ink)">a</text>
+<text x="1269.0" y="188" text-anchor="middle" font-style="italic" font-weight="600" font-size="22" style="font-family:var(--fig-serif);fill:var(--fig-l-text)">L</text>
+</g>
+<g>
+<text x="1347.0" y="66" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">14</text>
+<rect x="1313" y="85" width="68" height="68" stroke-opacity=".25" stroke-width="2" style="fill:var(--fig-tile);stroke:var(--fig-ink)"/>
+<text x="1347.0" y="132.0" text-anchor="middle" font-weight="600" font-size="36" style="font-family:var(--font-mono);fill:var(--fig-ink)">a</text>
+<text x="1347.0" y="188" text-anchor="middle" font-style="italic" font-weight="600" font-size="22" style="font-family:var(--fig-serif);fill:var(--fig-l-text)">L</text>
+</g>
+<g>
+<text x="1425.0" y="66" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">15</text>
+<rect x="1390" y="84" width="70" height="70" style="fill:var(--fig-s)"/>
+<text x="1425.0" y="132.0" text-anchor="middle" font-weight="600" font-size="36" style="font-family:var(--font-mono);fill:var(--fig-on-s)">$</text>
+<text x="1425.0" y="188" text-anchor="middle" font-style="italic" font-weight="600" font-size="22" style="font-family:var(--fig-serif);fill:var(--fig-s-text)">S</text>
+</g>
+<path d="M304.0,242 L304.0,258 L596.0,258 L596.0,242" fill="none" stroke-opacity=".55" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" style="stroke:var(--fig-ink)"/>
+<path d="M450.0,258 C450.0,350.4 400.0,333.6 400.0,426" fill="none" stroke-opacity=".4" stroke-width="2.2" style="stroke:var(--fig-ink)"/>
+<path d="M393.0,416 L400.0,426 L407.0,416" fill="none" stroke-opacity=".4" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" style="stroke:var(--fig-ink)"/>
+<path d="M538.0,214 L538.0,230 L830.0,230 L830.0,214" fill="none" stroke-opacity=".55" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" style="stroke:var(--fig-ink)"/>
+<path d="M684.0,230 C684.0,337.8 620.0,318.2 620.0,426" fill="none" stroke-opacity=".4" stroke-width="2.2" style="stroke:var(--fig-ink)"/>
+<path d="M613.0,416 L620.0,426 L627.0,416" fill="none" stroke-opacity=".4" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" style="stroke:var(--fig-ink)"/>
+<path d="M772.0,242 L772.0,258 L986.0,258 L986.0,242" fill="none" stroke-opacity=".55" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" style="stroke:var(--fig-ink)"/>
+<path d="M879.0,258 C879.0,350.4 840.0,333.6 840.0,426" fill="none" stroke-opacity=".4" stroke-width="2.2" style="stroke:var(--fig-ink)"/>
+<path d="M833.0,416 L840.0,426 L847.0,416" fill="none" stroke-opacity=".4" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" style="stroke:var(--fig-ink)"/>
+<path d="M928.0,214 L928.0,230 L1454.0,230 L1454.0,214" fill="none" stroke-opacity=".55" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" style="stroke:var(--fig-ink)"/>
+<path d="M1191.0,230 C1191.0,337.8 1060.0,318.2 1060.0,426" fill="none" stroke-opacity=".4" stroke-width="2.2" style="stroke:var(--fig-ink)"/>
+<path d="M1053.0,416 L1060.0,426 L1067.0,416" fill="none" stroke-opacity=".4" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" style="stroke:var(--fig-ink)"/>
+<path d="M1396.0,242 L1396.0,258 L1454.0,258 L1454.0,242" fill="none" stroke-opacity=".55" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" style="stroke:var(--fig-ink)"/>
+<path d="M1425.0,258 C1425.0,350.4 1280.0,333.6 1280.0,426" fill="none" stroke-opacity=".4" stroke-width="2.2" style="stroke:var(--fig-ink)"/>
+<path d="M1273.0,416 L1280.0,426 L1287.0,416" fill="none" stroke-opacity=".4" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" style="stroke:var(--fig-ink)"/>
+<rect x="308.0" y="441" width="184" height="76" stroke-opacity=".55" stroke-width="2.5" style="fill:var(--fig-tile);stroke:var(--fig-ink)"/>
+<text x="400.0" y="490.0" text-anchor="middle" font-weight="600" font-size="30" style="font-family:var(--font-mono);fill:var(--fig-ink)">aacb</text>
+<text x="400.0" y="554" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">T′[0]</text>
+<rect x="528.0" y="441" width="184" height="76" stroke-opacity=".55" stroke-width="2.5" style="fill:var(--fig-tile);stroke:var(--fig-ink)"/>
+<text x="620.0" y="490.0" text-anchor="middle" font-weight="600" font-size="30" style="font-family:var(--font-mono);fill:var(--fig-ink)">bcba</text>
+<text x="620.0" y="554" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">T′[1]</text>
+<rect x="748.0" y="441" width="184" height="76" stroke-opacity=".55" stroke-width="2.5" style="fill:var(--fig-tile);stroke:var(--fig-ink)"/>
+<text x="840.0" y="490.0" text-anchor="middle" font-weight="600" font-size="30" style="font-family:var(--font-mono);fill:var(--fig-ink)">acb</text>
+<text x="840.0" y="554" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">T′[2]</text>
+<rect x="968.0" y="441" width="184" height="76" stroke-opacity=".55" stroke-width="2.5" style="fill:var(--fig-tile);stroke:var(--fig-ink)"/>
+<text x="1060.0" y="490.0" text-anchor="middle" font-weight="600" font-size="30" style="font-family:var(--font-mono);fill:var(--fig-ink)">bccdaa$</text>
+<text x="1060.0" y="554" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">T′[3]</text>
+<rect x="1188.0" y="441" width="184" height="76" stroke-opacity=".55" stroke-width="2.5" style="fill:var(--fig-tile);stroke:var(--fig-ink)"/>
+<text x="1280.0" y="490.0" text-anchor="middle" font-weight="600" font-size="30" style="font-family:var(--font-mono);fill:var(--fig-ink)">$</text>
+<text x="1280.0" y="554" text-anchor="middle" font-size="16" style="font-family:var(--font-mono);fill:var(--fig-muted)">T′[4]</text>
+<rect x="1318" y="567" width="20" height="20" style="fill:var(--fig-s)"/>
+<text x="1348" y="584" font-size="19" style="font-family:var(--fig-serif);fill:var(--fig-ink)">LMS position</text>
+</svg>

@@ -6,6 +6,7 @@
 // readable without JavaScript (agents, search engines, link previews) and the
 // Svelte island can hydrate over it without re-rendering. Math is typeset
 // here too (typesetMath.ts), so the browser never runs MathJax for these pages.
+// SVG figures are inlined last (figures.ts).
 //
 // Pages that stay client-only (returned as kind 'client'):
 //   - `displayMode: musings` (MusingsStream fetches + decrypts at runtime)
@@ -17,6 +18,7 @@ import { getRenderer } from './markdown';
 import type { InitialContent, NavEntry } from './contentTypes';
 import { titleForPage } from './pageTitle';
 import { typesetMath } from './typesetMath';
+import { inlineFigures } from './figures';
 
 export type { InitialContent, NavEntry };
 
@@ -75,7 +77,7 @@ async function render(path: string): Promise<InitialContent> {
   const md = await getRenderer();
   const html = md.render(body);
   untypeset.set(path, html);
-  return { kind: 'md', path, html: await typesetMath(html), frontmatter: fm };
+  return { kind: 'md', path, html: inlineFigures(await typesetMath(html)), frontmatter: fm };
 }
 
 /** <title> for the page. */

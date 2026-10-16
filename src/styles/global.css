@@ -119,6 +119,15 @@ main::-webkit-scrollbar-thumb:hover, html::-webkit-scrollbar-thumb:hover {
   color: #7ee787;
 }
 
+/* Inline SVG figures (src/lib/figures.ts): scale to the column like an <img>;
+   colours and fonts come from the skin's fig-* variables */
+.svg-figure svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
 /* MathJax overflow/wrapping safeguards */
 /* Ensure inline/display math never forces the page wider than the viewport */
 mjx-container {

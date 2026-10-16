@@ -1,0 +1,33 @@
+/* Colours and fonts for the SA-IS figures, one block per skin.
+   Inlined (once) into any page that uses a figure from this folder, by src/lib/figures.ts.
+   Also read by bs/sais/claude/fig.py for its preview PNGs. Mono text uses the skin's --font-mono. */
+
+[data-skin="sunny"] .svg-figure[data-svg^="sais/"] {
+  --fig-ink: #2E2838;      /* text and lines */
+  --fig-muted: #8F8496;    /* indices and other quiet text */
+  --fig-tile: #FFFDF8;     /* plain tiles */
+  --fig-land: #F3E4D2;     /* area under the slope-view ridge */
+  --fig-vertex: #FFF8EC;   /* slope-view vertices */
+  --fig-s: #F2A541;        /* S-type marks */
+  --fig-l: #6F4E7C;        /* L-type marks */
+  --fig-s-text: #C9781A;   /* "S" set on the background */
+  --fig-l-text: #6F4E7C;   /* "L" set on the background */
+  --fig-on-s: #3A2410;     /* text on S-coloured tiles */
+  --fig-on-l: #FFF3E6;     /* text on L-coloured tiles */
+  --fig-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+[data-skin="dark"] .svg-figure[data-svg^="sais/"] {
+  --fig-ink: #D4D4D4;
+  --fig-muted: #8A8A8A;
+  --fig-tile: #222222;
+  --fig-land: #262320;
+  --fig-vertex: #1A1A1A;
+  --fig-s: #E89B3C;
+  --fig-l: #9A7BB8;
+  --fig-s-text: #E89B3C;
+  --fig-l-text: #B49AD0;
+  --fig-on-s: #1F1305;
+  --fig-on-l: #FFFFFF;
+  --fig-serif: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+}

@@ -182,11 +182,7 @@ Now, let's introduce a very helpful visualisation for strings that I'll just cal
 Let's look at some visualisations for $T = $ `baacbcbacbccdaa$` (where `$` is the appended unique minimum). I know I said that $T$ will have integer elements, but an english alphabet string is just nicer to look at, and is no different computationally (just assign some integer to every letter).
 
 <figure style="text-align: center;">
-  <img
-    src="/assets/sais/slope-view.png"
-    alt="Slope view of baacbcbacbccdaa$: rising (S-type) and falling (L-type) slants between adjacent positions"
-    style="display: block; margin: 0 auto;"
-  >
+  <div class="svg-figure" data-svg="sais/slope-view.svg" role="img" aria-label="Slope view of baacbcbacbccdaa$: rising (S-type) and falling (L-type) slants between adjacent positions"></div>
   <figcaption>
     The slope-view diagram for T.
   </figcaption>
@@ -202,11 +198,7 @@ A few observations:
 Also recall theorem 2.4. The buckets in the SA for $T$ take the following form.
 
 <figure style="text-align: center;">
-  <img
-    src="/assets/sais/bucket-view.png"
-    alt="Bucket structure of the suffix array of baacbcbacbccdaa$: slots split into buckets by first character ($, a, b, c, d), with L-type suffixes before S-type suffixes inside each bucket"
-    style="display: block; margin: 0 auto;"
-  >
+  <div class="svg-figure" data-svg="sais/bucket-view.svg" role="img" aria-label="Bucket structure of the suffix array of baacbcbacbccdaa$: slots split into buckets by first character ($, a, b, c, d), with L-type suffixes before S-type suffixes inside each bucket"></div>
   <figcaption>
     The buckets for the suffix array of T.
   </figcaption>
@@ -562,6 +554,13 @@ What would the time complexity of `SA(T)`, $f(N)$ ($N = \vert T \vert$) be? We h
 All that remains is to design such a `compress(T)`.
 
 Since the $i$-th suffix of $T'$ = `compress(T)` is going to correspond to the $i$-th LMS suffix of $T$ (which starts with $l_i$), it should be reasonably intuitive that we try to assign $T'_i$ a symbol that somehow represents the substring from the $i$-th LMS position to the $(i + 1)$-th (or if $i = m - 1$, the end of the string). Note that choosing this particular substring to be represented by $T'_i$ is only a design choice here.
+
+<figure style="text-align: center;">
+  <div class="svg-figure" data-svg="sais/compress-view.svg" role="img" aria-label="The substrings of baacbcbacbccdaa$ running from each LMS position to the next (aacb, bcba, acb, bccdaa$, $), each mapped to one symbol of T'"></div>
+  <figcaption>
+    The i-th symbol in T' will represent the substring of T from the i-th LMS position to the next.
+  </figcaption>
+</figure>
 
 ## 5.1 LMS Substrings
 

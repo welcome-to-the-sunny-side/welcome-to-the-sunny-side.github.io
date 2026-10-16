@@ -21,6 +21,8 @@ function applySkin(skin: Skin) {
   const rootCls = `h-full bg-bg text-text ${skin.classes.body}`;
   document.documentElement.className = rootCls;
   document.body.className = rootCls;
+  // lets CSS target a skin, e.g. the per-figure-set palettes in src/figures/*/palette.css
+  document.documentElement.dataset.skin = skin.name;
   const rs = document.documentElement.style;
   Object.entries(skin.cssVars).forEach(([k,v]) => rs.setProperty(`--${k}`, v));
   if (skin.inlineStyles?.body) {

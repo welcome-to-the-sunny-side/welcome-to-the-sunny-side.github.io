@@ -15,6 +15,7 @@ module.exports = {
         'text-muted': 'var(--text-muted)',
       },
       fontFamily: {
+        sans: ['IBM Plex Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         mono: [
           'var(--font-mono)',
           'ui-monospace',

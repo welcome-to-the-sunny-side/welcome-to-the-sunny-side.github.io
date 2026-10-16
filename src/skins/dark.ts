@@ -6,7 +6,9 @@ export const dark: Skin = {
   classes: {
     body: 'font-mono', // bg handled via css var
     contentPane: 'prose prose-invert',
-    blogTitle: 'text-2xl md:text-3xl font-semibold tracking-tight text-accent',
+    // proportional text for long-form reading; code, metadata and terminal stay mono
+    proseBody: 'prose-headings:font-sans prose-p:font-sans prose-li:font-sans prose-blockquote:font-sans prose-td:font-sans prose-th:font-sans prose-p:tracking-normal prose-li:tracking-normal prose-blockquote:tracking-normal prose-td:tracking-normal prose-th:tracking-normal',
+    blogTitle: 'font-sans font-bold leading-tight tracking-tight mb-3 text-[2.5rem] md:text-[3rem] text-accent',
   },
   cssVars: {
     bg: '#0d0d0d',
@@ -34,7 +36,7 @@ export const dark: Skin = {
     'lh-xl': '1.75rem',
     'fs-2xl': '1.5rem',
     'lh-2xl': '2rem',
-    'prose-font-size': '0.9rem',
+    'prose-font-size': '1rem',
 
     /* spacing & radius */
     'space-xs': '0.25rem',

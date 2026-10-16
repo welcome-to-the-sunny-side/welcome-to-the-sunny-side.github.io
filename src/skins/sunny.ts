@@ -12,7 +12,8 @@ export const sunny: Skin = {
   classes: {
     body: 'font-serif',
     contentPane: 'prose [--tw-prose-bullets:rgba(43,43,43,1)] [--tw-prose-counters:rgba(43,43,43,1)]',
-    blogTitle: 'font-semibold leading-tight tracking-tight mb-3 text-[2.1rem] md:text-[1.8rem] text-[color:var(--title)]',
+    proseBody: '',
+    blogTitle: 'font-semibold leading-tight tracking-tight mb-3 text-[2.5rem] md:text-[3rem] text-[color:var(--title)]',
   },
   cssVars: {
     /* core palette*/
@@ -48,7 +49,7 @@ export const sunny: Skin = {
     'lh-xl': '1.9rem',
     'fs-2xl': '1.6rem',
     'lh-2xl': '2.1rem',
-    'prose-font-size': '1rem',
+    'prose-font-size': '1.11rem',
 
     /* spacing & radius */
     'space-xs': '0.25rem',

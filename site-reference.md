@@ -208,6 +208,7 @@ Two independent theming systems. The split exists because a real terminal window
 - `src/stores/skin.ts` is the single source of DOM side effects: `applySkin()` writes the classes and CSS variables to `<html>` / `<body>`. Do not duplicate this logic elsewhere (in particular, `BaseLayout.astro` should never have an inline skin script).
 - Tailwind tokens (color, font, spacing, radius, easing) reference these CSS variables, so a skin can override every visual token without rebuilding.
 - Selection persists in `localStorage` under `wtss-skin`.
+- `classes.proseBody` is added only to the blog `<article>` and musings articles (not raw `.html` pages). The dark skin uses it to set headings, paragraphs, list items, blockquotes and table cells in IBM Plex Sans (Tailwind `font-sans`, loaded in `global.css`; the dark `blogTitle` uses it too) while code, the post date/tags and the terminal stay in IBM Plex Mono. Plex Sans runs larger than sunny's serif at the same size, so sunny's `prose-font-size` (`1.11rem`) is set ~1/0.9× dark's (`1rem`) to keep the two skins visually matched. Sunny sets it to `''`.
 
 ### Terminal themes (`tskins` / `tskin`)
 

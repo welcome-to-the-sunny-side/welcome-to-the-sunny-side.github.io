@@ -387,7 +387,7 @@ $: skin = $currentSkin;
         </ul>
       {/if}
     </header>
-    <article class={`${skin.classes.contentPane} max-w-none`}>
+    <article class={`${skin.classes.contentPane} ${skin.classes.proseBody} max-w-none`}>
       {@html isLoading && previousContentHtml ? previousContentHtml : contentHtml}
     </article>
   </section>

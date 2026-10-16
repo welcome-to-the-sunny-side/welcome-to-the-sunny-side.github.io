@@ -355,7 +355,7 @@
         </div>
       {:else if decryptedMd[e.id]}
         <div class="mt-1">
-          <article class="{$currentSkin.classes.contentPane} max-w-none">
+          <article class="{$currentSkin.classes.contentPane} {$currentSkin.classes.proseBody} max-w-none">
             {@html md ? md.render(decryptedMd[e.id].md) : ''}
           </article>
         </div>

@@ -831,7 +831,9 @@ for(int i = 0; i <= n; i ++)
 
 The justification of its correctness is basically identical to that of procedure 3, and is left as an exercise to the reader.
 
-Now that we have filled the L-regions of $C$, we turn our attention back to the S-induce. A (perhaps) surprising fact - we don't need to change anything at all in procedure 4. Once again, the proof is very similar to what we've done before (one change to note is that the position of an L-type $i$ within the suffix array previously encoded information about $S_i$, but now encodes information about $P_i$), and is left as an exercise to the reader.
+Now that we have filled the L-regions of $C$, we turn our attention back to the S-regions. A (perhaps) surprising fact - we don't need to change anything at all about procedure 4. Running the S-induce on $C$ now will correctly compute the S-regions!!
+
+Once again, the proof is very similar to what we've done before (one change to note is that the position of an L-type $i$ within the suffix array previously encoded information about $S_i$, but now encodes information about $P_i$), and is left as an exercise to the reader.
 
 And... we end up with $C$, correctly and efficiently computed.
 

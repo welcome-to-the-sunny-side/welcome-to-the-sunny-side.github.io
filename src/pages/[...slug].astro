@@ -29,5 +29,14 @@ const initial = await prerenderPath('/' + slug);
 const title = pageTitle(initial);
 const description = pageDescription(initial);
 const canonicalPath = initial.kind === 'home' ? '/' : initial.path;
+
+// The article HTML (typeset math included) is large; keep it out of the
+// island's serialized props, which would ship it a second time. Astro skips
+// non-enumerable keys when serializing, but the server render still reads it,
+// and ContentPane picks the HTML back up from the DOM on the client.
+const pageInitial = { ...initial };
+if (pageInitial.kind === 'md') {
+  Object.defineProperty(pageInitial, 'html', { value: initial.kind === 'md' ? initial.html : '', enumerable: false });
+}
 ---
-<BaseLayout {initial} {title} {description} {canonicalPath} />
+<BaseLayout initial={pageInitial} {title} {description} {canonicalPath} />

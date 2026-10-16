@@ -56,6 +56,8 @@
             settings: { enrich: false, speech: false, braille: false, assistiveMml: true, inTabOrder: false },
           },
         },
+        // Pages are typeset at build time; only typeset what we hand it.
+        startup: { typeset: false },
         output: {
           displayOverflow: 'linebreak',
           linebreaks: { inline: true, width: '100%', lineleading: .2 },
@@ -93,11 +95,20 @@ let isNavView = preRendered?.kind === 'nav';
 type NavEntry = { name: string; path: string; isDir: boolean };
 let navViewEntries: NavEntry[] = preRendered?.kind === 'nav' ? preRendered.entries : [];
 let navViewDir = preRendered?.kind === 'nav' ? preRendered.navDir : '';
-let contentHtml: string = preRendered?.kind === 'md' ? preRendered.html : '';
+// On the client the pre-rendered HTML isn't in the props (see [...slug].astro);
+// read it back from the server-rendered markup so hydration matches.
+const initialHtml = (): string => {
+  if (preRendered?.kind !== 'md') return '';
+  if (typeof document === 'undefined') return preRendered.html;
+  const el = document.querySelector(preRendered.frontmatter.displayMode === 'blog' ? 'main article' : '#content-html-container');
+  return preRendered.html || el?.innerHTML || '';
+};
+let contentHtml: string = initialHtml();
 let previousContentHtml: string = '';
 let isLoading = false;
 let pendingTypeset = false;
 let pendingScriptExec = false;
+let pendingRebreak = false;
 type Device = 'pc' | 'mobile';
 // Home background image URLs are listed in /home-bg-index.json (built by
 // tools/build-home-bg-index.mjs). We fetch the manifest on first home view
@@ -150,14 +161,11 @@ $: skin = $currentSkin;
   onMount(() => {
     loadContent();
 
-    // The first page came pre-rendered, so markdown-it wasn't needed yet.
-    // Fetch it once the browser is idle so the first terminal navigation is
-    // as snappy as it was when the chunk loaded up front.
-    if (preRendered?.kind === 'md') {
-      const idle = (cb: () => void) =>
-        'requestIdleCallback' in window ? (window as any).requestIdleCallback(cb) : setTimeout(cb, 1500);
-      idle(() => { ensureRenderer().catch(() => {}); });
-    }
+    // Spoilers start closed, so their display math can only be measured once opened.
+    const onToggle = (e: Event) => {
+      if ((e.target as HTMLDetailsElement).open) rebreakDisplayMath();
+    };
+    document.addEventListener('toggle', onToggle, true);
 
     const checkMobile = () => {
       isMobileView = typeof window !== 'undefined' && window.innerWidth < 768; // md: 768px
@@ -173,6 +181,7 @@ $: skin = $currentSkin;
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', checkMobile);
       }
+      document.removeEventListener('toggle', onToggle, true);
     };
   });
 
@@ -221,6 +230,7 @@ $: skin = $currentSkin;
     const htmlKey = '../content' + filePath;
 
     let contentFound = false;
+    let fetched: Extract<InitialContent, { kind: 'md' }> | null = null;
 
     if (isHome) {
       // Home: show background (handled via isHomeWithBackground). No HTML body required.
@@ -229,22 +239,31 @@ $: skin = $currentSkin;
       isMusings = false;
       // Keep contentHtml as-is (previous page) until displayPath switches; then template shows background.
       contentFound = true;
-    } else if (preRendered?.kind === 'md' && filePath === preRendered.path) {
-      // Serve the build-time render: same HTML markdown-it would produce,
-      // without downloading markdown-it/highlight.js first.
+    } else if (preRendered?.kind === 'md' && filePath === preRendered.path && !isLoading) {
+      // Build-time render (math already typeset), already in contentHtml.
+      // First load only: navigating back here later goes through
+      // fetchPrerendered like any other page.
       frontmatter = preRendered.frontmatter;
       isBlog = frontmatter.displayMode === 'blog';
       isMusings = false;
-      contentHtml = preRendered.html;
-      await ensureMathJaxLoaded();
+      await tick();
+      await rebreakDisplayMath();
+      contentFound = true;
+    } else if (mdKey in pagesMd && (fetched = await fetchPrerendered(filePath))) {
+      // Client-side navigation to a markdown page: same build-time render.
+      frontmatter = fetched.frontmatter;
+      isBlog = frontmatter.displayMode === 'blog';
+      isMusings = false;
+      contentHtml = fetched.html;
       await tick();
       if (isLoading) {
-        pendingTypeset = true;
+        pendingRebreak = true;
       } else {
-        await typesetMath();
+        await rebreakDisplayMath();
       }
       contentFound = true;
     } else if (mdKey in pagesMd) {
+      // Musings (no build-time render) are rendered and typeset here.
       await ensureRenderer();
       await ensureMathJaxLoaded();
       const raw = (await (pagesMd as any)[mdKey]()) as string;
@@ -318,24 +337,67 @@ $: skin = $currentSkin;
         try { await typesetMath(); } catch {}
         pendingTypeset = false;
       }
+      if (pendingRebreak) {
+        await tick();
+        try { await rebreakDisplayMath(); } catch {}
+        pendingRebreak = false;
+      }
     }
     
     return contentFound;
   }
 
+  // Build-time render of a markdown page (src/pages/prerendered/[...slug].json.ts).
+  // Musings have none, so they 404 here and fall back to client rendering.
+  async function fetchPrerendered(filePath: string): Promise<Extract<InitialContent, { kind: 'md' }> | null> {
+    try {
+      const r = await fetch('/prerendered' + filePath.replace(/\.html$/, '.json'));
+      if (!r.ok) return null;
+      const data = await r.json();
+      return data?.kind === 'md' ? data : null;
+    } catch {
+      return null;
+    }
+  }
+
+  const waitForMJ = () => new Promise<any>((resolve) => {
+    const check = () => {
+      const MJ = (window as any).MathJax;
+      if (!MJ) { setTimeout(check, 25); return; }
+      const p = MJ.startup?.promise;
+      if (p && typeof p.then === 'function') { p.then(() => resolve(MJ)); }
+      else resolve(MJ);
+    };
+    check();
+  });
+
+  // Build-time math can't break long display equations (no column width at
+  // build time), so they carry their TeX in data-tex. Re-typeset only the
+  // ones that overflow here; pages where everything fits never load MathJax.
+  async function rebreakDisplayMath() {
+    if (typeof window === 'undefined') return;
+    const wide = [...document.querySelectorAll<HTMLElement>('mjx-container[display="true"][data-tex]')]
+      .filter((el) => !el.dataset.rebreak && el.scrollWidth > el.clientWidth + 1);
+    if (!wide.length) return;
+    wide.forEach((el) => (el.dataset.rebreak = '1'));
+    try {
+      await ensureMathJaxLoaded();
+      const MJ = await waitForMJ();
+      const fresh = wide.map((el) => {
+        const span = document.createElement('span');
+        span.textContent = '\\[' + el.dataset.tex + '\\]';
+        el.replaceWith(span);
+        return span;
+      });
+      await MJ.typesetPromise(fresh);
+    } catch (e) {
+      console.warn('MathJax re-break failed:', e);
+    }
+  }
+
   // Wait for MathJax to be ready and typeset the page content.
   async function typesetMath() {
     if (typeof window === 'undefined') return;
-    const waitForMJ = () => new Promise<any>((resolve) => {
-      const check = () => {
-        const MJ = (window as any).MathJax;
-        if (!MJ) { setTimeout(check, 25); return; }
-        const p = MJ.startup?.promise;
-        if (p && typeof p.then === 'function') { p.then(() => resolve(MJ)); }
-        else resolve(MJ);
-      };
-      check();
-    });
     try {
       const MJ = await waitForMJ();
       if (MJ?.typesetClear) MJ.typesetClear();

@@ -4,7 +4,8 @@
 // time) — nothing here is shipped to the browser. It produces the same HTML
 // that ContentPane.svelte would produce client-side, so the static page is
 // readable without JavaScript (agents, search engines, link previews) and the
-// Svelte island can hydrate over it without re-rendering.
+// Svelte island can hydrate over it without re-rendering. Math is typeset
+// here too (typesetMath.ts), so the browser never runs MathJax for these pages.
 //
 // Pages that stay client-only (returned as kind 'client'):
 //   - `displayMode: musings` (MusingsStream fetches + decrypts at runtime)
@@ -15,6 +16,7 @@ import { parseFrontmatter } from './frontmatter';
 import { getRenderer } from './markdown';
 import type { InitialContent, NavEntry } from './contentTypes';
 import { titleForPage } from './pageTitle';
+import { typesetMath } from './typesetMath';
 
 export type { InitialContent, NavEntry };
 
@@ -35,8 +37,21 @@ export function navEntriesFor(dirPath: string): NavEntry[] {
   });
 }
 
+// Memoised: the page route and the /prerendered JSON route both ask for the
+// same paths, and typesetting a math-heavy page takes a few hundred ms.
+const cache = new Map<string, Promise<InitialContent>>();
+// markdown-it output before typesetting, for the meta description (typeset
+// math would turn into the screen-reader MathML's text).
+const untypeset = new Map<string, string>();
+
 /** Resolve a VFS path (e.g. "/algo/theory/foo.html") to its initial content. */
-export async function prerenderPath(path: string): Promise<InitialContent> {
+export function prerenderPath(path: string): Promise<InitialContent> {
+  let p = cache.get(path);
+  if (!p) cache.set(path, (p = render(path)));
+  return p;
+}
+
+async function render(path: string): Promise<InitialContent> {
   // The client router maps "/" to "/home.html", so the root index.html file
   // (what "/" serves) is pre-rendered as home rather than the root listing.
   if (path === '/' || path === '/home.html' || path === '/index.html') {
@@ -58,7 +73,9 @@ export async function prerenderPath(path: string): Promise<InitialContent> {
   if (fm.displayMode === 'musings') return { kind: 'client', path };
 
   const md = await getRenderer();
-  return { kind: 'md', path, html: md.render(body), frontmatter: fm };
+  const html = md.render(body);
+  untypeset.set(path, html);
+  return { kind: 'md', path, html: await typesetMath(html), frontmatter: fm };
 }
 
 /** <title> for the page. */
@@ -70,10 +87,11 @@ export function pageTitle(initial: InitialContent): string {
  *  the first substantial paragraph, falling back to the whole text. */
 export function pageDescription(initial: InitialContent): string | null {
   if (initial.kind !== 'md') return null;
-  const paragraphs = [...initial.html.matchAll(/<p[\s>][\s\S]*?<\/p>/gi)]
+  const html = untypeset.get(initial.path) ?? initial.html;
+  const paragraphs = [...html.matchAll(/<p[\s>][\s\S]*?<\/p>/gi)]
     .map((m) => htmlToText(m[0]))
     .filter((t) => t.length >= 40);
-  const text = paragraphs[0] ?? htmlToText(initial.html);
+  const text = paragraphs[0] ?? htmlToText(html);
   if (!text) return null;
   return text.length > 160 ? text.slice(0, 157).trimEnd() + '…' : text;
 }

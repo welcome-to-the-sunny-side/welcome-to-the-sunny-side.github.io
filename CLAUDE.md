@@ -28,7 +28,8 @@ A static, terminal-driven personal website/blog built with Astro + Svelte + Tail
 ## Key Details
 
 - Tailwind uses CSS custom properties for theming — colors, fonts, spacing are all `var(--*)` based (see `tailwind.config.js`)
-- Markdown rendering uses markdown-it + MathJax (math, loaded from CDN) + highlight.js (code). The renderer is a shared singleton in `src/lib/markdown.ts` — do not build a second markdown-it instance elsewhere.
+- Markdown rendering uses markdown-it + MathJax (math) + highlight.js (code). The renderer is a shared singleton in `src/lib/markdown.ts` — do not build a second markdown-it instance elsewhere.
+- Math on markdown pages is typeset at **build time** (`src/lib/typesetMath.ts`, server-only, like `prerender.ts`). Client-side navigation fetches the same render from `/prerendered/<path>.json`. Client MathJax (CDN) only runs for musings, raw `.html` pages, 404, and re-breaking overflowing display equations (`rebreakDisplayMath` in `ContentPane`). Do not reintroduce whole-page client typesetting for markdown pages: it is what made math-heavy posts lag on mobile.
 - Markdown source is loaded via `import.meta.glob('...', { query: '?raw' })` and parsed by a tiny custom YAML parser in `src/lib/frontmatter.ts`. Do *not* switch to Astro's compiled-frontmatter API — it inflates per-page chunks ~2.5×. The *eager* raw glob in `src/lib/prerender.ts` is server-only: never import that module from a Svelte component or the whole content tree lands in the client bundle.
 - `build.format: 'file'` plus `.html` slugs makes Astro emit `dist/foo.html.html`; the `postbuild` hook (`tools/fix-html-filenames.mjs`) renames these to `foo.html` so `dist/` matches the site's URLs on any static host, including `astro preview`.
 - The site uses xterm.js for the terminal UI

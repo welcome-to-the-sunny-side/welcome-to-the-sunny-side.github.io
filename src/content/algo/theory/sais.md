@@ -204,7 +204,7 @@ Also recall theorem 2.4. The buckets in the SA for $T$ take the following form.
 <figure style="text-align: center;">
   <img
     src="/assets/sais/bucket-view.png"
-    alt="Suffix array of baacbcbacbccdaa$ split into buckets by first character ($, a, b, c, d), with L-type suffixes before S-type suffixes inside each bucket"
+    alt="Bucket structure of the suffix array of baacbcbacbccdaa$: slots split into buckets by first character ($, a, b, c, d), with L-type suffixes before S-type suffixes inside each bucket"
     style="display: block; margin: 0 auto;"
   >
   <figcaption>
@@ -361,7 +361,7 @@ What if we could do the following at the same time?:
 
 Effectively (and I switch to pseudo-code now):
 
-```python
+```pseudo
 A = [-1] * (n + 1)
 for i from 0 to n:
   if (A[i] != -1) and (A[i] is L or LMS type):
@@ -385,7 +385,7 @@ In particular, we can already modify procedure 2 to run in linear time *for the 
 <details><summary class ="spoiler-summary">Procedure 2.5</summary>
 <div class = "spoiler-content">
 
-```python
+```pseudo
 A = [-1] * (n + 1)
 
 put {S[i], i} for all LMS-type i into heap H
@@ -535,7 +535,7 @@ Let's think outside the box. The observant reader will remember that the number 
 
 Let's imagine a magical procedure `compress(T)` which gives us such a $T'$ *in linear time*. Then we can define `SA(T)`, which computes the SA of $T$ (assuming that $T$ satisfies the conditions in section 1) in the following manner:
 
-```python
+```pseudo
 #input T satisfies properties from section 1
 SA(T):
   N = |T|
@@ -625,7 +625,7 @@ Okay, so we've finally found a suitable definition for $R$ - $R(P_i) = \vert \lb
 
 What if we just sort full LMS substrings in alex order, and then label them? Namely, compute an array $X$ of length $m$ where $P_{X_i} \preceq P_{X_j} \forall i \leq j$, and $X_i$ is an LMS position in $T$ for all $i$. Consider the following procedure:
 
-```python
+```pseudo
 N = |T|
 
 somehow compute X
@@ -709,7 +709,7 @@ Now, let's try to adapt our old procedure 2 to produce $C$:
 <details><summary class ="spoiler-summary">Procedure 5</summary>
 <div class = "spoiler-content">
 
-```python
+```pseudo
 C = [-1] * (n + 1)
 
 put {T[i, i], i} for all LMS-type i into heap H, which uses the alex comparator
@@ -752,7 +752,7 @@ The observant reader will have noticed that our arguments have been almost ident
 <details><summary class ="spoiler-summary">Procedure 5.5</summary>
 <div class = "spoiler-content">
 
-```python
+```pseudo
 C = [-1] * (n + 1)
 
 put {T[i, i], i} for all LMS-type i into heap H
@@ -839,7 +839,7 @@ And... we end up with $C$, correctly and efficiently computed.
 
 Let's finally assemble our algorithm from the pieces we've painstakingly built:
 
-```python
+```pseudo
 # T satisfies conditions from section 1
 SA(T):
   N = |T|

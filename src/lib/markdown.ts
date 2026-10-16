@@ -4,6 +4,9 @@
 
 const HLJS_CPP_ALIASES = ['cpp', 'c++', 'cc', 'cxx', 'hpp', 'hxx'];
 
+// Fences used for pseudocode: no grammar is loaded, we only colour `#` comments.
+const PSEUDO_ALIASES = ['pseudo'];
+
 let cached: Promise<any> | null = null;
 
 export function getRenderer(): Promise<any> {
@@ -28,6 +31,11 @@ async function build(): Promise<any> {
         try {
           return `<pre class="hljs"><code>${hljs.highlight(str, { language: 'cpp' }).value}</code></pre>`;
         } catch {}
+      }
+      if (PSEUDO_ALIASES.includes(norm)) {
+        // escapeHtml never emits '#', so matching after escaping is safe
+        const body = md.utils.escapeHtml(str).replace(/#.*$/gm, '<span class="pseudo-comment">$&</span>');
+        return `<pre class="hljs"><code>${body}</code></pre>`;
       }
       return `<pre class="hljs"><code>${md.utils.escapeHtml(str)}</code></pre>`;
     },

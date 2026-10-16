@@ -113,6 +113,11 @@ main::-webkit-scrollbar-thumb:hover {
   font-family: var(--font-mono);
 }
 
+/* Comments in pseudocode fences (see src/lib/markdown.ts) */
+.hljs .pseudo-comment {
+  color: #7ee787;
+}
+
 /* MathJax overflow/wrapping safeguards */
 /* Ensure inline/display math never forces the page wider than the viewport */
 mjx-container {

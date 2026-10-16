@@ -45,7 +45,17 @@
           displayMath: [['$$', '$$'], ['\\[', '\\]']],
           processEscapes: true,
         },
-        options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+        options: {
+          skipHtmlTags: ['script','noscript','style','textarea','pre','code'],
+          // MathJax 4 defaults to semantic enrichment + speech + braille for
+          // every expression. On math-heavy posts (SA-IS: ~500 expressions)
+          // that took typesetting from ~0.4s to ~5.6s and blocked the main
+          // thread long enough to make mobile scrolling stutter. Hidden
+          // MathML (assistiveMml) keeps the math readable by screen readers.
+          menuOptions: {
+            settings: { enrich: false, speech: false, braille: false, assistiveMml: true, inTabOrder: false },
+          },
+        },
         output: {
           displayOverflow: 'linebreak',
           linebreaks: { inline: true, width: '100%', lineleading: .2 },

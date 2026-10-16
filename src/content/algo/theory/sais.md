@@ -184,7 +184,7 @@ Let's look at some visualisations for $T = $ `baacbcbacbccdaa$` (where `$` is th
 <figure style="text-align: center;">
   <img
     src="/assets/sais/slope-view.png"
-    alt="Slope view of baacbcbacbccdaa$: rising (S-type) and falling (L-type) slants between adjacent positions, with flags on the LMS valleys at positions 1, 4, 7, 9 and 15"
+    alt="Slope view of baacbcbacbccdaa$: rising (S-type) and falling (L-type) slants between adjacent positions"
     style="display: block; margin: 0 auto;"
   >
   <figcaption>

@@ -1,4 +1,1000 @@
-<!DOCTYPE html><html lang="en" class="h-full"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Offline Incremental SCC · Welcome to the Sunny Side!</title><meta name="description" content="Hello, in this blog I'll explain the algorithm from this Radewoosh blog . The linked blog is understandable and well-written (and honestly, this idea can be…"><link rel="canonical" href="https://www.welcome-to-the-sunny-side.com/algo/theory/offline_incremental_scc.html"><link rel="icon" href="/favicon.ico"><script async src="https://www.googletagmanager.com/gtag/js?id=G-FDGES615HV"></script><script type="module">window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-FDGES615HV");</script><link rel="stylesheet" href="/_astro/_slug_.DFBpVZ-4.css"></head> <body class="h-full"> <div class="h-screen w-screen grid grid-cols-1 grid-rows-[auto_1fr] md:grid-cols-[1fr_auto] md:grid-rows-1"> <!-- Mobile breadcrumb nav --> <div class="md:hidden"> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z1AQ8aI" component-url="/_astro/MobileNav.XGZTBScB.js" component-export="default" renderer-url="/_astro/client.svelte.DSigbiJE.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;MobileNav&quot;,&quot;value&quot;:true}" await-children><!--[--><nav class="md:hidden flex items-center px-3 py-2 bg-surface border-b border-accent-subtle font-mono text-sm"><div class="flex-1 flex items-center min-w-0 overflow-x-auto whitespace-nowrap"><!--[--><!--[!--><!--]--> <!--[!--><button class="crumb-link text-text-muted hover:text-accent transition-colors duration-150 svelte-xffx7i">~</button><!--]--><!--[--><span class="text-accent mx-1 select-none">/</span><!--]--> <!--[--><span class="text-text font-medium">home.html</span><!--]--><!--]--></div> <button class="flex-shrink-0 ml-3 text-text-muted hover:text-accent transition-colors duration-150 text-base leading-none" aria-label="Switch skin (current: dark)">☾</button></nav><!--]--><!--astro:end--></astro-island> </div> <!-- Content --> <main class="overflow-y-auto overflow-x-hidden bg-surface text-text transition-colors duration-150 ease-retro min-h-0"> <astro-island uid="Z8bp9p" component-url="/_astro/ContentPane.B3yYqng8.js" component-export="default" renderer-url="/_astro/client.svelte.DSigbiJE.js" props="{&quot;initial&quot;:[0,{&quot;kind&quot;:[0,&quot;md&quot;],&quot;path&quot;:[0,&quot;/algo/theory/offline_incremental_scc.html&quot;],&quot;html&quot;:[0,&quot;&lt;h2&gt;Outline&lt;/h2&gt;\n&lt;ul class=\&quot;outline-list\&quot;&gt;\n&lt;li&gt;Problem&lt;/li&gt;\n&lt;li&gt;Observations&lt;/li&gt;\n&lt;li&gt;Algorithm\n  &lt;ul&gt;\n    &lt;li&gt;Pre-Processing&lt;/li&gt;\n    &lt;li&gt;Answering Queries\n      &lt;ul&gt;\n        &lt;li&gt;Queries based on number of edges added&lt;/li&gt;\n        &lt;li&gt;Queries based on nodes&lt;/li&gt;\n      &lt;/ul&gt;\n    &lt;/li&gt;\n  &lt;/ul&gt;\n&lt;/li&gt;\n&lt;li&gt;Complexity Analysis&lt;/li&gt;\n&lt;li&gt;Example Problems\n  &lt;ul&gt;\n    &lt;li&gt;Problem L, GP of Zheijang&lt;/li&gt;\n    &lt;li&gt;CF1989F&lt;/li&gt;\n    &lt;li&gt;ONTAK 2009 Godzilla&lt;/li&gt;\n  &lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;Hello, in this blog I&#39;ll explain the algorithm from &lt;a href=\&quot;https://codeforces.com/blog/entry/91608\&quot;&gt;this Radewoosh blog&lt;/a&gt;. The linked blog is understandable and well-written (and honestly, this idea can be in summarized in one line as &amp;quot;dnc over timeline&amp;quot;) but it&#39;s a bit informal and I feel like writing something, hence this blog.&lt;/p&gt;\n&lt;h2&gt;Problem&lt;/h2&gt;\n&lt;p&gt;We are going to learn to maintain information about SCCs in a directed graph when have a problem with the following general structure:&lt;/p&gt;\n&lt;blockquote&gt;\n&lt;p&gt;Given an initially empty digraph $G$, and a list of $m$ directed edges $E$ that are sequentially added to the graph, we need to answer queries of the following form: Find some information about SCCs in $G$ after the first $i$ edges are added&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Some specific examples of queries would be:&lt;/p&gt;\n&lt;ol&gt;\n&lt;li&gt;Find the smallest $i$ such that $u$ and $v$ belong to the same SCC after the first $i$ edges are added.&lt;/li&gt;\n&lt;li&gt;Find the size of the SCC containing node $u$ after $i$ edges are added.&lt;/li&gt;\n&lt;/ol&gt;\n&lt;p&gt;Note: As the title suggests, &lt;em&gt;the idea described here is only applicable when we are allowed to process the queries offline&lt;/em&gt;.&lt;/p&gt;\n&lt;h2&gt;Observations&lt;/h2&gt;\n&lt;p&gt;Notation:\nDefine $S(u, i)$ to be the set of nodes in the SCC of node $u$ after the addition of the first $i$ edges to $G$&lt;/p&gt;\n&lt;p&gt;The entire algorithm is based around a trivial observation:&lt;/p&gt;\n&lt;blockquote&gt;\n&lt;p&gt;For every pair of nodes $(u, v)$ we have, $(S(u, j) \\neq S(v, j)) \\implies (S(u, k) \\neq S(v, k)) \\forall k \\leq j$.&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Therefore, for every edge $E_i = (u \\rightarrow v)$, we define $t_i = \\arg \\min_j \\left( S(u, j) = S(v, j) \\right)$ (and trivially infinite if they are never equal). One can observe that the presence of $E_i$ in $G$ doesn&#39;t affect the structure of any SCC until the the first $t_i$ edges are added.&lt;/p&gt;\n&lt;div style=\&quot;text-align:center\&quot;&gt;&lt;img src=\&quot;/assets/offline-incremental-scc/slideshow.gif\&quot; /&gt;&lt;/div&gt;\n&lt;h2&gt;Algorithm&lt;/h2&gt;\n&lt;h3&gt;Pre-Processing&lt;/h3&gt;\n&lt;p&gt;We will be doing DnC over the timeline of addition of edges (ie, $[1, m]$) with a recursive function of the form $f(l, r, \\text{edge list})$. For every call $f(l, r, \\text{edge list})$, our $\\text{edge list}$ will contain all edges $E_i$ for which $l \\leq t_i \\leq r$.&lt;/p&gt;\n&lt;p&gt;Let us look at what we do in the first call, $f(1, m, \\text{edge list})$ to understand what the generalized recursive call will be doing:&lt;/p&gt;\n&lt;ol&gt;\n&lt;li&gt;Define $\\text{mid} = (1 + m)/2$. We add all edges $E_i : i \\leq \\text{mid}$ to our initially empty graph and find SCCs induced by these edges. This can be done in $O(x)$ time where $x$ is the number of edges.&lt;/li&gt;\n&lt;li&gt;Store information about SCCs/answer queries.&lt;/li&gt;\n&lt;li&gt;For every edge $E_i = (u \\rightarrow v) : i \\leq \\text{mid}$, if $\\text{SCC}_u = \\text{SCC}_v$, then we can deduce that $t_i \\leq (1 + n)/2$. Otherwise, $t_i &gt; \\text{mid}$. Separate these edges into two groups $\\text{G}_1$ and $\\text{G}_2$ respectively. Add all edges $E_i : i &gt; \\text{mid}$ to $\\text{G}_2$.&lt;/li&gt;\n&lt;li&gt;Call $f(1, \\text{mid} - 1, \\text{G}_1)$.&lt;/li&gt;\n&lt;li&gt;Once we return from this call, compress all the SCCs induced by the addition of edges in $\\text{G}_1$.&lt;/li&gt;\n&lt;li&gt;Call $f(\\text{mid} + 1, m, \\text{G}_2)$. **Remember, this call must operate on the compressed graph.&lt;/li&gt;\n&lt;/ol&gt;\n&lt;p&gt;Notice that when we execute $f(l, r, \\text{edge list})$, it is essential that we perform the computation within it (finding SCCs induced by $\\text{edge list}$, checking if endpoints of edges belong to the same SCC, etc.) upon the compressed graph induced by all edges $E_i : t_i &lt; l$. This can be done easily by maintaining a global graph $G$, and performing compressions introduced by $\\text{edge list}$ of $f(l, r, \\text{edge list})$ when we return from this function (therefore, step $5$ will actually be performed by $f(1, \\text{mid} - 1, \\text{G}_1)$ and the calls in its subtree before they return).&lt;/p&gt;\n&lt;p&gt;The pseudo code for our algorithm takes the following form:&lt;/p&gt;\n&lt;pre class=\&quot;hljs\&quot;&gt;&lt;code&gt;create an empty graph G with n nodes\n\ndef f(l, r, edge list):\n\n    mid = (l + r)/2\n\n    initialize SCC structure from G\n    for every edge E[i] = (u -&amp;gt; v) in edge list:\n        if(i &amp;lt;= mid)\n            add (u -&amp;gt; v) to SCC structure\n\n    compute SCCs\n    \n    problem specific stuff (storing info/answering queries)\n\n    initialize empty edge lists G1 and G2\n    for every edge E[i] = (u -&amp;gt; v) in edge list:\n        if(i &amp;lt;= mid):\n            if(SCC[u] = SCC[v])\n                add E[i] to G1\n            else\n                add E[i] to G2\n        else\n            add E[i] to G2\n\n    f(l, mid - 1, G1)\n    f(mid + 1, r, G2)\n    \n    for every SCC induced by G1:\n        compress SCC into a single node in G\nenddef\n\nf(1, m, edge list)\n&lt;/code&gt;&lt;/pre&gt;\n&lt;h3&gt;Answering Queries&lt;/h3&gt;\n&lt;p&gt;This is quite problem-dependent. I have only seen a couple of problems which use this idea so I will just describe two ways of answering queries that I know of:&lt;/p&gt;\n&lt;h4&gt;&lt;u&gt;Queries based on number of edges added&lt;/u&gt;&lt;/h4&gt;\n&lt;p&gt;These queries are of the form:&lt;/p&gt;\n&lt;blockquote&gt;\n&lt;p&gt;Find some information about the SCCs of a graph after $i$ edges are added.&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Such queries can be answered by maintaining SCCs using DSU/Small-to-Large merging/(some other ds) as we go through the recursion in a way such that after performing the computation for $f(l, r, \\text{edge list})$, all information about SCCs after adding the first $(l + r)/2$ edges will be queryable from our DS. We then answer all queries with $i = (l + r)/2$.&lt;/p&gt;\n&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: This is possible because if the SCC compression for $f(l_1, r_1, \\text{edge list}_1)$ is done before the SCC compression for $f(l_2, r_2, \\text{edge list}_2)$, then we have either  $(l_1 \\leq l_2 \\text{ and } r_1 \\leq r_2)$ or $(l_2 \\leq l_1 \\text{ and } r_1 \\leq r_2)$. Therefore, SCCs only expand(unite) as we recurse through the calls.&lt;/p&gt;\n&lt;h4&gt;&lt;u&gt;Queries based on nodes&lt;/u&gt;&lt;/h4&gt;\n&lt;p&gt;This is a somewhat non-trivial technique, which can be used to answer queries like:&lt;/p&gt;\n&lt;blockquote&gt;\n&lt;p&gt;Find the smallest $i$ such that nodes $u$ and $v$ belong to the same SCC after the first $i$ edges are added to $G$&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;We solve it in the following way:&lt;/p&gt;\n&lt;ol&gt;\n&lt;li&gt;We maintain an initially empty undirected weighted graph $U$.&lt;/li&gt;\n&lt;li&gt;At every call $f(l, r, \\text{edge list})$, for every edge $E_i = (u \\rightarrow v) \\in \\text{G}1$, we add an edge $(u, v)$ with weight $(l + r)/2$ to $U$.&lt;/li&gt;\n&lt;li&gt;Finally, $U$ contains $O(m\\log_2{m})$ edges, with weights $\\leq m$.&lt;/li&gt;\n&lt;li&gt;To answer a query for a pair of nodes $(u, v)$, one can observe that the problem is equivalent to finding the minimized maximum weight edge on any path between $u$ and $v$ in  $U$. This can be done by constructing the MST of $U$ and answering path maximum queries.&lt;/li&gt;\n&lt;/ol&gt;\n&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: Since all edges in $U$ have weight $\\leq m$, we can avoid sorting its edge list and simply iterate over edge weights (in kruskals) to find the MST and get rid of a log factor, allowing construction of the MST in $O(m\\log_2{m})$.&lt;/p&gt;\n&lt;h2&gt;Complexity Analysis&lt;/h2&gt;\n&lt;p&gt;Since we split apart $\\text{edge list}$ into two disjoint groups $\\text{G}1$ and $\\text{G}2$ in every call $f(l, r, \\text{edge list})$, this ensures that every edge occurs exactly once on every level of the recursion. For every call $f(l, r, \\text{edge list})$, we perform a $O(\\vert \\text{edge list} \\vert)$ computation. So on every level, we perform a $O(\\sum_{f(l, r, \\text{edge list})}(\\vert \\text{edge list} \\vert)) = O(m)$ computation. There are $\\log_2(m)$ levels of the recursion, so our pre-processing algorithm works in $O(m \\log_2{m})$.&lt;/p&gt;\n&lt;p&gt;The time taken for answering queries is problem dependent.&lt;/p&gt;\n&lt;h2&gt;Example Problems&lt;/h2&gt;\n&lt;h3&gt;1. &lt;a href=\&quot;https://qoj.ac/contest/796/problem/2214?v=1\&quot;&gt;Problem L, Grand Prix of Zheijang (Open Cup 2018-19)&lt;/a&gt;&lt;/h3&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Solution&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\nTrivial, just use DSU to maintain size of each SCC.\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;h3&gt;2. &lt;a href=\&quot;https://codeforces.com/problemset/problem/1989/F\&quot;&gt;CF-1989F&lt;/a&gt;&lt;/h3&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Solution&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\nTo be updated\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;h3&gt;3. &lt;a href=\&quot;https://www.acmicpc.net/problem/8496\&quot;&gt;ONTAK 2009 Godzilla&lt;/a&gt;&lt;/h3&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Solution&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\nTo be updated\n&lt;/div&gt;\n&lt;/details&gt;\n&quot;],&quot;frontmatter&quot;:[0,{&quot;displayMode&quot;:[0,&quot;blog&quot;],&quot;title&quot;:[0,&quot;Offline Incremental SCC&quot;],&quot;date&quot;:[0,&quot;2024-07-29&quot;],&quot;tags&quot;:[1,[[0,&quot;algorithm&quot;]]]}]}]}" ssr client="load" opts="{&quot;name&quot;:&quot;ContentPane&quot;,&quot;value&quot;:true}" await-children><!--[--><!--[1--><section class="prose prose-invert mx-auto max-w-4xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro"><header class="mb-8"><h1 class="font-sans font-bold leading-tight tracking-tight mb-3 text-[2.5rem] md:text-[3rem] text-accent">Offline Incremental SCC</h1> <!--[--><p class="mt-2 text-xs text-text-muted">29/07/2024</p><!--]--> <!--[--><ul class="mt-4 flex flex-wrap gap-2 list-none pl-0"><!--[--><li class="rounded-sm border border-accent-subtle px-2 py-1 text-xs font-medium text-text-muted transition-colors duration-150 ease-retro">algorithm</li><!--]--></ul><!--]--></header> <article class="prose prose-invert prose-headings:font-sans prose-p:font-sans prose-li:font-sans prose-blockquote:font-sans prose-td:font-sans prose-th:font-sans prose-p:tracking-normal prose-li:tracking-normal prose-blockquote:tracking-normal prose-td:tracking-normal prose-th:tracking-normal max-w-none"><!----><h2>Outline</h2>
+<!DOCTYPE html><html lang="en" class="h-full"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Offline Incremental SCC · Welcome to the Sunny Side!</title><meta name="description" content="Hello, in this blog I'll explain the algorithm from this Radewoosh blog . The linked blog is understandable and well-written (and honestly, this idea can be…"><link rel="canonical" href="https://www.welcome-to-the-sunny-side.com/algo/theory/offline_incremental_scc.html"><link rel="icon" href="/favicon.ico"><script async src="https://www.googletagmanager.com/gtag/js?id=G-FDGES615HV"></script><script type="module">window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-FDGES615HV");</script><link rel="stylesheet" href="/_astro/_slug_.DFBpVZ-4.css"></head> <body class="h-full"> <div class="h-screen w-screen grid grid-cols-1 grid-rows-[auto_1fr] md:grid-cols-[1fr_auto] md:grid-rows-1"> <!-- Mobile breadcrumb nav --> <div class="md:hidden"> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z1AQ8aI" component-url="/_astro/MobileNav.XGZTBScB.js" component-export="default" renderer-url="/_astro/client.svelte.DSigbiJE.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;MobileNav&quot;,&quot;value&quot;:true}" await-children><!--[--><nav class="md:hidden flex items-center px-3 py-2 bg-surface border-b border-accent-subtle font-mono text-sm"><div class="flex-1 flex items-center min-w-0 overflow-x-auto whitespace-nowrap"><!--[--><!--[!--><!--]--> <!--[!--><button class="crumb-link text-text-muted hover:text-accent transition-colors duration-150 svelte-xffx7i">~</button><!--]--><!--[--><span class="text-accent mx-1 select-none">/</span><!--]--> <!--[--><span class="text-text font-medium">home.html</span><!--]--><!--]--></div> <button class="flex-shrink-0 ml-3 text-text-muted hover:text-accent transition-colors duration-150 text-base leading-none" aria-label="Switch skin (current: dark)">☾</button></nav><!--]--><!--astro:end--></astro-island> </div> <!-- Content --> <main class="overflow-y-auto overflow-x-hidden bg-surface text-text transition-colors duration-150 ease-retro min-h-0"> <astro-island uid="Z2gO1kT" component-url="/_astro/ContentPane.Bn4HzKyU.js" component-export="default" renderer-url="/_astro/client.svelte.DSigbiJE.js" props="{&quot;initial&quot;:[0,{&quot;kind&quot;:[0,&quot;md&quot;],&quot;path&quot;:[0,&quot;/algo/theory/offline_incremental_scc.html&quot;],&quot;frontmatter&quot;:[0,{&quot;displayMode&quot;:[0,&quot;blog&quot;],&quot;title&quot;:[0,&quot;Offline Incremental SCC&quot;],&quot;date&quot;:[0,&quot;2024-07-29&quot;],&quot;tags&quot;:[1,[[0,&quot;algorithm&quot;]]]}]}]}" ssr client="load" opts="{&quot;name&quot;:&quot;ContentPane&quot;,&quot;value&quot;:true}" await-children><!--[--><!--[1--><section class="prose prose-invert mx-auto max-w-4xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro"><header class="mb-8"><h1 class="font-sans font-bold leading-tight tracking-tight mb-3 text-[2.5rem] md:text-[3rem] text-accent">Offline Incremental SCC</h1> <!--[--><p class="mt-2 text-xs text-text-muted">29/07/2024</p><!--]--> <!--[--><ul class="mt-4 flex flex-wrap gap-2 list-none pl-0"><!--[--><li class="rounded-sm border border-accent-subtle px-2 py-1 text-xs font-medium text-text-muted transition-colors duration-150 ease-retro">algorithm</li><!--]--></ul><!--]--></header> <article class="prose prose-invert prose-headings:font-sans prose-p:font-sans prose-li:font-sans prose-blockquote:font-sans prose-td:font-sans prose-th:font-sans prose-p:tracking-normal prose-li:tracking-normal prose-blockquote:tracking-normal prose-td:tracking-normal prose-th:tracking-normal max-w-none"><!----><style>
+mjx-container[overflow="scroll"][display] {
+  overflow: auto clip;
+  min-width: initial !important;
+}
+
+mjx-container[overflow="truncate"][display] {
+  overflow: hidden clip;
+  min-width: initial !important;
+}
+
+mjx-container[display] {
+  display: block;
+  text-align: center;
+  justify-content: center;
+  margin: .7em 0;
+  padding: .3em 2px;
+}
+
+mjx-container[display][width="full"] {
+  display: flex;
+}
+
+mjx-container[justify="left"] {
+  text-align: left;
+  justify-content: left;
+}
+
+mjx-container[justify="right"] {
+  text-align: right;
+  justify-content: right;
+}
+
+mjx-container[jax="CHTML"] {
+  white-space: nowrap;
+}
+
+mjx-mo > mjx-c, mjx-mi > mjx-c, mjx-mn > mjx-c, mjx-ms > mjx-c, mjx-mtext > mjx-c {
+  clip-path: padding-box polygon(-1em -2px, calc(100% + 1em) -2px, calc(100% + 1em) calc(100% + 2px), -1em calc(100% + 2px));
+}
+
+mjx-stretchy-h {
+  clip-path: padding-box polygon(0 -2px, 100% -2px, 100% calc(100% + 2px), 0 calc(100% + 2px));
+  display: inline-block;
+}
+
+mjx-stretchy-v {
+  clip-path: padding-box polygon(-2px 0, calc(100% + 2px) 0, calc(100% + 2px) 100%, -2px 100%);
+  display: inline-block;
+  text-align: center;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > mjx-cell, mjx-row > mjx-base, mjx-row > mjx-under, mjx-row > mjx-over, mjx-row > mjx-den {
+  display: table-cell;
+}
+
+mjx-container [inline-breaks] {
+  display: inline;
+}
+
+mjx-container .mjx-selected {
+  outline: 2px solid black;
+}
+
+@media (prefers-color-scheme: dark) {
+  mjx-container .mjx-selected {
+    outline: 2px solid #C8C8C8;
+  }
+}
+
+mjx-mtext {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: polygon(0 0, 0 1px, 1px 1px, 1px 0);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  text-indent: 0px ! important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  word-spacing: normal;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-math[breakable] {
+  display: inline;
+}
+
+mjx-container[jax="CHTML"] mjx-break {
+  white-space: normal;
+  line-height: 0;
+  clip-path: rect(0 0 0 0);
+  font-family: MJX-BRK !important;
+}
+
+mjx-break[size="0"] {
+  letter-spacing: -0.999em;
+}
+
+mjx-break[size="1"] {
+  letter-spacing: -0.889em;
+}
+
+mjx-break[size="2"] {
+  letter-spacing: -0.833em;
+}
+
+mjx-break[size="3"] {
+  letter-spacing: -0.778em;
+}
+
+mjx-break[size="4"] {
+  letter-spacing: -0.722em;
+}
+
+mjx-break[size="5"] {
+  letter-spacing: -0.667em;
+}
+
+mjx-mi {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+  width: 0;
+  text-align: right;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-mo {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-stretchy-h > mjx-beg, mjx-stretchy-h > mjx-ext, mjx-stretchy-h > mjx-end, mjx-stretchy-h > mjx-mid {
+  display: inline-block;
+  width: 0;
+  text-align: right;
+}
+
+mjx-stretchy-h > mjx-ext {
+  clip-path: padding-box polygon(0 -1em, 100% -1em, 100% calc(100% + 1em), 0 calc(100% + 1em));
+  width: 100%;
+  border: 0px solid transparent;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+mjx-stretchy-v > mjx-beg, mjx-stretchy-v > mjx-ext, mjx-stretchy-v > mjx-end, mjx-stretchy-v > mjx-mid {
+  display: block;
+  height: 0;
+  margin: 0 auto;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-spacer {
+  display: block;
+}
+
+mjx-stretchy-v > mjx-ext {
+  clip-path: padding-box polygon(-1em 0, calc(100% + 1em) 0, calc(100% + 1em) 100%, -1em 100%);
+  height: 100%;
+  border: 0.1px solid transparent;
+  box-sizing: border-box;
+  white-space: pre;
+}
+
+mjx-mark {
+  display: inline-block;
+  height: 0;
+}
+
+mjx-mspace {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-msub {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-msubsup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-script {
+  display: inline-block;
+  padding-right: .05em;
+  padding-left: .033em;
+}
+
+mjx-script > mjx-spacer {
+  display: block;
+}
+
+mjx-munder {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-over {
+  text-align: left;
+}
+
+mjx-munder:not([limits="false"]) {
+  display: inline-table;
+}
+
+mjx-munder > mjx-row {
+  text-align: left;
+}
+
+mjx-under {
+  padding-bottom: .1em;
+}
+
+mjx-mrow {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-linestack, mjx-mrow[break-top] {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-linestack[break-align="bottom"], mjx-mrow[break-top][break-align="bottom"] {
+  display: inline-block;
+}
+
+mjx-linestack[break-align="middle"], mjx-mrow[break-top][break-align="middle"] {
+  vertical-align: middle;
+}
+
+mjx-linestack[break-align="center"], mjx-mrow[break-top][break-align="center"] {
+  vertical-align: middle;
+}
+
+mjx-linestack[breakable] {
+  display: inline;
+}
+
+mjx-linestack[breakable] > mjx-linebox {
+  display: inline;
+}
+
+mjx-linestack[breakable] > mjx-linebox::before {
+  white-space: pre;
+  content: "\A";
+}
+
+mjx-linestack[breakable] > mjx-linebox::after {
+  white-space: normal;
+  content: " ";
+  letter-spacing: -.999em;
+  font-family: MJX-BRK;
+}
+
+mjx-linestack[breakable] > mjx-linebox:first-of-type::before {
+  display: none;
+}
+
+mjx-linestack[breakable] > mjx-linebox:last-of-type::after {
+  display: none;
+}
+
+mjx-linebox {
+  display: block;
+}
+
+mjx-linebox[align="left"] {
+  text-align: left;
+}
+
+mjx-linebox[align="center"] {
+  text-align: center;
+}
+
+mjx-linebox[align="right"] {
+  text-align: right;
+}
+
+mjx-linestrut {
+  display: inline-block;
+  height: 1em;
+  vertical-align: -.25em;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"] > mjx-math.NCM-N[breakable] > * {
+  font-family: MJX-NCM-ZERO, MJX-NCM-N;
+}
+
+.NCM-N {
+  font-family: MJX-NCM-ZERO, MJX-NCM-N;
+}
+
+.NCM-B {
+  font-family: MJX-NCM-ZERO, MJX-NCM-B;
+}
+
+.NCM-I {
+  font-family: MJX-NCM-ZERO, MJX-NCM-I;
+}
+
+.NCM-BI {
+  font-family: MJX-NCM-ZERO, MJX-NCM-BI;
+}
+
+.NCM-DS {
+  font-family: MJX-NCM-ZERO, MJX-NCM-DS;
+}
+
+.NCM-F {
+  font-family: MJX-NCM-ZERO, MJX-NCM-F;
+}
+
+.NCM-FB {
+  font-family: MJX-NCM-ZERO, MJX-NCM-FB;
+}
+
+.NCM-SS {
+  font-family: MJX-NCM-ZERO, MJX-NCM-SS;
+}
+
+.NCM-SSB {
+  font-family: MJX-NCM-ZERO, MJX-NCM-SSB;
+}
+
+.NCM-SSI {
+  font-family: MJX-NCM-ZERO, MJX-NCM-SSI;
+}
+
+.NCM-SSBI {
+  font-family: MJX-NCM-ZERO, MJX-NCM-SSBI;
+}
+
+.NCM-M {
+  font-family: MJX-NCM-ZERO, MJX-NCM-M;
+}
+
+.NCM-SO {
+  font-family: MJX-NCM-ZERO, MJX-NCM-SO;
+}
+
+.NCM-LO {
+  font-family: MJX-NCM-ZERO, MJX-NCM-LO;
+}
+
+.NCM-S3 {
+  font-family: MJX-NCM-ZERO, MJX-NCM-S3;
+}
+
+.NCM-S4 {
+  font-family: MJX-NCM-ZERO, MJX-NCM-S4;
+}
+
+.NCM-S5 {
+  font-family: MJX-NCM-ZERO, MJX-NCM-S5;
+}
+
+.NCM-S6 {
+  font-family: MJX-NCM-ZERO, MJX-NCM-S6;
+}
+
+.NCM-S7 {
+  font-family: MJX-NCM-ZERO, MJX-NCM-S7;
+}
+
+.NCM-MI {
+  font-family: MJX-NCM-ZERO, MJX-NCM-MI;
+}
+
+.NCM-C {
+  font-family: MJX-NCM-ZERO, MJX-NCM-C;
+}
+
+.NCM-CB {
+  font-family: MJX-NCM-ZERO, MJX-NCM-CB;
+}
+
+.NCM-OS {
+  font-family: MJX-NCM-ZERO, MJX-NCM-OS;
+}
+
+.NCM-OB {
+  font-family: MJX-NCM-ZERO, MJX-NCM-OB;
+}
+
+.NCM-V {
+  font-family: MJX-NCM-ZERO, MJX-NCM-V;
+}
+
+.NCM-LT {
+  font-family: MJX-NCM-ZERO, MJX-NCM-LT;
+}
+
+.NCM-RB {
+  font-family: MJX-NCM-ZERO, MJX-NCM-RB;
+}
+
+.NCM-EM {
+  font-family: MJX-NCM-ZERO, MJX-NCM-EM;
+}
+
+.NCM-B-a {
+  font-family: MJX-NCM-ZERO, MJX-NCM-B-a;
+}
+
+.NCM-U {
+  font-family: MJX-NCM-ZERO, MJX-NCM-U;
+}
+
+.NCM-U-a {
+  font-family: MJX-NCM-ZERO, MJX-NCM-U-a;
+}
+
+.NCM-S {
+  font-family: MJX-NCM-ZERO, MJX-NCM-S;
+}
+
+.NCM-SB {
+  font-family: MJX-NCM-ZERO, MJX-NCM-SB;
+}
+
+@font-face /* MJX-NCM-ZERO */ {
+  font-family: MJX-NCM-ZERO;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-zero.woff2") format("woff2");
+}
+
+@font-face /* MJX-BRK */ {
+  font-family: MJX-BRK;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-brk.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-N */ {
+  font-family: MJX-NCM-N;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-n.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-B */ {
+  font-family: MJX-NCM-B;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-b.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-I */ {
+  font-family: MJX-NCM-I;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-i.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-BI */ {
+  font-family: MJX-NCM-BI;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-bi.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-DS */ {
+  font-family: MJX-NCM-DS;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-ds.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-F */ {
+  font-family: MJX-NCM-F;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-f.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-FB */ {
+  font-family: MJX-NCM-FB;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-fb.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-SS */ {
+  font-family: MJX-NCM-SS;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-ss.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-SSB */ {
+  font-family: MJX-NCM-SSB;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-ssb.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-SSI */ {
+  font-family: MJX-NCM-SSI;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-ssi.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-SSBI */ {
+  font-family: MJX-NCM-SSBI;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-ssbi.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-M */ {
+  font-family: MJX-NCM-M;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-m.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-SO */ {
+  font-family: MJX-NCM-SO;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-so.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-LO */ {
+  font-family: MJX-NCM-LO;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-lo.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-S3 */ {
+  font-family: MJX-NCM-S3;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-s3.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-S4 */ {
+  font-family: MJX-NCM-S4;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-s4.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-S5 */ {
+  font-family: MJX-NCM-S5;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-s5.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-S6 */ {
+  font-family: MJX-NCM-S6;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-s6.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-S7 */ {
+  font-family: MJX-NCM-S7;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-s7.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-MI */ {
+  font-family: MJX-NCM-MI;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-mi.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-C */ {
+  font-family: MJX-NCM-C;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-c.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-CB */ {
+  font-family: MJX-NCM-CB;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-cb.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-OS */ {
+  font-family: MJX-NCM-OS;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-os.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-OB */ {
+  font-family: MJX-NCM-OB;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-ob.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-V */ {
+  font-family: MJX-NCM-V;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-v.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-LT */ {
+  font-family: MJX-NCM-LT;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-lt.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-RB */ {
+  font-family: MJX-NCM-RB;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-rb.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-EM */ {
+  font-family: MJX-NCM-EM;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-em.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-B-a */ {
+  font-family: MJX-NCM-B-a;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-b-a.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-U */ {
+  font-family: MJX-NCM-U;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-u.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-U-a */ {
+  font-family: MJX-NCM-U-a;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-u-a.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-S */ {
+  font-family: MJX-NCM-S;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-s.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-SB */ {
+  font-family: MJX-NCM-SB;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-sb.woff2") format("woff2");
+}
+
+mjx-c.mjx-c1D43A {
+  padding: 0.705em 0.786em 0.022em 0;
+}
+
+mjx-c.mjx-c1D45A {
+  padding: 0.442em 0.878em 0.011em 0;
+}
+
+mjx-c.mjx-c1D438 {
+  padding: 0.68em 0.766em 0 0;
+}
+
+mjx-c.mjx-c1D456 {
+  padding: 0.661em 0.345em 0.011em 0;
+}
+
+mjx-c.mjx-c1D462 {
+  padding: 0.442em 0.572em 0.011em 0;
+}
+
+mjx-c.mjx-c1D463 {
+  padding: 0.442em 0.485em 0.011em 0;
+}
+
+mjx-c.mjx-c1D446 {
+  padding: 0.705em 0.645em 0.022em 0;
+}
+
+mjx-c.mjx-c28 {
+  padding: 0.748em 0.389em 0.248em 0;
+}
+
+mjx-c.mjx-c2C {
+  padding: 0.106em 0.278em 0.193em 0;
+}
+
+mjx-c.mjx-c29 {
+  padding: 0.748em 0.389em 0.248em 0;
+}
+
+mjx-c.mjx-c1D457 {
+  padding: 0.661em 0.412em 0.205em 0;
+}
+
+mjx-c.mjx-c2260 {
+  padding: 0.73em 0.778em 0.23em 0;
+}
+
+mjx-c.mjx-c27F9 {
+  padding: 0.52em 1.457em 0.02em 0;
+}
+
+mjx-c.mjx-c1D458 {
+  padding: 0.694em 0.521em 0.011em 0;
+}
+
+mjx-c.mjx-c2200 {
+  padding: 0.688em 0.666em 0 0;
+}
+
+mjx-c.mjx-c2264 {
+  padding: 0.631em 0.778em 0.119em 0;
+}
+
+mjx-c.mjx-c3D {
+  padding: 0.367em 0.778em 0 0;
+}
+
+mjx-c.mjx-c2192 {
+  padding: 0.51em 1em 0.01em 0;
+}
+
+mjx-c.mjx-c1D461 {
+  padding: 0.626em 0.361em 0.011em 0;
+}
+
+mjx-c.mjx-c61 {
+  padding: 0.448em 0.5em 0.011em 0;
+}
+
+mjx-c.mjx-c72 {
+  padding: 0.442em 0.392em 0 0;
+}
+
+mjx-c.mjx-c67 {
+  padding: 0.453em 0.5em 0.206em 0;
+}
+
+mjx-c.mjx-c2061 {
+  padding: 0 0 0 0;
+}
+
+mjx-c.mjx-c6D {
+  padding: 0.442em 0.833em 0 0;
+}
+
+mjx-c.mjx-c69 {
+  padding: 0.657em 0.278em 0 0;
+}
+
+mjx-c.mjx-c6E {
+  padding: 0.442em 0.556em 0 0;
+}
+
+mjx-c.mjx-c5B {
+  padding: 0.75em 0.278em 0.25em 0;
+}
+
+mjx-c.mjx-c31 {
+  padding: 0.666em 0.5em 0 0;
+}
+
+mjx-c.mjx-c5D {
+  padding: 0.75em 0.278em 0.25em 0;
+}
+
+mjx-c.mjx-c1D453 {
+  padding: 0.705em 0.552em 0.205em 0;
+}
+
+mjx-c.mjx-c1D459 {
+  padding: 0.694em 0.298em 0.011em 0;
+}
+
+mjx-c.mjx-c1D45F {
+  padding: 0.442em 0.451em 0.011em 0;
+}
+
+mjx-c.mjx-c65 {
+  padding: 0.448em 0.444em 0.011em 0;
+}
+
+mjx-c.mjx-c64 {
+  padding: 0.694em 0.556em 0.011em 0;
+}
+
+mjx-c.mjx-c20 {
+  padding: 0 0.332em 0 0;
+}
+
+mjx-c.mjx-c6C {
+  padding: 0.694em 0.278em 0 0;
+}
+
+mjx-c.mjx-c73 {
+  padding: 0.448em 0.394em 0.011em 0;
+}
+
+mjx-c.mjx-c74 {
+  padding: 0.615em 0.389em 0.011em 0;
+}
+
+mjx-c.mjx-c2B {
+  padding: 0.583em 0.778em 0.083em 0;
+}
+
+mjx-c.mjx-c2F {
+  padding: 0.75em 0.5em 0.25em 0;
+}
+
+mjx-c.mjx-c32 {
+  padding: 0.666em 0.5em 0 0;
+}
+
+mjx-c.mjx-c3A {
+  padding: 0.431em 0.278em 0 0;
+}
+
+mjx-c.mjx-c1D442 {
+  padding: 0.705em 0.763em 0.022em 0;
+}
+
+mjx-c.mjx-c1D465 {
+  padding: 0.442em 0.572em 0.011em 0;
+}
+
+mjx-c.mjx-c53 {
+  padding: 0.705em 0.556em 0.022em 0;
+}
+
+mjx-c.mjx-c43 {
+  padding: 0.705em 0.722em 0.022em 0;
+}
+
+mjx-c.mjx-c1D45B {
+  padding: 0.442em 0.6em 0.011em 0;
+}
+
+mjx-c.mjx-c3E {
+  padding: 0.547em 0.778em 0.047em 0;
+}
+
+mjx-c.mjx-c47 {
+  padding: 0.705em 0.785em 0.022em 0;
+}
+
+mjx-c.mjx-c2212 {
+  padding: 0.583em 0.778em 0.083em 0;
+}
+
+mjx-c.mjx-c3C {
+  padding: 0.547em 0.778em 0.052em 0;
+}
+
+mjx-c.mjx-c35 {
+  padding: 0.666em 0.5em 0.022em 0;
+}
+
+mjx-c.mjx-cA0 {
+  padding: 0 0.332em 0 0;
+}
+
+mjx-c.mjx-c1D448 {
+  padding: 0.683em 0.76em 0.022em 0;
+}
+
+mjx-c.mjx-c2208 {
+  padding: 0.543em 0.667em 0.043em 0;
+}
+
+mjx-c.mjx-c6F {
+  padding: 0.448em 0.5em 0.011em 0;
+}
+
+mjx-c.mjx-c7C {
+  padding: 0.75em 0.278em 0.25em 0;
+}
+
+mjx-c.mjx-c2211 {
+  padding: 0.75em 1.056em 0.25em 0;
+}
+
+
+</style><h2>Outline</h2>
 <ul class="outline-list">
 <li>Problem</li>
 <li>Observations</li>
@@ -22,40 +1018,40 @@
   </ul>
 </li>
 </ul>
-<p>Hello, in this blog I'll explain the algorithm from <a href="https://codeforces.com/blog/entry/91608">this Radewoosh blog</a>. The linked blog is understandable and well-written (and honestly, this idea can be in summarized in one line as &quot;dnc over timeline&quot;) but it's a bit informal and I feel like writing something, hence this blog.</p>
+<p>Hello, in this blog I'll explain the algorithm from <a href="https://codeforces.com/blog/entry/91608">this Radewoosh blog</a>. The linked blog is understandable and well-written (and honestly, this idea can be in summarized in one line as "dnc over timeline") but it's a bit informal and I feel like writing something, hence this blog.</p>
 <h2>Problem</h2>
 <p>We are going to learn to maintain information about SCCs in a directed graph when have a problem with the following general structure:</p>
 <blockquote>
-<p>Given an initially empty digraph $G$, and a list of $m$ directed edges $E$ that are sequentially added to the graph, we need to answer queries of the following form: Find some information about SCCs in $G$ after the first $i$ edges are added</p>
+<p>Given an initially empty digraph <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="G" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="G"><mjx-c class="mjx-c1D43A">𝐺</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="G"><mi data-latex="G">G</mi></math></mjx-assistive-mml></mjx-container>, and a list of <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="m" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="m"><mi data-latex="m">m</mi></math></mjx-assistive-mml></mjx-container> directed edges <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="E" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="E"><mjx-c class="mjx-c1D438">𝐸</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="E"><mi data-latex="E">E</mi></math></mjx-assistive-mml></mjx-container> that are sequentially added to the graph, we need to answer queries of the following form: Find some information about SCCs in <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="G" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="G"><mjx-c class="mjx-c1D43A">𝐺</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="G"><mi data-latex="G">G</mi></math></mjx-assistive-mml></mjx-container> after the first <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i"><mi data-latex="i">i</mi></math></mjx-assistive-mml></mjx-container> edges are added</p>
 </blockquote>
 <p>Some specific examples of queries would be:</p>
 <ol>
-<li>Find the smallest $i$ such that $u$ and $v$ belong to the same SCC after the first $i$ edges are added.</li>
-<li>Find the size of the SCC containing node $u$ after $i$ edges are added.</li>
+<li>Find the smallest <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i"><mi data-latex="i">i</mi></math></mjx-assistive-mml></mjx-container> such that <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="u" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="u"><mi data-latex="u">u</mi></math></mjx-assistive-mml></mjx-container> and <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="v" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="v"><mjx-c class="mjx-c1D463">𝑣</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="v"><mi data-latex="v">v</mi></math></mjx-assistive-mml></mjx-container> belong to the same SCC after the first <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i"><mi data-latex="i">i</mi></math></mjx-assistive-mml></mjx-container> edges are added.</li>
+<li>Find the size of the SCC containing node <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="u" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="u"><mi data-latex="u">u</mi></math></mjx-assistive-mml></mjx-container> after <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i"><mi data-latex="i">i</mi></math></mjx-assistive-mml></mjx-container> edges are added.</li>
 </ol>
 <p>Note: As the title suggests, <em>the idea described here is only applicable when we are allowed to process the queries offline</em>.</p>
 <h2>Observations</h2>
 <p>Notation:
-Define $S(u, i)$ to be the set of nodes in the SCC of node $u$ after the addition of the first $i$ edges to $G$</p>
+Define <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="S(u, i)" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="S"><mjx-c class="mjx-c1D446">𝑆</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="S(u, i)"><mi data-latex="S">S</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="u">u</mi><mo data-latex=",">,</mo><mi data-latex="i">i</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> to be the set of nodes in the SCC of node <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="u" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="u"><mi data-latex="u">u</mi></math></mjx-assistive-mml></mjx-container> after the addition of the first <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i"><mi data-latex="i">i</mi></math></mjx-assistive-mml></mjx-container> edges to <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="G" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="G"><mjx-c class="mjx-c1D43A">𝐺</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="G"><mi data-latex="G">G</mi></math></mjx-assistive-mml></mjx-container></p>
 <p>The entire algorithm is based around a trivial observation:</p>
 <blockquote>
-<p>For every pair of nodes $(u, v)$ we have, $(S(u, j) \neq S(v, j)) \implies (S(u, k) \neq S(v, k)) \forall k \leq j$.</p>
+<p>For every pair of nodes <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="(u, v)" class="NCM-N" aria-hidden="true"><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="v"><mjx-c class="mjx-c1D463">𝑣</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="(u, v)"><mo data-latex="(" stretchy="false">(</mo><mi data-latex="u">u</mi><mo data-latex=",">,</mo><mi data-latex="v">v</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> we have, <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="(S(u, j) \neq S(v, j)) \implies (S(u, k) \neq S(v, k)) \forall k \leq j" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="S"><mjx-c class="mjx-c1D446">𝑆</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="j"><mjx-c class="mjx-c1D457">𝑗</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\neq"><mjx-c class="mjx-c2260">≠</mjx-c></mjx-mo><mjx-mi space="4" data-latex="S"><mjx-c class="mjx-c1D446">𝑆</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="v"><mjx-c class="mjx-c1D463">𝑣</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="j"><mjx-c class="mjx-c1D457">𝑗</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-break size="0"> </mjx-break><mjx-mspace data-latex="\;" style="width: 0.278em;"></mjx-mspace><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\Longrightarrow"><mjx-c class="mjx-c27F9">⟹</mjx-c></mjx-mo><mjx-break size="0"> </mjx-break><mjx-mspace data-latex="\;" style="width: 0.278em;"></mjx-mspace><mjx-mo space="4" data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="S"><mjx-c class="mjx-c1D446">𝑆</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="k"><mjx-c class="mjx-c1D458">𝑘</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\neq"><mjx-c class="mjx-c2260">≠</mjx-c></mjx-mo><mjx-mi space="4" data-latex="S"><mjx-c class="mjx-c1D446">𝑆</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="v"><mjx-c class="mjx-c1D463">𝑣</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="k"><mjx-c class="mjx-c1D458">𝑘</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-mi data-latex="\forall"><mjx-c class="mjx-c2200">∀</mjx-c></mjx-mi><mjx-mi data-latex="k"><mjx-c class="mjx-c1D458">𝑘</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-mi space="4" data-latex="j"><mjx-c class="mjx-c1D457">𝑗</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="(S(u, j) \neq S(v, j)) \implies (S(u, k) \neq S(v, k)) \forall k \leq j"><mo data-latex="(" stretchy="false">(</mo><mi data-latex="S">S</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="u">u</mi><mo data-latex=",">,</mo><mi data-latex="j">j</mi><mo data-latex=")" stretchy="false">)</mo><mo data-latex="\neq">≠</mo><mi data-latex="S">S</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="v">v</mi><mo data-latex=",">,</mo><mi data-latex="j">j</mi><mo data-latex=")" stretchy="false">)</mo><mo data-latex=")" stretchy="false">)</mo><mspace width="0.278em" data-latex="\;"></mspace><mo stretchy="false" data-latex="\Longrightarrow">⟹</mo><mspace width="0.278em" data-latex="\;"></mspace><mo data-latex="(" stretchy="false">(</mo><mi data-latex="S">S</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="u">u</mi><mo data-latex=",">,</mo><mi data-latex="k">k</mi><mo data-latex=")" stretchy="false">)</mo><mo data-latex="\neq">≠</mo><mi data-latex="S">S</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="v">v</mi><mo data-latex=",">,</mo><mi data-latex="k">k</mi><mo data-latex=")" stretchy="false">)</mo><mo data-latex=")" stretchy="false">)</mo><mi mathvariant="normal" data-latex="\forall">∀</mi><mi data-latex="k">k</mi><mo data-latex="\leq">≤</mo><mi data-latex="j">j</mi></math></mjx-assistive-mml></mjx-container>.</p>
 </blockquote>
-<p>Therefore, for every edge $E_i = (u \rightarrow v)$, we define $t_i = \arg \min_j \left( S(u, j) = S(v, j) \right)$ (and trivially infinite if they are never equal). One can observe that the presence of $E_i$ in $G$ doesn't affect the structure of any SCC until the the first $t_i$ edges are added.</p>
-<div style="text-align:center"><img src="/assets/offline-incremental-scc/slideshow.gif" /></div>
+<p>Therefore, for every edge <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="E_i = (u \rightarrow v)" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="E_i"><mjx-mi data-latex="E"><mjx-c class="mjx-c1D438">𝐸</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.028em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-mo space="4" data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\rightarrow"><mjx-c class="mjx-c2192">→</mjx-c></mjx-mo><mjx-mi space="4" data-latex="v"><mjx-c class="mjx-c1D463">𝑣</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="E_i = (u \rightarrow v)"><msub data-latex="E_i"><mi data-latex="E">E</mi><mi data-latex="i">i</mi></msub><mo data-latex="=">=</mo><mo data-latex="(" stretchy="false">(</mo><mi data-latex="u">u</mi><mo stretchy="false" data-latex="\rightarrow">→</mo><mi data-latex="v">v</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>, we define <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="t_i = \arg \min_j \left( S(u, j) = S(v, j) \right)" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="t_i"><mjx-mi data-latex="t"><mjx-c class="mjx-c1D461">𝑡</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-mi space="4" data-latex="\arg"><mjx-c class="mjx-c61" noic="true" style="padding-top: 0.453em;">a</mjx-c><mjx-c class="mjx-c72" noic="true" style="padding-top: 0.453em;">r</mjx-c><mjx-c class="mjx-c67" style="padding-top: 0.453em;">g</mjx-c></mjx-mi><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-munder space="2" data-latex="\min_j" limits="false"><mjx-mo data-latex="\min"><mjx-c class="mjx-c6D" noic="true" style="padding-top: 0.657em;">m</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.657em;">i</mjx-c><mjx-c class="mjx-c6E" style="padding-top: 0.657em;">n</mjx-c></mjx-mo><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="j"><mjx-c class="mjx-c1D457">𝑗</mjx-c></mjx-mi></mjx-script></mjx-munder><mjx-mrow space="2" data-latex="\left( S(u, j) = S(v, j) \right)"><mjx-mo data-latex="\left("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="S"><mjx-c class="mjx-c1D446">𝑆</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="j"><mjx-c class="mjx-c1D457">𝑗</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-mo space="4" data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-mi space="4" data-latex="S"><mjx-c class="mjx-c1D446">𝑆</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="v"><mjx-c class="mjx-c1D463">𝑣</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="j"><mjx-c class="mjx-c1D457">𝑗</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-mo data-latex="\right)"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-mrow></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="t_i = \arg \min_j \left( S(u, j) = S(v, j) \right)"><msub data-latex="t_i"><mi data-latex="t">t</mi><mi data-latex="i">i</mi></msub><mo data-latex="=">=</mo><mi data-latex="\arg">arg</mi><mo data-mjx-texclass="NONE">⁡</mo><munder data-latex="\min_j"><mo data-mjx-texclass="OP" movablelimits="true" data-latex="\min">min</mo><mi data-latex="j">j</mi></munder><mrow data-mjx-texclass="INNER" data-latex="\left( S(u, j) = S(v, j) \right)"><mo data-mjx-texclass="OPEN" data-latex="\left(">(</mo><mi data-latex="S">S</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="u">u</mi><mo data-latex=",">,</mo><mi data-latex="j">j</mi><mo data-latex=")" stretchy="false">)</mo><mo data-latex="=">=</mo><mi data-latex="S">S</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="v">v</mi><mo data-latex=",">,</mo><mi data-latex="j">j</mi><mo data-latex=")" stretchy="false">)</mo><mo data-mjx-texclass="CLOSE" data-latex="\right)">)</mo></mrow></math></mjx-assistive-mml></mjx-container> (and trivially infinite if they are never equal). One can observe that the presence of <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="E_i" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="E_i"><mjx-mi data-latex="E"><mjx-c class="mjx-c1D438">𝐸</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.028em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="E_i"><msub data-latex="E_i"><mi data-latex="E">E</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container> in <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="G" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="G"><mjx-c class="mjx-c1D43A">𝐺</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="G"><mi data-latex="G">G</mi></math></mjx-assistive-mml></mjx-container> doesn't affect the structure of any SCC until the the first <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="t_i" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="t_i"><mjx-mi data-latex="t"><mjx-c class="mjx-c1D461">𝑡</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="t_i"><msub data-latex="t_i"><mi data-latex="t">t</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container> edges are added.</p>
+<div style="text-align:center"><img src="/assets/offline-incremental-scc/slideshow.gif"></div>
 <h2>Algorithm</h2>
 <h3>Pre-Processing</h3>
-<p>We will be doing DnC over the timeline of addition of edges (ie, $[1, m]$) with a recursive function of the form $f(l, r, \text{edge list})$. For every call $f(l, r, \text{edge list})$, our $\text{edge list}$ will contain all edges $E_i$ for which $l \leq t_i \leq r$.</p>
-<p>Let us look at what we do in the first call, $f(1, m, \text{edge list})$ to understand what the generalized recursive call will be doing:</p>
+<p>We will be doing DnC over the timeline of addition of edges (ie, <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="[1, m]" class="NCM-N" aria-hidden="true"><mjx-mo data-latex="["><mjx-c class="mjx-c5B">[</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-mo data-latex="]"><mjx-c class="mjx-c5D">]</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="[1, m]"><mo data-latex="[" stretchy="false">[</mo><mn data-latex="1">1</mn><mo data-latex=",">,</mo><mi data-latex="m">m</mi><mo data-latex="]" stretchy="false">]</mo></math></mjx-assistive-mml></mjx-container>) with a recursive function of the form <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(l, r, \text{edge list})" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mtext space="2" data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(l, r, \text{edge list})"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="l">l</mi><mo data-latex=",">,</mo><mi data-latex="r">r</mi><mo data-latex=",">,</mo><mtext data-latex="\text{edge list}">edge list</mtext><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>. For every call <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(l, r, \text{edge list})" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mtext space="2" data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(l, r, \text{edge list})"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="l">l</mi><mo data-latex=",">,</mo><mi data-latex="r">r</mi><mo data-latex=",">,</mo><mtext data-latex="\text{edge list}">edge list</mtext><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>, our <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\text{edge list}" class="NCM-N" aria-hidden="true"><mjx-mtext data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\text{edge list}"><mtext data-latex="\text{edge list}">edge list</mtext></math></mjx-assistive-mml></mjx-container> will contain all edges <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="E_i" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="E_i"><mjx-mi data-latex="E"><mjx-c class="mjx-c1D438">𝐸</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.028em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="E_i"><msub data-latex="E_i"><mi data-latex="E">E</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container> for which <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="l \leq t_i \leq r" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-msub space="4" data-latex="t_i"><mjx-mi data-latex="t"><mjx-c class="mjx-c1D461">𝑡</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-mi space="4" data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="l \leq t_i \leq r"><mi data-latex="l">l</mi><mo data-latex="\leq">≤</mo><msub data-latex="t_i"><mi data-latex="t">t</mi><mi data-latex="i">i</mi></msub><mo data-latex="\leq">≤</mo><mi data-latex="r">r</mi></math></mjx-assistive-mml></mjx-container>.</p>
+<p>Let us look at what we do in the first call, <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(1, m, \text{edge list})" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mtext space="2" data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(1, m, \text{edge list})"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mn data-latex="1">1</mn><mo data-latex=",">,</mo><mi data-latex="m">m</mi><mo data-latex=",">,</mo><mtext data-latex="\text{edge list}">edge list</mtext><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> to understand what the generalized recursive call will be doing:</p>
 <ol>
-<li>Define $\text{mid} = (1 + m)/2$. We add all edges $E_i : i \leq \text{mid}$ to our initially empty graph and find SCCs induced by these edges. This can be done in $O(x)$ time where $x$ is the number of edges.</li>
+<li>Define <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\text{mid} = (1 + m)/2" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mtext data-latex="\text{mid}"><mjx-c class="mjx-c6D" noic="true" style="padding-top: 0.694em;">m</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mtext><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-mo space="4" data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn><mjx-break size="3"> </mjx-break><mjx-mo data-latex="+"><mjx-c class="mjx-c2B">+</mjx-c></mjx-mo><mjx-mi space="3" data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-mo data-latex="/"><mjx-c class="mjx-c2F">/</mjx-c></mjx-mo><mjx-mn data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\text{mid} = (1 + m)/2"><mtext data-latex="\text{mid}">mid</mtext><mo data-latex="=">=</mo><mo data-latex="(" stretchy="false">(</mo><mn data-latex="1">1</mn><mo data-latex="+">+</mo><mi data-latex="m">m</mi><mo data-latex=")" stretchy="false">)</mo><mo data-latex="/">/</mo><mn data-latex="2">2</mn></math></mjx-assistive-mml></mjx-container>. We add all edges <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="E_i : i \leq \text{mid}" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="E_i"><mjx-mi data-latex="E"><mjx-c class="mjx-c1D438">𝐸</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.028em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex=":"><mjx-c class="mjx-c3A">:</mjx-c></mjx-mo><mjx-mi space="4" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-mtext space="4" data-latex="\text{mid}"><mjx-c class="mjx-c6D" noic="true" style="padding-top: 0.694em;">m</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mtext></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="E_i : i \leq \text{mid}"><msub data-latex="E_i"><mi data-latex="E">E</mi><mi data-latex="i">i</mi></msub><mo data-latex=":">:</mo><mi data-latex="i">i</mi><mo data-latex="\leq">≤</mo><mtext data-latex="\text{mid}">mid</mtext></math></mjx-assistive-mml></mjx-container> to our initially empty graph and find SCCs induced by these edges. This can be done in <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="O(x)" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="O"><mjx-c class="mjx-c1D442">𝑂</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="x"><mjx-c class="mjx-c1D465">𝑥</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="O(x)"><mi data-latex="O">O</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="x">x</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> time where <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="x" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="x"><mjx-c class="mjx-c1D465">𝑥</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="x"><mi data-latex="x">x</mi></math></mjx-assistive-mml></mjx-container> is the number of edges.</li>
 <li>Store information about SCCs/answer queries.</li>
-<li>For every edge $E_i = (u \rightarrow v) : i \leq \text{mid}$, if $\text{SCC}_u = \text{SCC}_v$, then we can deduce that $t_i \leq (1 + n)/2$. Otherwise, $t_i > \text{mid}$. Separate these edges into two groups $\text{G}_1$ and $\text{G}_2$ respectively. Add all edges $E_i : i > \text{mid}$ to $\text{G}_2$.</li>
-<li>Call $f(1, \text{mid} - 1, \text{G}_1)$.</li>
-<li>Once we return from this call, compress all the SCCs induced by the addition of edges in $\text{G}_1$.</li>
-<li>Call $f(\text{mid} + 1, m, \text{G}_2)$. **Remember, this call must operate on the compressed graph.</li>
+<li>For every edge <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="E_i = (u \rightarrow v) : i \leq \text{mid}" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="E_i"><mjx-mi data-latex="E"><mjx-c class="mjx-c1D438">𝐸</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.028em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-mo space="4" data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\rightarrow"><mjx-c class="mjx-c2192">→</mjx-c></mjx-mo><mjx-mi space="4" data-latex="v"><mjx-c class="mjx-c1D463">𝑣</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-break size="4"> </mjx-break><mjx-mo data-latex=":"><mjx-c class="mjx-c3A">:</mjx-c></mjx-mo><mjx-mi space="4" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-mtext space="4" data-latex="\text{mid}"><mjx-c class="mjx-c6D" noic="true" style="padding-top: 0.694em;">m</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mtext></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="E_i = (u \rightarrow v) : i \leq \text{mid}"><msub data-latex="E_i"><mi data-latex="E">E</mi><mi data-latex="i">i</mi></msub><mo data-latex="=">=</mo><mo data-latex="(" stretchy="false">(</mo><mi data-latex="u">u</mi><mo stretchy="false" data-latex="\rightarrow">→</mo><mi data-latex="v">v</mi><mo data-latex=")" stretchy="false">)</mo><mo data-latex=":">:</mo><mi data-latex="i">i</mi><mo data-latex="\leq">≤</mo><mtext data-latex="\text{mid}">mid</mtext></math></mjx-assistive-mml></mjx-container>, if <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\text{SCC}_u = \text{SCC}_v" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="\text{SCC}_u"><mjx-mtext data-latex="\text{SCC}"><mjx-c class="mjx-c53" noic="true" style="padding-top: 0.705em;">S</mjx-c><mjx-c class="mjx-c43" noic="true" style="padding-top: 0.705em;">C</mjx-c><mjx-c class="mjx-c43" style="padding-top: 0.705em;">C</mjx-c></mjx-mtext><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-msub space="4" data-latex="\text{SCC}_v"><mjx-mtext data-latex="\text{SCC}"><mjx-c class="mjx-c53" noic="true" style="padding-top: 0.705em;">S</mjx-c><mjx-c class="mjx-c43" noic="true" style="padding-top: 0.705em;">C</mjx-c><mjx-c class="mjx-c43" style="padding-top: 0.705em;">C</mjx-c></mjx-mtext><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="v"><mjx-c class="mjx-c1D463">𝑣</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\text{SCC}_u = \text{SCC}_v"><msub data-latex="\text{SCC}_u"><mtext data-latex="\text{SCC}">SCC</mtext><mi data-latex="u">u</mi></msub><mo data-latex="=">=</mo><msub data-latex="\text{SCC}_v"><mtext data-latex="\text{SCC}">SCC</mtext><mi data-latex="v">v</mi></msub></math></mjx-assistive-mml></mjx-container>, then we can deduce that <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="t_i \leq (1 + n)/2" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="t_i"><mjx-mi data-latex="t"><mjx-c class="mjx-c1D461">𝑡</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-mo space="4" data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn><mjx-break size="3"> </mjx-break><mjx-mo data-latex="+"><mjx-c class="mjx-c2B">+</mjx-c></mjx-mo><mjx-mi space="3" data-latex="n"><mjx-c class="mjx-c1D45B">𝑛</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-mo data-latex="/"><mjx-c class="mjx-c2F">/</mjx-c></mjx-mo><mjx-mn data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="t_i \leq (1 + n)/2"><msub data-latex="t_i"><mi data-latex="t">t</mi><mi data-latex="i">i</mi></msub><mo data-latex="\leq">≤</mo><mo data-latex="(" stretchy="false">(</mo><mn data-latex="1">1</mn><mo data-latex="+">+</mo><mi data-latex="n">n</mi><mo data-latex=")" stretchy="false">)</mo><mo data-latex="/">/</mo><mn data-latex="2">2</mn></math></mjx-assistive-mml></mjx-container>. Otherwise, <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="t_i > \text{mid}" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="t_i"><mjx-mi data-latex="t"><mjx-c class="mjx-c1D461">𝑡</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex=">"><mjx-c class="mjx-c3E">&gt;</mjx-c></mjx-mo><mjx-mtext space="4" data-latex="\text{mid}"><mjx-c class="mjx-c6D" noic="true" style="padding-top: 0.694em;">m</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mtext></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="t_i > \text{mid}"><msub data-latex="t_i"><mi data-latex="t">t</mi><mi data-latex="i">i</mi></msub><mo data-latex=">">&gt;</mo><mtext data-latex="\text{mid}">mid</mtext></math></mjx-assistive-mml></mjx-container>. Separate these edges into two groups <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\text{G}_1" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="\text{G}_1"><mjx-mtext data-latex="\text{G}"><mjx-c class="mjx-c47">G</mjx-c></mjx-mtext><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\text{G}_1"><msub data-latex="\text{G}_1"><mtext data-latex="\text{G}">G</mtext><mn data-latex="1">1</mn></msub></math></mjx-assistive-mml></mjx-container> and <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\text{G}_2" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="\text{G}_2"><mjx-mtext data-latex="\text{G}"><mjx-c class="mjx-c47">G</mjx-c></mjx-mtext><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\text{G}_2"><msub data-latex="\text{G}_2"><mtext data-latex="\text{G}">G</mtext><mn data-latex="2">2</mn></msub></math></mjx-assistive-mml></mjx-container> respectively. Add all edges <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="E_i : i > \text{mid}" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="E_i"><mjx-mi data-latex="E"><mjx-c class="mjx-c1D438">𝐸</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.028em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex=":"><mjx-c class="mjx-c3A">:</mjx-c></mjx-mo><mjx-mi space="4" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex=">"><mjx-c class="mjx-c3E">&gt;</mjx-c></mjx-mo><mjx-mtext space="4" data-latex="\text{mid}"><mjx-c class="mjx-c6D" noic="true" style="padding-top: 0.694em;">m</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mtext></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="E_i : i > \text{mid}"><msub data-latex="E_i"><mi data-latex="E">E</mi><mi data-latex="i">i</mi></msub><mo data-latex=":">:</mo><mi data-latex="i">i</mi><mo data-latex=">">&gt;</mo><mtext data-latex="\text{mid}">mid</mtext></math></mjx-assistive-mml></mjx-container> to <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\text{G}_2" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="\text{G}_2"><mjx-mtext data-latex="\text{G}"><mjx-c class="mjx-c47">G</mjx-c></mjx-mtext><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\text{G}_2"><msub data-latex="\text{G}_2"><mtext data-latex="\text{G}">G</mtext><mn data-latex="2">2</mn></msub></math></mjx-assistive-mml></mjx-container>.</li>
+<li>Call <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(1, \text{mid} - 1, \text{G}_1)" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mtext space="2" data-latex="\text{mid}"><mjx-c class="mjx-c6D" noic="true" style="padding-top: 0.694em;">m</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mtext><mjx-break size="3"> </mjx-break><mjx-mo data-latex="-"><mjx-c class="mjx-c2212">−</mjx-c></mjx-mo><mjx-mn space="3" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="\text{G}_1"><mjx-mtext data-latex="\text{G}"><mjx-c class="mjx-c47">G</mjx-c></mjx-mtext><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(1, \text{mid} - 1, \text{G}_1)"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mn data-latex="1">1</mn><mo data-latex=",">,</mo><mtext data-latex="\text{mid}">mid</mtext><mo data-latex="-">−</mo><mn data-latex="1">1</mn><mo data-latex=",">,</mo><msub data-latex="\text{G}_1"><mtext data-latex="\text{G}">G</mtext><mn data-latex="1">1</mn></msub><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>.</li>
+<li>Once we return from this call, compress all the SCCs induced by the addition of edges in <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\text{G}_1" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="\text{G}_1"><mjx-mtext data-latex="\text{G}"><mjx-c class="mjx-c47">G</mjx-c></mjx-mtext><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\text{G}_1"><msub data-latex="\text{G}_1"><mtext data-latex="\text{G}">G</mtext><mn data-latex="1">1</mn></msub></math></mjx-assistive-mml></mjx-container>.</li>
+<li>Call <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(\text{mid} + 1, m, \text{G}_2)" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mtext data-latex="\text{mid}"><mjx-c class="mjx-c6D" noic="true" style="padding-top: 0.694em;">m</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mtext><mjx-break size="3"> </mjx-break><mjx-mo data-latex="+"><mjx-c class="mjx-c2B">+</mjx-c></mjx-mo><mjx-mn space="3" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="\text{G}_2"><mjx-mtext data-latex="\text{G}"><mjx-c class="mjx-c47">G</mjx-c></mjx-mtext><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(\text{mid} + 1, m, \text{G}_2)"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mtext data-latex="\text{mid}">mid</mtext><mo data-latex="+">+</mo><mn data-latex="1">1</mn><mo data-latex=",">,</mo><mi data-latex="m">m</mi><mo data-latex=",">,</mo><msub data-latex="\text{G}_2"><mtext data-latex="\text{G}">G</mtext><mn data-latex="2">2</mn></msub><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>. **Remember, this call must operate on the compressed graph.</li>
 </ol>
-<p>Notice that when we execute $f(l, r, \text{edge list})$, it is essential that we perform the computation within it (finding SCCs induced by $\text{edge list}$, checking if endpoints of edges belong to the same SCC, etc.) upon the compressed graph induced by all edges $E_i : t_i < l$. This can be done easily by maintaining a global graph $G$, and performing compressions introduced by $\text{edge list}$ of $f(l, r, \text{edge list})$ when we return from this function (therefore, step $5$ will actually be performed by $f(1, \text{mid} - 1, \text{G}_1)$ and the calls in its subtree before they return).</p>
+<p>Notice that when we execute <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(l, r, \text{edge list})" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mtext space="2" data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(l, r, \text{edge list})"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="l">l</mi><mo data-latex=",">,</mo><mi data-latex="r">r</mi><mo data-latex=",">,</mo><mtext data-latex="\text{edge list}">edge list</mtext><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>, it is essential that we perform the computation within it (finding SCCs induced by <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\text{edge list}" class="NCM-N" aria-hidden="true"><mjx-mtext data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\text{edge list}"><mtext data-latex="\text{edge list}">edge list</mtext></math></mjx-assistive-mml></mjx-container>, checking if endpoints of edges belong to the same SCC, etc.) upon the compressed graph induced by all edges <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="E_i : t_i < l" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="E_i"><mjx-mi data-latex="E"><mjx-c class="mjx-c1D438">𝐸</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.028em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex=":"><mjx-c class="mjx-c3A">:</mjx-c></mjx-mo><mjx-msub space="4" data-latex="t_i"><mjx-mi data-latex="t"><mjx-c class="mjx-c1D461">𝑡</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="<"><mjx-c class="mjx-c3C">&lt;</mjx-c></mjx-mo><mjx-mi space="4" data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="E_i : t_i < l"><msub data-latex="E_i"><mi data-latex="E">E</mi><mi data-latex="i">i</mi></msub><mo data-latex=":">:</mo><msub data-latex="t_i"><mi data-latex="t">t</mi><mi data-latex="i">i</mi></msub><mo data-latex="<">&lt;</mo><mi data-latex="l">l</mi></math></mjx-assistive-mml></mjx-container>. This can be done easily by maintaining a global graph <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="G" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="G"><mjx-c class="mjx-c1D43A">𝐺</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="G"><mi data-latex="G">G</mi></math></mjx-assistive-mml></mjx-container>, and performing compressions introduced by <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\text{edge list}" class="NCM-N" aria-hidden="true"><mjx-mtext data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\text{edge list}"><mtext data-latex="\text{edge list}">edge list</mtext></math></mjx-assistive-mml></mjx-container> of <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(l, r, \text{edge list})" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mtext space="2" data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(l, r, \text{edge list})"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="l">l</mi><mo data-latex=",">,</mo><mi data-latex="r">r</mi><mo data-latex=",">,</mo><mtext data-latex="\text{edge list}">edge list</mtext><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> when we return from this function (therefore, step <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="5" class="NCM-N" aria-hidden="true"><mjx-mn data-latex="5"><mjx-c class="mjx-c35">5</mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="5"><mn data-latex="5">5</mn></math></mjx-assistive-mml></mjx-container> will actually be performed by <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(1, \text{mid} - 1, \text{G}_1)" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mtext space="2" data-latex="\text{mid}"><mjx-c class="mjx-c6D" noic="true" style="padding-top: 0.694em;">m</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mtext><mjx-break size="3"> </mjx-break><mjx-mo data-latex="-"><mjx-c class="mjx-c2212">−</mjx-c></mjx-mo><mjx-mn space="3" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="\text{G}_1"><mjx-mtext data-latex="\text{G}"><mjx-c class="mjx-c47">G</mjx-c></mjx-mtext><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(1, \text{mid} - 1, \text{G}_1)"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mn data-latex="1">1</mn><mo data-latex=",">,</mo><mtext data-latex="\text{mid}">mid</mtext><mo data-latex="-">−</mo><mn data-latex="1">1</mn><mo data-latex=",">,</mo><msub data-latex="\text{G}_1"><mtext data-latex="\text{G}">G</mtext><mn data-latex="1">1</mn></msub><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> and the calls in its subtree before they return).</p>
 <p>The pseudo code for our algorithm takes the following form:</p>
 <pre class="hljs"><code>create an empty graph G with n nodes
 
@@ -96,42 +1092,42 @@ f(1, m, edge list)
 <h4><u>Queries based on number of edges added</u></h4>
 <p>These queries are of the form:</p>
 <blockquote>
-<p>Find some information about the SCCs of a graph after $i$ edges are added.</p>
+<p>Find some information about the SCCs of a graph after <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i"><mi data-latex="i">i</mi></math></mjx-assistive-mml></mjx-container> edges are added.</p>
 </blockquote>
-<p>Such queries can be answered by maintaining SCCs using DSU/Small-to-Large merging/(some other ds) as we go through the recursion in a way such that after performing the computation for $f(l, r, \text{edge list})$, all information about SCCs after adding the first $(l + r)/2$ edges will be queryable from our DS. We then answer all queries with $i = (l + r)/2$.</p>
-<p><strong>Note</strong>: This is possible because if the SCC compression for $f(l_1, r_1, \text{edge list}_1)$ is done before the SCC compression for $f(l_2, r_2, \text{edge list}_2)$, then we have either  $(l_1 \leq l_2 \text{ and } r_1 \leq r_2)$ or $(l_2 \leq l_1 \text{ and } r_1 \leq r_2)$. Therefore, SCCs only expand(unite) as we recurse through the calls.</p>
+<p>Such queries can be answered by maintaining SCCs using DSU/Small-to-Large merging/(some other ds) as we go through the recursion in a way such that after performing the computation for <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(l, r, \text{edge list})" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mtext space="2" data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(l, r, \text{edge list})"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="l">l</mi><mo data-latex=",">,</mo><mi data-latex="r">r</mi><mo data-latex=",">,</mo><mtext data-latex="\text{edge list}">edge list</mtext><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>, all information about SCCs after adding the first <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="(l + r)/2" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-break size="3"> </mjx-break><mjx-mo data-latex="+"><mjx-c class="mjx-c2B">+</mjx-c></mjx-mo><mjx-mi space="3" data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-mo data-latex="/"><mjx-c class="mjx-c2F">/</mjx-c></mjx-mo><mjx-mn data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="(l + r)/2"><mo data-latex="(" stretchy="false">(</mo><mi data-latex="l">l</mi><mo data-latex="+">+</mo><mi data-latex="r">r</mi><mo data-latex=")" stretchy="false">)</mo><mo data-latex="/">/</mo><mn data-latex="2">2</mn></math></mjx-assistive-mml></mjx-container> edges will be queryable from our DS. We then answer all queries with <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i = (l + r)/2" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-mo space="4" data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-break size="3"> </mjx-break><mjx-mo data-latex="+"><mjx-c class="mjx-c2B">+</mjx-c></mjx-mo><mjx-mi space="3" data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-mo data-latex="/"><mjx-c class="mjx-c2F">/</mjx-c></mjx-mo><mjx-mn data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i = (l + r)/2"><mi data-latex="i">i</mi><mo data-latex="=">=</mo><mo data-latex="(" stretchy="false">(</mo><mi data-latex="l">l</mi><mo data-latex="+">+</mo><mi data-latex="r">r</mi><mo data-latex=")" stretchy="false">)</mo><mo data-latex="/">/</mo><mn data-latex="2">2</mn></math></mjx-assistive-mml></mjx-container>.</p>
+<p><strong>Note</strong>: This is possible because if the SCC compression for <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(l_1, r_1, \text{edge list}_1)" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-msub data-latex="l_1"><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="r_1"><mjx-mi data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="\text{edge list}_1"><mjx-mtext data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext><mjx-script style="vertical-align: -0.241em;"><mjx-mn size="s" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(l_1, r_1, \text{edge list}_1)"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><msub data-latex="l_1"><mi data-latex="l">l</mi><mn data-latex="1">1</mn></msub><mo data-latex=",">,</mo><msub data-latex="r_1"><mi data-latex="r">r</mi><mn data-latex="1">1</mn></msub><mo data-latex=",">,</mo><msub data-latex="\text{edge list}_1"><mtext data-latex="\text{edge list}">edge list</mtext><mn data-latex="1">1</mn></msub><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> is done before the SCC compression for <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(l_2, r_2, \text{edge list}_2)" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-msub data-latex="l_2"><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="r_2"><mjx-mi data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="\text{edge list}_2"><mjx-mtext data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext><mjx-script style="vertical-align: -0.241em;"><mjx-mn size="s" data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(l_2, r_2, \text{edge list}_2)"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><msub data-latex="l_2"><mi data-latex="l">l</mi><mn data-latex="2">2</mn></msub><mo data-latex=",">,</mo><msub data-latex="r_2"><mi data-latex="r">r</mi><mn data-latex="2">2</mn></msub><mo data-latex=",">,</mo><msub data-latex="\text{edge list}_2"><mtext data-latex="\text{edge list}">edge list</mtext><mn data-latex="2">2</mn></msub><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>, then we have either  <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="(l_1 \leq l_2 \text{ and } r_1 \leq r_2)" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-msub data-latex="l_1"><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-msub space="4" data-latex="l_2"><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mtext data-latex="\text{ and }"><mjx-c class="mjx-cA0" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c61" noic="true" style="padding-top: 0.694em;">a</mjx-c><mjx-c class="mjx-c6E" noic="true" style="padding-top: 0.694em;">n</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-cA0" style="padding-top: 0.694em;"> </mjx-c></mjx-mtext><mjx-msub data-latex="r_1"><mjx-mi data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-msub space="4" data-latex="r_2"><mjx-mi data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="(l_1 \leq l_2 \text{ and } r_1 \leq r_2)"><mo data-latex="(" stretchy="false">(</mo><msub data-latex="l_1"><mi data-latex="l">l</mi><mn data-latex="1">1</mn></msub><mo data-latex="\leq">≤</mo><msub data-latex="l_2"><mi data-latex="l">l</mi><mn data-latex="2">2</mn></msub><mtext data-latex="\text{ and }"> and </mtext><msub data-latex="r_1"><mi data-latex="r">r</mi><mn data-latex="1">1</mn></msub><mo data-latex="\leq">≤</mo><msub data-latex="r_2"><mi data-latex="r">r</mi><mn data-latex="2">2</mn></msub><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> or <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="(l_2 \leq l_1 \text{ and } r_1 \leq r_2)" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-msub data-latex="l_2"><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-msub space="4" data-latex="l_1"><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mtext data-latex="\text{ and }"><mjx-c class="mjx-cA0" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c61" noic="true" style="padding-top: 0.694em;">a</mjx-c><mjx-c class="mjx-c6E" noic="true" style="padding-top: 0.694em;">n</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-cA0" style="padding-top: 0.694em;"> </mjx-c></mjx-mtext><mjx-msub data-latex="r_1"><mjx-mi data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-msub space="4" data-latex="r_2"><mjx-mi data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mn size="s" data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="(l_2 \leq l_1 \text{ and } r_1 \leq r_2)"><mo data-latex="(" stretchy="false">(</mo><msub data-latex="l_2"><mi data-latex="l">l</mi><mn data-latex="2">2</mn></msub><mo data-latex="\leq">≤</mo><msub data-latex="l_1"><mi data-latex="l">l</mi><mn data-latex="1">1</mn></msub><mtext data-latex="\text{ and }"> and </mtext><msub data-latex="r_1"><mi data-latex="r">r</mi><mn data-latex="1">1</mn></msub><mo data-latex="\leq">≤</mo><msub data-latex="r_2"><mi data-latex="r">r</mi><mn data-latex="2">2</mn></msub><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>. Therefore, SCCs only expand(unite) as we recurse through the calls.</p>
 <h4><u>Queries based on nodes</u></h4>
 <p>This is a somewhat non-trivial technique, which can be used to answer queries like:</p>
 <blockquote>
-<p>Find the smallest $i$ such that nodes $u$ and $v$ belong to the same SCC after the first $i$ edges are added to $G$</p>
+<p>Find the smallest <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i"><mi data-latex="i">i</mi></math></mjx-assistive-mml></mjx-container> such that nodes <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="u" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="u"><mi data-latex="u">u</mi></math></mjx-assistive-mml></mjx-container> and <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="v" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="v"><mjx-c class="mjx-c1D463">𝑣</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="v"><mi data-latex="v">v</mi></math></mjx-assistive-mml></mjx-container> belong to the same SCC after the first <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i"><mi data-latex="i">i</mi></math></mjx-assistive-mml></mjx-container> edges are added to <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="G" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="G"><mjx-c class="mjx-c1D43A">𝐺</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="G"><mi data-latex="G">G</mi></math></mjx-assistive-mml></mjx-container></p>
 </blockquote>
 <p>We solve it in the following way:</p>
 <ol>
-<li>We maintain an initially empty undirected weighted graph $U$.</li>
-<li>At every call $f(l, r, \text{edge list})$, for every edge $E_i = (u \rightarrow v) \in \text{G}1$, we add an edge $(u, v)$ with weight $(l + r)/2$ to $U$.</li>
-<li>Finally, $U$ contains $O(m\log_2{m})$ edges, with weights $\leq m$.</li>
-<li>To answer a query for a pair of nodes $(u, v)$, one can observe that the problem is equivalent to finding the minimized maximum weight edge on any path between $u$ and $v$ in  $U$. This can be done by constructing the MST of $U$ and answering path maximum queries.</li>
+<li>We maintain an initially empty undirected weighted graph <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="U" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="U"><mjx-c class="mjx-c1D448">𝑈</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="U"><mi data-latex="U">U</mi></math></mjx-assistive-mml></mjx-container>.</li>
+<li>At every call <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(l, r, \text{edge list})" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mtext space="2" data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(l, r, \text{edge list})"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="l">l</mi><mo data-latex=",">,</mo><mi data-latex="r">r</mi><mo data-latex=",">,</mo><mtext data-latex="\text{edge list}">edge list</mtext><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>, for every edge <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="E_i = (u \rightarrow v) \in \text{G}1" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="E_i"><mjx-mi data-latex="E"><mjx-c class="mjx-c1D438">𝐸</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.028em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-mo space="4" data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\rightarrow"><mjx-c class="mjx-c2192">→</mjx-c></mjx-mo><mjx-mi space="4" data-latex="v"><mjx-c class="mjx-c1D463">𝑣</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\in"><mjx-c class="mjx-c2208">∈</mjx-c></mjx-mo><mjx-mtext space="4" data-latex="\text{G}"><mjx-c class="mjx-c47">G</mjx-c></mjx-mtext><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="E_i = (u \rightarrow v) \in \text{G}1"><msub data-latex="E_i"><mi data-latex="E">E</mi><mi data-latex="i">i</mi></msub><mo data-latex="=">=</mo><mo data-latex="(" stretchy="false">(</mo><mi data-latex="u">u</mi><mo stretchy="false" data-latex="\rightarrow">→</mo><mi data-latex="v">v</mi><mo data-latex=")" stretchy="false">)</mo><mo data-latex="\in">∈</mo><mtext data-latex="\text{G}">G</mtext><mn data-latex="1">1</mn></math></mjx-assistive-mml></mjx-container>, we add an edge <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="(u, v)" class="NCM-N" aria-hidden="true"><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="v"><mjx-c class="mjx-c1D463">𝑣</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="(u, v)"><mo data-latex="(" stretchy="false">(</mo><mi data-latex="u">u</mi><mo data-latex=",">,</mo><mi data-latex="v">v</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> with weight <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="(l + r)/2" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-break size="3"> </mjx-break><mjx-mo data-latex="+"><mjx-c class="mjx-c2B">+</mjx-c></mjx-mo><mjx-mi space="3" data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-mo data-latex="/"><mjx-c class="mjx-c2F">/</mjx-c></mjx-mo><mjx-mn data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="(l + r)/2"><mo data-latex="(" stretchy="false">(</mo><mi data-latex="l">l</mi><mo data-latex="+">+</mo><mi data-latex="r">r</mi><mo data-latex=")" stretchy="false">)</mo><mo data-latex="/">/</mo><mn data-latex="2">2</mn></math></mjx-assistive-mml></mjx-container> to <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="U" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="U"><mjx-c class="mjx-c1D448">𝑈</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="U"><mi data-latex="U">U</mi></math></mjx-assistive-mml></mjx-container>.</li>
+<li>Finally, <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="U" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="U"><mjx-c class="mjx-c1D448">𝑈</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="U"><mi data-latex="U">U</mi></math></mjx-assistive-mml></mjx-container> contains <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="O(m\log_2{m})" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="O"><mjx-c class="mjx-c1D442">𝑂</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-msub space="2" data-latex="\log_2"><mjx-mi data-latex="\log"><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c6F" noic="true" style="padding-top: 0.694em;">o</mjx-c><mjx-c class="mjx-c67" style="padding-top: 0.694em;">g</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.241em;"><mjx-mn size="s" data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-TeXAtom space="2" data-latex="{m}" texclass="ORD"><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi></mjx-TeXAtom><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="O(m\log_2{m})"><mi data-latex="O">O</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="m">m</mi><msub data-latex="\log_2"><mi data-latex="\log">log</mi><mn data-latex="2">2</mn></msub><mo data-mjx-texclass="NONE">⁡</mo><mrow data-mjx-texclass="ORD" data-latex="{m}"><mi data-latex="m">m</mi></mrow><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> edges, with weights <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\leq m" class="NCM-N" aria-hidden="true"><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-mi space="4" data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\leq m"><mo data-latex="\leq">≤</mo><mi data-latex="m">m</mi></math></mjx-assistive-mml></mjx-container>.</li>
+<li>To answer a query for a pair of nodes <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="(u, v)" class="NCM-N" aria-hidden="true"><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="v"><mjx-c class="mjx-c1D463">𝑣</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="(u, v)"><mo data-latex="(" stretchy="false">(</mo><mi data-latex="u">u</mi><mo data-latex=",">,</mo><mi data-latex="v">v</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>, one can observe that the problem is equivalent to finding the minimized maximum weight edge on any path between <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="u" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="u"><mi data-latex="u">u</mi></math></mjx-assistive-mml></mjx-container> and <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="v" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="v"><mjx-c class="mjx-c1D463">𝑣</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="v"><mi data-latex="v">v</mi></math></mjx-assistive-mml></mjx-container> in  <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="U" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="U"><mjx-c class="mjx-c1D448">𝑈</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="U"><mi data-latex="U">U</mi></math></mjx-assistive-mml></mjx-container>. This can be done by constructing the MST of <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="U" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="U"><mjx-c class="mjx-c1D448">𝑈</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="U"><mi data-latex="U">U</mi></math></mjx-assistive-mml></mjx-container> and answering path maximum queries.</li>
 </ol>
-<p><strong>Note</strong>: Since all edges in $U$ have weight $\leq m$, we can avoid sorting its edge list and simply iterate over edge weights (in kruskals) to find the MST and get rid of a log factor, allowing construction of the MST in $O(m\log_2{m})$.</p>
+<p><strong>Note</strong>: Since all edges in <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="U" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="U"><mjx-c class="mjx-c1D448">𝑈</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="U"><mi data-latex="U">U</mi></math></mjx-assistive-mml></mjx-container> have weight <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\leq m" class="NCM-N" aria-hidden="true"><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-mi space="4" data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\leq m"><mo data-latex="\leq">≤</mo><mi data-latex="m">m</mi></math></mjx-assistive-mml></mjx-container>, we can avoid sorting its edge list and simply iterate over edge weights (in kruskals) to find the MST and get rid of a log factor, allowing construction of the MST in <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="O(m\log_2{m})" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="O"><mjx-c class="mjx-c1D442">𝑂</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-msub space="2" data-latex="\log_2"><mjx-mi data-latex="\log"><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c6F" noic="true" style="padding-top: 0.694em;">o</mjx-c><mjx-c class="mjx-c67" style="padding-top: 0.694em;">g</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.241em;"><mjx-mn size="s" data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-TeXAtom space="2" data-latex="{m}" texclass="ORD"><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi></mjx-TeXAtom><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="O(m\log_2{m})"><mi data-latex="O">O</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="m">m</mi><msub data-latex="\log_2"><mi data-latex="\log">log</mi><mn data-latex="2">2</mn></msub><mo data-mjx-texclass="NONE">⁡</mo><mrow data-mjx-texclass="ORD" data-latex="{m}"><mi data-latex="m">m</mi></mrow><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>.</p>
 <h2>Complexity Analysis</h2>
-<p>Since we split apart $\text{edge list}$ into two disjoint groups $\text{G}1$ and $\text{G}2$ in every call $f(l, r, \text{edge list})$, this ensures that every edge occurs exactly once on every level of the recursion. For every call $f(l, r, \text{edge list})$, we perform a $O(\vert \text{edge list} \vert)$ computation. So on every level, we perform a $O(\sum_{f(l, r, \text{edge list})}(\vert \text{edge list} \vert)) = O(m)$ computation. There are $\log_2(m)$ levels of the recursion, so our pre-processing algorithm works in $O(m \log_2{m})$.</p>
+<p>Since we split apart <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\text{edge list}" class="NCM-N" aria-hidden="true"><mjx-mtext data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\text{edge list}"><mtext data-latex="\text{edge list}">edge list</mtext></math></mjx-assistive-mml></mjx-container> into two disjoint groups <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\text{G}1" class="NCM-N" aria-hidden="true"><mjx-mtext data-latex="\text{G}"><mjx-c class="mjx-c47">G</mjx-c></mjx-mtext><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\text{G}1"><mtext data-latex="\text{G}">G</mtext><mn data-latex="1">1</mn></math></mjx-assistive-mml></mjx-container> and <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\text{G}2" class="NCM-N" aria-hidden="true"><mjx-mtext data-latex="\text{G}"><mjx-c class="mjx-c47">G</mjx-c></mjx-mtext><mjx-mn data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\text{G}2"><mtext data-latex="\text{G}">G</mtext><mn data-latex="2">2</mn></math></mjx-assistive-mml></mjx-container> in every call <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(l, r, \text{edge list})" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mtext space="2" data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(l, r, \text{edge list})"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="l">l</mi><mo data-latex=",">,</mo><mi data-latex="r">r</mi><mo data-latex=",">,</mo><mtext data-latex="\text{edge list}">edge list</mtext><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>, this ensures that every edge occurs exactly once on every level of the recursion. For every call <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(l, r, \text{edge list})" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mtext space="2" data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(l, r, \text{edge list})"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="l">l</mi><mo data-latex=",">,</mo><mi data-latex="r">r</mi><mo data-latex=",">,</mo><mtext data-latex="\text{edge list}">edge list</mtext><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>, we perform a <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="O(\vert \text{edge list} \vert)" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="O"><mjx-c class="mjx-c1D442">𝑂</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mo data-latex="\vert"><mjx-c class="mjx-c7C">|</mjx-c></mjx-mo><mjx-mtext data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext><mjx-mo data-latex="\vert"><mjx-c class="mjx-c7C">|</mjx-c></mjx-mo><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="O(\vert \text{edge list} \vert)"><mi data-latex="O">O</mi><mo data-latex="(" stretchy="false">(</mo><mo data-mjx-texclass="ORD" stretchy="false" data-latex="\vert">|</mo><mtext data-latex="\text{edge list}">edge list</mtext><mo data-mjx-texclass="ORD" stretchy="false" data-latex="\vert">|</mo><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> computation. So on every level, we perform a <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="O(\sum_{f(l, r, \text{edge list})}(\vert \text{edge list} \vert)) = O(m)" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="O"><mjx-c class="mjx-c1D442">𝑂</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-munder data-latex="\sum_{f(l,r,\text{edge list})}" limits="false"><mjx-mo data-latex="\sum"><mjx-c class="mjx-c2211">∑</mjx-c></mjx-mo><mjx-script style="vertical-align: -0.285em;"><mjx-TeXAtom size="s" data-latex="{f(l,r,\text{edge list})}" texclass="ORD"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mtext data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-TeXAtom></mjx-script></mjx-munder><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mo data-latex="\vert"><mjx-c class="mjx-c7C">|</mjx-c></mjx-mo><mjx-mtext data-latex="\text{edge list}"><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c64" noic="true" style="padding-top: 0.694em;">d</mjx-c><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c65" noic="true" style="padding-top: 0.694em;">e</mjx-c><mjx-c class="mjx-c20" noic="true" style="padding-top: 0.694em;"> </mjx-c><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c69" noic="true" style="padding-top: 0.694em;">i</mjx-c><mjx-c class="mjx-c73" noic="true" style="padding-top: 0.694em;">s</mjx-c><mjx-c class="mjx-c74" style="padding-top: 0.694em;">t</mjx-c></mjx-mtext><mjx-mo data-latex="\vert"><mjx-c class="mjx-c7C">|</mjx-c></mjx-mo><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-mi space="4" data-latex="O"><mjx-c class="mjx-c1D442">𝑂</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="O(\sum_{f(l, r, \text{edge list})}(\vert \text{edge list} \vert)) = O(m)"><mi data-latex="O">O</mi><mo data-latex="(" stretchy="false">(</mo><munder data-latex="\sum_{f(l,r,\text{edge list})}"><mo data-latex="\sum">∑</mo><mrow data-mjx-texclass="ORD" data-latex="{f(l,r,\text{edge list})}"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="l">l</mi><mo data-latex=",">,</mo><mi data-latex="r">r</mi><mo data-latex=",">,</mo><mtext data-latex="\text{edge list}">edge list</mtext><mo data-latex=")" stretchy="false">)</mo></mrow></munder><mo data-latex="(" stretchy="false">(</mo><mo data-mjx-texclass="ORD" stretchy="false" data-latex="\vert">|</mo><mtext data-latex="\text{edge list}">edge list</mtext><mo data-mjx-texclass="ORD" stretchy="false" data-latex="\vert">|</mo><mo data-latex=")" stretchy="false">)</mo><mo data-latex=")" stretchy="false">)</mo><mo data-latex="=">=</mo><mi data-latex="O">O</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="m">m</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> computation. There are <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\log_2(m)" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="\log_2"><mjx-mi data-latex="\log"><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c6F" noic="true" style="padding-top: 0.694em;">o</mjx-c><mjx-c class="mjx-c67" style="padding-top: 0.694em;">g</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.241em;"><mjx-mn size="s" data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\log_2(m)"><msub data-latex="\log_2"><mi data-latex="\log">log</mi><mn data-latex="2">2</mn></msub><mo data-mjx-texclass="NONE">⁡</mo><mo data-latex="(" stretchy="false">(</mo><mi data-latex="m">m</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> levels of the recursion, so our pre-processing algorithm works in <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="O(m \log_2{m})" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="O"><mjx-c class="mjx-c1D442">𝑂</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-msub space="2" data-latex="\log_2"><mjx-mi data-latex="\log"><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c6F" noic="true" style="padding-top: 0.694em;">o</mjx-c><mjx-c class="mjx-c67" style="padding-top: 0.694em;">g</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.241em;"><mjx-mn size="s" data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-script></mjx-msub><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-TeXAtom space="2" data-latex="{m}" texclass="ORD"><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi></mjx-TeXAtom><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="O(m \log_2{m})"><mi data-latex="O">O</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="m">m</mi><msub data-latex="\log_2"><mi data-latex="\log">log</mi><mn data-latex="2">2</mn></msub><mo data-mjx-texclass="NONE">⁡</mo><mrow data-mjx-texclass="ORD" data-latex="{m}"><mi data-latex="m">m</mi></mrow><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>.</p>
 <p>The time taken for answering queries is problem dependent.</p>
 <h2>Example Problems</h2>
 <h3>1. <a href="https://qoj.ac/contest/796/problem/2214?v=1">Problem L, Grand Prix of Zheijang (Open Cup 2018-19)</a></h3>
-<details><summary class ="spoiler-summary">Solution</summary>
-<div class = "spoiler-content">
+<details><summary class="spoiler-summary">Solution</summary>
+<div class="spoiler-content">
 Trivial, just use DSU to maintain size of each SCC.
 </div>
 </details>
 <h3>2. <a href="https://codeforces.com/problemset/problem/1989/F">CF-1989F</a></h3>
-<details><summary class ="spoiler-summary">Solution</summary>
-<div class = "spoiler-content">
+<details><summary class="spoiler-summary">Solution</summary>
+<div class="spoiler-content">
 To be updated
 </div>
 </details>
 <h3>3. <a href="https://www.acmicpc.net/problem/8496">ONTAK 2009 Godzilla</a></h3>
-<details><summary class ="spoiler-summary">Solution</summary>
-<div class = "spoiler-content">
+<details><summary class="spoiler-summary">Solution</summary>
+<div class="spoiler-content">
 To be updated
 </div>
 </details>

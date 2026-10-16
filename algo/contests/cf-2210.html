@@ -1,75 +1,933 @@
-<!DOCTYPE html><html lang="en" class="h-full"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CF-2210 · Welcome to the Sunny Side!</title><meta name="description" content="I have begun training for WF, and want my practice to take a more structured form. Hence this recapitulation, and any others that may follow."><link rel="canonical" href="https://www.welcome-to-the-sunny-side.com/algo/contests/cf-2210.html"><link rel="icon" href="/favicon.ico"><script async src="https://www.googletagmanager.com/gtag/js?id=G-FDGES615HV"></script><script type="module">window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-FDGES615HV");</script><link rel="stylesheet" href="/_astro/_slug_.DFBpVZ-4.css"></head> <body class="h-full"> <div class="h-screen w-screen grid grid-cols-1 grid-rows-[auto_1fr] md:grid-cols-[1fr_auto] md:grid-rows-1"> <!-- Mobile breadcrumb nav --> <div class="md:hidden"> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z1AQ8aI" component-url="/_astro/MobileNav.XGZTBScB.js" component-export="default" renderer-url="/_astro/client.svelte.DSigbiJE.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;MobileNav&quot;,&quot;value&quot;:true}" await-children><!--[--><nav class="md:hidden flex items-center px-3 py-2 bg-surface border-b border-accent-subtle font-mono text-sm"><div class="flex-1 flex items-center min-w-0 overflow-x-auto whitespace-nowrap"><!--[--><!--[!--><!--]--> <!--[!--><button class="crumb-link text-text-muted hover:text-accent transition-colors duration-150 svelte-xffx7i">~</button><!--]--><!--[--><span class="text-accent mx-1 select-none">/</span><!--]--> <!--[--><span class="text-text font-medium">home.html</span><!--]--><!--]--></div> <button class="flex-shrink-0 ml-3 text-text-muted hover:text-accent transition-colors duration-150 text-base leading-none" aria-label="Switch skin (current: dark)">☾</button></nav><!--]--><!--astro:end--></astro-island> </div> <!-- Content --> <main class="overflow-y-auto overflow-x-hidden bg-surface text-text transition-colors duration-150 ease-retro min-h-0"> <astro-island uid="19DLEB" component-url="/_astro/ContentPane.B3yYqng8.js" component-export="default" renderer-url="/_astro/client.svelte.DSigbiJE.js" props="{&quot;initial&quot;:[0,{&quot;kind&quot;:[0,&quot;md&quot;],&quot;path&quot;:[0,&quot;/algo/contests/cf-2210.html&quot;],&quot;html&quot;:[0,&quot;&lt;h2&gt;Thoughts&lt;/h2&gt;\n&lt;p&gt;I have begun training for WF, and want my practice to take a more structured form. Hence this recapitulation, and any others that may follow.&lt;/p&gt;\n&lt;p&gt;I wasn&#39;t as fast as I could have been today. The WA on D was also pointless. It could have been easily avoided by looking at my code for 2 seconds before submitting.&lt;/p&gt;\n&lt;h2&gt;Solutions&lt;/h2&gt;\n&lt;h3&gt;A&lt;/h3&gt;\n&lt;p&gt;Reversing the identity sequence clearly works.&lt;/p&gt;\n&lt;h3&gt;B&lt;/h3&gt;\n&lt;p&gt;Let&#39;s say that the optimal sequence of operations results in us stopping at position $i$.&lt;/p&gt;\n&lt;p&gt;Then it&#39;s optimal to have sat at all chairs $j$ behind us such that either $p_j \\leq j$ or $i \\leq p_j$. The first category doesn&#39;t prevent us from going forward at all (as they mark chairs behind or at our current position), and the second category won&#39;t prevent us from reaching $i$.&lt;/p&gt;\n&lt;p&gt;The optimal score for every stopping point can therefore be computed by iterating over $i$ in increasing order, and using either a &lt;code&gt;std::set&lt;/code&gt; or a range query DS.&lt;/p&gt;\n&lt;h3&gt;C1&lt;/h3&gt;\n&lt;p&gt;Notice that the condition:&lt;/p&gt;\n&lt;blockquote&gt;\n&lt;p&gt;$\\operatorname{gcd}(a_l,a_{l+1},\\ldots,{a_r})=\\operatorname{gcd}(a&#39;_l,a&#39;_{l+1},\\ldots,a&#39;_r)$ for all $1 \\leq l &lt; r \\leq n$&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;is equivalent to&lt;/p&gt;\n&lt;blockquote&gt;\n&lt;p&gt;$\\operatorname{gcd}(a_i, a_{i + 1}) = \\operatorname{gcd}(a&#39;_i, a&#39;_{i + 1})$ for all $1 \\leq i &lt; n$&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Now, for a particular $1 &lt; i &lt; n$, its value in the second array, $a&#39;_i$ only matters to two conditions:&lt;/p&gt;\n&lt;ol&gt;\n&lt;li&gt;$\\operatorname{gcd}(a_i, a_{i - 1}) = \\operatorname{gcd}(a&#39;_i, a&#39;_{i - 1})$&lt;/li&gt;\n&lt;li&gt;$\\operatorname{gcd}(a_i, a_{i + 1}) = \\operatorname{gcd}(a&#39;_i, a&#39;_{i + 1})$&lt;/li&gt;\n&lt;/ol&gt;\n&lt;p&gt;We notice that $a&#39;_i$ must therefore be divisible by $c_i = \\operatorname{lcm}(\\operatorname{gcd}(a_i, a_{i - 1}), \\operatorname{gcd}(a_i, a_{i + 1}))$.&lt;/p&gt;\n&lt;p&gt;$c_i$ is also the smallest value for $a&#39;_i$ that satisfies both these conditions (at least from $i$&#39;s side).&lt;/p&gt;\n&lt;p&gt;If $c_i &lt; a_i = b_i$, we simply set $a&#39;_i = c_i$, and this increases our score by 1.&lt;/p&gt;\n&lt;p&gt;Otherwise, we have $c_i = a_i$. In this case:&lt;/p&gt;\n&lt;ol&gt;\n&lt;li&gt;We cannot set $a&#39;_i$ to anything less than $c_i$, as we have shown $c_i$ to be the smallest valid value of $c_i$.&lt;/li&gt;\n&lt;li&gt;We cannot set $a&#39;_i$ to any other multiple of $c_i$ as $c_i = a_i = b_i$.&lt;/li&gt;\n&lt;/ol&gt;\n&lt;p&gt;Therefore, we are forced to set $a&#39;_i = a_i$ (not make a move).&lt;/p&gt;\n&lt;h3&gt;C2&lt;/h3&gt;\n&lt;p&gt;The harder version decouples $a_i$ and $b_i$.&lt;/p&gt;\n&lt;p&gt;This only affects our previous analysis at one place: previously, when we had $c_i = a_i$, in point 2, we argued that we cannot set $a&#39;_i$ to some non-trivial multiple of $c_i$, as we had $c_i = a_i = b_i$.&lt;/p&gt;\n&lt;p&gt;But now, we can have $a_i &lt; b_i$, which will allow us to set $a&#39;_i = m_i \\cdot c_i$ (where $m_i &gt; 1$).&lt;/p&gt;\n&lt;h5&gt;Lemma 1:&lt;/h5&gt;\n&lt;blockquote&gt;\n&lt;p&gt;There exists an optimal solution wherein the chosen $m_i$ for all $i$ at which we set $a&#39;_i = m_i \\cdot c_i$ ($m_i &gt; 1$) is prime.&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Proof: easy enough to show, but left as an exercise to the reader.&lt;/p&gt;\n&lt;h5&gt;Lemma 2:&lt;/h5&gt;\n&lt;blockquote&gt;\n&lt;p&gt;There exists an optimal solution wherein the set of used $m_i$ is a subset of the first $P = 25$ primes.&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Proof: left as an exercise to the reader (hint: $m_i$ is only restricted by $m_{i - 1}, a_{i - 1}, c_i, m_{i + 1}, a_{i + 1}$, and any number up to $10^{18}$ cannot have too many distinct prime factors).&lt;/p&gt;\n&lt;p&gt;We can therefore do a dynamic programming with the following state:&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;$f(i)$ = maximum number of moves we can make in the prefix $i$, if we make no move at position $i$.&lt;/li&gt;\n&lt;li&gt;$g(i, x)$ = maximum number of moves we can make in the prefix $i$, if we set $a&#39;_i = c_i \\cdot p_x$ (where $p_x$ is the $x$-th smallest prime).&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;Computing all of these states takes $O(n \\cdot P ^ 2 \\cdot \\log{10^9})$ time, which is fast enough.&lt;/p&gt;\n&lt;h3&gt;D&lt;/h3&gt;\n&lt;p&gt;Firstly, let $f(s)$ be the maximum $x \\leq n/2$ such that for all $i \\leq x$, $s_i$ gets matched to $s_{n - i + 1}$ by RBS rules.&lt;/p&gt;\n&lt;h5&gt;Lemma 1:&lt;/h5&gt;\n&lt;blockquote&gt;\n&lt;p&gt;$f(s) = f(t)$ is a necessary requirement for $s$ and $t$ to be interconvertible, as $f(s) = f(s&#39;)$ after any operation that converts $s$ to $s&#39;$&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Proof: Exercise for the reader (hint: this outer section can never be modified by any operation).&lt;/p&gt;\n&lt;p&gt;If $f(s) \\neq f(t)$, we&#39;re done. Otherwise, we get rid of the first and last $f(s)$ characters from both $s$ and $t$.&lt;/p&gt;\n&lt;p&gt;Now, consider the RBS trees $T(s)$ and $T(t)$ built from $s$ and $t$ (note that since we removed the first/last $f(s)$ characters, these trees will either be empty, or the root will have &amp;gt; 1 child).&lt;/p&gt;\n&lt;p&gt;The equivalent problem on these trees is the following:&lt;/p&gt;\n&lt;blockquote&gt;\n&lt;p&gt;You can perform any number of the following operations on either tree:&lt;/p&gt;\n&lt;p&gt;Select nodes $u$ and $v$ such that neither is an ancestor of the either, and attach some &amp;quot;adjacent&amp;quot; children of $v$ (in the ordered child sequence) to the parent of $u$, and attach $v$ to $u$.&lt;/p&gt;\n&lt;p&gt;Can the two trees be made isomorphic?&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Now, notice the following invariant: The number of leaf nodes remains the same after every operation.&lt;/p&gt;\n&lt;p&gt;While obviously necessary, it turns out that having an equal number of leaf nodes is sufficient for two trees to be interconvertible.&lt;/p&gt;\n&lt;p&gt;Proof:&lt;/p&gt;\n&lt;p&gt;Let&#39;s say a tree has $l$ leaves.&lt;/p&gt;\n&lt;p&gt;Regardless of the initial structure of the tree, we can always convert it to the following equivalence class representative:&lt;/p&gt;\n&lt;p&gt;A tree with $l - 1$ leaves hanging from the root, and a chain containing the remaining nodes.&lt;/p&gt;\n&quot;],&quot;frontmatter&quot;:[0,{&quot;displayMode&quot;:[0,&quot;blog&quot;],&quot;title&quot;:[0,&quot;CF-2210&quot;],&quot;date&quot;:[0,&quot;2026-03-29&quot;],&quot;tags&quot;:[1,[[0,&quot;contest&quot;]]]}]}]}" ssr client="load" opts="{&quot;name&quot;:&quot;ContentPane&quot;,&quot;value&quot;:true}" await-children><!--[--><!--[1--><section class="prose prose-invert mx-auto max-w-4xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro"><header class="mb-8"><h1 class="font-sans font-bold leading-tight tracking-tight mb-3 text-[2.5rem] md:text-[3rem] text-accent">CF-2210</h1> <!--[--><p class="mt-2 text-xs text-text-muted">29/03/2026</p><!--]--> <!--[--><ul class="mt-4 flex flex-wrap gap-2 list-none pl-0"><!--[--><li class="rounded-sm border border-accent-subtle px-2 py-1 text-xs font-medium text-text-muted transition-colors duration-150 ease-retro">contest</li><!--]--></ul><!--]--></header> <article class="prose prose-invert prose-headings:font-sans prose-p:font-sans prose-li:font-sans prose-blockquote:font-sans prose-td:font-sans prose-th:font-sans prose-p:tracking-normal prose-li:tracking-normal prose-blockquote:tracking-normal prose-td:tracking-normal prose-th:tracking-normal max-w-none"><!----><h2>Thoughts</h2>
+<!DOCTYPE html><html lang="en" class="h-full"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CF-2210 · Welcome to the Sunny Side!</title><meta name="description" content="I have begun training for WF, and want my practice to take a more structured form. Hence this recapitulation, and any others that may follow."><link rel="canonical" href="https://www.welcome-to-the-sunny-side.com/algo/contests/cf-2210.html"><link rel="icon" href="/favicon.ico"><script async src="https://www.googletagmanager.com/gtag/js?id=G-FDGES615HV"></script><script type="module">window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-FDGES615HV");</script><link rel="stylesheet" href="/_astro/_slug_.DFBpVZ-4.css"></head> <body class="h-full"> <div class="h-screen w-screen grid grid-cols-1 grid-rows-[auto_1fr] md:grid-cols-[1fr_auto] md:grid-rows-1"> <!-- Mobile breadcrumb nav --> <div class="md:hidden"> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z1AQ8aI" component-url="/_astro/MobileNav.XGZTBScB.js" component-export="default" renderer-url="/_astro/client.svelte.DSigbiJE.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;MobileNav&quot;,&quot;value&quot;:true}" await-children><!--[--><nav class="md:hidden flex items-center px-3 py-2 bg-surface border-b border-accent-subtle font-mono text-sm"><div class="flex-1 flex items-center min-w-0 overflow-x-auto whitespace-nowrap"><!--[--><!--[!--><!--]--> <!--[!--><button class="crumb-link text-text-muted hover:text-accent transition-colors duration-150 svelte-xffx7i">~</button><!--]--><!--[--><span class="text-accent mx-1 select-none">/</span><!--]--> <!--[--><span class="text-text font-medium">home.html</span><!--]--><!--]--></div> <button class="flex-shrink-0 ml-3 text-text-muted hover:text-accent transition-colors duration-150 text-base leading-none" aria-label="Switch skin (current: dark)">☾</button></nav><!--]--><!--astro:end--></astro-island> </div> <!-- Content --> <main class="overflow-y-auto overflow-x-hidden bg-surface text-text transition-colors duration-150 ease-retro min-h-0"> <astro-island uid="2wBaLk" component-url="/_astro/ContentPane.Bn4HzKyU.js" component-export="default" renderer-url="/_astro/client.svelte.DSigbiJE.js" props="{&quot;initial&quot;:[0,{&quot;kind&quot;:[0,&quot;md&quot;],&quot;path&quot;:[0,&quot;/algo/contests/cf-2210.html&quot;],&quot;frontmatter&quot;:[0,{&quot;displayMode&quot;:[0,&quot;blog&quot;],&quot;title&quot;:[0,&quot;CF-2210&quot;],&quot;date&quot;:[0,&quot;2026-03-29&quot;],&quot;tags&quot;:[1,[[0,&quot;contest&quot;]]]}]}]}" ssr client="load" opts="{&quot;name&quot;:&quot;ContentPane&quot;,&quot;value&quot;:true}" await-children><!--[--><!--[1--><section class="prose prose-invert mx-auto max-w-4xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro"><header class="mb-8"><h1 class="font-sans font-bold leading-tight tracking-tight mb-3 text-[2.5rem] md:text-[3rem] text-accent">CF-2210</h1> <!--[--><p class="mt-2 text-xs text-text-muted">29/03/2026</p><!--]--> <!--[--><ul class="mt-4 flex flex-wrap gap-2 list-none pl-0"><!--[--><li class="rounded-sm border border-accent-subtle px-2 py-1 text-xs font-medium text-text-muted transition-colors duration-150 ease-retro">contest</li><!--]--></ul><!--]--></header> <article class="prose prose-invert prose-headings:font-sans prose-p:font-sans prose-li:font-sans prose-blockquote:font-sans prose-td:font-sans prose-th:font-sans prose-p:tracking-normal prose-li:tracking-normal prose-blockquote:tracking-normal prose-td:tracking-normal prose-th:tracking-normal max-w-none"><!----><style>
+mjx-container[overflow="scroll"][display] {
+  overflow: auto clip;
+  min-width: initial !important;
+}
+
+mjx-container[overflow="truncate"][display] {
+  overflow: hidden clip;
+  min-width: initial !important;
+}
+
+mjx-container[display] {
+  display: block;
+  text-align: center;
+  justify-content: center;
+  margin: .7em 0;
+  padding: .3em 2px;
+}
+
+mjx-container[display][width="full"] {
+  display: flex;
+}
+
+mjx-container[justify="left"] {
+  text-align: left;
+  justify-content: left;
+}
+
+mjx-container[justify="right"] {
+  text-align: right;
+  justify-content: right;
+}
+
+mjx-container[jax="CHTML"] {
+  white-space: nowrap;
+}
+
+mjx-mo > mjx-c, mjx-mi > mjx-c, mjx-mn > mjx-c, mjx-ms > mjx-c, mjx-mtext > mjx-c {
+  clip-path: padding-box polygon(-1em -2px, calc(100% + 1em) -2px, calc(100% + 1em) calc(100% + 2px), -1em calc(100% + 2px));
+}
+
+mjx-stretchy-h {
+  clip-path: padding-box polygon(0 -2px, 100% -2px, 100% calc(100% + 2px), 0 calc(100% + 2px));
+  display: inline-block;
+}
+
+mjx-stretchy-v {
+  clip-path: padding-box polygon(-2px 0, calc(100% + 2px) 0, calc(100% + 2px) 100%, -2px 100%);
+  display: inline-block;
+  text-align: center;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > mjx-cell, mjx-row > mjx-base, mjx-row > mjx-under, mjx-row > mjx-over, mjx-row > mjx-den {
+  display: table-cell;
+}
+
+mjx-container [inline-breaks] {
+  display: inline;
+}
+
+mjx-container .mjx-selected {
+  outline: 2px solid black;
+}
+
+@media (prefers-color-scheme: dark) {
+  mjx-container .mjx-selected {
+    outline: 2px solid #C8C8C8;
+  }
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: polygon(0 0, 0 1px, 1px 1px, 1px 0);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  text-indent: 0px ! important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  word-spacing: normal;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-math[breakable] {
+  display: inline;
+}
+
+mjx-container[jax="CHTML"] mjx-break {
+  white-space: normal;
+  line-height: 0;
+  clip-path: rect(0 0 0 0);
+  font-family: MJX-BRK !important;
+}
+
+mjx-break[size="0"] {
+  letter-spacing: -0.999em;
+}
+
+mjx-break[size="1"] {
+  letter-spacing: -0.889em;
+}
+
+mjx-break[size="2"] {
+  letter-spacing: -0.833em;
+}
+
+mjx-break[size="3"] {
+  letter-spacing: -0.778em;
+}
+
+mjx-break[size="4"] {
+  letter-spacing: -0.722em;
+}
+
+mjx-break[size="5"] {
+  letter-spacing: -0.667em;
+}
+
+mjx-mi {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+  width: 0;
+  text-align: right;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-msub {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-msubsup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-script {
+  display: inline-block;
+  padding-right: .05em;
+  padding-left: .033em;
+}
+
+mjx-script > mjx-spacer {
+  display: block;
+}
+
+mjx-mo {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-stretchy-h > mjx-beg, mjx-stretchy-h > mjx-ext, mjx-stretchy-h > mjx-end, mjx-stretchy-h > mjx-mid {
+  display: inline-block;
+  width: 0;
+  text-align: right;
+}
+
+mjx-stretchy-h > mjx-ext {
+  clip-path: padding-box polygon(0 -1em, 100% -1em, 100% calc(100% + 1em), 0 calc(100% + 1em));
+  width: 100%;
+  border: 0px solid transparent;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+mjx-stretchy-v > mjx-beg, mjx-stretchy-v > mjx-ext, mjx-stretchy-v > mjx-end, mjx-stretchy-v > mjx-mid {
+  display: block;
+  height: 0;
+  margin: 0 auto;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-spacer {
+  display: block;
+}
+
+mjx-stretchy-v > mjx-ext {
+  clip-path: padding-box polygon(-1em 0, calc(100% + 1em) 0, calc(100% + 1em) 100%, -1em 100%);
+  height: 100%;
+  border: 0.1px solid transparent;
+  box-sizing: border-box;
+  white-space: pre;
+}
+
+mjx-mark {
+  display: inline-block;
+  height: 0;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-msup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"] > mjx-math.NCM-N[breakable] > * {
+  font-family: MJX-NCM-ZERO, MJX-NCM-N;
+}
+
+.NCM-N {
+  font-family: MJX-NCM-ZERO, MJX-NCM-N;
+}
+
+.NCM-B {
+  font-family: MJX-NCM-ZERO, MJX-NCM-B;
+}
+
+.NCM-I {
+  font-family: MJX-NCM-ZERO, MJX-NCM-I;
+}
+
+.NCM-BI {
+  font-family: MJX-NCM-ZERO, MJX-NCM-BI;
+}
+
+.NCM-DS {
+  font-family: MJX-NCM-ZERO, MJX-NCM-DS;
+}
+
+.NCM-F {
+  font-family: MJX-NCM-ZERO, MJX-NCM-F;
+}
+
+.NCM-FB {
+  font-family: MJX-NCM-ZERO, MJX-NCM-FB;
+}
+
+.NCM-SS {
+  font-family: MJX-NCM-ZERO, MJX-NCM-SS;
+}
+
+.NCM-SSB {
+  font-family: MJX-NCM-ZERO, MJX-NCM-SSB;
+}
+
+.NCM-SSI {
+  font-family: MJX-NCM-ZERO, MJX-NCM-SSI;
+}
+
+.NCM-SSBI {
+  font-family: MJX-NCM-ZERO, MJX-NCM-SSBI;
+}
+
+.NCM-M {
+  font-family: MJX-NCM-ZERO, MJX-NCM-M;
+}
+
+.NCM-SO {
+  font-family: MJX-NCM-ZERO, MJX-NCM-SO;
+}
+
+.NCM-LO {
+  font-family: MJX-NCM-ZERO, MJX-NCM-LO;
+}
+
+.NCM-S3 {
+  font-family: MJX-NCM-ZERO, MJX-NCM-S3;
+}
+
+.NCM-S4 {
+  font-family: MJX-NCM-ZERO, MJX-NCM-S4;
+}
+
+.NCM-S5 {
+  font-family: MJX-NCM-ZERO, MJX-NCM-S5;
+}
+
+.NCM-S6 {
+  font-family: MJX-NCM-ZERO, MJX-NCM-S6;
+}
+
+.NCM-S7 {
+  font-family: MJX-NCM-ZERO, MJX-NCM-S7;
+}
+
+.NCM-MI {
+  font-family: MJX-NCM-ZERO, MJX-NCM-MI;
+}
+
+.NCM-C {
+  font-family: MJX-NCM-ZERO, MJX-NCM-C;
+}
+
+.NCM-CB {
+  font-family: MJX-NCM-ZERO, MJX-NCM-CB;
+}
+
+.NCM-OS {
+  font-family: MJX-NCM-ZERO, MJX-NCM-OS;
+}
+
+.NCM-OB {
+  font-family: MJX-NCM-ZERO, MJX-NCM-OB;
+}
+
+.NCM-V {
+  font-family: MJX-NCM-ZERO, MJX-NCM-V;
+}
+
+.NCM-LT {
+  font-family: MJX-NCM-ZERO, MJX-NCM-LT;
+}
+
+.NCM-RB {
+  font-family: MJX-NCM-ZERO, MJX-NCM-RB;
+}
+
+.NCM-EM {
+  font-family: MJX-NCM-ZERO, MJX-NCM-EM;
+}
+
+.NCM-B-a {
+  font-family: MJX-NCM-ZERO, MJX-NCM-B-a;
+}
+
+.NCM-U {
+  font-family: MJX-NCM-ZERO, MJX-NCM-U;
+}
+
+.NCM-U-a {
+  font-family: MJX-NCM-ZERO, MJX-NCM-U-a;
+}
+
+.NCM-S {
+  font-family: MJX-NCM-ZERO, MJX-NCM-S;
+}
+
+.NCM-SB {
+  font-family: MJX-NCM-ZERO, MJX-NCM-SB;
+}
+
+@font-face /* MJX-NCM-ZERO */ {
+  font-family: MJX-NCM-ZERO;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-zero.woff2") format("woff2");
+}
+
+@font-face /* MJX-BRK */ {
+  font-family: MJX-BRK;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-brk.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-N */ {
+  font-family: MJX-NCM-N;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-n.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-B */ {
+  font-family: MJX-NCM-B;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-b.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-I */ {
+  font-family: MJX-NCM-I;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-i.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-BI */ {
+  font-family: MJX-NCM-BI;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-bi.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-DS */ {
+  font-family: MJX-NCM-DS;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-ds.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-F */ {
+  font-family: MJX-NCM-F;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-f.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-FB */ {
+  font-family: MJX-NCM-FB;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-fb.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-SS */ {
+  font-family: MJX-NCM-SS;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-ss.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-SSB */ {
+  font-family: MJX-NCM-SSB;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-ssb.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-SSI */ {
+  font-family: MJX-NCM-SSI;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-ssi.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-SSBI */ {
+  font-family: MJX-NCM-SSBI;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-ssbi.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-M */ {
+  font-family: MJX-NCM-M;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-m.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-SO */ {
+  font-family: MJX-NCM-SO;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-so.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-LO */ {
+  font-family: MJX-NCM-LO;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-lo.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-S3 */ {
+  font-family: MJX-NCM-S3;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-s3.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-S4 */ {
+  font-family: MJX-NCM-S4;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-s4.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-S5 */ {
+  font-family: MJX-NCM-S5;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-s5.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-S6 */ {
+  font-family: MJX-NCM-S6;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-s6.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-S7 */ {
+  font-family: MJX-NCM-S7;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-s7.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-MI */ {
+  font-family: MJX-NCM-MI;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-mi.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-C */ {
+  font-family: MJX-NCM-C;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-c.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-CB */ {
+  font-family: MJX-NCM-CB;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-cb.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-OS */ {
+  font-family: MJX-NCM-OS;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-os.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-OB */ {
+  font-family: MJX-NCM-OB;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-ob.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-V */ {
+  font-family: MJX-NCM-V;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-v.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-LT */ {
+  font-family: MJX-NCM-LT;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-lt.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-RB */ {
+  font-family: MJX-NCM-RB;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-rb.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-EM */ {
+  font-family: MJX-NCM-EM;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-em.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-B-a */ {
+  font-family: MJX-NCM-B-a;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-b-a.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-U */ {
+  font-family: MJX-NCM-U;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-u.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-U-a */ {
+  font-family: MJX-NCM-U-a;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-u-a.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-S */ {
+  font-family: MJX-NCM-S;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-s.woff2") format("woff2");
+}
+
+@font-face /* MJX-NCM-SB */ {
+  font-family: MJX-NCM-SB;
+  src: url("https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@4.1.3/chtml/woff2/mjx-ncm-sb.woff2") format("woff2");
+}
+
+mjx-c.mjx-c1D456 {
+  padding: 0.661em 0.345em 0.011em 0;
+}
+
+mjx-c.mjx-c1D457 {
+  padding: 0.661em 0.412em 0.205em 0;
+}
+
+mjx-c.mjx-c1D45D {
+  padding: 0.442em 0.503em 0.194em 0;
+}
+
+mjx-c.mjx-c2264 {
+  padding: 0.631em 0.778em 0.119em 0;
+}
+
+mjx-c.mjx-c67 {
+  padding: 0.453em 0.5em 0.206em 0;
+}
+
+mjx-c.mjx-c63 {
+  padding: 0.448em 0.444em 0.011em 0;
+}
+
+mjx-c.mjx-c64 {
+  padding: 0.694em 0.556em 0.011em 0;
+}
+
+mjx-c.mjx-c2061 {
+  padding: 0 0 0 0;
+}
+
+mjx-c.mjx-c28 {
+  padding: 0.748em 0.389em 0.248em 0;
+}
+
+mjx-c.mjx-c1D44E {
+  padding: 0.442em 0.529em 0.011em 0;
+}
+
+mjx-c.mjx-c1D459 {
+  padding: 0.694em 0.298em 0.011em 0;
+}
+
+mjx-c.mjx-c2C {
+  padding: 0.106em 0.278em 0.193em 0;
+}
+
+mjx-c.mjx-c2B {
+  padding: 0.583em 0.778em 0.083em 0;
+}
+
+mjx-c.mjx-c31 {
+  padding: 0.666em 0.5em 0 0;
+}
+
+mjx-c.mjx-c2026 {
+  padding: 0.106em 0.837em 0 0;
+}
+
+mjx-c.mjx-c1D45F {
+  padding: 0.442em 0.451em 0.011em 0;
+}
+
+mjx-c.mjx-c29 {
+  padding: 0.748em 0.389em 0.248em 0;
+}
+
+mjx-c.mjx-c3D {
+  padding: 0.367em 0.778em 0 0;
+}
+
+mjx-c.mjx-c2032.NCM-V {
+  padding: 0.549em 0.407em 0 0;
+}
+
+mjx-c.mjx-c3C {
+  padding: 0.547em 0.778em 0.052em 0;
+}
+
+mjx-c.mjx-c1D45B {
+  padding: 0.442em 0.6em 0.011em 0;
+}
+
+mjx-c.mjx-c2212 {
+  padding: 0.583em 0.778em 0.083em 0;
+}
+
+mjx-c.mjx-c1D450 {
+  padding: 0.442em 0.433em 0.011em 0;
+}
+
+mjx-c.mjx-c6C {
+  padding: 0.694em 0.278em 0 0;
+}
+
+mjx-c.mjx-c6D {
+  padding: 0.442em 0.833em 0 0;
+}
+
+mjx-c.mjx-c1D44F {
+  padding: 0.694em 0.429em 0.011em 0;
+}
+
+mjx-c.mjx-c1D45A {
+  padding: 0.442em 0.878em 0.011em 0;
+}
+
+mjx-c.mjx-c22C5 {
+  padding: 0.303em 0.278em 0 0;
+}
+
+mjx-c.mjx-c3E {
+  padding: 0.547em 0.778em 0.047em 0;
+}
+
+mjx-c.mjx-c1D443 {
+  padding: 0.683em 0.754em 0 0;
+}
+
+mjx-c.mjx-c32 {
+  padding: 0.666em 0.5em 0 0;
+}
+
+mjx-c.mjx-c35 {
+  padding: 0.666em 0.5em 0.022em 0;
+}
+
+mjx-c.mjx-c30 {
+  padding: 0.666em 0.5em 0.022em 0;
+}
+
+mjx-c.mjx-c38 {
+  padding: 0.666em 0.5em 0.022em 0;
+}
+
+mjx-c.mjx-c1D453 {
+  padding: 0.705em 0.552em 0.205em 0;
+}
+
+mjx-c.mjx-c1D454 {
+  padding: 0.442em 0.477em 0.205em 0;
+}
+
+mjx-c.mjx-c1D465 {
+  padding: 0.442em 0.572em 0.011em 0;
+}
+
+mjx-c.mjx-c1D442 {
+  padding: 0.705em 0.763em 0.022em 0;
+}
+
+mjx-c.mjx-c6F {
+  padding: 0.448em 0.5em 0.011em 0;
+}
+
+mjx-c.mjx-c39 {
+  padding: 0.666em 0.5em 0.022em 0;
+}
+
+mjx-c.mjx-c1D460 {
+  padding: 0.442em 0.469em 0.011em 0;
+}
+
+mjx-c.mjx-c2F {
+  padding: 0.75em 0.5em 0.25em 0;
+}
+
+mjx-c.mjx-c1D461 {
+  padding: 0.626em 0.361em 0.011em 0;
+}
+
+mjx-c.mjx-c2260 {
+  padding: 0.73em 0.778em 0.23em 0;
+}
+
+mjx-c.mjx-c1D447 {
+  padding: 0.677em 0.704em 0 0;
+}
+
+mjx-c.mjx-c1D462 {
+  padding: 0.442em 0.572em 0.011em 0;
+}
+
+mjx-c.mjx-c1D463 {
+  padding: 0.442em 0.485em 0.011em 0;
+}
+
+
+</style><h2>Thoughts</h2>
 <p>I have begun training for WF, and want my practice to take a more structured form. Hence this recapitulation, and any others that may follow.</p>
 <p>I wasn't as fast as I could have been today. The WA on D was also pointless. It could have been easily avoided by looking at my code for 2 seconds before submitting.</p>
 <h2>Solutions</h2>
 <h3>A</h3>
 <p>Reversing the identity sequence clearly works.</p>
 <h3>B</h3>
-<p>Let's say that the optimal sequence of operations results in us stopping at position $i$.</p>
-<p>Then it's optimal to have sat at all chairs $j$ behind us such that either $p_j \leq j$ or $i \leq p_j$. The first category doesn't prevent us from going forward at all (as they mark chairs behind or at our current position), and the second category won't prevent us from reaching $i$.</p>
-<p>The optimal score for every stopping point can therefore be computed by iterating over $i$ in increasing order, and using either a <code>std::set</code> or a range query DS.</p>
+<p>Let's say that the optimal sequence of operations results in us stopping at position <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i"><mi data-latex="i">i</mi></math></mjx-assistive-mml></mjx-container>.</p>
+<p>Then it's optimal to have sat at all chairs <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="j" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="j"><mjx-c class="mjx-c1D457">𝑗</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="j"><mi data-latex="j">j</mi></math></mjx-assistive-mml></mjx-container> behind us such that either <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="p_j \leq j" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="p_j"><mjx-mi data-latex="p"><mjx-c class="mjx-c1D45D">𝑝</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="j"><mjx-c class="mjx-c1D457">𝑗</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-mi space="4" data-latex="j"><mjx-c class="mjx-c1D457">𝑗</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="p_j \leq j"><msub data-latex="p_j"><mi data-latex="p">p</mi><mi data-latex="j">j</mi></msub><mo data-latex="\leq">≤</mo><mi data-latex="j">j</mi></math></mjx-assistive-mml></mjx-container> or <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i \leq p_j" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-msub space="4" data-latex="p_j"><mjx-mi data-latex="p"><mjx-c class="mjx-c1D45D">𝑝</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="j"><mjx-c class="mjx-c1D457">𝑗</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i \leq p_j"><mi data-latex="i">i</mi><mo data-latex="\leq">≤</mo><msub data-latex="p_j"><mi data-latex="p">p</mi><mi data-latex="j">j</mi></msub></math></mjx-assistive-mml></mjx-container>. The first category doesn't prevent us from going forward at all (as they mark chairs behind or at our current position), and the second category won't prevent us from reaching <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i"><mi data-latex="i">i</mi></math></mjx-assistive-mml></mjx-container>.</p>
+<p>The optimal score for every stopping point can therefore be computed by iterating over <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i"><mi data-latex="i">i</mi></math></mjx-assistive-mml></mjx-container> in increasing order, and using either a <code>std::set</code> or a range query DS.</p>
 <h3>C1</h3>
 <p>Notice that the condition:</p>
 <blockquote>
-<p>$\operatorname{gcd}(a_l,a_{l+1},\ldots,{a_r})=\operatorname{gcd}(a'_l,a'_{l+1},\ldots,a'_r)$ for all $1 \leq l < r \leq n$</p>
+<p><mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\operatorname{gcd}(a_l,a_{l+1},\ldots,{a_r})=\operatorname{gcd}(a'_l,a'_{l+1},\ldots,a'_r)" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="\operatorname{gcd}"><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c63" noic="true" style="padding-top: 0.694em;">c</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mi><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-msub data-latex="a_l"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="a_{l+1}"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-TeXAtom size="s" data-latex="{l+1}" texclass="ORD"><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-mo data-latex="+"><mjx-c class="mjx-c2B">+</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-TeXAtom></mjx-script></mjx-msub><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mo space="2" data-latex="\ldots"><mjx-c class="mjx-c2026">…</mjx-c></mjx-mo><mjx-mo space="2" data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-TeXAtom space="2" data-latex="{a_r}" texclass="ORD"><mjx-msub data-latex="a_r"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-TeXAtom><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-mi space="4" data-latex="\operatorname{gcd}"><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c63" noic="true" style="padding-top: 0.694em;">c</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mi><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-msubsup data-latex="a^'_l"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.187em;"></mjx-spacer><mjx-mi size="s" data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi></mjx-script></mjx-msubsup><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msubsup space="2" data-latex="a^'_{l+1}"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.187em;"></mjx-spacer><mjx-TeXAtom size="s" data-latex="{l+1}" texclass="ORD"><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-mo data-latex="+"><mjx-c class="mjx-c2B">+</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-TeXAtom></mjx-script></mjx-msubsup><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mo space="2" data-latex="\ldots"><mjx-c class="mjx-c2026">…</mjx-c></mjx-mo><mjx-mo space="2" data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msubsup space="2" data-latex="a^'_r"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.365em;"></mjx-spacer><mjx-mi size="s" data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi></mjx-script></mjx-msubsup><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\operatorname{gcd}(a_l,a_{l+1},\ldots,{a_r})=\operatorname{gcd}(a'_l,a'_{l+1},\ldots,a'_r)"><mi data-latex="\operatorname{gcd}">gcd</mi><mo data-mjx-texclass="NONE">⁡</mo><mo data-latex="(" stretchy="false">(</mo><msub data-latex="a_l"><mi data-latex="a">a</mi><mi data-latex="l">l</mi></msub><mo data-latex=",">,</mo><msub data-latex="a_{l+1}"><mi data-latex="a">a</mi><mrow data-mjx-texclass="ORD" data-latex="{l+1}"><mi data-latex="l">l</mi><mo data-latex="+">+</mo><mn data-latex="1">1</mn></mrow></msub><mo data-latex=",">,</mo><mo data-latex="\ldots">…</mo><mo data-latex=",">,</mo><mrow data-mjx-texclass="ORD" data-latex="{a_r}"><msub data-latex="a_r"><mi data-latex="a">a</mi><mi data-latex="r">r</mi></msub></mrow><mo data-latex=")" stretchy="false">)</mo><mo data-latex="=">=</mo><mi data-latex="\operatorname{gcd}">gcd</mi><mo data-mjx-texclass="NONE">⁡</mo><mo data-latex="(" stretchy="false">(</mo><msubsup data-latex="a^'_l"><mi data-latex="a">a</mi><mi data-latex="l">l</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup><mo data-latex=",">,</mo><msubsup data-latex="a^'_{l+1}"><mi data-latex="a">a</mi><mrow data-mjx-texclass="ORD" data-latex="{l+1}"><mi data-latex="l">l</mi><mo data-latex="+">+</mo><mn data-latex="1">1</mn></mrow><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup><mo data-latex=",">,</mo><mo data-latex="\ldots">…</mo><mo data-latex=",">,</mo><msubsup data-latex="a^'_r"><mi data-latex="a">a</mi><mi data-latex="r">r</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> for all <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="1 \leq l < r \leq n" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-mi space="4" data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex="<"><mjx-c class="mjx-c3C">&lt;</mjx-c></mjx-mo><mjx-mi space="4" data-latex="r"><mjx-c class="mjx-c1D45F">𝑟</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-mi space="4" data-latex="n"><mjx-c class="mjx-c1D45B">𝑛</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="1 \leq l < r \leq n"><mn data-latex="1">1</mn><mo data-latex="\leq">≤</mo><mi data-latex="l">l</mi><mo data-latex="<">&lt;</mo><mi data-latex="r">r</mi><mo data-latex="\leq">≤</mo><mi data-latex="n">n</mi></math></mjx-assistive-mml></mjx-container></p>
 </blockquote>
 <p>is equivalent to</p>
 <blockquote>
-<p>$\operatorname{gcd}(a_i, a_{i + 1}) = \operatorname{gcd}(a'_i, a'_{i + 1})$ for all $1 \leq i < n$</p>
+<p><mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\operatorname{gcd}(a_i, a_{i + 1}) = \operatorname{gcd}(a'_i, a'_{i + 1})" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="\operatorname{gcd}"><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c63" noic="true" style="padding-top: 0.694em;">c</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mi><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-msub data-latex="a_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="a_{i+1}"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-TeXAtom size="s" data-latex="{i+1}" texclass="ORD"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-mo data-latex="+"><mjx-c class="mjx-c2B">+</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-TeXAtom></mjx-script></mjx-msub><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-mi space="4" data-latex="\operatorname{gcd}"><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c63" noic="true" style="padding-top: 0.694em;">c</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mi><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-msubsup data-latex="a^'_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.21em;"></mjx-spacer><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msubsup><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msubsup space="2" data-latex="a^'_{i+1}"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.207em;"></mjx-spacer><mjx-TeXAtom size="s" data-latex="{i+1}" texclass="ORD"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-mo data-latex="+"><mjx-c class="mjx-c2B">+</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-TeXAtom></mjx-script></mjx-msubsup><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\operatorname{gcd}(a_i, a_{i + 1}) = \operatorname{gcd}(a'_i, a'_{i + 1})"><mi data-latex="\operatorname{gcd}">gcd</mi><mo data-mjx-texclass="NONE">⁡</mo><mo data-latex="(" stretchy="false">(</mo><msub data-latex="a_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi></msub><mo data-latex=",">,</mo><msub data-latex="a_{i+1}"><mi data-latex="a">a</mi><mrow data-mjx-texclass="ORD" data-latex="{i+1}"><mi data-latex="i">i</mi><mo data-latex="+">+</mo><mn data-latex="1">1</mn></mrow></msub><mo data-latex=")" stretchy="false">)</mo><mo data-latex="=">=</mo><mi data-latex="\operatorname{gcd}">gcd</mi><mo data-mjx-texclass="NONE">⁡</mo><mo data-latex="(" stretchy="false">(</mo><msubsup data-latex="a^'_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup><mo data-latex=",">,</mo><msubsup data-latex="a^'_{i+1}"><mi data-latex="a">a</mi><mrow data-mjx-texclass="ORD" data-latex="{i+1}"><mi data-latex="i">i</mi><mo data-latex="+">+</mo><mn data-latex="1">1</mn></mrow><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> for all <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="1 \leq i < n" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-mi space="4" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex="<"><mjx-c class="mjx-c3C">&lt;</mjx-c></mjx-mo><mjx-mi space="4" data-latex="n"><mjx-c class="mjx-c1D45B">𝑛</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="1 \leq i < n"><mn data-latex="1">1</mn><mo data-latex="\leq">≤</mo><mi data-latex="i">i</mi><mo data-latex="<">&lt;</mo><mi data-latex="n">n</mi></math></mjx-assistive-mml></mjx-container></p>
 </blockquote>
-<p>Now, for a particular $1 < i < n$, its value in the second array, $a'_i$ only matters to two conditions:</p>
+<p>Now, for a particular <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="1 < i < n" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn><mjx-break size="4"> </mjx-break><mjx-mo data-latex="<"><mjx-c class="mjx-c3C">&lt;</mjx-c></mjx-mo><mjx-mi space="4" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex="<"><mjx-c class="mjx-c3C">&lt;</mjx-c></mjx-mo><mjx-mi space="4" data-latex="n"><mjx-c class="mjx-c1D45B">𝑛</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="1 < i < n"><mn data-latex="1">1</mn><mo data-latex="<">&lt;</mo><mi data-latex="i">i</mi><mo data-latex="<">&lt;</mo><mi data-latex="n">n</mi></math></mjx-assistive-mml></mjx-container>, its value in the second array, <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="a'_i" class="NCM-N" aria-hidden="true"><mjx-msubsup data-latex="a'_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.21em;"></mjx-spacer><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msubsup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="a'_i"><msubsup data-latex="a'_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup></math></mjx-assistive-mml></mjx-container> only matters to two conditions:</p>
 <ol>
-<li>$\operatorname{gcd}(a_i, a_{i - 1}) = \operatorname{gcd}(a'_i, a'_{i - 1})$</li>
-<li>$\operatorname{gcd}(a_i, a_{i + 1}) = \operatorname{gcd}(a'_i, a'_{i + 1})$</li>
+<li><mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\operatorname{gcd}(a_i, a_{i - 1}) = \operatorname{gcd}(a'_i, a'_{i - 1})" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="\operatorname{gcd}"><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c63" noic="true" style="padding-top: 0.694em;">c</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mi><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-msub data-latex="a_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="a_{i-1}"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-TeXAtom size="s" data-latex="{i-1}" texclass="ORD"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-mo data-latex="-"><mjx-c class="mjx-c2212">−</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-TeXAtom></mjx-script></mjx-msub><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-mi space="4" data-latex="\operatorname{gcd}"><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c63" noic="true" style="padding-top: 0.694em;">c</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mi><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-msubsup data-latex="a^'_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.21em;"></mjx-spacer><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msubsup><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msubsup space="2" data-latex="a^'_{i-1}"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.207em;"></mjx-spacer><mjx-TeXAtom size="s" data-latex="{i-1}" texclass="ORD"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-mo data-latex="-"><mjx-c class="mjx-c2212">−</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-TeXAtom></mjx-script></mjx-msubsup><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\operatorname{gcd}(a_i, a_{i - 1}) = \operatorname{gcd}(a'_i, a'_{i - 1})"><mi data-latex="\operatorname{gcd}">gcd</mi><mo data-mjx-texclass="NONE">⁡</mo><mo data-latex="(" stretchy="false">(</mo><msub data-latex="a_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi></msub><mo data-latex=",">,</mo><msub data-latex="a_{i-1}"><mi data-latex="a">a</mi><mrow data-mjx-texclass="ORD" data-latex="{i-1}"><mi data-latex="i">i</mi><mo data-latex="-">−</mo><mn data-latex="1">1</mn></mrow></msub><mo data-latex=")" stretchy="false">)</mo><mo data-latex="=">=</mo><mi data-latex="\operatorname{gcd}">gcd</mi><mo data-mjx-texclass="NONE">⁡</mo><mo data-latex="(" stretchy="false">(</mo><msubsup data-latex="a^'_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup><mo data-latex=",">,</mo><msubsup data-latex="a^'_{i-1}"><mi data-latex="a">a</mi><mrow data-mjx-texclass="ORD" data-latex="{i-1}"><mi data-latex="i">i</mi><mo data-latex="-">−</mo><mn data-latex="1">1</mn></mrow><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container></li>
+<li><mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="\operatorname{gcd}(a_i, a_{i + 1}) = \operatorname{gcd}(a'_i, a'_{i + 1})" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="\operatorname{gcd}"><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c63" noic="true" style="padding-top: 0.694em;">c</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mi><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-msub data-latex="a_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="a_{i+1}"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-TeXAtom size="s" data-latex="{i+1}" texclass="ORD"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-mo data-latex="+"><mjx-c class="mjx-c2B">+</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-TeXAtom></mjx-script></mjx-msub><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-mi space="4" data-latex="\operatorname{gcd}"><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c63" noic="true" style="padding-top: 0.694em;">c</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mi><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-msubsup data-latex="a^'_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.21em;"></mjx-spacer><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msubsup><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msubsup space="2" data-latex="a^'_{i+1}"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.207em;"></mjx-spacer><mjx-TeXAtom size="s" data-latex="{i+1}" texclass="ORD"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-mo data-latex="+"><mjx-c class="mjx-c2B">+</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-TeXAtom></mjx-script></mjx-msubsup><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="\operatorname{gcd}(a_i, a_{i + 1}) = \operatorname{gcd}(a'_i, a'_{i + 1})"><mi data-latex="\operatorname{gcd}">gcd</mi><mo data-mjx-texclass="NONE">⁡</mo><mo data-latex="(" stretchy="false">(</mo><msub data-latex="a_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi></msub><mo data-latex=",">,</mo><msub data-latex="a_{i+1}"><mi data-latex="a">a</mi><mrow data-mjx-texclass="ORD" data-latex="{i+1}"><mi data-latex="i">i</mi><mo data-latex="+">+</mo><mn data-latex="1">1</mn></mrow></msub><mo data-latex=")" stretchy="false">)</mo><mo data-latex="=">=</mo><mi data-latex="\operatorname{gcd}">gcd</mi><mo data-mjx-texclass="NONE">⁡</mo><mo data-latex="(" stretchy="false">(</mo><msubsup data-latex="a^'_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup><mo data-latex=",">,</mo><msubsup data-latex="a^'_{i+1}"><mi data-latex="a">a</mi><mrow data-mjx-texclass="ORD" data-latex="{i+1}"><mi data-latex="i">i</mi><mo data-latex="+">+</mo><mn data-latex="1">1</mn></mrow><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container></li>
 </ol>
-<p>We notice that $a'_i$ must therefore be divisible by $c_i = \operatorname{lcm}(\operatorname{gcd}(a_i, a_{i - 1}), \operatorname{gcd}(a_i, a_{i + 1}))$.</p>
-<p>$c_i$ is also the smallest value for $a'_i$ that satisfies both these conditions (at least from $i$'s side).</p>
-<p>If $c_i < a_i = b_i$, we simply set $a'_i = c_i$, and this increases our score by 1.</p>
-<p>Otherwise, we have $c_i = a_i$. In this case:</p>
+<p>We notice that <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="a'_i" class="NCM-N" aria-hidden="true"><mjx-msubsup data-latex="a'_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.21em;"></mjx-spacer><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msubsup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="a'_i"><msubsup data-latex="a'_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup></math></mjx-assistive-mml></mjx-container> must therefore be divisible by <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="c_i = \operatorname{lcm}(\operatorname{gcd}(a_i, a_{i - 1}), \operatorname{gcd}(a_i, a_{i + 1}))" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-mi space="4" data-latex="\operatorname{lcm}"><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c63" noic="true" style="padding-top: 0.694em;">c</mjx-c><mjx-c class="mjx-c6D" style="padding-top: 0.694em;">m</mjx-c></mjx-mi><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="\operatorname{gcd}"><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c63" noic="true" style="padding-top: 0.694em;">c</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mi><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-msub data-latex="a_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="a_{i-1}"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-TeXAtom size="s" data-latex="{i-1}" texclass="ORD"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-mo data-latex="-"><mjx-c class="mjx-c2212">−</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-TeXAtom></mjx-script></mjx-msub><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="\operatorname{gcd}"><mjx-c class="mjx-c67" noic="true" style="padding-top: 0.694em;">g</mjx-c><mjx-c class="mjx-c63" noic="true" style="padding-top: 0.694em;">c</mjx-c><mjx-c class="mjx-c64" style="padding-top: 0.694em;">d</mjx-c></mjx-mi><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-msub data-latex="a_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="a_{i+1}"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-TeXAtom size="s" data-latex="{i+1}" texclass="ORD"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-mo data-latex="+"><mjx-c class="mjx-c2B">+</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-TeXAtom></mjx-script></mjx-msub><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="c_i = \operatorname{lcm}(\operatorname{gcd}(a_i, a_{i - 1}), \operatorname{gcd}(a_i, a_{i + 1}))"><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub><mo data-latex="=">=</mo><mi data-latex="\operatorname{lcm}">lcm</mi><mo data-mjx-texclass="NONE">⁡</mo><mo data-latex="(" stretchy="false">(</mo><mi data-latex="\operatorname{gcd}">gcd</mi><mo data-mjx-texclass="NONE">⁡</mo><mo data-latex="(" stretchy="false">(</mo><msub data-latex="a_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi></msub><mo data-latex=",">,</mo><msub data-latex="a_{i-1}"><mi data-latex="a">a</mi><mrow data-mjx-texclass="ORD" data-latex="{i-1}"><mi data-latex="i">i</mi><mo data-latex="-">−</mo><mn data-latex="1">1</mn></mrow></msub><mo data-latex=")" stretchy="false">)</mo><mo data-latex=",">,</mo><mi data-latex="\operatorname{gcd}">gcd</mi><mo data-mjx-texclass="NONE">⁡</mo><mo data-latex="(" stretchy="false">(</mo><msub data-latex="a_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi></msub><mo data-latex=",">,</mo><msub data-latex="a_{i+1}"><mi data-latex="a">a</mi><mrow data-mjx-texclass="ORD" data-latex="{i+1}"><mi data-latex="i">i</mi><mo data-latex="+">+</mo><mn data-latex="1">1</mn></mrow></msub><mo data-latex=")" stretchy="false">)</mo><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>.</p>
+<p><mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="c_i" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="c_i"><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container> is also the smallest value for <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="a'_i" class="NCM-N" aria-hidden="true"><mjx-msubsup data-latex="a'_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.21em;"></mjx-spacer><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msubsup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="a'_i"><msubsup data-latex="a'_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup></math></mjx-assistive-mml></mjx-container> that satisfies both these conditions (at least from <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i"><mi data-latex="i">i</mi></math></mjx-assistive-mml></mjx-container>'s side).</p>
+<p>If <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="c_i < a_i = b_i" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="<"><mjx-c class="mjx-c3C">&lt;</mjx-c></mjx-mo><mjx-msub space="4" data-latex="a_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-msub space="4" data-latex="b_i"><mjx-mi data-latex="b"><mjx-c class="mjx-c1D44F">𝑏</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="c_i < a_i = b_i"><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub><mo data-latex="<">&lt;</mo><msub data-latex="a_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi></msub><mo data-latex="=">=</mo><msub data-latex="b_i"><mi data-latex="b">b</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container>, we simply set <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="a'_i = c_i" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msubsup data-latex="a^'_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.21em;"></mjx-spacer><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msubsup><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-msub space="4" data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="a'_i = c_i"><msubsup data-latex="a^'_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup><mo data-latex="=">=</mo><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container>, and this increases our score by 1.</p>
+<p>Otherwise, we have <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="c_i = a_i" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-msub space="4" data-latex="a_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="c_i = a_i"><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub><mo data-latex="=">=</mo><msub data-latex="a_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container>. In this case:</p>
 <ol>
-<li>We cannot set $a'_i$ to anything less than $c_i$, as we have shown $c_i$ to be the smallest valid value of $c_i$.</li>
-<li>We cannot set $a'_i$ to any other multiple of $c_i$ as $c_i = a_i = b_i$.</li>
+<li>We cannot set <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="a'_i" class="NCM-N" aria-hidden="true"><mjx-msubsup data-latex="a'_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.21em;"></mjx-spacer><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msubsup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="a'_i"><msubsup data-latex="a'_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup></math></mjx-assistive-mml></mjx-container> to anything less than <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="c_i" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="c_i"><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container>, as we have shown <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="c_i" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="c_i"><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container> to be the smallest valid value of <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="c_i" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="c_i"><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container>.</li>
+<li>We cannot set <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="a'_i" class="NCM-N" aria-hidden="true"><mjx-msubsup data-latex="a'_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.21em;"></mjx-spacer><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msubsup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="a'_i"><msubsup data-latex="a'_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup></math></mjx-assistive-mml></mjx-container> to any other multiple of <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="c_i" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="c_i"><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container> as <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="c_i = a_i = b_i" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-msub space="4" data-latex="a_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-msub space="4" data-latex="b_i"><mjx-mi data-latex="b"><mjx-c class="mjx-c1D44F">𝑏</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="c_i = a_i = b_i"><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub><mo data-latex="=">=</mo><msub data-latex="a_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi></msub><mo data-latex="=">=</mo><msub data-latex="b_i"><mi data-latex="b">b</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container>.</li>
 </ol>
-<p>Therefore, we are forced to set $a'_i = a_i$ (not make a move).</p>
+<p>Therefore, we are forced to set <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="a'_i = a_i" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msubsup data-latex="a^'_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.21em;"></mjx-spacer><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msubsup><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-msub space="4" data-latex="a_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="a'_i = a_i"><msubsup data-latex="a^'_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup><mo data-latex="=">=</mo><msub data-latex="a_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container> (not make a move).</p>
 <h3>C2</h3>
-<p>The harder version decouples $a_i$ and $b_i$.</p>
-<p>This only affects our previous analysis at one place: previously, when we had $c_i = a_i$, in point 2, we argued that we cannot set $a'_i$ to some non-trivial multiple of $c_i$, as we had $c_i = a_i = b_i$.</p>
-<p>But now, we can have $a_i < b_i$, which will allow us to set $a'_i = m_i \cdot c_i$ (where $m_i > 1$).</p>
+<p>The harder version decouples <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="a_i" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="a_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="a_i"><msub data-latex="a_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container> and <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="b_i" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="b_i"><mjx-mi data-latex="b"><mjx-c class="mjx-c1D44F">𝑏</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="b_i"><msub data-latex="b_i"><mi data-latex="b">b</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container>.</p>
+<p>This only affects our previous analysis at one place: previously, when we had <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="c_i = a_i" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-msub space="4" data-latex="a_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="c_i = a_i"><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub><mo data-latex="=">=</mo><msub data-latex="a_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container>, in point 2, we argued that we cannot set <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="a'_i" class="NCM-N" aria-hidden="true"><mjx-msubsup data-latex="a'_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.21em;"></mjx-spacer><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msubsup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="a'_i"><msubsup data-latex="a'_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup></math></mjx-assistive-mml></mjx-container> to some non-trivial multiple of <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="c_i" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="c_i"><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container>, as we had <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="c_i = a_i = b_i" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-msub space="4" data-latex="a_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-msub space="4" data-latex="b_i"><mjx-mi data-latex="b"><mjx-c class="mjx-c1D44F">𝑏</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="c_i = a_i = b_i"><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub><mo data-latex="=">=</mo><msub data-latex="a_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi></msub><mo data-latex="=">=</mo><msub data-latex="b_i"><mi data-latex="b">b</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container>.</p>
+<p>But now, we can have <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="a_i < b_i" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="a_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex="<"><mjx-c class="mjx-c3C">&lt;</mjx-c></mjx-mo><mjx-msub space="4" data-latex="b_i"><mjx-mi data-latex="b"><mjx-c class="mjx-c1D44F">𝑏</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="a_i < b_i"><msub data-latex="a_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi></msub><mo data-latex="<">&lt;</mo><msub data-latex="b_i"><mi data-latex="b">b</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container>, which will allow us to set <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="a'_i = m_i \cdot c_i" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msubsup data-latex="a^'_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.21em;"></mjx-spacer><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msubsup><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-msub space="4" data-latex="m_i"><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="3"> </mjx-break><mjx-mo data-latex="\cdot"><mjx-c class="mjx-c22C5">⋅</mjx-c></mjx-mo><mjx-msub space="3" data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="a'_i = m_i \cdot c_i"><msubsup data-latex="a^'_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup><mo data-latex="=">=</mo><msub data-latex="m_i"><mi data-latex="m">m</mi><mi data-latex="i">i</mi></msub><mo data-latex="\cdot">⋅</mo><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container> (where <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="m_i > 1" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="m_i"><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex=">"><mjx-c class="mjx-c3E">&gt;</mjx-c></mjx-mo><mjx-mn space="4" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="m_i > 1"><msub data-latex="m_i"><mi data-latex="m">m</mi><mi data-latex="i">i</mi></msub><mo data-latex=">">&gt;</mo><mn data-latex="1">1</mn></math></mjx-assistive-mml></mjx-container>).</p>
 <h5>Lemma 1:</h5>
 <blockquote>
-<p>There exists an optimal solution wherein the chosen $m_i$ for all $i$ at which we set $a'_i = m_i \cdot c_i$ ($m_i > 1$) is prime.</p>
+<p>There exists an optimal solution wherein the chosen <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="m_i" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="m_i"><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="m_i"><msub data-latex="m_i"><mi data-latex="m">m</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container> for all <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i"><mi data-latex="i">i</mi></math></mjx-assistive-mml></mjx-container> at which we set <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="a'_i = m_i \cdot c_i" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msubsup data-latex="a^'_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.21em;"></mjx-spacer><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msubsup><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-msub space="4" data-latex="m_i"><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="3"> </mjx-break><mjx-mo data-latex="\cdot"><mjx-c class="mjx-c22C5">⋅</mjx-c></mjx-mo><mjx-msub space="3" data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="a'_i = m_i \cdot c_i"><msubsup data-latex="a^'_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup><mo data-latex="=">=</mo><msub data-latex="m_i"><mi data-latex="m">m</mi><mi data-latex="i">i</mi></msub><mo data-latex="\cdot">⋅</mo><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container> (<mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="m_i > 1" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="m_i"><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="4"> </mjx-break><mjx-mo data-latex=">"><mjx-c class="mjx-c3E">&gt;</mjx-c></mjx-mo><mjx-mn space="4" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="m_i > 1"><msub data-latex="m_i"><mi data-latex="m">m</mi><mi data-latex="i">i</mi></msub><mo data-latex=">">&gt;</mo><mn data-latex="1">1</mn></math></mjx-assistive-mml></mjx-container>) is prime.</p>
 </blockquote>
 <p>Proof: easy enough to show, but left as an exercise to the reader.</p>
 <h5>Lemma 2:</h5>
 <blockquote>
-<p>There exists an optimal solution wherein the set of used $m_i$ is a subset of the first $P = 25$ primes.</p>
+<p>There exists an optimal solution wherein the set of used <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="m_i" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="m_i"><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="m_i"><msub data-latex="m_i"><mi data-latex="m">m</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container> is a subset of the first <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="P = 25" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="P"><mjx-c class="mjx-c1D443">𝑃</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-mn space="4" data-latex="25"><mjx-c class="mjx-c32" noic="true" style="padding-top: 0.666em;">2</mjx-c><mjx-c class="mjx-c35" style="padding-top: 0.666em;">5</mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="P = 25"><mi data-latex="P">P</mi><mo data-latex="=">=</mo><mn data-latex="25">25</mn></math></mjx-assistive-mml></mjx-container> primes.</p>
 </blockquote>
-<p>Proof: left as an exercise to the reader (hint: $m_i$ is only restricted by $m_{i - 1}, a_{i - 1}, c_i, m_{i + 1}, a_{i + 1}$, and any number up to $10^{18}$ cannot have too many distinct prime factors).</p>
+<p>Proof: left as an exercise to the reader (hint: <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="m_i" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="m_i"><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="m_i"><msub data-latex="m_i"><mi data-latex="m">m</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container> is only restricted by <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="m_{i - 1}, a_{i - 1}, c_i, m_{i + 1}, a_{i + 1}" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="m_{i-1}"><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-TeXAtom size="s" data-latex="{i-1}" texclass="ORD"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-mo data-latex="-"><mjx-c class="mjx-c2212">−</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-TeXAtom></mjx-script></mjx-msub><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="a_{i-1}"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-TeXAtom size="s" data-latex="{i-1}" texclass="ORD"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-mo data-latex="-"><mjx-c class="mjx-c2212">−</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-TeXAtom></mjx-script></mjx-msub><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="m_{i+1}"><mjx-mi data-latex="m"><mjx-c class="mjx-c1D45A">𝑚</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-TeXAtom size="s" data-latex="{i+1}" texclass="ORD"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-mo data-latex="+"><mjx-c class="mjx-c2B">+</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-TeXAtom></mjx-script></mjx-msub><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="a_{i+1}"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-TeXAtom size="s" data-latex="{i+1}" texclass="ORD"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-mo data-latex="+"><mjx-c class="mjx-c2B">+</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-TeXAtom></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="m_{i - 1}, a_{i - 1}, c_i, m_{i + 1}, a_{i + 1}"><msub data-latex="m_{i-1}"><mi data-latex="m">m</mi><mrow data-mjx-texclass="ORD" data-latex="{i-1}"><mi data-latex="i">i</mi><mo data-latex="-">−</mo><mn data-latex="1">1</mn></mrow></msub><mo data-latex=",">,</mo><msub data-latex="a_{i-1}"><mi data-latex="a">a</mi><mrow data-mjx-texclass="ORD" data-latex="{i-1}"><mi data-latex="i">i</mi><mo data-latex="-">−</mo><mn data-latex="1">1</mn></mrow></msub><mo data-latex=",">,</mo><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub><mo data-latex=",">,</mo><msub data-latex="m_{i+1}"><mi data-latex="m">m</mi><mrow data-mjx-texclass="ORD" data-latex="{i+1}"><mi data-latex="i">i</mi><mo data-latex="+">+</mo><mn data-latex="1">1</mn></mrow></msub><mo data-latex=",">,</mo><msub data-latex="a_{i+1}"><mi data-latex="a">a</mi><mrow data-mjx-texclass="ORD" data-latex="{i+1}"><mi data-latex="i">i</mi><mo data-latex="+">+</mo><mn data-latex="1">1</mn></mrow></msub></math></mjx-assistive-mml></mjx-container>, and any number up to <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="10^{18}" class="NCM-N" aria-hidden="true"><mjx-msup data-latex="10^{18}"><mjx-mn data-latex="10"><mjx-c class="mjx-c31" noic="true" style="padding-top: 0.666em;">1</mjx-c><mjx-c class="mjx-c30" style="padding-top: 0.666em;">0</mjx-c></mjx-mn><mjx-script style="vertical-align: 0.393em;"><mjx-TeXAtom size="s" data-latex="{18}" texclass="ORD"><mjx-mn data-latex="18"><mjx-c class="mjx-c31" noic="true" style="padding-top: 0.666em;">1</mjx-c><mjx-c class="mjx-c38" style="padding-top: 0.666em;">8</mjx-c></mjx-mn></mjx-TeXAtom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="10^{18}"><msup data-latex="10^{18}"><mn data-latex="10">10</mn><mrow data-mjx-texclass="ORD" data-latex="{18}"><mn data-latex="18">18</mn></mrow></msup></math></mjx-assistive-mml></mjx-container> cannot have too many distinct prime factors).</p>
 <p>We can therefore do a dynamic programming with the following state:</p>
 <ul>
-<li>$f(i)$ = maximum number of moves we can make in the prefix $i$, if we make no move at position $i$.</li>
-<li>$g(i, x)$ = maximum number of moves we can make in the prefix $i$, if we set $a'_i = c_i \cdot p_x$ (where $p_x$ is the $x$-th smallest prime).</li>
+<li><mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(i)" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(i)"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="i">i</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> = maximum number of moves we can make in the prefix <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i"><mi data-latex="i">i</mi></math></mjx-assistive-mml></mjx-container>, if we make no move at position <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i"><mi data-latex="i">i</mi></math></mjx-assistive-mml></mjx-container>.</li>
+<li><mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="g(i, x)" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="g"><mjx-c class="mjx-c1D454">𝑔</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-mi space="2" data-latex="x"><mjx-c class="mjx-c1D465">𝑥</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="g(i, x)"><mi data-latex="g">g</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="i">i</mi><mo data-latex=",">,</mo><mi data-latex="x">x</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> = maximum number of moves we can make in the prefix <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i"><mi data-latex="i">i</mi></math></mjx-assistive-mml></mjx-container>, if we set <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="a'_i = c_i \cdot p_x" breakable="true" class="NCM-N" aria-hidden="true"><mjx-msubsup data-latex="a^'_i"><mjx-mi data-latex="a"><mjx-c class="mjx-c1D44E">𝑎</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.247em; margin-left: 0;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo><mjx-spacer style="margin-top: 0.21em;"></mjx-spacer><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msubsup><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-msub space="4" data-latex="c_i"><mjx-mi data-latex="c"><mjx-c class="mjx-c1D450">𝑐</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-break size="3"> </mjx-break><mjx-mo data-latex="\cdot"><mjx-c class="mjx-c22C5">⋅</mjx-c></mjx-mo><mjx-msub space="3" data-latex="p_x"><mjx-mi data-latex="p"><mjx-c class="mjx-c1D45D">𝑝</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="x"><mjx-c class="mjx-c1D465">𝑥</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="a'_i = c_i \cdot p_x"><msubsup data-latex="a^'_i"><mi data-latex="a">a</mi><mi data-latex="i">i</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msubsup><mo data-latex="=">=</mo><msub data-latex="c_i"><mi data-latex="c">c</mi><mi data-latex="i">i</mi></msub><mo data-latex="\cdot">⋅</mo><msub data-latex="p_x"><mi data-latex="p">p</mi><mi data-latex="x">x</mi></msub></math></mjx-assistive-mml></mjx-container> (where <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="p_x" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="p_x"><mjx-mi data-latex="p"><mjx-c class="mjx-c1D45D">𝑝</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="x"><mjx-c class="mjx-c1D465">𝑥</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="p_x"><msub data-latex="p_x"><mi data-latex="p">p</mi><mi data-latex="x">x</mi></msub></math></mjx-assistive-mml></mjx-container> is the <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="x" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="x"><mjx-c class="mjx-c1D465">𝑥</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="x"><mi data-latex="x">x</mi></math></mjx-assistive-mml></mjx-container>-th smallest prime).</li>
 </ul>
-<p>Computing all of these states takes $O(n \cdot P ^ 2 \cdot \log{10^9})$ time, which is fast enough.</p>
+<p>Computing all of these states takes <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="O(n \cdot P ^ 2 \cdot \log{10^9})" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="O"><mjx-c class="mjx-c1D442">𝑂</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="n"><mjx-c class="mjx-c1D45B">𝑛</mjx-c></mjx-mi><mjx-break size="3"> </mjx-break><mjx-mo data-latex="\cdot"><mjx-c class="mjx-c22C5">⋅</mjx-c></mjx-mo><mjx-msup space="3" data-latex="P^2"><mjx-mi data-latex="P"><mjx-c class="mjx-c1D443">𝑃</mjx-c></mjx-mi><mjx-script style="vertical-align: 0.363em; margin-left: 0.056em;"><mjx-mn size="s" data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-script></mjx-msup><mjx-break size="3"> </mjx-break><mjx-mo data-latex="\cdot"><mjx-c class="mjx-c22C5">⋅</mjx-c></mjx-mo><mjx-mi space="3" data-latex="\log"><mjx-c class="mjx-c6C" noic="true" style="padding-top: 0.694em;">l</mjx-c><mjx-c class="mjx-c6F" noic="true" style="padding-top: 0.694em;">o</mjx-c><mjx-c class="mjx-c67" style="padding-top: 0.694em;">g</mjx-c></mjx-mi><mjx-mo><mjx-c class="mjx-c2061">⁡</mjx-c></mjx-mo><mjx-TeXAtom space="2" data-latex="{10^9}" texclass="ORD"><mjx-msup data-latex="10^9"><mjx-mn data-latex="10"><mjx-c class="mjx-c31" noic="true" style="padding-top: 0.666em;">1</mjx-c><mjx-c class="mjx-c30" style="padding-top: 0.666em;">0</mjx-c></mjx-mn><mjx-script style="vertical-align: 0.393em;"><mjx-mn size="s" data-latex="9"><mjx-c class="mjx-c39">9</mjx-c></mjx-mn></mjx-script></mjx-msup></mjx-TeXAtom><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="O(n \cdot P ^ 2 \cdot \log{10^9})"><mi data-latex="O">O</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="n">n</mi><mo data-latex="\cdot">⋅</mo><msup data-latex="P^2"><mi data-latex="P">P</mi><mn data-latex="2">2</mn></msup><mo data-latex="\cdot">⋅</mo><mi data-latex="\log">log</mi><mo data-mjx-texclass="NONE">⁡</mo><mrow data-mjx-texclass="ORD" data-latex="{10^9}"><msup data-latex="10^9"><mn data-latex="10">10</mn><mn data-latex="9">9</mn></msup></mrow><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> time, which is fast enough.</p>
 <h3>D</h3>
-<p>Firstly, let $f(s)$ be the maximum $x \leq n/2$ such that for all $i \leq x$, $s_i$ gets matched to $s_{n - i + 1}$ by RBS rules.</p>
+<p>Firstly, let <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(s)" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="s"><mjx-c class="mjx-c1D460">𝑠</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(s)"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="s">s</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> be the maximum <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="x \leq n/2" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="x"><mjx-c class="mjx-c1D465">𝑥</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-mi space="4" data-latex="n"><mjx-c class="mjx-c1D45B">𝑛</mjx-c></mjx-mi><mjx-mo data-latex="/"><mjx-c class="mjx-c2F">/</mjx-c></mjx-mo><mjx-mn data-latex="2"><mjx-c class="mjx-c32">2</mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="x \leq n/2"><mi data-latex="x">x</mi><mo data-latex="\leq">≤</mo><mi data-latex="n">n</mi><mo data-latex="/">/</mo><mn data-latex="2">2</mn></math></mjx-assistive-mml></mjx-container> such that for all <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="i \leq x" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\leq"><mjx-c class="mjx-c2264">≤</mjx-c></mjx-mo><mjx-mi space="4" data-latex="x"><mjx-c class="mjx-c1D465">𝑥</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="i \leq x"><mi data-latex="i">i</mi><mo data-latex="\leq">≤</mo><mi data-latex="x">x</mi></math></mjx-assistive-mml></mjx-container>, <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="s_i" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="s_i"><mjx-mi data-latex="s"><mjx-c class="mjx-c1D460">𝑠</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="s_i"><msub data-latex="s_i"><mi data-latex="s">s</mi><mi data-latex="i">i</mi></msub></math></mjx-assistive-mml></mjx-container> gets matched to <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="s_{n - i + 1}" class="NCM-N" aria-hidden="true"><mjx-msub data-latex="s_{n - i + 1}"><mjx-mi data-latex="s"><mjx-c class="mjx-c1D460">𝑠</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em;"><mjx-TeXAtom size="s" data-latex="{n-i+1}" texclass="ORD"><mjx-mi data-latex="n"><mjx-c class="mjx-c1D45B">𝑛</mjx-c></mjx-mi><mjx-mo data-latex="-"><mjx-c class="mjx-c2212">−</mjx-c></mjx-mo><mjx-mi data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi><mjx-mo data-latex="+"><mjx-c class="mjx-c2B">+</mjx-c></mjx-mo><mjx-mn data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-TeXAtom></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="s_{n - i + 1}"><msub data-latex="s_{n - i + 1}"><mi data-latex="s">s</mi><mrow data-mjx-texclass="ORD" data-latex="{n-i+1}"><mi data-latex="n">n</mi><mo data-latex="-">−</mo><mi data-latex="i">i</mi><mo data-latex="+">+</mo><mn data-latex="1">1</mn></mrow></msub></math></mjx-assistive-mml></mjx-container> by RBS rules.</p>
 <h5>Lemma 1:</h5>
 <blockquote>
-<p>$f(s) = f(t)$ is a necessary requirement for $s$ and $t$ to be interconvertible, as $f(s) = f(s')$ after any operation that converts $s$ to $s'$</p>
+<p><mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(s) = f(t)" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="s"><mjx-c class="mjx-c1D460">𝑠</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-mi space="4" data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="t"><mjx-c class="mjx-c1D461">𝑡</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(s) = f(t)"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="s">s</mi><mo data-latex=")" stretchy="false">)</mo><mo data-latex="=">=</mo><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="t">t</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> is a necessary requirement for <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="s" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="s"><mjx-c class="mjx-c1D460">𝑠</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="s"><mi data-latex="s">s</mi></math></mjx-assistive-mml></mjx-container> and <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="t" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="t"><mjx-c class="mjx-c1D461">𝑡</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="t"><mi data-latex="t">t</mi></math></mjx-assistive-mml></mjx-container> to be interconvertible, as <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(s) = f(s')" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="s"><mjx-c class="mjx-c1D460">𝑠</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-break size="4"> </mjx-break><mjx-mo data-latex="="><mjx-c class="mjx-c3D">=</mjx-c></mjx-mo><mjx-mi space="4" data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-msup><mjx-mi data-latex="s"><mjx-c class="mjx-c1D460">𝑠</mjx-c></mjx-mi><mjx-script style="vertical-align: 0.363em;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo></mjx-script></mjx-msup><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(s) = f(s')"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="s">s</mi><mo data-latex=")" stretchy="false">)</mo><mo data-latex="=">=</mo><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><msup><mi data-latex="s">s</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msup><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> after any operation that converts <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="s" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="s"><mjx-c class="mjx-c1D460">𝑠</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="s"><mi data-latex="s">s</mi></math></mjx-assistive-mml></mjx-container> to <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="s'" class="NCM-N" aria-hidden="true"><mjx-msup data-latex="s'"><mjx-mi data-latex="s"><mjx-c class="mjx-c1D460">𝑠</mjx-c></mjx-mi><mjx-script style="vertical-align: 0.363em;"><mjx-mo size="s" data-latex="'"><mjx-c class="mjx-c2032 NCM-V">′</mjx-c></mjx-mo></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="s'"><msup data-latex="s'"><mi data-latex="s">s</mi><mo data-mjx-alternate="1" data-latex="'">′</mo></msup></math></mjx-assistive-mml></mjx-container></p>
 </blockquote>
 <p>Proof: Exercise for the reader (hint: this outer section can never be modified by any operation).</p>
-<p>If $f(s) \neq f(t)$, we're done. Otherwise, we get rid of the first and last $f(s)$ characters from both $s$ and $t$.</p>
-<p>Now, consider the RBS trees $T(s)$ and $T(t)$ built from $s$ and $t$ (note that since we removed the first/last $f(s)$ characters, these trees will either be empty, or the root will have &gt; 1 child).</p>
+<p>If <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(s) \neq f(t)" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="s"><mjx-c class="mjx-c1D460">𝑠</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo><mjx-break size="4"> </mjx-break><mjx-mo data-latex="\neq"><mjx-c class="mjx-c2260">≠</mjx-c></mjx-mo><mjx-mi space="4" data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="t"><mjx-c class="mjx-c1D461">𝑡</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(s) \neq f(t)"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="s">s</mi><mo data-latex=")" stretchy="false">)</mo><mo data-latex="\neq">≠</mo><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="t">t</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container>, we're done. Otherwise, we get rid of the first and last <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(s)" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="s"><mjx-c class="mjx-c1D460">𝑠</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(s)"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="s">s</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> characters from both <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="s" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="s"><mjx-c class="mjx-c1D460">𝑠</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="s"><mi data-latex="s">s</mi></math></mjx-assistive-mml></mjx-container> and <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="t" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="t"><mjx-c class="mjx-c1D461">𝑡</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="t"><mi data-latex="t">t</mi></math></mjx-assistive-mml></mjx-container>.</p>
+<p>Now, consider the RBS trees <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="T(s)" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="T"><mjx-c class="mjx-c1D447">𝑇</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="s"><mjx-c class="mjx-c1D460">𝑠</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="T(s)"><mi data-latex="T">T</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="s">s</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> and <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="T(t)" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="T"><mjx-c class="mjx-c1D447">𝑇</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="t"><mjx-c class="mjx-c1D461">𝑡</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="T(t)"><mi data-latex="T">T</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="t">t</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> built from <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="s" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="s"><mjx-c class="mjx-c1D460">𝑠</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="s"><mi data-latex="s">s</mi></math></mjx-assistive-mml></mjx-container> and <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="t" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="t"><mjx-c class="mjx-c1D461">𝑡</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="t"><mi data-latex="t">t</mi></math></mjx-assistive-mml></mjx-container> (note that since we removed the first/last <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="f(s)" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="f"><mjx-c class="mjx-c1D453">𝑓</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="s"><mjx-c class="mjx-c1D460">𝑠</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="f(s)"><mi data-latex="f">f</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="s">s</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> characters, these trees will either be empty, or the root will have &gt; 1 child).</p>
 <p>The equivalent problem on these trees is the following:</p>
 <blockquote>
 <p>You can perform any number of the following operations on either tree:</p>
-<p>Select nodes $u$ and $v$ such that neither is an ancestor of the either, and attach some &quot;adjacent&quot; children of $v$ (in the ordered child sequence) to the parent of $u$, and attach $v$ to $u$.</p>
+<p>Select nodes <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="u" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="u"><mi data-latex="u">u</mi></math></mjx-assistive-mml></mjx-container> and <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="v" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="v"><mjx-c class="mjx-c1D463">𝑣</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="v"><mi data-latex="v">v</mi></math></mjx-assistive-mml></mjx-container> such that neither is an ancestor of the either, and attach some "adjacent" children of <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="v" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="v"><mjx-c class="mjx-c1D463">𝑣</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="v"><mi data-latex="v">v</mi></math></mjx-assistive-mml></mjx-container> (in the ordered child sequence) to the parent of <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="u" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="u"><mi data-latex="u">u</mi></math></mjx-assistive-mml></mjx-container>, and attach <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="v" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="v"><mjx-c class="mjx-c1D463">𝑣</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="v"><mi data-latex="v">v</mi></math></mjx-assistive-mml></mjx-container> to <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="u" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="u"><mjx-c class="mjx-c1D462">𝑢</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="u"><mi data-latex="u">u</mi></math></mjx-assistive-mml></mjx-container>.</p>
 <p>Can the two trees be made isomorphic?</p>
 </blockquote>
 <p>Now, notice the following invariant: The number of leaf nodes remains the same after every operation.</p>
 <p>While obviously necessary, it turns out that having an equal number of leaf nodes is sufficient for two trees to be interconvertible.</p>
 <p>Proof:</p>
-<p>Let's say a tree has $l$ leaves.</p>
+<p>Let's say a tree has <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="l" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="l"><mi data-latex="l">l</mi></math></mjx-assistive-mml></mjx-container> leaves.</p>
 <p>Regardless of the initial structure of the tree, we can always convert it to the following equivalence class representative:</p>
-<p>A tree with $l - 1$ leaves hanging from the root, and a chain containing the remaining nodes.</p>
+<p>A tree with <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="l - 1" breakable="true" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="l"><mjx-c class="mjx-c1D459">𝑙</mjx-c></mjx-mi><mjx-break size="3"> </mjx-break><mjx-mo data-latex="-"><mjx-c class="mjx-c2212">−</mjx-c></mjx-mo><mjx-mn space="3" data-latex="1"><mjx-c class="mjx-c31">1</mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="l - 1"><mi data-latex="l">l</mi><mo data-latex="-">−</mo><mn data-latex="1">1</mn></math></mjx-assistive-mml></mjx-container> leaves hanging from the root, and a chain containing the remaining nodes.</p>
 <!----></article></section><!--]--><!--]--><!--astro:end--></astro-island> </main> <!-- Terminal (desktop only) --> <aside class="hidden md:block"> <astro-island uid="Z2ejFBI" component-url="/_astro/TerminalPane.D2hkyxKp.js" component-export="default" renderer-url="/_astro/client.svelte.DSigbiJE.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;TerminalPane&quot;,&quot;value&quot;:true}" await-children><!--[--><div class="h-full flex flex-col desktop-wrapper svelte-1mq48mh" style="--tw-bg: #0a0a0a; --tw-bg-end: #0d0d0d; --tw-border: rgba(100, 255, 218, 0.15); --tw-border-focus: rgba(100, 255, 218, 0.4); --tw-glow: rgba(100, 255, 218, 0.1); --tw-glow-strong: rgba(100, 255, 218, 0.3); --tw-accent: #64ffda; --tw-accent-muted: rgba(100, 255, 218, 0.6); --tw-shadow: rgba(0, 0, 0, 0.3);"><button class="desktop-toggle flex svelte-1mq48mh" aria-label="Collapse terminal">▶</button> <!--[!--><!--]--> <div class="flex-1 overflow-hidden"><div class="terminal-content svelte-1mq48mh"><div class="terminal-shell-outer h-full w-full svelte-scxdjl"><div class="terminal-shell svelte-scxdjl"></div></div><!----></div></div></div><!--]--><!--astro:end--></astro-island> </aside> </div> </body></html>

@@ -1,0 +1,945 @@
+<!DOCTYPE html><html lang="en" class="h-full"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Suffix arrays in O(n) using SA-IS · Welcome to the Sunny Side!</title><meta name="description" content="While the usual $O(n \log{n})$ suffix array algorithm described here suffices for almost all of one's competitive-programming needs, suffix structures turn o…"><link rel="canonical" href="https://www.welcome-to-the-sunny-side.com/algo/theory/sais.html"><link rel="icon" href="/favicon.ico"><script async src="https://www.googletagmanager.com/gtag/js?id=G-FDGES615HV"></script><script type="module">window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-FDGES615HV");</script><link rel="stylesheet" href="/_astro/_slug_.DFBpVZ-4.css"></head> <body class="h-full"> <div class="h-screen w-screen grid grid-cols-1 grid-rows-[auto_1fr] md:grid-cols-[1fr_auto] md:grid-rows-1"> <!-- Mobile breadcrumb nav --> <div class="md:hidden"> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z1AQ8aI" component-url="/_astro/MobileNav.XGZTBScB.js" component-export="default" renderer-url="/_astro/client.svelte.DSigbiJE.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;MobileNav&quot;,&quot;value&quot;:true}" await-children><!--[--><nav class="md:hidden flex items-center px-3 py-2 bg-surface border-b border-accent-subtle font-mono text-sm"><div class="flex-1 flex items-center min-w-0 overflow-x-auto whitespace-nowrap"><!--[--><!--[!--><!--]--> <!--[!--><button class="crumb-link text-text-muted hover:text-accent transition-colors duration-150 svelte-xffx7i">~</button><!--]--><!--[--><span class="text-accent mx-1 select-none">/</span><!--]--> <!--[--><span class="text-text font-medium">home.html</span><!--]--><!--]--></div> <button class="flex-shrink-0 ml-3 text-text-muted hover:text-accent transition-colors duration-150 text-base leading-none" aria-label="Switch skin (current: dark)">☾</button></nav><!--]--><!--astro:end--></astro-island> </div> <!-- Content --> <main class="overflow-y-auto overflow-x-hidden bg-surface text-text transition-colors duration-150 ease-retro min-h-0"> <astro-island uid="Z1z0ppE" component-url="/_astro/ContentPane.rjnzTeDS.js" component-export="default" renderer-url="/_astro/client.svelte.DSigbiJE.js" props="{&quot;initial&quot;:[0,{&quot;kind&quot;:[0,&quot;md&quot;],&quot;path&quot;:[0,&quot;/algo/theory/sais.html&quot;],&quot;html&quot;:[0,&quot;&lt;h1&gt;Introduction&lt;/h1&gt;\n&lt;p&gt;While the usual $O(n \\log{n})$ suffix array algorithm described &lt;a href=\&quot;https://cp-algorithms.com/string/suffix-array.html\&quot;&gt;here&lt;/a&gt; suffices for almost all of one&#39;s competitive-programming needs, suffix structures turn out to be useful in several other fields which require faster algorithms. Lossless compression is one such field, and I happened to need a faster SA algorithm in an LZ-compressor I&#39;ve &lt;a href=\&quot;https://github.com/welcome-to-the-sunny-side/misa77\&quot;&gt;been working on recently&lt;/a&gt;.&lt;/p&gt;\n&lt;p&gt;In this blog, we&#39;ll learn how to build suffix arrays in linear time, using the algorithm I learned for this purpose. It&#39;s called SA-IS (&amp;quot;Suffix Array by Induced Sorting&amp;quot;, by Nong, Zhang, and Chan), and was originally described &lt;a href=\&quot;https://ieeexplore.ieee.org/document/4976463\&quot;&gt;in this paper&lt;/a&gt;.&lt;/p&gt;\n&lt;h1&gt;1. Preliminaries&lt;/h1&gt;\n&lt;p&gt;We have a string $T$ of length $n$.&lt;/p&gt;\n&lt;p&gt;For the sake of convenience:&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;We assume that $T_i \\in \\lbrace 1, 2, \\dots n \\rbrace$ for all $ i \\in [0, n)$.&lt;/li&gt;\n&lt;li&gt;We add a unique sentinel element with value $0$ at the end of $T$. Note that this sentinel is the unique minimum in $T$ and the length now becomes $n + 1$.&lt;/li&gt;\n&lt;li&gt;We define $S_i$ to be the $i$-th suffix, i.e. $T_i T_{i + 1} \\dots T_n$. At several places ahead, I will simply use &amp;quot;$i$-th suffix&amp;quot; or &amp;quot;suffix $i$&amp;quot; to refer to $S_i$.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;The goal is to construct the suffix array of $T$ in $O(n)$ time. The suffix array is defined as the array $A$ of length $n + 1$, where $A_i$ corresponds to the index of the $i$-th smallest suffix amongst all suffixes of $T$ (when compared lexicographically). One can note that the last character being unique ensures that no suffix is a prefix of another.&lt;/p&gt;\n&lt;h1&gt;2. L and S-type suffixes&lt;/h1&gt;\n&lt;p&gt;The key insight that SAIS is built around is that there&#39;s a &lt;em&gt;lot&lt;/em&gt; of information hidden in comparisons of adjacent suffixes of a string (i.e. $S_i$ vs $S_{i + 1}$).&lt;/p&gt;\n&lt;p&gt;As such, we define two types of suffixes:&lt;/p&gt;\n&lt;ol&gt;\n&lt;li&gt;Suffix $i$ is said to be of &lt;strong&gt;L-type&lt;/strong&gt;, if $i &lt; n$ and $S_i &gt; S_{i + 1}$.&lt;/li&gt;\n&lt;li&gt;Suffix $i$ is said to be of &lt;strong&gt;S-type&lt;/strong&gt;, if $i = n$ or $S_i &lt; S_{i + 1}$.&lt;/li&gt;\n&lt;/ol&gt;\n&lt;p&gt;We will now make a series of observations about these two types in quick succession, so buckle up.&lt;/p&gt;\n&lt;p&gt;First, we characterise the structure of both types.&lt;/p&gt;\n&lt;h4&gt;Theorem 2.1&lt;/h4&gt;\n&lt;blockquote&gt;\n&lt;p&gt;Suffix $i$ is L-type iff $i &lt; n$ and $T_i &gt; T_j$ for the smallest $j \\geq i$ such that $T_j \\neq T_i$.&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Simply put, all L-type suffixes have the form &lt;code&gt;[&amp;gt;= 1 occurrences of symbol b][1 occurrence of a]...&lt;/code&gt; where $b &gt; a$ ($b$ is the first character of the suffix here).&lt;/p&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Proof&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;p&gt;Let $x \\geq 0$ be the smallest index where $T_{i + x} \\neq T_{i + 1 + x}$. There must exist such an $x$ because the last element is unique.\nIf $i$ is L-type, then we definitionally need $T_{i + x} &gt; T_{i + 1 + x}$ (as $S_i &gt; S_{i + 1}$). Therefore, we have $T_i = T_{i + y}$ for all $0 \\leq y \\leq x$ and $T_i &gt; T_{i + x + 1}$.&lt;/p&gt;\n&lt;p&gt;Now, the other direction - if $S_i$ takes the form &lt;code&gt;[x &amp;gt;= 1 occurrences of b] [1 occurrence of a]&lt;/code&gt; where $b &gt; a$, then $S_i &gt; S_{i + 1}$ because $x$ is the smallest non-negative integer where $T_{i + x} \\neq T_{i + 1 + x}$, and we have $T_{i + x} &gt; T_{i + 1 + x}$.&lt;/p&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;h4&gt;Theorem 2.2&lt;/h4&gt;\n&lt;blockquote&gt;\n&lt;p&gt;Suffix $i$ is S-type iff $i = n$ or $T_j &gt; T_i$ for the smallest $j \\geq i$ such that $T_j \\neq T_i$.&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Simply put, all S-type suffixes, save for the sentinel, have the form &lt;code&gt;[&amp;gt;= 1 occurrences of symbol b][1 occurrence of c]...&lt;/code&gt; where $b &lt; c$.&lt;/p&gt;\n&lt;p&gt;The proof is symmetrical to 2.1.&lt;/p&gt;\n&lt;h4&gt;Theorem 2.3&lt;/h4&gt;\n&lt;blockquote&gt;\n&lt;p&gt;All the positions in $T$ can be classified as L or S-type in $O(n)$.&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Denote the type of the $i$-th suffix by $Q_i$. Then:&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;$Q_n =$ S-type.&lt;/li&gt;\n&lt;li&gt;For $i &lt; n$:\n&lt;ul&gt;\n&lt;li&gt;If $T_i &lt; T_{i + 1}$, $Q_i$ = S-type.&lt;/li&gt;\n&lt;li&gt;If $T_i &gt; T_{i + 1}$, $Q_i$ = L-type.&lt;/li&gt;\n&lt;li&gt;Else, $Q_i = Q_{i + 1}$.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Proof&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;p&gt;We simply use 2.1 and 2.2 for all $i &lt; n$ here:&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;If $T_i &lt; T_{i + 1}$, then suffix $i$ is of the form &lt;code&gt;b c ...&lt;/code&gt; where $b &lt; c$ and therefore must be S-type.&lt;/li&gt;\n&lt;li&gt;If $T_i &gt; T_{i + 1}$, then suffix $i$ is of the form &lt;code&gt;b a ...&lt;/code&gt; where $b &gt; a$ and therefore must be L-type.&lt;/li&gt;\n&lt;li&gt;If $T_i == T_{i + 1}$, then suffix $i + 1$ is either of the form &lt;code&gt;[&amp;gt;= 1 occurrences of b][1 occurrence of a]...&lt;/code&gt; or &lt;code&gt;[&amp;gt;= 1 occurrences of b][1 occurrence of c]...&lt;/code&gt;, and this determines its type. If we prepend one &lt;code&gt;b&lt;/code&gt; to either form ($S_i = bS_{i + 1}$), then the form doesn&#39;t change and neither does the type.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;h4&gt;Theorem 2.4&lt;/h4&gt;\n&lt;blockquote&gt;\n&lt;p&gt;If $T_i = T_j$, suffix $i$ is of L-type, and suffix $j$ is of S-type, then $S_i &lt; S_j$.&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Proof&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;p&gt;$S_i$ has the form &lt;code&gt;[&amp;gt;= 1 occurrences of b] [1 occurrence of a]...&lt;/code&gt; and $S_j$ has the form &lt;code&gt;[&amp;gt;= 1 occurrences of b][1 occurrence of c]...&lt;/code&gt;.\nIt&#39;s easy to see that at the smallest $x \\geq 0$ where $T_{i + x} \\neq T_{j + x}$, we have one of the following:&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;$T_{i + x} = b, T_{j + x} = c$&lt;/li&gt;\n&lt;li&gt;$T_{i + x} = a, T_{j + x} = b$&lt;/li&gt;\n&lt;li&gt;$T_{i + x} = a, T_{j + x} = c$&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;In every case, we have $T_{i + x} &lt; T_{j + x}$, and therefore $S_i &lt; S_j$.&lt;/p&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;p&gt;Now, theorem 2.4 is quite powerful as it allows us to characterise the structure of the suffix array in a very friendly &amp;quot;bucketed&amp;quot; manner. We can observe that the suffix array must take the following form:&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;First, we have L-type suffixes that start with symbol $0$.&lt;/li&gt;\n&lt;li&gt;Then, we have S-type suffixes that start with symbol $0$.&lt;/li&gt;\n&lt;li&gt;Then, L-type suffixes that start with symbol $1$.&lt;/li&gt;\n&lt;li&gt;Then, S-type suffixes that start with symbol $1$.&lt;/li&gt;\n&lt;li&gt;Then, L-type suffixes that start with symbol $2$.&lt;/li&gt;\n&lt;li&gt;Then, S-type suffixes that start with symbol $2$.&lt;/li&gt;\n&lt;li&gt;...and so on&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;In other words:&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;The suffix array consists of several disjoint buckets, with each bucket corresponding to suffixes starting with a certain symbol.&lt;/li&gt;\n&lt;li&gt;The buckets are ordered by the starting symbol.&lt;/li&gt;\n&lt;li&gt;Within a particular bucket, we first have all the L-type suffixes, and then all the S-type suffixes.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;It&#39;s easy to see that these bucket boundaries can also be computed in $O(n)$. It might seem odd that I&#39;m mentioning this, but it&#39;s important for the implementation later.&lt;/p&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Code&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;pre class=\&quot;hljs\&quot;&gt;&lt;code&gt;&lt;span class=\&quot;hljs-comment\&quot;&gt;// Given n and T&lt;/span&gt;\n&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; n;\nvector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; T;\n\n&lt;span class=\&quot;hljs-function\&quot;&gt;vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &lt;span class=\&quot;hljs-title\&quot;&gt;cnt&lt;/span&gt;&lt;span class=\&quot;hljs-params\&quot;&gt;(n + &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;, &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;;\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; x : T)\n    cnt[x]++;\n\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; tail = cnt;\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;; i &amp;lt;= n; i++)\n    tail[i] += tail[i - &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;];\n\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; head = tail;\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; i &amp;lt;= n; i ++)\n    head[i] -= cnt[i];\n\n&lt;span class=\&quot;hljs-comment\&quot;&gt;//now, bucket for element i is [head[i], tail[i])&lt;/span&gt;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;h1&gt;3. LMS-types&lt;/h1&gt;\n&lt;p&gt;We define a suffix $i$ to be of &lt;strong&gt;LMS-type&lt;/strong&gt; (i.e. &amp;quot;Leftmost-S-type&amp;quot;) iff:&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;$i &gt; 0$&lt;/li&gt;\n&lt;li&gt;Suffix $i$ is of S-type.&lt;/li&gt;\n&lt;li&gt;Suffix $i - 1$ is of L-type.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;Let $l_0 &lt; l_1 &lt; \\dots &lt; l_{m - 1}$ be the LMS positions of $T$.&lt;/p&gt;\n&lt;p&gt;A key observation is that there are $m \\leq \\frac{n + 1}{2} $ LMS positions (the existence of each LMS position &amp;quot;consumes&amp;quot; a unique L-type and S-type). As you will later see, the efficiency of SAIS is dependent on this.&lt;/p&gt;\n&lt;h4&gt;Theorem 3.1&lt;/h4&gt;\n&lt;blockquote&gt;\n&lt;p&gt;If $i$ is LMS-type, then $T_{i - 1} &gt; T_i$.&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Proof&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;p&gt;If $i$ is LMS, then $i &gt; 0$ and $i - 1$ is L-type.\nBy theorem 2.3, we cannot have $T_{i - 1} \\leq T_i$ because then $i - 1$ would have been S-type.&lt;/p&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;p&gt;Now, let&#39;s introduce a very helpful visualisation for strings that I&#39;ll just call a &amp;quot;slope view&amp;quot;. The slope view of any given string will be obtained by us drawing downward or upward slants between two adjacent suffixes based on the result of their comparison (i.e. the type of the left suffix).&lt;/p&gt;\n&lt;p&gt;Let&#39;s look at some visualisations for $T = $ &lt;code&gt;baacbcbacbccdaa$&lt;/code&gt; (where &lt;code&gt;$&lt;/code&gt; is the appended unique minimum). I know I said that $T$ will have integer elements, but an english alphabet string is just nicer to look at, and is no different computationally (just assign some integer to every letter).&lt;/p&gt;\n&lt;figure style=\&quot;text-align: center;\&quot;&gt;\n  &lt;img\n    src=\&quot;/assets/sais/slope-view.png\&quot;\n    alt=\&quot;Slope view of baacbcbacbccdaa$: rising (S-type) and falling (L-type) slants between adjacent positions, with flags on the LMS valleys at positions 1, 4, 7, 9 and 15\&quot;\n    style=\&quot;display: block; margin: 0 auto;\&quot;\n  &gt;\n  &lt;figcaption&gt;\n    The slope-view diagram for T.\n  &lt;/figcaption&gt;\n&lt;/figure&gt;\n&lt;p&gt;A few observations:&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;LMS-types correspond to &lt;em&gt;valleys&lt;/em&gt; in the slope view.&lt;/li&gt;\n&lt;li&gt;An upward slope (from left to right) corresponds to S-type suffixes.&lt;/li&gt;\n&lt;li&gt;A downward slope corresponds to L-type suffixes.&lt;/li&gt;\n&lt;li&gt;The second-last character is always L-type, as the last character is the unique minimum. Since the last position is definitionally S-type, this also implies that it&#39;s always LMS-type.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;Also recall theorem 2.4. The buckets in the SA for $T$ take the following form.&lt;/p&gt;\n&lt;figure style=\&quot;text-align: center;\&quot;&gt;\n  &lt;img\n    src=\&quot;/assets/sais/bucket-view.png\&quot;\n    alt=\&quot;Bucket structure of the suffix array of baacbcbacbccdaa$: slots split into buckets by first character ($, a, b, c, d), with L-type suffixes before S-type suffixes inside each bucket\&quot;\n    style=\&quot;display: block; margin: 0 auto;\&quot;\n  &gt;\n  &lt;figcaption&gt;\n    The buckets for the suffix array of T.\n  &lt;/figcaption&gt;\n&lt;/figure&gt;\n&lt;h1&gt;4. Induced sorting&lt;/h1&gt;\n&lt;p&gt;Now, after having tunnel-visioned on the classification of these L/S types for so long, let&#39;s return to our original goal of finding $A$. Why did we do all of this? As it turns out, it&#39;s really convenient to sort L-suffixes and S-suffixes separately.&lt;/p&gt;\n&lt;h2&gt;4.1 L-induce&lt;/h2&gt;\n&lt;p&gt;Say we were tasked with producing $A$ partially, i.e. only at positions $i$ such that $A_i$ was an L-type position. Does the problem get meaningfully easier?&lt;/p&gt;\n&lt;p&gt;The observation that the entire algorithm is built upon is that &lt;em&gt;we don&#39;t need any S-type suffixes except the LMS-types to induce the sorted order of L-type suffixes&lt;/em&gt;.&lt;/p&gt;\n&lt;h4&gt;Theorem 4.1&lt;/h4&gt;\n&lt;blockquote&gt;\n&lt;p&gt;Given the sorted order of LMS-suffixes (a permutation $G$ of $l_0, l_1 \\dots l_{m - 1}$ where $S_{G_i} &lt; S_{G_{i + 1}}$ for $i + 1 &lt; m$), we can compute in $O(n)$ time all $A_i$ where $A_i$ is an L-type position. Less formally, we can fill out all the &amp;quot;L-buckets&amp;quot; of $A$ in $O(n)$ time.&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;The rest of subsection 4.1 will be spent realising an algorithm which does this.&lt;/p&gt;\n&lt;p&gt;Let&#39;s first consider a really inefficient procedure to sort L-type suffixes while only making use of LMS-types (besides the L-types). This is really the sort of algorithm where it&#39;s simpler to use an unambiguous, real programming language rather than pseudocode, so you&#39;ll have to bear with C++ snippets throughout.&lt;/p&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Procedure 1&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;pre class=\&quot;hljs\&quot;&gt;&lt;code&gt;&lt;span class=\&quot;hljs-comment\&quot;&gt;// Given n, T, Q, S, bucket boundaries (see code in theorem 2.4)&lt;/span&gt;\n&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; n;\nvector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; T, Q, head, tail;\nvector&amp;lt;vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt;&amp;gt; S;          &lt;span class=\&quot;hljs-comment\&quot;&gt;//suffixes&lt;/span&gt;\n\n&lt;span class=\&quot;hljs-function\&quot;&gt;vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &lt;span class=\&quot;hljs-title\&quot;&gt;A&lt;/span&gt;&lt;span class=\&quot;hljs-params\&quot;&gt;(n + &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;, &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;;\n\nset&amp;lt;pair&amp;lt;vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt;, &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt;&amp;gt; q;\n\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; extend = [&amp;amp;](&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i) -&amp;gt; &lt;span class=\&quot;hljs-type\&quot;&gt;void&lt;/span&gt;\n{\n  &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; j = i - &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;;\n  &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(j &amp;gt;= &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt; &lt;span class=\&quot;hljs-keyword\&quot;&gt;and&lt;/span&gt; &lt;span class=\&quot;hljs-built_in\&quot;&gt;is_L_type&lt;/span&gt;(Q[j]))\n    q.&lt;span class=\&quot;hljs-built_in\&quot;&gt;insert&lt;/span&gt;({S[j], j});\n};\n\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; i &amp;lt;= n; i ++)\n  &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(&lt;span class=\&quot;hljs-built_in\&quot;&gt;is_LMS_type&lt;/span&gt;(Q[i]))\n    q.&lt;span class=\&quot;hljs-built_in\&quot;&gt;insert&lt;/span&gt;({S[i], i});\n\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;while&lt;/span&gt;(!q.&lt;span class=\&quot;hljs-built_in\&quot;&gt;empty&lt;/span&gt;())\n{\n  &lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; [v, i] = *q.&lt;span class=\&quot;hljs-built_in\&quot;&gt;begin&lt;/span&gt;();\n  q.&lt;span class=\&quot;hljs-built_in\&quot;&gt;erase&lt;/span&gt;(q.&lt;span class=\&quot;hljs-built_in\&quot;&gt;begin&lt;/span&gt;());\n\n  &lt;span class=\&quot;hljs-comment\&quot;&gt;//we do not place the LMS types into A&lt;/span&gt;\n  &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(&lt;span class=\&quot;hljs-built_in\&quot;&gt;is_L_type&lt;/span&gt;(Q[i]))\n  {\n    A[head[T[i]]] = i;\n    head[T[i]] ++;\n  }\n\n  &lt;span class=\&quot;hljs-built_in\&quot;&gt;extend&lt;/span&gt;(i);\n}\n&lt;/code&gt;&lt;/pre&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;p&gt;This inefficient procedure essentially does the following:&lt;/p&gt;\n&lt;ol&gt;\n&lt;li&gt;It first inserts all the LMS-suffixes into a heap (that uses the standard lexicographical comparator).&lt;/li&gt;\n&lt;li&gt;Then, it repeatedly picks the smallest suffix from the heap and:\n&lt;ol&gt;\n&lt;li&gt;If the suffix corresponds to an L-type position $i$, it places $i$ at the first free position in the L-bucket corresponding to $T_i$ in $A$.&lt;/li&gt;\n&lt;li&gt;Then, if position $i - 1$ is L-type, it inserts $S_{i - 1}$ into the heap (i.e. it extends the removed suffix by one character on the left, or equivalently in the slope-view - moves one step up to the left).&lt;/li&gt;\n&lt;/ol&gt;\n&lt;/li&gt;\n&lt;/ol&gt;\n&lt;p&gt;Before we prove that this procedure is correct, I encourage you to intuit why this is correct by visualising the slope view. We essentially &amp;quot;seed&amp;quot; the heap by inserting all the valley positions, and then inch up each L-type slope to the left (remember, L-type slopes slant upwards from right to left).&lt;/p&gt;\n&lt;p&gt;Anyway, why is the procedure correct?&lt;/p&gt;\n&lt;p&gt;Notice that when suffix $S_i$ is deleted from the heap, it can only result in the insertion of a &lt;em&gt;strictly greater suffix&lt;/em&gt; back into the heap ($S_{i - 1}$, where $i - 1$ must be L-type, so $S_{i - 1} &gt; S_i$. In the slope view, $i - 1$ must be above $i$). Since we always delete the smallest suffix from the heap, this implies that all suffixes to ever be inserted in the heap are deleted in non-decreasing order (for any two L or LMS-type positions $i$ and $j$, if $S_i &lt; S_j$, then $i$ is deleted from the heap before $j$).&lt;/p&gt;\n&lt;p&gt;Now consider the manner in which we insert elements into $A$. It&#39;s easy to see that every suffix $i$ is guaranteed to be placed somewhere within the L-bucket of $i$. Within every L-bucket, suffixes are placed correctly too, as they were deleted in non-decreasing order from the heap, and therefore placed into the L-bucket in the same order.&lt;/p&gt;\n&lt;p&gt;What about coverage? Does &lt;em&gt;every&lt;/em&gt; L-type position eventually get placed into $A$? Yes! Remember that the last element is always LMS-type (a valley), and therefore, every L-type position has an LMS-type position somewhere after it (more formally, every L-type position has either an L-type position or LMS-type position to its right).&lt;/p&gt;\n&lt;p&gt;Now, we make a subtle modification to this procedure that preserves correctness, but allows us to later optimise it. Consider the following:&lt;/p&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Procedure 2&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;pre class=\&quot;hljs\&quot;&gt;&lt;code&gt;&lt;span class=\&quot;hljs-comment\&quot;&gt;// Given n, T, Q, S, bucket boundaries (see code in theorem 2.4)&lt;/span&gt;\n&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; n;\nvector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; T, Q, head, tail;\nvector&amp;lt;vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt;&amp;gt; S;          &lt;span class=\&quot;hljs-comment\&quot;&gt;//suffixes&lt;/span&gt;\n\n&lt;span class=\&quot;hljs-function\&quot;&gt;vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &lt;span class=\&quot;hljs-title\&quot;&gt;A&lt;/span&gt;&lt;span class=\&quot;hljs-params\&quot;&gt;(n + &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;, &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;;       &lt;span class=\&quot;hljs-comment\&quot;&gt;//suffix array&lt;/span&gt;\n\nset&amp;lt;pair&amp;lt;vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt;, &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt;&amp;gt; q;\n\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; extend2 = [&amp;amp;](&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i) -&amp;gt; &lt;span class=\&quot;hljs-type\&quot;&gt;void&lt;/span&gt;\n{\n  &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; j = i - &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;;\n  &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(j &amp;gt;= &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt; &lt;span class=\&quot;hljs-keyword\&quot;&gt;and&lt;/span&gt; &lt;span class=\&quot;hljs-built_in\&quot;&gt;is_L_type&lt;/span&gt;(Q[j]))\n  {\n    A[head[T[j]]] = j;\n    head[T[j]] ++;\n    q.&lt;span class=\&quot;hljs-built_in\&quot;&gt;insert&lt;/span&gt;({S[j], j});\n  }\n};\n\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; i &amp;lt;= n; i ++)\n  &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(&lt;span class=\&quot;hljs-built_in\&quot;&gt;is_LMS_type&lt;/span&gt;(Q[i]))\n    q.&lt;span class=\&quot;hljs-built_in\&quot;&gt;insert&lt;/span&gt;({S[i], i});\n\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;while&lt;/span&gt;(!q.&lt;span class=\&quot;hljs-built_in\&quot;&gt;empty&lt;/span&gt;())\n{\n  &lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; [v, i] = *q.&lt;span class=\&quot;hljs-built_in\&quot;&gt;begin&lt;/span&gt;();\n  q.&lt;span class=\&quot;hljs-built_in\&quot;&gt;erase&lt;/span&gt;(q.&lt;span class=\&quot;hljs-built_in\&quot;&gt;begin&lt;/span&gt;());\n\n  &lt;span class=\&quot;hljs-built_in\&quot;&gt;extend2&lt;/span&gt;(i);\n}\n&lt;/code&gt;&lt;/pre&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;p&gt;What changed? Instead of placing L-type $i$ into $A$ when $S_i$ gets deleted from the heap, we place $i$ into $A$ &lt;em&gt;when it gets inserted into the heap&lt;/em&gt;. When does it get inserted into the heap? When $S_{i + 1}$ is deleted.&lt;/p&gt;\n&lt;p&gt;Why is this procedure correct? First, observe that elements are still deleted from the heap in non-decreasing order.&lt;/p&gt;\n&lt;p&gt;All L-type positions are necessarily placed within their buckets in $A$, so for any two L-type positions $i$ and $j$ with $T_i &lt; T_j$, $i$ will necessarily be placed before $j$ in $A$. Therefore, we need only show that the relative placement of L-type positions &lt;em&gt;within&lt;/em&gt; buckets is correct.&lt;/p&gt;\n&lt;p&gt;Consider any two L-type positions $i$ and $j$ with $T_i = T_j = c$. Since $T_i = T_j$, $S_i &lt; S_j \\iff S_{i + 1} &lt; S_{j + 1}$. But recall that elements are still deleted from the heap in non-decreasing order! Since $i$ and $j$ are L-type, $i + 1$ and $j + 1$ are L or LMS-type, and pass through the heap before $i$ and $j$ respectively ($S_i &gt; S_{i + 1}$ and $S_j &gt; S_{j + 1}$). Assume WLOG $S_{i + 1} &lt; S_{j + 1}$. But then, $S_{i + 1}$ is deleted before $S_{j + 1}$, and $i$ is placed in the L-bucket of $c$ before $j$, just like we require. Therefore, suffixes are placed in the correct order within buckets.&lt;/p&gt;\n&lt;p&gt;This proves that the L-regions of $A$ are correctly filled by this procedure too.&lt;/p&gt;\n&lt;p&gt;Notice that our proof only relied on suffixes being deleted from the heap in non-decreasing order.&lt;/p&gt;\n&lt;h4&gt;Theorem 4.2&lt;/h4&gt;\n&lt;blockquote&gt;\n&lt;p&gt;Sequentially calling &lt;code&gt;extend2(i)&lt;/code&gt; on some non-decreasing sequence of suffixes $i_1, i_2, i_3, \\dots$ which contains all L/LMS-type positions exactly once results in the L-regions of $A$ being correctly filled.&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Now, how can we do this faster?&lt;/p&gt;\n&lt;p&gt;First, we divorce &lt;code&gt;extend2(i)&lt;/code&gt; from the heap. From this point onward, it will no longer add anything to the heap.&lt;/p&gt;\n&lt;p&gt;Let&#39;s make use of Theorem 4.2. Imagine that we had access to some pre-built, valid $A&#39;$. We could then simply call &lt;code&gt;extend2(A&#39;[i])&lt;/code&gt; in increasing order of $i$, where $A&#39;_i$ was L or LMS-type. Alas, we do not have access to a pre-built $A&#39;$... But we notice that calling &lt;code&gt;extend2(A&#39;[i])&lt;/code&gt; only possibly places an element into $A$ to the right of $i$ (so as we walk from left to right, we only place elements to our right, and there are no &amp;quot;circular dependencies&amp;quot;).&lt;/p&gt;\n&lt;p&gt;What if we could do the following at the same time?:&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;Build $A$.&lt;/li&gt;\n&lt;li&gt;&lt;em&gt;Use $A$ itself as a pre-built $A&#39;$&lt;/em&gt; that we walk from left to right and call &lt;code&gt;extend2(A&#39;[i])&lt;/code&gt; on?&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;Effectively (and I switch to pseudo-code now):&lt;/p&gt;\n&lt;pre class=\&quot;hljs\&quot;&gt;&lt;code&gt;A = [-1] * (n + 1)\nfor i from 0 to n:\n  if (A[i] != -1) and (A[i] is L or LMS type):\n    extend2(A[i])\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;This is of course incorrect, for the simple reason that everything remains -1, but the fix is smaller than you might expect.&lt;/p&gt;\n&lt;p&gt;The problem is illustrated well by considering this procedure&#39;s equivalence to procedure 2. Remember that we delete suffixes $S_i$ in non-decreasing order. This effectively means that the position of $S_i$ in $A$ keeps increasing as time goes on, and the deletion order can be grouped like this:&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;First, we delete all indices in the L-bucket of $0$ (L-suffixes that begin with $0$).&lt;/li&gt;\n&lt;li&gt;Then, LMS indices in the S-bucket of $0$.&lt;/li&gt;\n&lt;li&gt;Then, all indices in the L-bucket of $1$.&lt;/li&gt;\n&lt;li&gt;Then, LMS indices in the S-bucket of $1$&lt;/li&gt;\n&lt;li&gt;and so on&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;The issue here is that while we don&#39;t need the heap &lt;em&gt;at all&lt;/em&gt; to handle the L-regions, it&#39;s doing critical work for us in the S-regions.&lt;/p&gt;\n&lt;p&gt;In particular, we can already modify procedure 2 to run in linear time &lt;em&gt;for the L-regions&lt;/em&gt; in the following manner:&lt;/p&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Procedure 2.5&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;pre class=\&quot;hljs\&quot;&gt;&lt;code&gt;A = [-1] * (n + 1)\n\nput {S[i], i} for all LMS-type i into heap H\n\n&lt;span class=\&quot;pseudo-comment\&quot;&gt;# we iterate over the first character of suffixes&lt;/span&gt;\nfor character c from 0 to n:\n\n  &lt;span class=\&quot;pseudo-comment\&quot;&gt;# we first process the L-region of c&lt;/span&gt;\n  let A[l, r] be the L-region for c\n  for i from l to r:\n    extend2(A[i])\n  \n  &lt;span class=\&quot;pseudo-comment\&quot;&gt;# we then process the LMS-types of c, naively&lt;/span&gt;\n  while H is not empty and the smallest suffix in H begins with c:\n    pop out {S[i], i}, the smallest element of H\n    extend2(i)\n&lt;/code&gt;&lt;/pre&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;p&gt;Why is this correct? Because &lt;code&gt;extend2(i)&lt;/code&gt; is called on exactly the same sequence of $i$ in both, procedure 2 and 2.5.&lt;/p&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Annoying Proof&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;p&gt;We can prove this using induction. Assume that the first $k$ calls to &lt;code&gt;extend2()&lt;/code&gt; are made on the exact same sequence of indices in both procedures. Then let the $k + 1$-th call in procedure 2 be on index $i$.&lt;/p&gt;\n&lt;ol&gt;\n&lt;li&gt;If $i$ is LMS type: Suffix $i$ is then present within both heaps from the very beginning. We will make use of the fact that no two suffixes can be equal. Procedure 2 would have already deleted all strings strictly smaller than it from the heap (remember that it calls &lt;code&gt;extend2()&lt;/code&gt; in strictly increasing order of suffixes), and since 2.5 also called &lt;code&gt;extend2()&lt;/code&gt; for the same indices, it would also have deleted all suffixes smaller than $S_i$ from its own heap. Therefore, at this point of time $S_i$ must be the smallest string in procedure 2.5&#39;s heap, and we will pop it out now.&lt;/li&gt;\n&lt;li&gt;If $i$ is L-type: Then it will be placed somewhere in the L-region of $T_i$. Notice that its position in both procedures is determined solely by the number of times we call &lt;code&gt;extend2(j)&lt;/code&gt; for $j$ such that $j &gt; 0, Q_{j - 1} = \\text{L}, T_{j - 1} = T_i$ before we call &lt;code&gt;extend2(i + 1)&lt;/code&gt;. All of these calls lie within the first $k$ calls ($i$ is L-type so $S_i &gt; S_{i + 1}$), and are therefore the same for both procedures, implying that $i$ gets placed at the same position in both.&lt;/li&gt;\n&lt;/ol&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;p&gt;Looking at the second stage for each $c$, it&#39;s easy to see that the heap was only really responsible for sorting the LMS-suffixes (all insertions are before all deletions now, so we don&#39;t need its &amp;quot;online&amp;quot; nature, we just need the sorted order of all LMS suffixes). This brings us back to theorem 4.1. We don&#39;t really need the entirety of a pre-built $A&#39;$ - we only need $G$!&lt;/p&gt;\n&lt;p&gt;Let&#39;s finally look at the L-induce procedure, which takes $G$ and computes the L-regions of $A$. An implementation choice here is that since the S-regions of $A$ are otherwise unused during this phase, we just put all LMS positions from the given $G$ at the ends of their respective S-buckets in $A$, preserving their order.&lt;/p&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Procedure 3&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;pre class=\&quot;hljs\&quot;&gt;&lt;code&gt;&lt;span class=\&quot;hljs-comment\&quot;&gt;// Given n, T, Q, and the bucket boundaries (see code in theorem 2.4)&lt;/span&gt;\n&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; n;\nvector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; T, Q, head, tail;\n\n&lt;span class=\&quot;hljs-comment\&quot;&gt;// Of course, given G too!&lt;/span&gt;\nvector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; G;\n\n&lt;span class=\&quot;hljs-function\&quot;&gt;vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &lt;span class=\&quot;hljs-title\&quot;&gt;A&lt;/span&gt;&lt;span class=\&quot;hljs-params\&quot;&gt;(n + &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;, &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;;       &lt;span class=\&quot;hljs-comment\&quot;&gt;//suffix array&lt;/span&gt;\n\n&lt;span class=\&quot;hljs-comment\&quot;&gt;// Seeding - we put LMS positions at the tails of their S-buckets &lt;/span&gt;\n&lt;span class=\&quot;hljs-built_in\&quot;&gt;reverse&lt;/span&gt;(G.&lt;span class=\&quot;hljs-built_in\&quot;&gt;begin&lt;/span&gt;(), G.&lt;span class=\&quot;hljs-built_in\&quot;&gt;end&lt;/span&gt;());\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; i : G)\n  A[--tail[T[i]]] = i;\n\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; extend2 = [&amp;amp;](&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i) -&amp;gt; &lt;span class=\&quot;hljs-type\&quot;&gt;void&lt;/span&gt;\n{\n  &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; j = i - &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;;\n  &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(j &amp;gt;= &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt; &lt;span class=\&quot;hljs-keyword\&quot;&gt;and&lt;/span&gt; &lt;span class=\&quot;hljs-built_in\&quot;&gt;is_L_type&lt;/span&gt;(Q[j]))\n  {\n    A[head[T[j]]] = j;\n    head[T[j]] ++;\n  }\n};\n\n&lt;span class=\&quot;hljs-comment\&quot;&gt;// induce L positions into A&lt;/span&gt;\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; l_induce = [&amp;amp;]() -&amp;gt; &lt;span class=\&quot;hljs-type\&quot;&gt;void&lt;/span&gt;\n{\n  &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; i &amp;lt;= n; i ++)\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(A[i] != &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt;)\n      &lt;span class=\&quot;hljs-built_in\&quot;&gt;extend2&lt;/span&gt;(A[i]);\n};\n&lt;span class=\&quot;hljs-built_in\&quot;&gt;l_induce&lt;/span&gt;();\n\n&lt;span class=\&quot;hljs-comment\&quot;&gt;// clean up LMS types from A&lt;/span&gt;\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; i &amp;lt;= n; i ++)\n  &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(A[i] != &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt; &lt;span class=\&quot;hljs-keyword\&quot;&gt;and&lt;/span&gt; &lt;span class=\&quot;hljs-built_in\&quot;&gt;is_LMS_type&lt;/span&gt;(Q[A[i]]))\n    A[i] = &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt;;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;p&gt;It&#39;s easy to see that this procedure is correct (it&#39;s just the previous procedure with the second stage for each $c$ made efficient), and that apart from the magical acquisition of $G$, it runs in $O(n)$ (placing LMS-positions into $A$, L-induce itself, cleanup).&lt;/p&gt;\n&lt;h2&gt;4.2 S-induce&lt;/h2&gt;\n&lt;p&gt;Let us now deal with the S regions.&lt;/p&gt;\n&lt;p&gt;The basic idea is symmetrical - just like we processed L-suffixes in non-decreasing order to fill the L-regions (left to right in $A$), we will process S-suffixes in &lt;em&gt;non-increasing&lt;/em&gt; order to fill the S-regions (right to left). In the slope view, we previously inched upwards on slopes that were slanted upward from right to left, after having seeded the valleys ($G$). Now, we will inch downwards on slopes that are slanted downward from right to left (remember the slant of slopes for S-suffixes). We have an advantage here though! The analogous seeds are going to be the &amp;quot;leftmost L&amp;quot; (LML) positions (peaks in the slope view), which lie in the L-regions of $A$. Since we have already computed the L-regions, we already have the analogue of $G$ here!&lt;/p&gt;\n&lt;p&gt;Anyway, let&#39;s look at the procedure and then talk about it:&lt;/p&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Procedure 4&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;pre class=\&quot;hljs\&quot;&gt;&lt;code&gt;&lt;span class=\&quot;hljs-comment\&quot;&gt;// Given n, T, Q, bucket boundaries, and A with L-regions computed&lt;/span&gt;\n&lt;span class=\&quot;hljs-comment\&quot;&gt;// Note that these are freshly computed bucket boundaries, not those&lt;/span&gt;\n&lt;span class=\&quot;hljs-comment\&quot;&gt;// modified in the L phase. &lt;/span&gt;\n&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; n;\nvector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; T, Q, head, tail, A;\n\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; extend3 = [&amp;amp;](&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i) -&amp;gt; &lt;span class=\&quot;hljs-type\&quot;&gt;void&lt;/span&gt;\n{\n  &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; j = i - &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;;\n  &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(j &amp;gt;= &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt; &lt;span class=\&quot;hljs-keyword\&quot;&gt;and&lt;/span&gt; &lt;span class=\&quot;hljs-built_in\&quot;&gt;is_S_type&lt;/span&gt;(Q[j]))\n  {\n    tail[T[j]] --;\n    A[tail[T[j]]] = j;\n  }\n};\n\n&lt;span class=\&quot;hljs-comment\&quot;&gt;// place the sentinel position separately&lt;/span&gt;\nA[&lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;] = n;\n\n&lt;span class=\&quot;hljs-comment\&quot;&gt;// induce S positions into A&lt;/span&gt;\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; s_induce = [&amp;amp;]() -&amp;gt; &lt;span class=\&quot;hljs-type\&quot;&gt;void&lt;/span&gt;\n{\n  &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = n; i &amp;gt;= &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; i --)\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(A[i] != &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt;)\n      &lt;span class=\&quot;hljs-built_in\&quot;&gt;extend3&lt;/span&gt;(A[i]);\n};\n&lt;span class=\&quot;hljs-built_in\&quot;&gt;s_induce&lt;/span&gt;();\n&lt;/code&gt;&lt;/pre&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;p&gt;Why does this work? The proof is structurally symmetric to that of L-induce (we now process strings in non-increasing order, so we go from right to left in $A$, and every call to &lt;code&gt;extend3(A[i])&lt;/code&gt; can only add something to $A$ strictly before $i$), but with one caveat: coverage previously relied on the fact that every sequence of L positions ended in an LMS position (every downward slope ends in a valley), and us manually placing the LMS positions into $A$ first. The equivalent requirement here would be every upward slope ending in a peak, and us having placed every peak first. As all L regions have already been computed, all the peaks have been placed into $A$. The only source of nuisance is the very last position, which is LMS-type and doesn&#39;t have an L-type peak after it.&lt;/p&gt;\n&lt;p&gt;Thankfully:&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;$T_n$ is the unique minimum and must therefore be the very first element in $A$, so we manually place it.&lt;/li&gt;\n&lt;li&gt;Because it&#39;s the unique minimum, $n - 1$ is L-type. Therefore, all other S-type positions have some peak after them (a &amp;quot;Leftmost L type&amp;quot;).&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;I leave the formal proof of correctness to the reader, and return to the broader picture.&lt;/p&gt;\n&lt;p&gt;We now know that just having $G$ would allow us to set off a convenient chain of events (the induction phases) which would end in $O(n)$ time, with us having computed $A$. The entire problem therefore reduces to being able to sort the LMS-suffixes efficiently.&lt;/p&gt;\n&lt;h1&gt;5. Sorting LMS-suffixes&lt;/h1&gt;\n&lt;p&gt;Okay, so how do we sort LMS suffixes efficiently? The S induce would of course give us their sorted order, but that needs the L induce, which needs the sorted order... It&#39;s a bit of a chicken-and-egg problem.&lt;/p&gt;\n&lt;p&gt;Let&#39;s think outside the box. The observant reader will remember that the number of LMS positions, $m$ is no more than $\\frac{n + 1}{2}$. What if we could somehow &amp;quot;compress&amp;quot; $T$ to $T&#39;$ of length $m$, where the $i$-th suffix of $T&#39;$ corresponded to $S_{l_i}$, and the sorted order of the suffixes of $T&#39;$ gave us the sorted order of the corresponding LMS-suffixes of $T$ (that is, the $i$-th suffix of $T&#39;$ is smaller than the $j$-th, iff $S_{l_i} &lt; S_{l_j}$)? If we could create such a $T&#39;$, then finding its suffix array would just be an identical subproblem to our original task, but with smaller size!&lt;/p&gt;\n&lt;p&gt;Let&#39;s imagine a magical procedure &lt;code&gt;compress(T)&lt;/code&gt; which gives us such a $T&#39;$ &lt;em&gt;in linear time&lt;/em&gt;. Then we can define &lt;code&gt;SA(T)&lt;/code&gt;, which computes the SA of $T$ (assuming that $T$ satisfies the conditions in section 1) in the following manner:&lt;/p&gt;\n&lt;pre class=\&quot;hljs\&quot;&gt;&lt;code&gt;&lt;span class=\&quot;pseudo-comment\&quot;&gt;#input T satisfies properties from section 1&lt;/span&gt;\nSA(T):\n  N = |T|\n\n  &lt;span class=\&quot;pseudo-comment\&quot;&gt;#base case&lt;/span&gt;\n  if N == 1:\n    return [0]\n\n  T2 = compress(T)\n\n  G = SA(T2)\n  for i from 0 to |G| - 1:\n    G[i] = l[G[i]]    &lt;span class=\&quot;pseudo-comment\&quot;&gt;#G[i]-th LMS position in T&lt;/span&gt;\n\n  A = [-1] * (N)\n  run L induce on A using G\n  run S induce\n\n  return A\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;What would the time complexity of &lt;code&gt;SA(T)&lt;/code&gt;, $f(N)$ ($N = \\vert T \\vert$) be? We have $f(N) = O(N) + f(N/2) + O(N) + O(N) + O(N)$ (the recursive call takes $f(N/2)$ time, and every other phase takes linear time). Therefore, $f(N) = O(N) + f(N/2)$. Also, the base case is handled with $f(1) = O(1)$. Since $O(N) + O(N/2) + O(N/4) + \\dots = O(N)$, we have $f(N) = O(N)$.&lt;/p&gt;\n&lt;p&gt;All that remains is to design such a &lt;code&gt;compress(T)&lt;/code&gt;.&lt;/p&gt;\n&lt;p&gt;Since the $i$-th suffix of $T&#39;$ = &lt;code&gt;compress(T)&lt;/code&gt; is going to correspond to the $i$-th LMS suffix of $T$ (which starts with $l_i$), it should be reasonably intuitive that we try to assign $T&#39;_i$ a symbol that somehow represents the substring from the $i$-th LMS position to the $(i + 1)$-th (or if $i = m - 1$, the end of the string). Note that choosing this particular substring to be represented by $T&#39;_i$ is only a design choice here.&lt;/p&gt;\n&lt;h2&gt;5.1 LMS Substrings&lt;/h2&gt;\n&lt;p&gt;We define the &lt;strong&gt;LMS-end&lt;/strong&gt; of position $i$, $E_i$, as the smallest LMS-position such that $i &lt; E_i$. For $i = n$, we separately define $E_i = i$.\nThe &lt;strong&gt;LMS-substring&lt;/strong&gt; of position $i$, $P_i$ is defined as $T[i, E_i]$. Additionally, we refer to $P_i$ as a &amp;quot;full&amp;quot; LMS-substring if $i$ is LMS-type.&lt;/p&gt;\n&lt;p&gt;Now, return to &lt;code&gt;compress(T)&lt;/code&gt;. We wish to find a labelling function $R : \\lbrace P_i \\rbrace \\rightarrow Z$ that will assign an integer label to each full LMS-substring such that the resultant string, $T&#39;$ ($T&#39;_i = R(P_{l_i})$) meets the following conditions:&lt;/p&gt;\n&lt;ol&gt;\n&lt;li&gt;$T&#39;_i$ is an integer in $[0, \\vert T&#39; \\vert)$&lt;/li&gt;\n&lt;li&gt;The last element of $T&#39;$ is the unique minimum.&lt;/li&gt;\n&lt;li&gt;The $i$-th suffix of $T&#39;$ is smaller than the $j$-th, iff $S_{l_i} &lt; S_{l_j}$.&lt;/li&gt;\n&lt;/ol&gt;\n&lt;p&gt;To recap, why do we need these conditions? The first and second are needed so that $T&#39; =$ &lt;code&gt;compress(T)&lt;/code&gt; can directly be passed to &lt;code&gt;SA(T)&lt;/code&gt; (which assumes that the conditions from section 1 are met). The third is needed so that $G$ can be computed from the suffix array of $T&#39;$.&lt;/p&gt;\n&lt;p&gt;The first and second conditions are relatively simple to satisfy, but the third isn&#39;t. A condition on $R$ that naively seems helpful for the third is $R(P_i) &lt; R(P_j) \\iff P_i &lt; P_j$, let&#39;s try to build $R$ around it.&lt;/p&gt;\n&lt;p&gt;Consider the labelling function: $R(P_i) = \\vert \\lbrace P_j : P_j &lt; P_i, Q_j = \\text{LMS} \\rbrace  \\vert$ (the number of unique full LMS substrings that are strictly smaller than it). It trivially satisfies the first two conditions, but what about the third?&lt;/p&gt;\n&lt;p&gt;Let&#39;s compare the $i$-th and $j$-th suffixes of $T&#39;$.&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;Since the last character of $T&#39;$ is the unique minimum, no suffix of $T&#39;$ can be a proper prefix of another suffix.&lt;/li&gt;\n&lt;li&gt;Therefore, consider the smallest $x \\geq 0$ such that $T&#39;_{i + x} \\neq T&#39;_{j + x}$. Clearly  $T&#39;[i, m) &lt; T&#39;[j, m) \\iff T&#39;_{i + x} &lt; T&#39;_{j + x}$.&lt;/li&gt;\n&lt;li&gt;Let $u = l_{i + x}, v = l_{j + x}$. Since $T&#39;[i, i + x - 1] = T&#39;[j, j + x - 1]$, we have $T[l_i, u) = T[l_j, v)$ (easy to prove, left as an exercise). Now, $T[l_i, n] &lt; T[l_j, n] \\iff T[u, n] &lt; T[v, n]$.&lt;/li&gt;\n&lt;li&gt;We know that $P_{u} \\neq P_{v}$ ($T&#39;_{i + x} \\neq T&#39;_{j + x}$). There are two cases:\n&lt;ul&gt;\n&lt;li&gt;If neither $P_{u}$ nor $P_{v}$ is a proper prefix of the other, then $ T[u, n] &lt; T[v, n] \\iff P_{u} &lt; P_{v} \\iff R(P_{u}) &lt; R(P_{v}) \\iff T&#39;_{i + x} &lt; T&#39;_{j + x}$! Therefore, in this case, we have $T&#39;[i, m) &lt; T&#39;[j, m) \\iff T[l_i, n] &lt; T[l_j, n]$.&lt;/li&gt;\n&lt;li&gt;Otherwise, WLOG assume $P_{u}$ is a proper prefix of $P_{v}$. In this case, the lex comparator says $P_{u} &lt; P_{v} \\implies R(P_{u}) &lt; R(P_{v}) \\implies T&#39;_{i + x} &lt; T&#39;_{j + x} \\implies T&#39;[i, m) &lt; T&#39;[j, m)$. For $T&#39;[i, m) &lt; T&#39;[j, m) \\iff T[l_i, n] &lt; T[l_j, n]$ to now be satisfied, we need $T[l_i, n] &lt; T[l_j, n]$. Let&#39;s examine this in more detail.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;Surprisingly, properties of the L/S classification trivialise this. Let $p = \\vert P_{u} \\vert$. Notice that $P_{u} = T[u, u + p - 1] = T[v, v + p - 1]$, so $T[l_i, n] &lt; T[l_j, n] \\iff T[u + p - 1, n] &lt; T[v + p - 1, n]$. We know that $T_{u + p - 1} = T_{v + p - 1}$ and  position $(u + p - 1)$ is LMS-type (it&#39;s the end of an LMS-substring). What about position $v + p - 1$? Using theorem 3.1, $T_{u + p - 2} &gt; T_{u + p - 1} \\implies T_{v + p - 2} &gt; T_{v + p - 1}$, so position $v + p - 2$ must be L-type. Recall that the types of positions in an LMS substring take the following form: &lt;code&gt;LMS S S S S ... L L L L LMS&lt;/code&gt;. Since $P_v$ doesn&#39;t end at $v + p - 1$, position $v + p - 1$ must be L-type too!&lt;/p&gt;\n&lt;p&gt;Recall theorem 2.4! Since $S_{u + p - 1}$ and $S_{v + p - 1}$ begin with the same character, and the former is S-type while the latter is L-type, we must have $T[u + p - 1, n] &gt; T[v + p - 1, n] \\implies T[l_i, n] &gt; T[l_j, n]$! which is... the exact opposite of what we wanted. But since the issue is so localised (i.e. in the comparison of full LMS substrings where one is a proper prefix of the other), could we make do with a localised fix?&lt;/p&gt;\n&lt;p&gt;We indeed can! We introduce the &lt;strong&gt;alex&lt;/strong&gt; comparator, $\\prec$. For strings $a$ and $b$, it is defined in the following manner:&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;If $a = b$ under lex, then they&#39;re equal under alex too.&lt;/li&gt;\n&lt;li&gt;Otherwise if neither $a$ nor $b$ is a proper prefix of the other, then $a \\prec b \\iff a &lt; b$.&lt;/li&gt;\n&lt;li&gt;Otherwise, $a \\prec b \\iff \\vert a \\vert &gt; \\vert b \\vert$.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;Simply put, it&#39;s just the standard lexicographical comparator, except we flip the comparison result when one string is a proper prefix of the other.&lt;/p&gt;\n&lt;p&gt;Also, we can show that alex imposes a &lt;em&gt;total order&lt;/em&gt;. Why? Because $A \\prec B \\iff A\\infty &lt; B \\infty$ and $A = B \\iff A\\infty = B \\infty$. That is, the result of alex comparison is equal to the result of lex comparison if you append a character that&#39;s larger than all others to the end of both strings. Since lex imposes a total order, alex does too.&lt;/p&gt;\n&lt;p&gt;Redefine $R$ as $R(P_i) = \\vert \\lbrace P_j : P_j \\prec P_i, Q_j = \\text{LMS} \\rbrace  \\vert$, and recall the three required conditions on $R$:&lt;/p&gt;\n&lt;ol&gt;\n&lt;li&gt;$T&#39;_i$ is an integer in $[0, \\vert T&#39; \\vert)$ - trivially satisfied.&lt;/li&gt;\n&lt;li&gt;The last element of $T&#39;$ is the unique minimum - satisfied because $P_{l_{m - 1}}$ remains the unique minimum amongst all full LMS substrings, so $R(P_{l_{m - 1}}) = 0$.&lt;/li&gt;\n&lt;li&gt;The $i$-th suffix of $T&#39;$ is smaller than the $j$-th, iff $S_{l_i} &lt; S_{l_j}$.&lt;/li&gt;\n&lt;/ol&gt;\n&lt;p&gt;Consider the third condition. When we previously attempted to prove $T&#39;[i, m) &lt; T&#39;[j, m) \\iff T[l_i, n] &lt; T[l_j, n]$ for $T&#39;$ defined using the old definition of $R$ (using the regular lex comparator), there were only four relevant properties:&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;For character $c$, and strings $A$ and $B$, $cA &lt; cB \\iff A &lt; B$, and $cA = cB \\iff A = B$.&lt;/li&gt;\n&lt;li&gt;For full LMS substrings $A$ and $B$:\n&lt;ul&gt;\n&lt;li&gt;If neither was a prefix of the other, $R(A) &lt; R(B) \\iff A &lt; B$.&lt;/li&gt;\n&lt;li&gt;$R(A) = R(B) \\iff A = B$.&lt;/li&gt;\n&lt;li&gt;When $A$ is a proper prefix of $B$, we required $R(A) &gt; R(B)$, but our old $R$ yielded $R(A) &lt; R(B)$.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;Clearly, our new definition of $R$ satisfies all four! I won&#39;t restate the entire proof again, but encourage you to go through the argument again to convince yourself of this.&lt;/p&gt;\n&lt;h2&gt;5.2 Sorting LMS Substrings under alex&lt;/h2&gt;\n&lt;p&gt;Okay, so we&#39;ve finally found a suitable definition for $R$ - $R(P_i) = \\vert \\lbrace P_j : P_j \\prec P_i, Q_j = \\text{LMS} \\rbrace  \\vert$ where $\\prec$ is the alex comparator. But how do we efficiently compute it?&lt;/p&gt;\n&lt;p&gt;What if we just sort full LMS substrings in alex order, and then label them? Namely, compute an array $X$ of length $m$ where $P_{X_i} \\preceq P_{X_j} \\forall i \\leq j$, and $X_i$ is an LMS position in $T$ for all $i$. Consider the following procedure:&lt;/p&gt;\n&lt;pre class=\&quot;hljs\&quot;&gt;&lt;code&gt;N = |T|\n\nsomehow compute X\n\nR = [-1] * N\nlabel = -1, last = -1\n\nfor i in X:\n  if last == -1 or !equal(P[last], P[i])\n    label += 1\n  R[i] = label\n  last = i\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;One concern is that assuming $X$ is given to us, is the labelling procedure efficient? What if the &lt;code&gt;equal(A, B)&lt;/code&gt; function is implemented naively, i.e. in $O(\\vert A \\vert + \\vert B \\vert)$ time? Since each full LMS substring contributes its length at most twice, and $\\sum{\\vert P_{l_i} \\vert} = O(n)$, the total time taken is $O(n)$.&lt;/p&gt;\n&lt;p&gt;Alright, so we just need to sort full LMS substrings under alex now. It shouldn&#39;t be surprising that we&#39;ll lean on the machinery (L and S induce) we built for sorting &lt;em&gt;suffixes&lt;/em&gt; previously. Further, we&#39;ll sort &lt;em&gt;all&lt;/em&gt; LMS substrings, and then just extract the subsequence of full LMS substrings from this sorted order.&lt;/p&gt;\n&lt;p&gt;Let&#39;s state our goal more formally. We want to compute array $C$ of length $n + 1$, which will contain every index in $[0, n]$ exactly once, and satisfy $i \\leq j \\implies T[C_i, E_{C_i}] \\preceq T[C_j, E_{C_j}]$. A &amp;quot;partial suffix array&amp;quot; of sorts.&lt;/p&gt;\n&lt;p&gt;Now, consider the L-induce, which was previously used to sort L-type suffixes. Can we repurpose it to sort L-type LMS-substrings instead? When we previously discussed it, we seeded $A$ with $G$, which contained the sorted order of all the LMS suffixes. Why? Because for every L-type suffix $T[i, n]$, its final position in $A$ depended on the LMS suffix $T[E_i, n]$ having been seeded correctly relative to the other LMS suffixes. In a certain sense, the position of $T[E_i, n]$ (relative to other LMS suffixes) was storing all that the L-induce needed about its value when implicitly comparing $T[i, n]$ against other suffixes.&lt;/p&gt;\n&lt;p&gt;But now that we&#39;re sorting $T[i, E_i]$ instead of $T[i, n]$, would it do to seed our array with $T[E_i, E_i]$ instead?&lt;/p&gt;\n&lt;p&gt;The answer is yes, but we&#39;ll need to first prove some facts about LMS substrings.&lt;/p&gt;\n&lt;h4&gt;Theorem 5.1&lt;/h4&gt;\n&lt;blockquote&gt;\n&lt;p&gt;For any LMS-substring $T[i, E_i]$ with $i \\neq n$, its second-to-last character is strictly greater than the last.&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;This is just theorem 3.1 again, but it&#39;s quite fundamental to our arguments ahead, so I restate it.&lt;/p&gt;\n&lt;h4&gt;Theorem 5.2&lt;/h4&gt;\n&lt;blockquote&gt;\n&lt;p&gt;If position $i$ is L-type, then $T[i + 1, E_i] \\prec T[i, E_i]$.&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Proof&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;p&gt;Since position $i$ is L-type, $i + 1$ can either be L or LMS-type.&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;If $i + 1$ is LMS type, then $T_i &gt; T_{i + 1} \\implies T[i + 1, E_i] \\prec T[i, E_i]$&lt;/li&gt;\n&lt;li&gt;Otherwise, $T_i \\geq T_{i + 1}$.\n&lt;ul&gt;\n&lt;li&gt;If $T_{i} &gt; T_{i + 1}$, then $T[i + 1, E_i] \\prec T[i, E_i]$ trivially.&lt;/li&gt;\n&lt;li&gt;Otherwise, we know that for the smallest $x \\geq 0$ where $T_{i + x} \\neq T_{i + x + 1}$, we have $T_{i + x} &gt; T_{i + x + 1}$ (definition of L-type suffixes). Since $T_{E_i - 1} \\neq T_{E_i}$, we must have $i + x + 1 \\leq E_i$, and the two strings differ before either ends.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;h4&gt;Theorem 5.3&lt;/h4&gt;\n&lt;blockquote&gt;\n&lt;p&gt;(Analogue of theorem 2.4) If $T_i = T_j$, suffix $i$ is of L-type, and suffix $j$ is of S-type, then $P_i \\prec P_j$.&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Proof&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;p&gt;Consider the proof of theorem 2.4. It applies to any strings which have prefixes of the form &lt;code&gt;[&amp;gt;= 1 occurrences of b][1 occurrence of a]...&lt;/code&gt; and &lt;code&gt;[&amp;gt;= 1 occurrences of b][1 occurrence of c]...&lt;/code&gt; respectively. We know that $S_i$ and $S_j$ have this form, but do $P_i$ and $P_j$ do?&lt;/p&gt;\n&lt;p&gt;Since $P_i$ is a prefix of $S_i$, the only way it cannot be of this form is if it consists only of $b$-s. But since $P_i = T[i, E_i]$ contains both $T_{E_i - 1}$ and $T_{E_i}$, and $T_{E_i - 1} &gt; T_{E_i}$, it cannot possibly consist of only one character.&lt;/p&gt;\n&lt;p&gt;The same argument applies to $P_j$.&lt;/p&gt;\n&lt;p&gt;Therefore, the two must have the same form and the proof of theorem 2.4 applies.&lt;/p&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;p&gt;Consequently, $C$ can be divided into buckets just like $A$. That is, it takes the following form:&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;First, we have L-type suffixes that start with symbol $0$.&lt;/li&gt;\n&lt;li&gt;Then, we have S-type suffixes that start with symbol $0$.&lt;/li&gt;\n&lt;li&gt;Then, L-type suffixes that start with symbol $1$.&lt;/li&gt;\n&lt;li&gt;Then, S-type suffixes that start with symbol $1$.&lt;/li&gt;\n&lt;li&gt;Then, L-type suffixes that start with symbol $2$.&lt;/li&gt;\n&lt;li&gt;Then, S-type suffixes that start with symbol $2$.&lt;/li&gt;\n&lt;li&gt;...and so on&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;Now, let&#39;s try to adapt our old procedure 2 to produce $C$:&lt;/p&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Procedure 5&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;pre class=\&quot;hljs\&quot;&gt;&lt;code&gt;C = [-1] * (n + 1)\n\nput {T[i, i], i} for all LMS-type i into heap H, which uses the alex comparator\n\n&lt;span class=\&quot;pseudo-comment\&quot;&gt;# just like our previous extend2 function, except here we insert T[j, E[j]] into the heap&lt;/span&gt;\ndef extend2(i):\n  j = i - 1\n  if (j &amp;gt;= 0) and (position j is L-type)\n    place j in the first empty position of the bucket of T[j] in C\n    put {T[j, E[j]], j} into H\n\nwhile H is not empty:\n  pop out {v, i}, the smallest element of H\n  extend2(i)\n&lt;/code&gt;&lt;/pre&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;p&gt;The proof for procedure 5 correctly filling the L-regions of $C$ is quite similar to that for procedure 2 correctly producing $A$.&lt;/p&gt;\n&lt;p&gt;First, notice that the deletion of any string from the heap can only result in the insertion of a strictly larger substring under alex (or no insertion at all):&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;If the string being deleted is $T[i, i]$ with LMS $i$, then by theorem 5.1, we have $T[i, i] \\prec T[i - 1, E_{i - 1}]$.&lt;/li&gt;\n&lt;li&gt;Otherwise, $T[i, E_i]$ ($i$ is L-type) being deleted results in the insertion of $T[i - 1, E_{i - 1}]$, then $T[i, E_i] \\prec T[i - 1, E_{i - 1}]$ (theorem 5.2).&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;Since we always erase the alex-smallest substring from the heap, the order in which we delete LMS substrings from the heap is alex-non-decreasing. Coverage (every L-type LMS substring is inserted into the heap at some point) is also guaranteed for the same reason as before.&lt;/p&gt;\n&lt;p&gt;Now, consider any two L-type LMS substrings $T[i, E_i]$ and $T[j, E_j]$. We will show that their relative position in $C$ aligns with the result of their comparison under alex.&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;If $T[i, E_i] = T[j, E_j]$, then their relative order doesn&#39;t matter.&lt;/li&gt;\n&lt;li&gt;Otherwise, if $T_i \\neq T_j$, WLOG assume $T_i &lt; T_j$. Then we necessarily have $T[i, E_i] \\prec T[j, E_j]$, and the two are placed in different buckets, with the former&#39;s bucket lying to the left of the latter&#39;s.&lt;/li&gt;\n&lt;li&gt;Otherwise, if $T_i = T_j$, then $T[i, E_i]$ and $T[j, E_j]$ will be placed in the same bucket. Recall that for any character $c$ and strings $A, B$, we have $cA \\prec cB \\iff A \\prec B$. Therefore, $T[i, E_i] \\prec T[j, E_j] \\iff T[i + 1, E_i] \\prec T[j + 1, E_j]$. Note that we cannot have $T[i + 1, E_i] = T[j + 1, E_j]$ here. Consider the other two cases\n&lt;ul&gt;\n&lt;li&gt;If $T[i + 1, E_i] \\prec T[j + 1, E_j]$, then the former is deleted before the latter from the heap, and $T[i, E_i]$ is placed in their common bucket before $T[j, E_j]$. Since we also have $T[i + 1, E_i] \\prec T[j + 1, E_j] \\implies T[i, E_i] \\prec T[j, E_j]$ here, their relative order in $C$ is valid.&lt;/li&gt;\n&lt;li&gt;If $T[j + 1, E_j] \\prec T[i + 1, E_i]$, then the former is deleted before the latter from the heap, and $T[j, E_j]$ is placed in their common bucket before $T[i, E_i]$. Since we also have $T[j + 1, E_j] \\prec T[i + 1, E_i] \\implies T[j, E_j] \\prec T[i, E_i]$ here, their relative order in $C$ is valid.&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;p&gt;This implies $i \\leq j \\implies T[C_i, E_{C_i}] \\preceq T[C_j, E_{C_j}]$ for the placed L-type LMS substrings $C_i, C_j$ so far.&lt;/p&gt;\n&lt;p&gt;The observant reader will have noticed that our arguments have been almost identical to the initial use of L-induce. We shall continue in a similar vein. Consider this optimised version of procedure 5 (adapted from procedure 2.5):&lt;/p&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Procedure 5.5&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;pre class=\&quot;hljs\&quot;&gt;&lt;code&gt;C = [-1] * (n + 1)\n\nput {T[i, i], i} for all LMS-type i into heap H\n\n&lt;span class=\&quot;pseudo-comment\&quot;&gt;# once again, we don&#39;t place anything into the heap any more&lt;/span&gt;\ndef extend2(i):\n  j = i - 1\n  if (j &amp;gt;= 0) and (position j is L-type)\n    place j in the first empty position of the bucket of T[j] in C\n\n&lt;span class=\&quot;pseudo-comment\&quot;&gt;# we iterate over the first character of the suffix&lt;/span&gt;\nfor character c from 0 to n:\n\n  &lt;span class=\&quot;pseudo-comment\&quot;&gt;# we first process the L-region of c&lt;/span&gt;\n  let C[l, r] be the L-region for c\n  for i from l to r:\n    extend2(C[i])\n  \n  &lt;span class=\&quot;pseudo-comment\&quot;&gt;# we then process the LMS-types of c, naively&lt;/span&gt;\n  while H is not empty and the smallest string in H begins with c:\n    pop out {T[i, i], i}, the smallest element of H\n    extend2(i)\n&lt;/code&gt;&lt;/pre&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;p&gt;Why is this correct? The proof is almost identical to that of procedure 2.5 - &lt;code&gt;extend2(i)&lt;/code&gt; is called over the same sequence of $i$. The only subtlety is that while the strings in 2.5 were suffixes and could therefore not be equal to each other, strings here can be equal. Fortunately, the order in which equal strings are processed doesn&#39;t matter at all (so it&#39;s technically not the exact same sequence of $i$, you can swap indices which correspond to the same string). All of this should be fairly natural by now, so I&#39;ll leave the formal proof to the reader.&lt;/p&gt;\n&lt;p&gt;Now, recall that at this point in the old L-induce, we revealed the need for $G$, as in procedure 2.5, we &lt;em&gt;needed&lt;/em&gt; the heap to sort the LMS suffixes $T[E_i, n]$ for us. But now? We&#39;re only using the heap to sort $T[E_i, E_i]$! There&#39;s no chicken-and-egg problem like before with $T[E_i, n]$, because since these are just length-1 strings, we can easily sort them in $O(n)$ using counting-sort instead!&lt;/p&gt;\n&lt;p&gt;This allows us to easily optimise procedure 5.5 to the following $O(n)$ procedure (note that we don&#39;t explicitly sort $T[E_i, E_i]$, instead we just place each LMS position at the tail of its respective bucket).&lt;/p&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Procedure 6&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;pre class=\&quot;hljs\&quot;&gt;&lt;code&gt;&lt;span class=\&quot;hljs-comment\&quot;&gt;// Given n, T, Q, and the bucket boundaries (see code in theorem 2.4)&lt;/span&gt;\n&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; n;\nvector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; T, Q, head, tail;\n\n&lt;span class=\&quot;hljs-function\&quot;&gt;vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &lt;span class=\&quot;hljs-title\&quot;&gt;C&lt;/span&gt;&lt;span class=\&quot;hljs-params\&quot;&gt;(n + &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;, &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;;\n\n&lt;span class=\&quot;hljs-comment\&quot;&gt;// Seeding - we put LMS positions at the tails of their S-buckets &lt;/span&gt;\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; i &amp;lt;= n; i ++)\n  &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(&lt;span class=\&quot;hljs-built_in\&quot;&gt;is_LMS_type&lt;/span&gt;(Q[i]))\n    C[--tail[T[i]]] = i;\n\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; extend2 = [&amp;amp;](&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i) -&amp;gt; &lt;span class=\&quot;hljs-type\&quot;&gt;void&lt;/span&gt;\n{\n  &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; j = i - &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;;\n  &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(j &amp;gt;= &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt; &lt;span class=\&quot;hljs-keyword\&quot;&gt;and&lt;/span&gt; &lt;span class=\&quot;hljs-built_in\&quot;&gt;is_L_type&lt;/span&gt;(Q[j]))\n  {\n    C[head[T[j]]] = j;\n    head[T[j]] ++;\n  }\n};\n\n&lt;span class=\&quot;hljs-comment\&quot;&gt;// induce L positions into C&lt;/span&gt;\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; l_induce = [&amp;amp;]() -&amp;gt; &lt;span class=\&quot;hljs-type\&quot;&gt;void&lt;/span&gt;\n{\n  &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; i &amp;lt;= n; i ++)\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(C[i] != &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt;)\n      &lt;span class=\&quot;hljs-built_in\&quot;&gt;extend2&lt;/span&gt;(C[i]);\n};\n&lt;span class=\&quot;hljs-built_in\&quot;&gt;l_induce&lt;/span&gt;();\n\n&lt;span class=\&quot;hljs-comment\&quot;&gt;// clean up LMS types from C&lt;/span&gt;\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; i &amp;lt;= n; i ++)\n  &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(C[i] != &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt; &lt;span class=\&quot;hljs-keyword\&quot;&gt;and&lt;/span&gt; &lt;span class=\&quot;hljs-built_in\&quot;&gt;is_LMS_type&lt;/span&gt;(Q[C[i]]))\n    C[i] = &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt;;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&lt;p&gt;The justification of its correctness is basically identical to that of procedure 3, and is left as an exercise to the reader.&lt;/p&gt;\n&lt;p&gt;Now that we have filled the L-regions of $C$, we turn our attention back to the S-induce. A (perhaps) surprising fact - we don&#39;t need to change anything at all in procedure 4. Once again, the proof is very similar to what we&#39;ve done before (one change to note is that the position of an L-type $i$ within the suffix array previously encoded information about $S_i$, but now encodes information about $P_i$), and is left as an exercise to the reader.&lt;/p&gt;\n&lt;p&gt;And... we end up with $C$, correctly and efficiently computed.&lt;/p&gt;\n&lt;h1&gt;6. Putting it all together&lt;/h1&gt;\n&lt;p&gt;Let&#39;s finally assemble our algorithm from the pieces we&#39;ve painstakingly built:&lt;/p&gt;\n&lt;pre class=\&quot;hljs\&quot;&gt;&lt;code&gt;&lt;span class=\&quot;pseudo-comment\&quot;&gt;# T satisfies conditions from section 1&lt;/span&gt;\nSA(T):\n  N = |T|\n  n = N - 1\n\n  if N == 1:\n    return [0]\n\n  classify L, S, LMS types in O(n)\n\n&lt;span class=\&quot;pseudo-comment\&quot;&gt;#PHASE 1: sort LMS substrings under alex&lt;/span&gt;\n  C = [-1] * (n + 1)\n  seed C with T[i, i] for all LMS positions i, in O(n)\n  run L induce on C   &lt;span class=\&quot;pseudo-comment\&quot;&gt;# we compute fresh bucket boundaries before every L and S induce&lt;/span&gt;\n  run S induce on C\n\n&lt;span class=\&quot;pseudo-comment\&quot;&gt;#PHASE 2: construct T2 and sort its suffixes to get G&lt;/span&gt;\n  &lt;span class=\&quot;pseudo-comment\&quot;&gt;#label full LMS substrings&lt;/span&gt;\n  R = [-1] * (n + 1)\n  label = -1, last = -1\n  for i from 0 to n:\n    if C[i] is LMS type:\n      j = C[i]\n      if last == -1 or !equal(last, j):     &lt;span class=\&quot;pseudo-comment\&quot;&gt;#equal(i, j) compares P[i] and P[j]&lt;/span&gt;\n        label += 1\n      R[j] = label\n      last = j\n  &lt;span class=\&quot;pseudo-comment\&quot;&gt;#construct T2 and sort its suffixes&lt;/span&gt;\n  T2 = []\n  for i from 0 to n:\n    if i is LMS type:\n      T2.append(R[i])\n  A2 = SA(T2)\n  &lt;span class=\&quot;pseudo-comment\&quot;&gt;#construct G from A2&lt;/span&gt;\n  G = A2\n  for i from 0 to |G| - 1:\n    G[i] = l[G[i]]  &lt;span class=\&quot;pseudo-comment\&quot;&gt;#l[i] is i-th LMS position in T&lt;/span&gt;\n\n&lt;span class=\&quot;pseudo-comment\&quot;&gt;#PHASE 3: seed A with G and run the final L and S induce &lt;/span&gt;\n  A = [-1] * (n + 1)\n  seed A with G\n  run L induce on A\n  run S induce on A\n\n  return A\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;My own &lt;a href=\&quot;https://github.com/welcome-to-the-sunny-side/libra/blob/main/string/suffix_array.cpp\&quot;&gt;implementation&lt;/a&gt; of SAIS was unfortunately created before I wrote this blog, and doesn&#39;t really follow the exposition, but here&#39;s a highly readable one by my friend Opus 5.5 that does:&lt;/p&gt;\n&lt;details&gt;&lt;summary class =\&quot;spoiler-summary\&quot;&gt;Code&lt;/summary&gt;\n&lt;div class = \&quot;spoiler-content\&quot;&gt;\n&lt;pre class=\&quot;hljs\&quot;&gt;&lt;code&gt;&lt;span class=\&quot;hljs-meta\&quot;&gt;#&lt;span class=\&quot;hljs-keyword\&quot;&gt;include&lt;/span&gt; &lt;span class=\&quot;hljs-string\&quot;&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;/span&gt;\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;using&lt;/span&gt; &lt;span class=\&quot;hljs-keyword\&quot;&gt;namespace&lt;/span&gt; std;\n\n&lt;span class=\&quot;hljs-comment\&quot;&gt;// Types of positions (section 2, 3). An LMS position is also S-type.&lt;/span&gt;\n&lt;span class=\&quot;hljs-keyword\&quot;&gt;enum&lt;/span&gt; &lt;span class=\&quot;hljs-title class_\&quot;&gt;Type&lt;/span&gt; : &lt;span class=\&quot;hljs-type\&quot;&gt;uint8_t&lt;/span&gt; { L_TYPE, S_TYPE, LMS_TYPE };\n\n&lt;span class=\&quot;hljs-comment\&quot;&gt;// Computes the suffix array of T.&lt;/span&gt;\n&lt;span class=\&quot;hljs-comment\&quot;&gt;// T must satisfy the conditions from section 1: with n = |T| - 1,&lt;/span&gt;\n&lt;span class=\&quot;hljs-comment\&quot;&gt;//   - T[n] == 0 is the sentinel (the unique minimum), and&lt;/span&gt;\n&lt;span class=\&quot;hljs-comment\&quot;&gt;//   - T[i] lies in [1, n] for all i &amp;lt; n.&lt;/span&gt;\n&lt;span class=\&quot;hljs-function\&quot;&gt;vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &lt;span class=\&quot;hljs-title\&quot;&gt;SA&lt;/span&gt;&lt;span class=\&quot;hljs-params\&quot;&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;const&lt;/span&gt; vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &amp;amp;T)&lt;/span&gt;\n&lt;/span&gt;{\n    &lt;span class=\&quot;hljs-type\&quot;&gt;const&lt;/span&gt; &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; N = (&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;)T.&lt;span class=\&quot;hljs-built_in\&quot;&gt;size&lt;/span&gt;(), n = N - &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;;\n\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// base case&lt;/span&gt;\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(N == &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;)\n        &lt;span class=\&quot;hljs-keyword\&quot;&gt;return&lt;/span&gt; {&lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;};\n\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// ---------------------------------------------------------------&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// Classify positions as L / S / LMS (theorem 2.3, section 3)&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// ---------------------------------------------------------------&lt;/span&gt;\n    &lt;span class=\&quot;hljs-function\&quot;&gt;vector&amp;lt;Type&amp;gt; &lt;span class=\&quot;hljs-title\&quot;&gt;Q&lt;/span&gt;&lt;span class=\&quot;hljs-params\&quot;&gt;(N)&lt;/span&gt;&lt;/span&gt;;\n    Q[n] = S_TYPE;\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = n - &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;; i &amp;gt;= &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; i --)\n    {\n        &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(T[i] &amp;lt; T[i + &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;])\n            Q[i] = S_TYPE;\n        &lt;span class=\&quot;hljs-keyword\&quot;&gt;else&lt;/span&gt; &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(T[i] &amp;gt; T[i + &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;])\n            Q[i] = L_TYPE;\n        &lt;span class=\&quot;hljs-keyword\&quot;&gt;else&lt;/span&gt;\n            Q[i] = Q[i + &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;];\n    }\n\n    vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; l;      &lt;span class=\&quot;hljs-comment\&quot;&gt;// l[k] = k-th LMS position, so l = {l_0 &amp;lt; l_1 &amp;lt; ... &amp;lt; l_{m - 1}}&lt;/span&gt;\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;; i &amp;lt;= n; i ++)\n        &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(Q[i] == S_TYPE &lt;span class=\&quot;hljs-keyword\&quot;&gt;and&lt;/span&gt; Q[i - &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;] == L_TYPE)\n        {\n            Q[i] = LMS_TYPE;\n            l.&lt;span class=\&quot;hljs-built_in\&quot;&gt;push_back&lt;/span&gt;(i);\n        }\n    &lt;span class=\&quot;hljs-type\&quot;&gt;const&lt;/span&gt; &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; m = (&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;)l.&lt;span class=\&quot;hljs-built_in\&quot;&gt;size&lt;/span&gt;();\n\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; is_L = [&amp;amp;](&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i) { &lt;span class=\&quot;hljs-keyword\&quot;&gt;return&lt;/span&gt; Q[i] == L_TYPE; };\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; is_S = [&amp;amp;](&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i) { &lt;span class=\&quot;hljs-keyword\&quot;&gt;return&lt;/span&gt; Q[i] != L_TYPE; };\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; is_LMS = [&amp;amp;](&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i) { &lt;span class=\&quot;hljs-keyword\&quot;&gt;return&lt;/span&gt; Q[i] == LMS_TYPE; };\n\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// ---------------------------------------------------------------&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// Bucket boundaries (section 2): the bucket for symbol c is [head[c], tail[c])&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// ---------------------------------------------------------------&lt;/span&gt;\n    &lt;span class=\&quot;hljs-function\&quot;&gt;vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &lt;span class=\&quot;hljs-title\&quot;&gt;cnt&lt;/span&gt;&lt;span class=\&quot;hljs-params\&quot;&gt;(N, &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;;      &lt;span class=\&quot;hljs-comment\&quot;&gt;// symbols lie in [0, n]&lt;/span&gt;\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; x : T)\n        cnt[x] ++;\n\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// induce L/S both modify the boundaries, so we hand out fresh copies every time&lt;/span&gt;\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; get_buckets = [&amp;amp;](vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &amp;amp;head, vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &amp;amp;tail) -&amp;gt; &lt;span class=\&quot;hljs-type\&quot;&gt;void&lt;/span&gt;\n    {\n        head.&lt;span class=\&quot;hljs-built_in\&quot;&gt;assign&lt;/span&gt;(N, &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;);\n        tail.&lt;span class=\&quot;hljs-built_in\&quot;&gt;assign&lt;/span&gt;(N, &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;);\n        &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; c = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;, sum = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; c &amp;lt; N; c ++)\n        {\n            head[c] = sum;\n            sum += cnt[c];\n            tail[c] = sum;\n        }\n    };\n\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// ---------------------------------------------------------------&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// Induced sorting (section 4)&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;//&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// `seeds` contains the LMS positions, in sorted order. Returns the array&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// obtained by seeding them at the tails of their S-buckets, then running&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// L-induce (procedure 3) followed by S-induce (procedure 4).&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;//&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// Phase 1 and phase 3 differ *only* in the seeds they pass here.&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// ---------------------------------------------------------------&lt;/span&gt;\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; induced_sort = [&amp;amp;](&lt;span class=\&quot;hljs-type\&quot;&gt;const&lt;/span&gt; vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &amp;amp;seeds) -&amp;gt; vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt;\n    {\n        vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &lt;span class=\&quot;hljs-built_in\&quot;&gt;A&lt;/span&gt;(N, &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt;);\n        vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; head, tail;\n\n        &lt;span class=\&quot;hljs-comment\&quot;&gt;// seeding: walk the seeds from largest to smallest, filling each S-bucket from its tail&lt;/span&gt;\n        &lt;span class=\&quot;hljs-built_in\&quot;&gt;get_buckets&lt;/span&gt;(head, tail);\n        &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; k = (&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;)seeds.&lt;span class=\&quot;hljs-built_in\&quot;&gt;size&lt;/span&gt;() - &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;; k &amp;gt;= &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; k --)\n        {\n            &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = seeds[k];\n            A[-- tail[T[i]]] = i;\n        }\n\n        &lt;span class=\&quot;hljs-comment\&quot;&gt;// L-induce: walk left to right; if A[i] - 1 is L-type, append it to the&lt;/span&gt;\n        &lt;span class=\&quot;hljs-comment\&quot;&gt;// first free slot of its L-bucket (this is extend2)&lt;/span&gt;\n        &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; i &amp;lt; N; i ++)\n        {\n            &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(A[i] == &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt;)\n                &lt;span class=\&quot;hljs-keyword\&quot;&gt;continue&lt;/span&gt;;\n            &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; j = A[i] - &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;;\n            &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(j &amp;gt;= &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt; &lt;span class=\&quot;hljs-keyword\&quot;&gt;and&lt;/span&gt; &lt;span class=\&quot;hljs-built_in\&quot;&gt;is_L&lt;/span&gt;(j))\n                A[head[T[j]] ++] = j;\n        }\n\n        &lt;span class=\&quot;hljs-comment\&quot;&gt;// clean up: remove the seeded LMS positions, the S-induce places them again&lt;/span&gt;\n        &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; i &amp;lt; N; i ++)\n            &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(A[i] != &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt; &lt;span class=\&quot;hljs-keyword\&quot;&gt;and&lt;/span&gt; &lt;span class=\&quot;hljs-built_in\&quot;&gt;is_LMS&lt;/span&gt;(A[i]))\n                A[i] = &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt;;\n\n        &lt;span class=\&quot;hljs-comment\&quot;&gt;// S-induce: walk right to left; if A[i] - 1 is S-type, prepend it to the&lt;/span&gt;\n        &lt;span class=\&quot;hljs-comment\&quot;&gt;// last free slot of its S-bucket (this is extend3)&lt;/span&gt;\n        &lt;span class=\&quot;hljs-built_in\&quot;&gt;get_buckets&lt;/span&gt;(head, tail);\n        A[&lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;] = n;               &lt;span class=\&quot;hljs-comment\&quot;&gt;// the sentinel is the smallest suffix, place it manually&lt;/span&gt;\n        &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = n; i &amp;gt;= &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; i --)\n        {\n            &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(A[i] == &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt;)\n                &lt;span class=\&quot;hljs-keyword\&quot;&gt;continue&lt;/span&gt;;\n            &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; j = A[i] - &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;;\n            &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(j &amp;gt;= &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt; &lt;span class=\&quot;hljs-keyword\&quot;&gt;and&lt;/span&gt; &lt;span class=\&quot;hljs-built_in\&quot;&gt;is_S&lt;/span&gt;(j))\n                A[-- tail[T[j]]] = j;\n        }\n\n        &lt;span class=\&quot;hljs-keyword\&quot;&gt;return&lt;/span&gt; A;\n    };\n\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// ---------------------------------------------------------------&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// PHASE 1: sort all LMS substrings under alex (section 5.2)&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;//&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// Seeding with T[i, i] for each LMS position i: these are single&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// characters, so any order works, as long as each one lands in its own&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// bucket (procedure 6).&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// ---------------------------------------------------------------&lt;/span&gt;\n    vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; C = &lt;span class=\&quot;hljs-built_in\&quot;&gt;induced_sort&lt;/span&gt;(l);\n\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// ---------------------------------------------------------------&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// PHASE 2: label full LMS substrings, build T2, recurse (sections 5.1, 6)&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// ---------------------------------------------------------------&lt;/span&gt;\n\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// equal(i, j) checks whether P_i == P_j for LMS positions i != j.&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// P_i = T[i, E_i] ends at the next LMS position, so we walk both substrings&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// together until one of them ends. They are equal iff both end at the same&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// offset with all characters equal along the way.&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// (If one of them is the sentinel n, the very first characters differ, so&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// we never read past the end of T.)&lt;/span&gt;\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;auto&lt;/span&gt; equal = [&amp;amp;](&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i, &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; j) -&amp;gt; &lt;span class=\&quot;hljs-type\&quot;&gt;bool&lt;/span&gt;\n    {\n        &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; k = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; ; k ++)\n        {\n            &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(T[i + k] != T[j + k])\n                &lt;span class=\&quot;hljs-keyword\&quot;&gt;return&lt;/span&gt; &lt;span class=\&quot;hljs-literal\&quot;&gt;false&lt;/span&gt;;\n            &lt;span class=\&quot;hljs-type\&quot;&gt;bool&lt;/span&gt; end_i = (k &amp;gt; &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt; &lt;span class=\&quot;hljs-keyword\&quot;&gt;and&lt;/span&gt; &lt;span class=\&quot;hljs-built_in\&quot;&gt;is_LMS&lt;/span&gt;(i + k));\n            &lt;span class=\&quot;hljs-type\&quot;&gt;bool&lt;/span&gt; end_j = (k &amp;gt; &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt; &lt;span class=\&quot;hljs-keyword\&quot;&gt;and&lt;/span&gt; &lt;span class=\&quot;hljs-built_in\&quot;&gt;is_LMS&lt;/span&gt;(j + k));\n            &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(end_i &lt;span class=\&quot;hljs-keyword\&quot;&gt;or&lt;/span&gt; end_j)\n                &lt;span class=\&quot;hljs-keyword\&quot;&gt;return&lt;/span&gt; end_i &lt;span class=\&quot;hljs-keyword\&quot;&gt;and&lt;/span&gt; end_j;\n        }\n    };\n\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// walk C (which is alex-sorted) and give equal full LMS substrings equal labels&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// R[i] = label of P_i, for LMS positions i&lt;/span&gt;\n    &lt;span class=\&quot;hljs-function\&quot;&gt;vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &lt;span class=\&quot;hljs-title\&quot;&gt;R&lt;/span&gt;&lt;span class=\&quot;hljs-params\&quot;&gt;(N, &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;;\n    &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; label = &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt;, last = &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt;;\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; k = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; k &amp;lt; N; k ++)\n    {\n        &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; j = C[k];\n        &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(!&lt;span class=\&quot;hljs-built_in\&quot;&gt;is_LMS&lt;/span&gt;(j))\n            &lt;span class=\&quot;hljs-keyword\&quot;&gt;continue&lt;/span&gt;;\n        &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(last == &lt;span class=\&quot;hljs-number\&quot;&gt;-1&lt;/span&gt; &lt;span class=\&quot;hljs-keyword\&quot;&gt;or&lt;/span&gt; !&lt;span class=\&quot;hljs-built_in\&quot;&gt;equal&lt;/span&gt;(last, j))\n            label ++;\n        R[j] = label;\n        last = j;\n    }\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// C[0] = n is the first LMS position seen, so the sentinel gets label 0,&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// and every other label lies in [1, m - 1]: T2 satisfies section 1&lt;/span&gt;\n\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// T2[k] = label of the k-th full LMS substring&lt;/span&gt;\n    &lt;span class=\&quot;hljs-function\&quot;&gt;vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &lt;span class=\&quot;hljs-title\&quot;&gt;T2&lt;/span&gt;&lt;span class=\&quot;hljs-params\&quot;&gt;(m)&lt;/span&gt;&lt;/span&gt;;\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; k = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; k &amp;lt; m; k ++)\n        T2[k] = R[l[k]];\n\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// G = LMS positions in sorted order of their suffixes&lt;/span&gt;\n    vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; G = &lt;span class=\&quot;hljs-built_in\&quot;&gt;SA&lt;/span&gt;(T2);\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; k = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; k &amp;lt; m; k ++)\n        G[k] = l[G[k]];\n\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// ---------------------------------------------------------------&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// PHASE 3: seed with G and induce the actual suffix array (section 4)&lt;/span&gt;\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// ---------------------------------------------------------------&lt;/span&gt;\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;return&lt;/span&gt; &lt;span class=\&quot;hljs-built_in\&quot;&gt;induced_sort&lt;/span&gt;(G);\n}\n\n&lt;span class=\&quot;hljs-comment\&quot;&gt;// Convenience wrapper for arbitrary non-negative input: s[i] in [0, K).&lt;/span&gt;\n&lt;span class=\&quot;hljs-comment\&quot;&gt;// Remaps s to satisfy section 1 in O(n + K), and drops the sentinel from the result.&lt;/span&gt;\n&lt;span class=\&quot;hljs-function\&quot;&gt;vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &lt;span class=\&quot;hljs-title\&quot;&gt;suffix_array&lt;/span&gt;&lt;span class=\&quot;hljs-params\&quot;&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;const&lt;/span&gt; vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &amp;amp;s, &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; K)&lt;/span&gt;\n&lt;/span&gt;{\n    &lt;span class=\&quot;hljs-type\&quot;&gt;const&lt;/span&gt; &lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; n = (&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;)s.&lt;span class=\&quot;hljs-built_in\&quot;&gt;size&lt;/span&gt;();\n\n    &lt;span class=\&quot;hljs-comment\&quot;&gt;// rank[x] = 1 + number of distinct symbols in s smaller than x&lt;/span&gt;\n    &lt;span class=\&quot;hljs-function\&quot;&gt;vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &lt;span class=\&quot;hljs-title\&quot;&gt;rank&lt;/span&gt;&lt;span class=\&quot;hljs-params\&quot;&gt;(K, &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;;\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; x : s)\n        rank[x] = &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;;\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; x = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;, r = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; x &amp;lt; K; x ++)\n        &lt;span class=\&quot;hljs-keyword\&quot;&gt;if&lt;/span&gt;(rank[x])\n            rank[x] = ++ r;\n\n    &lt;span class=\&quot;hljs-function\&quot;&gt;vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; &lt;span class=\&quot;hljs-title\&quot;&gt;T&lt;/span&gt;&lt;span class=\&quot;hljs-params\&quot;&gt;(n + &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;)&lt;/span&gt;&lt;/span&gt;;\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;for&lt;/span&gt;(&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt; i = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;; i &amp;lt; n; i ++)\n        T[i] = rank[s[i]];\n    T[n] = &lt;span class=\&quot;hljs-number\&quot;&gt;0&lt;/span&gt;;\n\n    vector&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt; A = &lt;span class=\&quot;hljs-built_in\&quot;&gt;SA&lt;/span&gt;(T);\n    &lt;span class=\&quot;hljs-keyword\&quot;&gt;return&lt;/span&gt; &lt;span class=\&quot;hljs-built_in\&quot;&gt;vector&lt;/span&gt;&amp;lt;&lt;span class=\&quot;hljs-type\&quot;&gt;int&lt;/span&gt;&amp;gt;(A.&lt;span class=\&quot;hljs-built_in\&quot;&gt;begin&lt;/span&gt;() + &lt;span class=\&quot;hljs-number\&quot;&gt;1&lt;/span&gt;, A.&lt;span class=\&quot;hljs-built_in\&quot;&gt;end&lt;/span&gt;());     &lt;span class=\&quot;hljs-comment\&quot;&gt;// A[0] is always the sentinel&lt;/span&gt;\n}\n&lt;/code&gt;&lt;/pre&gt;\n&lt;/div&gt;\n&lt;/details&gt;\n&quot;],&quot;frontmatter&quot;:[0,{&quot;displayMode&quot;:[0,&quot;blog&quot;],&quot;title&quot;:[0,&quot;Suffix arrays in O(n) using SA-IS&quot;],&quot;date&quot;:[0,&quot;2026-08-11&quot;],&quot;tags&quot;:[1,[[0,&quot;algorithm&quot;]]]}]}]}" ssr client="load" opts="{&quot;name&quot;:&quot;ContentPane&quot;,&quot;value&quot;:true}" await-children><!--[--><!--[1--><section class="prose prose-invert mx-auto max-w-4xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro"><header class="mb-8"><h1 class="font-sans font-bold leading-tight tracking-tight mb-3 text-[2.5rem] md:text-[3rem] text-accent">Suffix arrays in O(n) using SA-IS</h1> <!--[--><p class="mt-2 text-xs text-text-muted">11/08/2026</p><!--]--> <!--[--><ul class="mt-4 flex flex-wrap gap-2 list-none pl-0"><!--[--><li class="rounded-sm border border-accent-subtle px-2 py-1 text-xs font-medium text-text-muted transition-colors duration-150 ease-retro">algorithm</li><!--]--></ul><!--]--></header> <article class="prose prose-invert prose-headings:font-sans prose-p:font-sans prose-li:font-sans prose-blockquote:font-sans prose-td:font-sans prose-th:font-sans prose-p:tracking-normal prose-li:tracking-normal prose-blockquote:tracking-normal prose-td:tracking-normal prose-th:tracking-normal max-w-none"><!----><h1>Introduction</h1>
+<p>While the usual $O(n \log{n})$ suffix array algorithm described <a href="https://cp-algorithms.com/string/suffix-array.html">here</a> suffices for almost all of one's competitive-programming needs, suffix structures turn out to be useful in several other fields which require faster algorithms. Lossless compression is one such field, and I happened to need a faster SA algorithm in an LZ-compressor I've <a href="https://github.com/welcome-to-the-sunny-side/misa77">been working on recently</a>.</p>
+<p>In this blog, we'll learn how to build suffix arrays in linear time, using the algorithm I learned for this purpose. It's called SA-IS (&quot;Suffix Array by Induced Sorting&quot;, by Nong, Zhang, and Chan), and was originally described <a href="https://ieeexplore.ieee.org/document/4976463">in this paper</a>.</p>
+<h1>1. Preliminaries</h1>
+<p>We have a string $T$ of length $n$.</p>
+<p>For the sake of convenience:</p>
+<ul>
+<li>We assume that $T_i \in \lbrace 1, 2, \dots n \rbrace$ for all $ i \in [0, n)$.</li>
+<li>We add a unique sentinel element with value $0$ at the end of $T$. Note that this sentinel is the unique minimum in $T$ and the length now becomes $n + 1$.</li>
+<li>We define $S_i$ to be the $i$-th suffix, i.e. $T_i T_{i + 1} \dots T_n$. At several places ahead, I will simply use &quot;$i$-th suffix&quot; or &quot;suffix $i$&quot; to refer to $S_i$.</li>
+</ul>
+<p>The goal is to construct the suffix array of $T$ in $O(n)$ time. The suffix array is defined as the array $A$ of length $n + 1$, where $A_i$ corresponds to the index of the $i$-th smallest suffix amongst all suffixes of $T$ (when compared lexicographically). One can note that the last character being unique ensures that no suffix is a prefix of another.</p>
+<h1>2. L and S-type suffixes</h1>
+<p>The key insight that SAIS is built around is that there's a <em>lot</em> of information hidden in comparisons of adjacent suffixes of a string (i.e. $S_i$ vs $S_{i + 1}$).</p>
+<p>As such, we define two types of suffixes:</p>
+<ol>
+<li>Suffix $i$ is said to be of <strong>L-type</strong>, if $i < n$ and $S_i > S_{i + 1}$.</li>
+<li>Suffix $i$ is said to be of <strong>S-type</strong>, if $i = n$ or $S_i < S_{i + 1}$.</li>
+</ol>
+<p>We will now make a series of observations about these two types in quick succession, so buckle up.</p>
+<p>First, we characterise the structure of both types.</p>
+<h4>Theorem 2.1</h4>
+<blockquote>
+<p>Suffix $i$ is L-type iff $i < n$ and $T_i > T_j$ for the smallest $j \geq i$ such that $T_j \neq T_i$.</p>
+</blockquote>
+<p>Simply put, all L-type suffixes have the form <code>[&gt;= 1 occurrences of symbol b][1 occurrence of a]...</code> where $b > a$ ($b$ is the first character of the suffix here).</p>
+<details><summary class ="spoiler-summary">Proof</summary>
+<div class = "spoiler-content">
+<p>Let $x \geq 0$ be the smallest index where $T_{i + x} \neq T_{i + 1 + x}$. There must exist such an $x$ because the last element is unique.
+If $i$ is L-type, then we definitionally need $T_{i + x} > T_{i + 1 + x}$ (as $S_i > S_{i + 1}$). Therefore, we have $T_i = T_{i + y}$ for all $0 \leq y \leq x$ and $T_i > T_{i + x + 1}$.</p>
+<p>Now, the other direction - if $S_i$ takes the form <code>[x &gt;= 1 occurrences of b] [1 occurrence of a]</code> where $b > a$, then $S_i > S_{i + 1}$ because $x$ is the smallest non-negative integer where $T_{i + x} \neq T_{i + 1 + x}$, and we have $T_{i + x} > T_{i + 1 + x}$.</p>
+</div>
+</details>
+<h4>Theorem 2.2</h4>
+<blockquote>
+<p>Suffix $i$ is S-type iff $i = n$ or $T_j > T_i$ for the smallest $j \geq i$ such that $T_j \neq T_i$.</p>
+</blockquote>
+<p>Simply put, all S-type suffixes, save for the sentinel, have the form <code>[&gt;= 1 occurrences of symbol b][1 occurrence of c]...</code> where $b < c$.</p>
+<p>The proof is symmetrical to 2.1.</p>
+<h4>Theorem 2.3</h4>
+<blockquote>
+<p>All the positions in $T$ can be classified as L or S-type in $O(n)$.</p>
+</blockquote>
+<p>Denote the type of the $i$-th suffix by $Q_i$. Then:</p>
+<ul>
+<li>$Q_n =$ S-type.</li>
+<li>For $i < n$:
+<ul>
+<li>If $T_i < T_{i + 1}$, $Q_i$ = S-type.</li>
+<li>If $T_i > T_{i + 1}$, $Q_i$ = L-type.</li>
+<li>Else, $Q_i = Q_{i + 1}$.</li>
+</ul>
+</li>
+</ul>
+<details><summary class ="spoiler-summary">Proof</summary>
+<div class = "spoiler-content">
+<p>We simply use 2.1 and 2.2 for all $i < n$ here:</p>
+<ul>
+<li>If $T_i < T_{i + 1}$, then suffix $i$ is of the form <code>b c ...</code> where $b < c$ and therefore must be S-type.</li>
+<li>If $T_i > T_{i + 1}$, then suffix $i$ is of the form <code>b a ...</code> where $b > a$ and therefore must be L-type.</li>
+<li>If $T_i == T_{i + 1}$, then suffix $i + 1$ is either of the form <code>[&gt;= 1 occurrences of b][1 occurrence of a]...</code> or <code>[&gt;= 1 occurrences of b][1 occurrence of c]...</code>, and this determines its type. If we prepend one <code>b</code> to either form ($S_i = bS_{i + 1}$), then the form doesn't change and neither does the type.</li>
+</ul>
+</div>
+</details>
+<h4>Theorem 2.4</h4>
+<blockquote>
+<p>If $T_i = T_j$, suffix $i$ is of L-type, and suffix $j$ is of S-type, then $S_i < S_j$.</p>
+</blockquote>
+<details><summary class ="spoiler-summary">Proof</summary>
+<div class = "spoiler-content">
+<p>$S_i$ has the form <code>[&gt;= 1 occurrences of b] [1 occurrence of a]...</code> and $S_j$ has the form <code>[&gt;= 1 occurrences of b][1 occurrence of c]...</code>.
+It's easy to see that at the smallest $x \geq 0$ where $T_{i + x} \neq T_{j + x}$, we have one of the following:</p>
+<ul>
+<li>$T_{i + x} = b, T_{j + x} = c$</li>
+<li>$T_{i + x} = a, T_{j + x} = b$</li>
+<li>$T_{i + x} = a, T_{j + x} = c$</li>
+</ul>
+<p>In every case, we have $T_{i + x} < T_{j + x}$, and therefore $S_i < S_j$.</p>
+</div>
+</details>
+<p>Now, theorem 2.4 is quite powerful as it allows us to characterise the structure of the suffix array in a very friendly &quot;bucketed&quot; manner. We can observe that the suffix array must take the following form:</p>
+<ul>
+<li>First, we have L-type suffixes that start with symbol $0$.</li>
+<li>Then, we have S-type suffixes that start with symbol $0$.</li>
+<li>Then, L-type suffixes that start with symbol $1$.</li>
+<li>Then, S-type suffixes that start with symbol $1$.</li>
+<li>Then, L-type suffixes that start with symbol $2$.</li>
+<li>Then, S-type suffixes that start with symbol $2$.</li>
+<li>...and so on</li>
+</ul>
+<p>In other words:</p>
+<ul>
+<li>The suffix array consists of several disjoint buckets, with each bucket corresponding to suffixes starting with a certain symbol.</li>
+<li>The buckets are ordered by the starting symbol.</li>
+<li>Within a particular bucket, we first have all the L-type suffixes, and then all the S-type suffixes.</li>
+</ul>
+<p>It's easy to see that these bucket boundaries can also be computed in $O(n)$. It might seem odd that I'm mentioning this, but it's important for the implementation later.</p>
+<details><summary class ="spoiler-summary">Code</summary>
+<div class = "spoiler-content">
+<pre class="hljs"><code><span class="hljs-comment">// Given n and T</span>
+<span class="hljs-type">int</span> n;
+vector&lt;<span class="hljs-type">int</span>&gt; T;
+
+<span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">cnt</span><span class="hljs-params">(n + <span class="hljs-number">1</span>, <span class="hljs-number">0</span>)</span></span>;
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span> x : T)
+    cnt[x]++;
+
+<span class="hljs-keyword">auto</span> tail = cnt;
+<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++)
+    tail[i] += tail[i - <span class="hljs-number">1</span>];
+
+<span class="hljs-keyword">auto</span> head = tail;
+<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= n; i ++)
+    head[i] -= cnt[i];
+
+<span class="hljs-comment">//now, bucket for element i is [head[i], tail[i])</span>
+</code></pre>
+</div>
+</details>
+<h1>3. LMS-types</h1>
+<p>We define a suffix $i$ to be of <strong>LMS-type</strong> (i.e. &quot;Leftmost-S-type&quot;) iff:</p>
+<ul>
+<li>$i > 0$</li>
+<li>Suffix $i$ is of S-type.</li>
+<li>Suffix $i - 1$ is of L-type.</li>
+</ul>
+<p>Let $l_0 < l_1 < \dots < l_{m - 1}$ be the LMS positions of $T$.</p>
+<p>A key observation is that there are $m \leq \frac{n + 1}{2} $ LMS positions (the existence of each LMS position &quot;consumes&quot; a unique L-type and S-type). As you will later see, the efficiency of SAIS is dependent on this.</p>
+<h4>Theorem 3.1</h4>
+<blockquote>
+<p>If $i$ is LMS-type, then $T_{i - 1} > T_i$.</p>
+</blockquote>
+<details><summary class ="spoiler-summary">Proof</summary>
+<div class = "spoiler-content">
+<p>If $i$ is LMS, then $i > 0$ and $i - 1$ is L-type.
+By theorem 2.3, we cannot have $T_{i - 1} \leq T_i$ because then $i - 1$ would have been S-type.</p>
+</div>
+</details>
+<p>Now, let's introduce a very helpful visualisation for strings that I'll just call a &quot;slope view&quot;. The slope view of any given string will be obtained by us drawing downward or upward slants between two adjacent suffixes based on the result of their comparison (i.e. the type of the left suffix).</p>
+<p>Let's look at some visualisations for $T = $ <code>baacbcbacbccdaa$</code> (where <code>$</code> is the appended unique minimum). I know I said that $T$ will have integer elements, but an english alphabet string is just nicer to look at, and is no different computationally (just assign some integer to every letter).</p>
+<figure style="text-align: center;">
+  <img
+    src="/assets/sais/slope-view.png"
+    alt="Slope view of baacbcbacbccdaa$: rising (S-type) and falling (L-type) slants between adjacent positions, with flags on the LMS valleys at positions 1, 4, 7, 9 and 15"
+    style="display: block; margin: 0 auto;"
+  >
+  <figcaption>
+    The slope-view diagram for T.
+  </figcaption>
+</figure>
+<p>A few observations:</p>
+<ul>
+<li>LMS-types correspond to <em>valleys</em> in the slope view.</li>
+<li>An upward slope (from left to right) corresponds to S-type suffixes.</li>
+<li>A downward slope corresponds to L-type suffixes.</li>
+<li>The second-last character is always L-type, as the last character is the unique minimum. Since the last position is definitionally S-type, this also implies that it's always LMS-type.</li>
+</ul>
+<p>Also recall theorem 2.4. The buckets in the SA for $T$ take the following form.</p>
+<figure style="text-align: center;">
+  <img
+    src="/assets/sais/bucket-view.png"
+    alt="Bucket structure of the suffix array of baacbcbacbccdaa$: slots split into buckets by first character ($, a, b, c, d), with L-type suffixes before S-type suffixes inside each bucket"
+    style="display: block; margin: 0 auto;"
+  >
+  <figcaption>
+    The buckets for the suffix array of T.
+  </figcaption>
+</figure>
+<h1>4. Induced sorting</h1>
+<p>Now, after having tunnel-visioned on the classification of these L/S types for so long, let's return to our original goal of finding $A$. Why did we do all of this? As it turns out, it's really convenient to sort L-suffixes and S-suffixes separately.</p>
+<h2>4.1 L-induce</h2>
+<p>Say we were tasked with producing $A$ partially, i.e. only at positions $i$ such that $A_i$ was an L-type position. Does the problem get meaningfully easier?</p>
+<p>The observation that the entire algorithm is built upon is that <em>we don't need any S-type suffixes except the LMS-types to induce the sorted order of L-type suffixes</em>.</p>
+<h4>Theorem 4.1</h4>
+<blockquote>
+<p>Given the sorted order of LMS-suffixes (a permutation $G$ of $l_0, l_1 \dots l_{m - 1}$ where $S_{G_i} < S_{G_{i + 1}}$ for $i + 1 < m$), we can compute in $O(n)$ time all $A_i$ where $A_i$ is an L-type position. Less formally, we can fill out all the &quot;L-buckets&quot; of $A$ in $O(n)$ time.</p>
+</blockquote>
+<p>The rest of subsection 4.1 will be spent realising an algorithm which does this.</p>
+<p>Let's first consider a really inefficient procedure to sort L-type suffixes while only making use of LMS-types (besides the L-types). This is really the sort of algorithm where it's simpler to use an unambiguous, real programming language rather than pseudocode, so you'll have to bear with C++ snippets throughout.</p>
+<details><summary class ="spoiler-summary">Procedure 1</summary>
+<div class = "spoiler-content">
+<pre class="hljs"><code><span class="hljs-comment">// Given n, T, Q, S, bucket boundaries (see code in theorem 2.4)</span>
+<span class="hljs-type">int</span> n;
+vector&lt;<span class="hljs-type">int</span>&gt; T, Q, head, tail;
+vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; S;          <span class="hljs-comment">//suffixes</span>
+
+<span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">A</span><span class="hljs-params">(n + <span class="hljs-number">1</span>, <span class="hljs-number">-1</span>)</span></span>;
+
+set&lt;pair&lt;vector&lt;<span class="hljs-type">int</span>&gt;, <span class="hljs-type">int</span>&gt;&gt; q;
+
+<span class="hljs-keyword">auto</span> extend = [&amp;](<span class="hljs-type">int</span> i) -&gt; <span class="hljs-type">void</span>
+{
+  <span class="hljs-type">int</span> j = i - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_L_type</span>(Q[j]))
+    q.<span class="hljs-built_in">insert</span>({S[j], j});
+};
+
+<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= n; i ++)
+  <span class="hljs-keyword">if</span>(<span class="hljs-built_in">is_LMS_type</span>(Q[i]))
+    q.<span class="hljs-built_in">insert</span>({S[i], i});
+
+<span class="hljs-keyword">while</span>(!q.<span class="hljs-built_in">empty</span>())
+{
+  <span class="hljs-keyword">auto</span> [v, i] = *q.<span class="hljs-built_in">begin</span>();
+  q.<span class="hljs-built_in">erase</span>(q.<span class="hljs-built_in">begin</span>());
+
+  <span class="hljs-comment">//we do not place the LMS types into A</span>
+  <span class="hljs-keyword">if</span>(<span class="hljs-built_in">is_L_type</span>(Q[i]))
+  {
+    A[head[T[i]]] = i;
+    head[T[i]] ++;
+  }
+
+  <span class="hljs-built_in">extend</span>(i);
+}
+</code></pre>
+</div>
+</details>
+<p>This inefficient procedure essentially does the following:</p>
+<ol>
+<li>It first inserts all the LMS-suffixes into a heap (that uses the standard lexicographical comparator).</li>
+<li>Then, it repeatedly picks the smallest suffix from the heap and:
+<ol>
+<li>If the suffix corresponds to an L-type position $i$, it places $i$ at the first free position in the L-bucket corresponding to $T_i$ in $A$.</li>
+<li>Then, if position $i - 1$ is L-type, it inserts $S_{i - 1}$ into the heap (i.e. it extends the removed suffix by one character on the left, or equivalently in the slope-view - moves one step up to the left).</li>
+</ol>
+</li>
+</ol>
+<p>Before we prove that this procedure is correct, I encourage you to intuit why this is correct by visualising the slope view. We essentially &quot;seed&quot; the heap by inserting all the valley positions, and then inch up each L-type slope to the left (remember, L-type slopes slant upwards from right to left).</p>
+<p>Anyway, why is the procedure correct?</p>
+<p>Notice that when suffix $S_i$ is deleted from the heap, it can only result in the insertion of a <em>strictly greater suffix</em> back into the heap ($S_{i - 1}$, where $i - 1$ must be L-type, so $S_{i - 1} > S_i$. In the slope view, $i - 1$ must be above $i$). Since we always delete the smallest suffix from the heap, this implies that all suffixes to ever be inserted in the heap are deleted in non-decreasing order (for any two L or LMS-type positions $i$ and $j$, if $S_i < S_j$, then $i$ is deleted from the heap before $j$).</p>
+<p>Now consider the manner in which we insert elements into $A$. It's easy to see that every suffix $i$ is guaranteed to be placed somewhere within the L-bucket of $i$. Within every L-bucket, suffixes are placed correctly too, as they were deleted in non-decreasing order from the heap, and therefore placed into the L-bucket in the same order.</p>
+<p>What about coverage? Does <em>every</em> L-type position eventually get placed into $A$? Yes! Remember that the last element is always LMS-type (a valley), and therefore, every L-type position has an LMS-type position somewhere after it (more formally, every L-type position has either an L-type position or LMS-type position to its right).</p>
+<p>Now, we make a subtle modification to this procedure that preserves correctness, but allows us to later optimise it. Consider the following:</p>
+<details><summary class ="spoiler-summary">Procedure 2</summary>
+<div class = "spoiler-content">
+<pre class="hljs"><code><span class="hljs-comment">// Given n, T, Q, S, bucket boundaries (see code in theorem 2.4)</span>
+<span class="hljs-type">int</span> n;
+vector&lt;<span class="hljs-type">int</span>&gt; T, Q, head, tail;
+vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; S;          <span class="hljs-comment">//suffixes</span>
+
+<span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">A</span><span class="hljs-params">(n + <span class="hljs-number">1</span>, <span class="hljs-number">-1</span>)</span></span>;       <span class="hljs-comment">//suffix array</span>
+
+set&lt;pair&lt;vector&lt;<span class="hljs-type">int</span>&gt;, <span class="hljs-type">int</span>&gt;&gt; q;
+
+<span class="hljs-keyword">auto</span> extend2 = [&amp;](<span class="hljs-type">int</span> i) -&gt; <span class="hljs-type">void</span>
+{
+  <span class="hljs-type">int</span> j = i - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_L_type</span>(Q[j]))
+  {
+    A[head[T[j]]] = j;
+    head[T[j]] ++;
+    q.<span class="hljs-built_in">insert</span>({S[j], j});
+  }
+};
+
+<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= n; i ++)
+  <span class="hljs-keyword">if</span>(<span class="hljs-built_in">is_LMS_type</span>(Q[i]))
+    q.<span class="hljs-built_in">insert</span>({S[i], i});
+
+<span class="hljs-keyword">while</span>(!q.<span class="hljs-built_in">empty</span>())
+{
+  <span class="hljs-keyword">auto</span> [v, i] = *q.<span class="hljs-built_in">begin</span>();
+  q.<span class="hljs-built_in">erase</span>(q.<span class="hljs-built_in">begin</span>());
+
+  <span class="hljs-built_in">extend2</span>(i);
+}
+</code></pre>
+</div>
+</details>
+<p>What changed? Instead of placing L-type $i$ into $A$ when $S_i$ gets deleted from the heap, we place $i$ into $A$ <em>when it gets inserted into the heap</em>. When does it get inserted into the heap? When $S_{i + 1}$ is deleted.</p>
+<p>Why is this procedure correct? First, observe that elements are still deleted from the heap in non-decreasing order.</p>
+<p>All L-type positions are necessarily placed within their buckets in $A$, so for any two L-type positions $i$ and $j$ with $T_i < T_j$, $i$ will necessarily be placed before $j$ in $A$. Therefore, we need only show that the relative placement of L-type positions <em>within</em> buckets is correct.</p>
+<p>Consider any two L-type positions $i$ and $j$ with $T_i = T_j = c$. Since $T_i = T_j$, $S_i < S_j \iff S_{i + 1} < S_{j + 1}$. But recall that elements are still deleted from the heap in non-decreasing order! Since $i$ and $j$ are L-type, $i + 1$ and $j + 1$ are L or LMS-type, and pass through the heap before $i$ and $j$ respectively ($S_i > S_{i + 1}$ and $S_j > S_{j + 1}$). Assume WLOG $S_{i + 1} < S_{j + 1}$. But then, $S_{i + 1}$ is deleted before $S_{j + 1}$, and $i$ is placed in the L-bucket of $c$ before $j$, just like we require. Therefore, suffixes are placed in the correct order within buckets.</p>
+<p>This proves that the L-regions of $A$ are correctly filled by this procedure too.</p>
+<p>Notice that our proof only relied on suffixes being deleted from the heap in non-decreasing order.</p>
+<h4>Theorem 4.2</h4>
+<blockquote>
+<p>Sequentially calling <code>extend2(i)</code> on some non-decreasing sequence of suffixes $i_1, i_2, i_3, \dots$ which contains all L/LMS-type positions exactly once results in the L-regions of $A$ being correctly filled.</p>
+</blockquote>
+<p>Now, how can we do this faster?</p>
+<p>First, we divorce <code>extend2(i)</code> from the heap. From this point onward, it will no longer add anything to the heap.</p>
+<p>Let's make use of Theorem 4.2. Imagine that we had access to some pre-built, valid $A'$. We could then simply call <code>extend2(A'[i])</code> in increasing order of $i$, where $A'_i$ was L or LMS-type. Alas, we do not have access to a pre-built $A'$... But we notice that calling <code>extend2(A'[i])</code> only possibly places an element into $A$ to the right of $i$ (so as we walk from left to right, we only place elements to our right, and there are no &quot;circular dependencies&quot;).</p>
+<p>What if we could do the following at the same time?:</p>
+<ul>
+<li>Build $A$.</li>
+<li><em>Use $A$ itself as a pre-built $A'$</em> that we walk from left to right and call <code>extend2(A'[i])</code> on?</li>
+</ul>
+<p>Effectively (and I switch to pseudo-code now):</p>
+<pre class="hljs"><code>A = [-1] * (n + 1)
+for i from 0 to n:
+  if (A[i] != -1) and (A[i] is L or LMS type):
+    extend2(A[i])
+</code></pre>
+<p>This is of course incorrect, for the simple reason that everything remains -1, but the fix is smaller than you might expect.</p>
+<p>The problem is illustrated well by considering this procedure's equivalence to procedure 2. Remember that we delete suffixes $S_i$ in non-decreasing order. This effectively means that the position of $S_i$ in $A$ keeps increasing as time goes on, and the deletion order can be grouped like this:</p>
+<ul>
+<li>First, we delete all indices in the L-bucket of $0$ (L-suffixes that begin with $0$).</li>
+<li>Then, LMS indices in the S-bucket of $0$.</li>
+<li>Then, all indices in the L-bucket of $1$.</li>
+<li>Then, LMS indices in the S-bucket of $1$</li>
+<li>and so on</li>
+</ul>
+<p>The issue here is that while we don't need the heap <em>at all</em> to handle the L-regions, it's doing critical work for us in the S-regions.</p>
+<p>In particular, we can already modify procedure 2 to run in linear time <em>for the L-regions</em> in the following manner:</p>
+<details><summary class ="spoiler-summary">Procedure 2.5</summary>
+<div class = "spoiler-content">
+<pre class="hljs"><code>A = [-1] * (n + 1)
+
+put {S[i], i} for all LMS-type i into heap H
+
+<span class="pseudo-comment"># we iterate over the first character of suffixes</span>
+for character c from 0 to n:
+
+  <span class="pseudo-comment"># we first process the L-region of c</span>
+  let A[l, r] be the L-region for c
+  for i from l to r:
+    extend2(A[i])
+  
+  <span class="pseudo-comment"># we then process the LMS-types of c, naively</span>
+  while H is not empty and the smallest suffix in H begins with c:
+    pop out {S[i], i}, the smallest element of H
+    extend2(i)
+</code></pre>
+</div>
+</details>
+<p>Why is this correct? Because <code>extend2(i)</code> is called on exactly the same sequence of $i$ in both, procedure 2 and 2.5.</p>
+<details><summary class ="spoiler-summary">Annoying Proof</summary>
+<div class = "spoiler-content">
+<p>We can prove this using induction. Assume that the first $k$ calls to <code>extend2()</code> are made on the exact same sequence of indices in both procedures. Then let the $k + 1$-th call in procedure 2 be on index $i$.</p>
+<ol>
+<li>If $i$ is LMS type: Suffix $i$ is then present within both heaps from the very beginning. We will make use of the fact that no two suffixes can be equal. Procedure 2 would have already deleted all strings strictly smaller than it from the heap (remember that it calls <code>extend2()</code> in strictly increasing order of suffixes), and since 2.5 also called <code>extend2()</code> for the same indices, it would also have deleted all suffixes smaller than $S_i$ from its own heap. Therefore, at this point of time $S_i$ must be the smallest string in procedure 2.5's heap, and we will pop it out now.</li>
+<li>If $i$ is L-type: Then it will be placed somewhere in the L-region of $T_i$. Notice that its position in both procedures is determined solely by the number of times we call <code>extend2(j)</code> for $j$ such that $j > 0, Q_{j - 1} = \text{L}, T_{j - 1} = T_i$ before we call <code>extend2(i + 1)</code>. All of these calls lie within the first $k$ calls ($i$ is L-type so $S_i > S_{i + 1}$), and are therefore the same for both procedures, implying that $i$ gets placed at the same position in both.</li>
+</ol>
+</div>
+</details>
+<p>Looking at the second stage for each $c$, it's easy to see that the heap was only really responsible for sorting the LMS-suffixes (all insertions are before all deletions now, so we don't need its &quot;online&quot; nature, we just need the sorted order of all LMS suffixes). This brings us back to theorem 4.1. We don't really need the entirety of a pre-built $A'$ - we only need $G$!</p>
+<p>Let's finally look at the L-induce procedure, which takes $G$ and computes the L-regions of $A$. An implementation choice here is that since the S-regions of $A$ are otherwise unused during this phase, we just put all LMS positions from the given $G$ at the ends of their respective S-buckets in $A$, preserving their order.</p>
+<details><summary class ="spoiler-summary">Procedure 3</summary>
+<div class = "spoiler-content">
+<pre class="hljs"><code><span class="hljs-comment">// Given n, T, Q, and the bucket boundaries (see code in theorem 2.4)</span>
+<span class="hljs-type">int</span> n;
+vector&lt;<span class="hljs-type">int</span>&gt; T, Q, head, tail;
+
+<span class="hljs-comment">// Of course, given G too!</span>
+vector&lt;<span class="hljs-type">int</span>&gt; G;
+
+<span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">A</span><span class="hljs-params">(n + <span class="hljs-number">1</span>, <span class="hljs-number">-1</span>)</span></span>;       <span class="hljs-comment">//suffix array</span>
+
+<span class="hljs-comment">// Seeding - we put LMS positions at the tails of their S-buckets </span>
+<span class="hljs-built_in">reverse</span>(G.<span class="hljs-built_in">begin</span>(), G.<span class="hljs-built_in">end</span>());
+<span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span> i : G)
+  A[--tail[T[i]]] = i;
+
+<span class="hljs-keyword">auto</span> extend2 = [&amp;](<span class="hljs-type">int</span> i) -&gt; <span class="hljs-type">void</span>
+{
+  <span class="hljs-type">int</span> j = i - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_L_type</span>(Q[j]))
+  {
+    A[head[T[j]]] = j;
+    head[T[j]] ++;
+  }
+};
+
+<span class="hljs-comment">// induce L positions into A</span>
+<span class="hljs-keyword">auto</span> l_induce = [&amp;]() -&gt; <span class="hljs-type">void</span>
+{
+  <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= n; i ++)
+    <span class="hljs-keyword">if</span>(A[i] != <span class="hljs-number">-1</span>)
+      <span class="hljs-built_in">extend2</span>(A[i]);
+};
+<span class="hljs-built_in">l_induce</span>();
+
+<span class="hljs-comment">// clean up LMS types from A</span>
+<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= n; i ++)
+  <span class="hljs-keyword">if</span>(A[i] != <span class="hljs-number">-1</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_LMS_type</span>(Q[A[i]]))
+    A[i] = <span class="hljs-number">-1</span>;
+</code></pre>
+</div>
+</details>
+<p>It's easy to see that this procedure is correct (it's just the previous procedure with the second stage for each $c$ made efficient), and that apart from the magical acquisition of $G$, it runs in $O(n)$ (placing LMS-positions into $A$, L-induce itself, cleanup).</p>
+<h2>4.2 S-induce</h2>
+<p>Let us now deal with the S regions.</p>
+<p>The basic idea is symmetrical - just like we processed L-suffixes in non-decreasing order to fill the L-regions (left to right in $A$), we will process S-suffixes in <em>non-increasing</em> order to fill the S-regions (right to left). In the slope view, we previously inched upwards on slopes that were slanted upward from right to left, after having seeded the valleys ($G$). Now, we will inch downwards on slopes that are slanted downward from right to left (remember the slant of slopes for S-suffixes). We have an advantage here though! The analogous seeds are going to be the &quot;leftmost L&quot; (LML) positions (peaks in the slope view), which lie in the L-regions of $A$. Since we have already computed the L-regions, we already have the analogue of $G$ here!</p>
+<p>Anyway, let's look at the procedure and then talk about it:</p>
+<details><summary class ="spoiler-summary">Procedure 4</summary>
+<div class = "spoiler-content">
+<pre class="hljs"><code><span class="hljs-comment">// Given n, T, Q, bucket boundaries, and A with L-regions computed</span>
+<span class="hljs-comment">// Note that these are freshly computed bucket boundaries, not those</span>
+<span class="hljs-comment">// modified in the L phase. </span>
+<span class="hljs-type">int</span> n;
+vector&lt;<span class="hljs-type">int</span>&gt; T, Q, head, tail, A;
+
+<span class="hljs-keyword">auto</span> extend3 = [&amp;](<span class="hljs-type">int</span> i) -&gt; <span class="hljs-type">void</span>
+{
+  <span class="hljs-type">int</span> j = i - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_S_type</span>(Q[j]))
+  {
+    tail[T[j]] --;
+    A[tail[T[j]]] = j;
+  }
+};
+
+<span class="hljs-comment">// place the sentinel position separately</span>
+A[<span class="hljs-number">0</span>] = n;
+
+<span class="hljs-comment">// induce S positions into A</span>
+<span class="hljs-keyword">auto</span> s_induce = [&amp;]() -&gt; <span class="hljs-type">void</span>
+{
+  <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = n; i &gt;= <span class="hljs-number">0</span>; i --)
+    <span class="hljs-keyword">if</span>(A[i] != <span class="hljs-number">-1</span>)
+      <span class="hljs-built_in">extend3</span>(A[i]);
+};
+<span class="hljs-built_in">s_induce</span>();
+</code></pre>
+</div>
+</details>
+<p>Why does this work? The proof is structurally symmetric to that of L-induce (we now process strings in non-increasing order, so we go from right to left in $A$, and every call to <code>extend3(A[i])</code> can only add something to $A$ strictly before $i$), but with one caveat: coverage previously relied on the fact that every sequence of L positions ended in an LMS position (every downward slope ends in a valley), and us manually placing the LMS positions into $A$ first. The equivalent requirement here would be every upward slope ending in a peak, and us having placed every peak first. As all L regions have already been computed, all the peaks have been placed into $A$. The only source of nuisance is the very last position, which is LMS-type and doesn't have an L-type peak after it.</p>
+<p>Thankfully:</p>
+<ul>
+<li>$T_n$ is the unique minimum and must therefore be the very first element in $A$, so we manually place it.</li>
+<li>Because it's the unique minimum, $n - 1$ is L-type. Therefore, all other S-type positions have some peak after them (a &quot;Leftmost L type&quot;).</li>
+</ul>
+<p>I leave the formal proof of correctness to the reader, and return to the broader picture.</p>
+<p>We now know that just having $G$ would allow us to set off a convenient chain of events (the induction phases) which would end in $O(n)$ time, with us having computed $A$. The entire problem therefore reduces to being able to sort the LMS-suffixes efficiently.</p>
+<h1>5. Sorting LMS-suffixes</h1>
+<p>Okay, so how do we sort LMS suffixes efficiently? The S induce would of course give us their sorted order, but that needs the L induce, which needs the sorted order... It's a bit of a chicken-and-egg problem.</p>
+<p>Let's think outside the box. The observant reader will remember that the number of LMS positions, $m$ is no more than $\frac{n + 1}{2}$. What if we could somehow &quot;compress&quot; $T$ to $T'$ of length $m$, where the $i$-th suffix of $T'$ corresponded to $S_{l_i}$, and the sorted order of the suffixes of $T'$ gave us the sorted order of the corresponding LMS-suffixes of $T$ (that is, the $i$-th suffix of $T'$ is smaller than the $j$-th, iff $S_{l_i} < S_{l_j}$)? If we could create such a $T'$, then finding its suffix array would just be an identical subproblem to our original task, but with smaller size!</p>
+<p>Let's imagine a magical procedure <code>compress(T)</code> which gives us such a $T'$ <em>in linear time</em>. Then we can define <code>SA(T)</code>, which computes the SA of $T$ (assuming that $T$ satisfies the conditions in section 1) in the following manner:</p>
+<pre class="hljs"><code><span class="pseudo-comment">#input T satisfies properties from section 1</span>
+SA(T):
+  N = |T|
+
+  <span class="pseudo-comment">#base case</span>
+  if N == 1:
+    return [0]
+
+  T2 = compress(T)
+
+  G = SA(T2)
+  for i from 0 to |G| - 1:
+    G[i] = l[G[i]]    <span class="pseudo-comment">#G[i]-th LMS position in T</span>
+
+  A = [-1] * (N)
+  run L induce on A using G
+  run S induce
+
+  return A
+</code></pre>
+<p>What would the time complexity of <code>SA(T)</code>, $f(N)$ ($N = \vert T \vert$) be? We have $f(N) = O(N) + f(N/2) + O(N) + O(N) + O(N)$ (the recursive call takes $f(N/2)$ time, and every other phase takes linear time). Therefore, $f(N) = O(N) + f(N/2)$. Also, the base case is handled with $f(1) = O(1)$. Since $O(N) + O(N/2) + O(N/4) + \dots = O(N)$, we have $f(N) = O(N)$.</p>
+<p>All that remains is to design such a <code>compress(T)</code>.</p>
+<p>Since the $i$-th suffix of $T'$ = <code>compress(T)</code> is going to correspond to the $i$-th LMS suffix of $T$ (which starts with $l_i$), it should be reasonably intuitive that we try to assign $T'_i$ a symbol that somehow represents the substring from the $i$-th LMS position to the $(i + 1)$-th (or if $i = m - 1$, the end of the string). Note that choosing this particular substring to be represented by $T'_i$ is only a design choice here.</p>
+<h2>5.1 LMS Substrings</h2>
+<p>We define the <strong>LMS-end</strong> of position $i$, $E_i$, as the smallest LMS-position such that $i < E_i$. For $i = n$, we separately define $E_i = i$.
+The <strong>LMS-substring</strong> of position $i$, $P_i$ is defined as $T[i, E_i]$. Additionally, we refer to $P_i$ as a &quot;full&quot; LMS-substring if $i$ is LMS-type.</p>
+<p>Now, return to <code>compress(T)</code>. We wish to find a labelling function $R : \lbrace P_i \rbrace \rightarrow Z$ that will assign an integer label to each full LMS-substring such that the resultant string, $T'$ ($T'_i = R(P_{l_i})$) meets the following conditions:</p>
+<ol>
+<li>$T'_i$ is an integer in $[0, \vert T' \vert)$</li>
+<li>The last element of $T'$ is the unique minimum.</li>
+<li>The $i$-th suffix of $T'$ is smaller than the $j$-th, iff $S_{l_i} < S_{l_j}$.</li>
+</ol>
+<p>To recap, why do we need these conditions? The first and second are needed so that $T' =$ <code>compress(T)</code> can directly be passed to <code>SA(T)</code> (which assumes that the conditions from section 1 are met). The third is needed so that $G$ can be computed from the suffix array of $T'$.</p>
+<p>The first and second conditions are relatively simple to satisfy, but the third isn't. A condition on $R$ that naively seems helpful for the third is $R(P_i) < R(P_j) \iff P_i < P_j$, let's try to build $R$ around it.</p>
+<p>Consider the labelling function: $R(P_i) = \vert \lbrace P_j : P_j < P_i, Q_j = \text{LMS} \rbrace  \vert$ (the number of unique full LMS substrings that are strictly smaller than it). It trivially satisfies the first two conditions, but what about the third?</p>
+<p>Let's compare the $i$-th and $j$-th suffixes of $T'$.</p>
+<ul>
+<li>Since the last character of $T'$ is the unique minimum, no suffix of $T'$ can be a proper prefix of another suffix.</li>
+<li>Therefore, consider the smallest $x \geq 0$ such that $T'_{i + x} \neq T'_{j + x}$. Clearly  $T'[i, m) < T'[j, m) \iff T'_{i + x} < T'_{j + x}$.</li>
+<li>Let $u = l_{i + x}, v = l_{j + x}$. Since $T'[i, i + x - 1] = T'[j, j + x - 1]$, we have $T[l_i, u) = T[l_j, v)$ (easy to prove, left as an exercise). Now, $T[l_i, n] < T[l_j, n] \iff T[u, n] < T[v, n]$.</li>
+<li>We know that $P_{u} \neq P_{v}$ ($T'_{i + x} \neq T'_{j + x}$). There are two cases:
+<ul>
+<li>If neither $P_{u}$ nor $P_{v}$ is a proper prefix of the other, then $ T[u, n] < T[v, n] \iff P_{u} < P_{v} \iff R(P_{u}) < R(P_{v}) \iff T'_{i + x} < T'_{j + x}$! Therefore, in this case, we have $T'[i, m) < T'[j, m) \iff T[l_i, n] < T[l_j, n]$.</li>
+<li>Otherwise, WLOG assume $P_{u}$ is a proper prefix of $P_{v}$. In this case, the lex comparator says $P_{u} < P_{v} \implies R(P_{u}) < R(P_{v}) \implies T'_{i + x} < T'_{j + x} \implies T'[i, m) < T'[j, m)$. For $T'[i, m) < T'[j, m) \iff T[l_i, n] < T[l_j, n]$ to now be satisfied, we need $T[l_i, n] < T[l_j, n]$. Let's examine this in more detail.</li>
+</ul>
+</li>
+</ul>
+<p>Surprisingly, properties of the L/S classification trivialise this. Let $p = \vert P_{u} \vert$. Notice that $P_{u} = T[u, u + p - 1] = T[v, v + p - 1]$, so $T[l_i, n] < T[l_j, n] \iff T[u + p - 1, n] < T[v + p - 1, n]$. We know that $T_{u + p - 1} = T_{v + p - 1}$ and  position $(u + p - 1)$ is LMS-type (it's the end of an LMS-substring). What about position $v + p - 1$? Using theorem 3.1, $T_{u + p - 2} > T_{u + p - 1} \implies T_{v + p - 2} > T_{v + p - 1}$, so position $v + p - 2$ must be L-type. Recall that the types of positions in an LMS substring take the following form: <code>LMS S S S S ... L L L L LMS</code>. Since $P_v$ doesn't end at $v + p - 1$, position $v + p - 1$ must be L-type too!</p>
+<p>Recall theorem 2.4! Since $S_{u + p - 1}$ and $S_{v + p - 1}$ begin with the same character, and the former is S-type while the latter is L-type, we must have $T[u + p - 1, n] > T[v + p - 1, n] \implies T[l_i, n] > T[l_j, n]$! which is... the exact opposite of what we wanted. But since the issue is so localised (i.e. in the comparison of full LMS substrings where one is a proper prefix of the other), could we make do with a localised fix?</p>
+<p>We indeed can! We introduce the <strong>alex</strong> comparator, $\prec$. For strings $a$ and $b$, it is defined in the following manner:</p>
+<ul>
+<li>If $a = b$ under lex, then they're equal under alex too.</li>
+<li>Otherwise if neither $a$ nor $b$ is a proper prefix of the other, then $a \prec b \iff a < b$.</li>
+<li>Otherwise, $a \prec b \iff \vert a \vert > \vert b \vert$.</li>
+</ul>
+<p>Simply put, it's just the standard lexicographical comparator, except we flip the comparison result when one string is a proper prefix of the other.</p>
+<p>Also, we can show that alex imposes a <em>total order</em>. Why? Because $A \prec B \iff A\infty < B \infty$ and $A = B \iff A\infty = B \infty$. That is, the result of alex comparison is equal to the result of lex comparison if you append a character that's larger than all others to the end of both strings. Since lex imposes a total order, alex does too.</p>
+<p>Redefine $R$ as $R(P_i) = \vert \lbrace P_j : P_j \prec P_i, Q_j = \text{LMS} \rbrace  \vert$, and recall the three required conditions on $R$:</p>
+<ol>
+<li>$T'_i$ is an integer in $[0, \vert T' \vert)$ - trivially satisfied.</li>
+<li>The last element of $T'$ is the unique minimum - satisfied because $P_{l_{m - 1}}$ remains the unique minimum amongst all full LMS substrings, so $R(P_{l_{m - 1}}) = 0$.</li>
+<li>The $i$-th suffix of $T'$ is smaller than the $j$-th, iff $S_{l_i} < S_{l_j}$.</li>
+</ol>
+<p>Consider the third condition. When we previously attempted to prove $T'[i, m) < T'[j, m) \iff T[l_i, n] < T[l_j, n]$ for $T'$ defined using the old definition of $R$ (using the regular lex comparator), there were only four relevant properties:</p>
+<ul>
+<li>For character $c$, and strings $A$ and $B$, $cA < cB \iff A < B$, and $cA = cB \iff A = B$.</li>
+<li>For full LMS substrings $A$ and $B$:
+<ul>
+<li>If neither was a prefix of the other, $R(A) < R(B) \iff A < B$.</li>
+<li>$R(A) = R(B) \iff A = B$.</li>
+<li>When $A$ is a proper prefix of $B$, we required $R(A) > R(B)$, but our old $R$ yielded $R(A) < R(B)$.</li>
+</ul>
+</li>
+</ul>
+<p>Clearly, our new definition of $R$ satisfies all four! I won't restate the entire proof again, but encourage you to go through the argument again to convince yourself of this.</p>
+<h2>5.2 Sorting LMS Substrings under alex</h2>
+<p>Okay, so we've finally found a suitable definition for $R$ - $R(P_i) = \vert \lbrace P_j : P_j \prec P_i, Q_j = \text{LMS} \rbrace  \vert$ where $\prec$ is the alex comparator. But how do we efficiently compute it?</p>
+<p>What if we just sort full LMS substrings in alex order, and then label them? Namely, compute an array $X$ of length $m$ where $P_{X_i} \preceq P_{X_j} \forall i \leq j$, and $X_i$ is an LMS position in $T$ for all $i$. Consider the following procedure:</p>
+<pre class="hljs"><code>N = |T|
+
+somehow compute X
+
+R = [-1] * N
+label = -1, last = -1
+
+for i in X:
+  if last == -1 or !equal(P[last], P[i])
+    label += 1
+  R[i] = label
+  last = i
+</code></pre>
+<p>One concern is that assuming $X$ is given to us, is the labelling procedure efficient? What if the <code>equal(A, B)</code> function is implemented naively, i.e. in $O(\vert A \vert + \vert B \vert)$ time? Since each full LMS substring contributes its length at most twice, and $\sum{\vert P_{l_i} \vert} = O(n)$, the total time taken is $O(n)$.</p>
+<p>Alright, so we just need to sort full LMS substrings under alex now. It shouldn't be surprising that we'll lean on the machinery (L and S induce) we built for sorting <em>suffixes</em> previously. Further, we'll sort <em>all</em> LMS substrings, and then just extract the subsequence of full LMS substrings from this sorted order.</p>
+<p>Let's state our goal more formally. We want to compute array $C$ of length $n + 1$, which will contain every index in $[0, n]$ exactly once, and satisfy $i \leq j \implies T[C_i, E_{C_i}] \preceq T[C_j, E_{C_j}]$. A &quot;partial suffix array&quot; of sorts.</p>
+<p>Now, consider the L-induce, which was previously used to sort L-type suffixes. Can we repurpose it to sort L-type LMS-substrings instead? When we previously discussed it, we seeded $A$ with $G$, which contained the sorted order of all the LMS suffixes. Why? Because for every L-type suffix $T[i, n]$, its final position in $A$ depended on the LMS suffix $T[E_i, n]$ having been seeded correctly relative to the other LMS suffixes. In a certain sense, the position of $T[E_i, n]$ (relative to other LMS suffixes) was storing all that the L-induce needed about its value when implicitly comparing $T[i, n]$ against other suffixes.</p>
+<p>But now that we're sorting $T[i, E_i]$ instead of $T[i, n]$, would it do to seed our array with $T[E_i, E_i]$ instead?</p>
+<p>The answer is yes, but we'll need to first prove some facts about LMS substrings.</p>
+<h4>Theorem 5.1</h4>
+<blockquote>
+<p>For any LMS-substring $T[i, E_i]$ with $i \neq n$, its second-to-last character is strictly greater than the last.</p>
+</blockquote>
+<p>This is just theorem 3.1 again, but it's quite fundamental to our arguments ahead, so I restate it.</p>
+<h4>Theorem 5.2</h4>
+<blockquote>
+<p>If position $i$ is L-type, then $T[i + 1, E_i] \prec T[i, E_i]$.</p>
+</blockquote>
+<details><summary class ="spoiler-summary">Proof</summary>
+<div class = "spoiler-content">
+<p>Since position $i$ is L-type, $i + 1$ can either be L or LMS-type.</p>
+<ul>
+<li>If $i + 1$ is LMS type, then $T_i > T_{i + 1} \implies T[i + 1, E_i] \prec T[i, E_i]$</li>
+<li>Otherwise, $T_i \geq T_{i + 1}$.
+<ul>
+<li>If $T_{i} > T_{i + 1}$, then $T[i + 1, E_i] \prec T[i, E_i]$ trivially.</li>
+<li>Otherwise, we know that for the smallest $x \geq 0$ where $T_{i + x} \neq T_{i + x + 1}$, we have $T_{i + x} > T_{i + x + 1}$ (definition of L-type suffixes). Since $T_{E_i - 1} \neq T_{E_i}$, we must have $i + x + 1 \leq E_i$, and the two strings differ before either ends.</li>
+</ul>
+</li>
+</ul>
+</div>
+</details>
+<h4>Theorem 5.3</h4>
+<blockquote>
+<p>(Analogue of theorem 2.4) If $T_i = T_j$, suffix $i$ is of L-type, and suffix $j$ is of S-type, then $P_i \prec P_j$.</p>
+</blockquote>
+<details><summary class ="spoiler-summary">Proof</summary>
+<div class = "spoiler-content">
+<p>Consider the proof of theorem 2.4. It applies to any strings which have prefixes of the form <code>[&gt;= 1 occurrences of b][1 occurrence of a]...</code> and <code>[&gt;= 1 occurrences of b][1 occurrence of c]...</code> respectively. We know that $S_i$ and $S_j$ have this form, but do $P_i$ and $P_j$ do?</p>
+<p>Since $P_i$ is a prefix of $S_i$, the only way it cannot be of this form is if it consists only of $b$-s. But since $P_i = T[i, E_i]$ contains both $T_{E_i - 1}$ and $T_{E_i}$, and $T_{E_i - 1} > T_{E_i}$, it cannot possibly consist of only one character.</p>
+<p>The same argument applies to $P_j$.</p>
+<p>Therefore, the two must have the same form and the proof of theorem 2.4 applies.</p>
+</div>
+</details>
+<p>Consequently, $C$ can be divided into buckets just like $A$. That is, it takes the following form:</p>
+<ul>
+<li>First, we have L-type suffixes that start with symbol $0$.</li>
+<li>Then, we have S-type suffixes that start with symbol $0$.</li>
+<li>Then, L-type suffixes that start with symbol $1$.</li>
+<li>Then, S-type suffixes that start with symbol $1$.</li>
+<li>Then, L-type suffixes that start with symbol $2$.</li>
+<li>Then, S-type suffixes that start with symbol $2$.</li>
+<li>...and so on</li>
+</ul>
+<p>Now, let's try to adapt our old procedure 2 to produce $C$:</p>
+<details><summary class ="spoiler-summary">Procedure 5</summary>
+<div class = "spoiler-content">
+<pre class="hljs"><code>C = [-1] * (n + 1)
+
+put {T[i, i], i} for all LMS-type i into heap H, which uses the alex comparator
+
+<span class="pseudo-comment"># just like our previous extend2 function, except here we insert T[j, E[j]] into the heap</span>
+def extend2(i):
+  j = i - 1
+  if (j &gt;= 0) and (position j is L-type)
+    place j in the first empty position of the bucket of T[j] in C
+    put {T[j, E[j]], j} into H
+
+while H is not empty:
+  pop out {v, i}, the smallest element of H
+  extend2(i)
+</code></pre>
+</div>
+</details>
+<p>The proof for procedure 5 correctly filling the L-regions of $C$ is quite similar to that for procedure 2 correctly producing $A$.</p>
+<p>First, notice that the deletion of any string from the heap can only result in the insertion of a strictly larger substring under alex (or no insertion at all):</p>
+<ul>
+<li>If the string being deleted is $T[i, i]$ with LMS $i$, then by theorem 5.1, we have $T[i, i] \prec T[i - 1, E_{i - 1}]$.</li>
+<li>Otherwise, $T[i, E_i]$ ($i$ is L-type) being deleted results in the insertion of $T[i - 1, E_{i - 1}]$, then $T[i, E_i] \prec T[i - 1, E_{i - 1}]$ (theorem 5.2).</li>
+</ul>
+<p>Since we always erase the alex-smallest substring from the heap, the order in which we delete LMS substrings from the heap is alex-non-decreasing. Coverage (every L-type LMS substring is inserted into the heap at some point) is also guaranteed for the same reason as before.</p>
+<p>Now, consider any two L-type LMS substrings $T[i, E_i]$ and $T[j, E_j]$. We will show that their relative position in $C$ aligns with the result of their comparison under alex.</p>
+<ul>
+<li>If $T[i, E_i] = T[j, E_j]$, then their relative order doesn't matter.</li>
+<li>Otherwise, if $T_i \neq T_j$, WLOG assume $T_i < T_j$. Then we necessarily have $T[i, E_i] \prec T[j, E_j]$, and the two are placed in different buckets, with the former's bucket lying to the left of the latter's.</li>
+<li>Otherwise, if $T_i = T_j$, then $T[i, E_i]$ and $T[j, E_j]$ will be placed in the same bucket. Recall that for any character $c$ and strings $A, B$, we have $cA \prec cB \iff A \prec B$. Therefore, $T[i, E_i] \prec T[j, E_j] \iff T[i + 1, E_i] \prec T[j + 1, E_j]$. Note that we cannot have $T[i + 1, E_i] = T[j + 1, E_j]$ here. Consider the other two cases
+<ul>
+<li>If $T[i + 1, E_i] \prec T[j + 1, E_j]$, then the former is deleted before the latter from the heap, and $T[i, E_i]$ is placed in their common bucket before $T[j, E_j]$. Since we also have $T[i + 1, E_i] \prec T[j + 1, E_j] \implies T[i, E_i] \prec T[j, E_j]$ here, their relative order in $C$ is valid.</li>
+<li>If $T[j + 1, E_j] \prec T[i + 1, E_i]$, then the former is deleted before the latter from the heap, and $T[j, E_j]$ is placed in their common bucket before $T[i, E_i]$. Since we also have $T[j + 1, E_j] \prec T[i + 1, E_i] \implies T[j, E_j] \prec T[i, E_i]$ here, their relative order in $C$ is valid.</li>
+</ul>
+</li>
+</ul>
+<p>This implies $i \leq j \implies T[C_i, E_{C_i}] \preceq T[C_j, E_{C_j}]$ for the placed L-type LMS substrings $C_i, C_j$ so far.</p>
+<p>The observant reader will have noticed that our arguments have been almost identical to the initial use of L-induce. We shall continue in a similar vein. Consider this optimised version of procedure 5 (adapted from procedure 2.5):</p>
+<details><summary class ="spoiler-summary">Procedure 5.5</summary>
+<div class = "spoiler-content">
+<pre class="hljs"><code>C = [-1] * (n + 1)
+
+put {T[i, i], i} for all LMS-type i into heap H
+
+<span class="pseudo-comment"># once again, we don't place anything into the heap any more</span>
+def extend2(i):
+  j = i - 1
+  if (j &gt;= 0) and (position j is L-type)
+    place j in the first empty position of the bucket of T[j] in C
+
+<span class="pseudo-comment"># we iterate over the first character of the suffix</span>
+for character c from 0 to n:
+
+  <span class="pseudo-comment"># we first process the L-region of c</span>
+  let C[l, r] be the L-region for c
+  for i from l to r:
+    extend2(C[i])
+  
+  <span class="pseudo-comment"># we then process the LMS-types of c, naively</span>
+  while H is not empty and the smallest string in H begins with c:
+    pop out {T[i, i], i}, the smallest element of H
+    extend2(i)
+</code></pre>
+</div>
+</details>
+<p>Why is this correct? The proof is almost identical to that of procedure 2.5 - <code>extend2(i)</code> is called over the same sequence of $i$. The only subtlety is that while the strings in 2.5 were suffixes and could therefore not be equal to each other, strings here can be equal. Fortunately, the order in which equal strings are processed doesn't matter at all (so it's technically not the exact same sequence of $i$, you can swap indices which correspond to the same string). All of this should be fairly natural by now, so I'll leave the formal proof to the reader.</p>
+<p>Now, recall that at this point in the old L-induce, we revealed the need for $G$, as in procedure 2.5, we <em>needed</em> the heap to sort the LMS suffixes $T[E_i, n]$ for us. But now? We're only using the heap to sort $T[E_i, E_i]$! There's no chicken-and-egg problem like before with $T[E_i, n]$, because since these are just length-1 strings, we can easily sort them in $O(n)$ using counting-sort instead!</p>
+<p>This allows us to easily optimise procedure 5.5 to the following $O(n)$ procedure (note that we don't explicitly sort $T[E_i, E_i]$, instead we just place each LMS position at the tail of its respective bucket).</p>
+<details><summary class ="spoiler-summary">Procedure 6</summary>
+<div class = "spoiler-content">
+<pre class="hljs"><code><span class="hljs-comment">// Given n, T, Q, and the bucket boundaries (see code in theorem 2.4)</span>
+<span class="hljs-type">int</span> n;
+vector&lt;<span class="hljs-type">int</span>&gt; T, Q, head, tail;
+
+<span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">C</span><span class="hljs-params">(n + <span class="hljs-number">1</span>, <span class="hljs-number">-1</span>)</span></span>;
+
+<span class="hljs-comment">// Seeding - we put LMS positions at the tails of their S-buckets </span>
+<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= n; i ++)
+  <span class="hljs-keyword">if</span>(<span class="hljs-built_in">is_LMS_type</span>(Q[i]))
+    C[--tail[T[i]]] = i;
+
+<span class="hljs-keyword">auto</span> extend2 = [&amp;](<span class="hljs-type">int</span> i) -&gt; <span class="hljs-type">void</span>
+{
+  <span class="hljs-type">int</span> j = i - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_L_type</span>(Q[j]))
+  {
+    C[head[T[j]]] = j;
+    head[T[j]] ++;
+  }
+};
+
+<span class="hljs-comment">// induce L positions into C</span>
+<span class="hljs-keyword">auto</span> l_induce = [&amp;]() -&gt; <span class="hljs-type">void</span>
+{
+  <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= n; i ++)
+    <span class="hljs-keyword">if</span>(C[i] != <span class="hljs-number">-1</span>)
+      <span class="hljs-built_in">extend2</span>(C[i]);
+};
+<span class="hljs-built_in">l_induce</span>();
+
+<span class="hljs-comment">// clean up LMS types from C</span>
+<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= n; i ++)
+  <span class="hljs-keyword">if</span>(C[i] != <span class="hljs-number">-1</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_LMS_type</span>(Q[C[i]]))
+    C[i] = <span class="hljs-number">-1</span>;
+</code></pre>
+</div>
+</details>
+<p>The justification of its correctness is basically identical to that of procedure 3, and is left as an exercise to the reader.</p>
+<p>Now that we have filled the L-regions of $C$, we turn our attention back to the S-induce. A (perhaps) surprising fact - we don't need to change anything at all in procedure 4. Once again, the proof is very similar to what we've done before (one change to note is that the position of an L-type $i$ within the suffix array previously encoded information about $S_i$, but now encodes information about $P_i$), and is left as an exercise to the reader.</p>
+<p>And... we end up with $C$, correctly and efficiently computed.</p>
+<h1>6. Putting it all together</h1>
+<p>Let's finally assemble our algorithm from the pieces we've painstakingly built:</p>
+<pre class="hljs"><code><span class="pseudo-comment"># T satisfies conditions from section 1</span>
+SA(T):
+  N = |T|
+  n = N - 1
+
+  if N == 1:
+    return [0]
+
+  classify L, S, LMS types in O(n)
+
+<span class="pseudo-comment">#PHASE 1: sort LMS substrings under alex</span>
+  C = [-1] * (n + 1)
+  seed C with T[i, i] for all LMS positions i, in O(n)
+  run L induce on C   <span class="pseudo-comment"># we compute fresh bucket boundaries before every L and S induce</span>
+  run S induce on C
+
+<span class="pseudo-comment">#PHASE 2: construct T2 and sort its suffixes to get G</span>
+  <span class="pseudo-comment">#label full LMS substrings</span>
+  R = [-1] * (n + 1)
+  label = -1, last = -1
+  for i from 0 to n:
+    if C[i] is LMS type:
+      j = C[i]
+      if last == -1 or !equal(last, j):     <span class="pseudo-comment">#equal(i, j) compares P[i] and P[j]</span>
+        label += 1
+      R[j] = label
+      last = j
+  <span class="pseudo-comment">#construct T2 and sort its suffixes</span>
+  T2 = []
+  for i from 0 to n:
+    if i is LMS type:
+      T2.append(R[i])
+  A2 = SA(T2)
+  <span class="pseudo-comment">#construct G from A2</span>
+  G = A2
+  for i from 0 to |G| - 1:
+    G[i] = l[G[i]]  <span class="pseudo-comment">#l[i] is i-th LMS position in T</span>
+
+<span class="pseudo-comment">#PHASE 3: seed A with G and run the final L and S induce </span>
+  A = [-1] * (n + 1)
+  seed A with G
+  run L induce on A
+  run S induce on A
+
+  return A
+</code></pre>
+<p>My own <a href="https://github.com/welcome-to-the-sunny-side/libra/blob/main/string/suffix_array.cpp">implementation</a> of SAIS was unfortunately created before I wrote this blog, and doesn't really follow the exposition, but here's a highly readable one by my friend Opus 5.5 that does:</p>
+<details><summary class ="spoiler-summary">Code</summary>
+<div class = "spoiler-content">
+<pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;
+
+<span class="hljs-comment">// Types of positions (section 2, 3). An LMS position is also S-type.</span>
+<span class="hljs-keyword">enum</span> <span class="hljs-title class_">Type</span> : <span class="hljs-type">uint8_t</span> { L_TYPE, S_TYPE, LMS_TYPE };
+
+<span class="hljs-comment">// Computes the suffix array of T.</span>
+<span class="hljs-comment">// T must satisfy the conditions from section 1: with n = |T| - 1,</span>
+<span class="hljs-comment">//   - T[n] == 0 is the sentinel (the unique minimum), and</span>
+<span class="hljs-comment">//   - T[i] lies in [1, n] for all i &lt; n.</span>
+<span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">SA</span><span class="hljs-params">(<span class="hljs-type">const</span> vector&lt;<span class="hljs-type">int</span>&gt; &amp;T)</span>
+</span>{
+    <span class="hljs-type">const</span> <span class="hljs-type">int</span> N = (<span class="hljs-type">int</span>)T.<span class="hljs-built_in">size</span>(), n = N - <span class="hljs-number">1</span>;
+
+    <span class="hljs-comment">// base case</span>
+    <span class="hljs-keyword">if</span>(N == <span class="hljs-number">1</span>)
+        <span class="hljs-keyword">return</span> {<span class="hljs-number">0</span>};
+
+    <span class="hljs-comment">// ---------------------------------------------------------------</span>
+    <span class="hljs-comment">// Classify positions as L / S / LMS (theorem 2.3, section 3)</span>
+    <span class="hljs-comment">// ---------------------------------------------------------------</span>
+    <span class="hljs-function">vector&lt;Type&gt; <span class="hljs-title">Q</span><span class="hljs-params">(N)</span></span>;
+    Q[n] = S_TYPE;
+    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = n - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i --)
+    {
+        <span class="hljs-keyword">if</span>(T[i] &lt; T[i + <span class="hljs-number">1</span>])
+            Q[i] = S_TYPE;
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(T[i] &gt; T[i + <span class="hljs-number">1</span>])
+            Q[i] = L_TYPE;
+        <span class="hljs-keyword">else</span>
+            Q[i] = Q[i + <span class="hljs-number">1</span>];
+    }
+
+    vector&lt;<span class="hljs-type">int</span>&gt; l;      <span class="hljs-comment">// l[k] = k-th LMS position, so l = {l_0 &lt; l_1 &lt; ... &lt; l_{m - 1}}</span>
+    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i ++)
+        <span class="hljs-keyword">if</span>(Q[i] == S_TYPE <span class="hljs-keyword">and</span> Q[i - <span class="hljs-number">1</span>] == L_TYPE)
+        {
+            Q[i] = LMS_TYPE;
+            l.<span class="hljs-built_in">push_back</span>(i);
+        }
+    <span class="hljs-type">const</span> <span class="hljs-type">int</span> m = (<span class="hljs-type">int</span>)l.<span class="hljs-built_in">size</span>();
+
+    <span class="hljs-keyword">auto</span> is_L = [&amp;](<span class="hljs-type">int</span> i) { <span class="hljs-keyword">return</span> Q[i] == L_TYPE; };
+    <span class="hljs-keyword">auto</span> is_S = [&amp;](<span class="hljs-type">int</span> i) { <span class="hljs-keyword">return</span> Q[i] != L_TYPE; };
+    <span class="hljs-keyword">auto</span> is_LMS = [&amp;](<span class="hljs-type">int</span> i) { <span class="hljs-keyword">return</span> Q[i] == LMS_TYPE; };
+
+    <span class="hljs-comment">// ---------------------------------------------------------------</span>
+    <span class="hljs-comment">// Bucket boundaries (section 2): the bucket for symbol c is [head[c], tail[c])</span>
+    <span class="hljs-comment">// ---------------------------------------------------------------</span>
+    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">cnt</span><span class="hljs-params">(N, <span class="hljs-number">0</span>)</span></span>;      <span class="hljs-comment">// symbols lie in [0, n]</span>
+    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> x : T)
+        cnt[x] ++;
+
+    <span class="hljs-comment">// induce L/S both modify the boundaries, so we hand out fresh copies every time</span>
+    <span class="hljs-keyword">auto</span> get_buckets = [&amp;](vector&lt;<span class="hljs-type">int</span>&gt; &amp;head, vector&lt;<span class="hljs-type">int</span>&gt; &amp;tail) -&gt; <span class="hljs-type">void</span>
+    {
+        head.<span class="hljs-built_in">assign</span>(N, <span class="hljs-number">0</span>);
+        tail.<span class="hljs-built_in">assign</span>(N, <span class="hljs-number">0</span>);
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> c = <span class="hljs-number">0</span>, sum = <span class="hljs-number">0</span>; c &lt; N; c ++)
+        {
+            head[c] = sum;
+            sum += cnt[c];
+            tail[c] = sum;
+        }
+    };
+
+    <span class="hljs-comment">// ---------------------------------------------------------------</span>
+    <span class="hljs-comment">// Induced sorting (section 4)</span>
+    <span class="hljs-comment">//</span>
+    <span class="hljs-comment">// `seeds` contains the LMS positions, in sorted order. Returns the array</span>
+    <span class="hljs-comment">// obtained by seeding them at the tails of their S-buckets, then running</span>
+    <span class="hljs-comment">// L-induce (procedure 3) followed by S-induce (procedure 4).</span>
+    <span class="hljs-comment">//</span>
+    <span class="hljs-comment">// Phase 1 and phase 3 differ *only* in the seeds they pass here.</span>
+    <span class="hljs-comment">// ---------------------------------------------------------------</span>
+    <span class="hljs-keyword">auto</span> induced_sort = [&amp;](<span class="hljs-type">const</span> vector&lt;<span class="hljs-type">int</span>&gt; &amp;seeds) -&gt; vector&lt;<span class="hljs-type">int</span>&gt;
+    {
+        vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-built_in">A</span>(N, <span class="hljs-number">-1</span>);
+        vector&lt;<span class="hljs-type">int</span>&gt; head, tail;
+
+        <span class="hljs-comment">// seeding: walk the seeds from largest to smallest, filling each S-bucket from its tail</span>
+        <span class="hljs-built_in">get_buckets</span>(head, tail);
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> k = (<span class="hljs-type">int</span>)seeds.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>; k &gt;= <span class="hljs-number">0</span>; k --)
+        {
+            <span class="hljs-type">int</span> i = seeds[k];
+            A[-- tail[T[i]]] = i;
+        }
+
+        <span class="hljs-comment">// L-induce: walk left to right; if A[i] - 1 is L-type, append it to the</span>
+        <span class="hljs-comment">// first free slot of its L-bucket (this is extend2)</span>
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; N; i ++)
+        {
+            <span class="hljs-keyword">if</span>(A[i] == <span class="hljs-number">-1</span>)
+                <span class="hljs-keyword">continue</span>;
+            <span class="hljs-type">int</span> j = A[i] - <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_L</span>(j))
+                A[head[T[j]] ++] = j;
+        }
+
+        <span class="hljs-comment">// clean up: remove the seeded LMS positions, the S-induce places them again</span>
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; N; i ++)
+            <span class="hljs-keyword">if</span>(A[i] != <span class="hljs-number">-1</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_LMS</span>(A[i]))
+                A[i] = <span class="hljs-number">-1</span>;
+
+        <span class="hljs-comment">// S-induce: walk right to left; if A[i] - 1 is S-type, prepend it to the</span>
+        <span class="hljs-comment">// last free slot of its S-bucket (this is extend3)</span>
+        <span class="hljs-built_in">get_buckets</span>(head, tail);
+        A[<span class="hljs-number">0</span>] = n;               <span class="hljs-comment">// the sentinel is the smallest suffix, place it manually</span>
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = n; i &gt;= <span class="hljs-number">0</span>; i --)
+        {
+            <span class="hljs-keyword">if</span>(A[i] == <span class="hljs-number">-1</span>)
+                <span class="hljs-keyword">continue</span>;
+            <span class="hljs-type">int</span> j = A[i] - <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_S</span>(j))
+                A[-- tail[T[j]]] = j;
+        }
+
+        <span class="hljs-keyword">return</span> A;
+    };
+
+    <span class="hljs-comment">// ---------------------------------------------------------------</span>
+    <span class="hljs-comment">// PHASE 1: sort all LMS substrings under alex (section 5.2)</span>
+    <span class="hljs-comment">//</span>
+    <span class="hljs-comment">// Seeding with T[i, i] for each LMS position i: these are single</span>
+    <span class="hljs-comment">// characters, so any order works, as long as each one lands in its own</span>
+    <span class="hljs-comment">// bucket (procedure 6).</span>
+    <span class="hljs-comment">// ---------------------------------------------------------------</span>
+    vector&lt;<span class="hljs-type">int</span>&gt; C = <span class="hljs-built_in">induced_sort</span>(l);
+
+    <span class="hljs-comment">// ---------------------------------------------------------------</span>
+    <span class="hljs-comment">// PHASE 2: label full LMS substrings, build T2, recurse (sections 5.1, 6)</span>
+    <span class="hljs-comment">// ---------------------------------------------------------------</span>
+
+    <span class="hljs-comment">// equal(i, j) checks whether P_i == P_j for LMS positions i != j.</span>
+    <span class="hljs-comment">// P_i = T[i, E_i] ends at the next LMS position, so we walk both substrings</span>
+    <span class="hljs-comment">// together until one of them ends. They are equal iff both end at the same</span>
+    <span class="hljs-comment">// offset with all characters equal along the way.</span>
+    <span class="hljs-comment">// (If one of them is the sentinel n, the very first characters differ, so</span>
+    <span class="hljs-comment">// we never read past the end of T.)</span>
+    <span class="hljs-keyword">auto</span> equal = [&amp;](<span class="hljs-type">int</span> i, <span class="hljs-type">int</span> j) -&gt; <span class="hljs-type">bool</span>
+    {
+        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> k = <span class="hljs-number">0</span>; ; k ++)
+        {
+            <span class="hljs-keyword">if</span>(T[i + k] != T[j + k])
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+            <span class="hljs-type">bool</span> end_i = (k &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_LMS</span>(i + k));
+            <span class="hljs-type">bool</span> end_j = (k &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_LMS</span>(j + k));
+            <span class="hljs-keyword">if</span>(end_i <span class="hljs-keyword">or</span> end_j)
+                <span class="hljs-keyword">return</span> end_i <span class="hljs-keyword">and</span> end_j;
+        }
+    };
+
+    <span class="hljs-comment">// walk C (which is alex-sorted) and give equal full LMS substrings equal labels</span>
+    <span class="hljs-comment">// R[i] = label of P_i, for LMS positions i</span>
+    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">R</span><span class="hljs-params">(N, <span class="hljs-number">-1</span>)</span></span>;
+    <span class="hljs-type">int</span> label = <span class="hljs-number">-1</span>, last = <span class="hljs-number">-1</span>;
+    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> k = <span class="hljs-number">0</span>; k &lt; N; k ++)
+    {
+        <span class="hljs-type">int</span> j = C[k];
+        <span class="hljs-keyword">if</span>(!<span class="hljs-built_in">is_LMS</span>(j))
+            <span class="hljs-keyword">continue</span>;
+        <span class="hljs-keyword">if</span>(last == <span class="hljs-number">-1</span> <span class="hljs-keyword">or</span> !<span class="hljs-built_in">equal</span>(last, j))
+            label ++;
+        R[j] = label;
+        last = j;
+    }
+    <span class="hljs-comment">// C[0] = n is the first LMS position seen, so the sentinel gets label 0,</span>
+    <span class="hljs-comment">// and every other label lies in [1, m - 1]: T2 satisfies section 1</span>
+
+    <span class="hljs-comment">// T2[k] = label of the k-th full LMS substring</span>
+    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">T2</span><span class="hljs-params">(m)</span></span>;
+    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> k = <span class="hljs-number">0</span>; k &lt; m; k ++)
+        T2[k] = R[l[k]];
+
+    <span class="hljs-comment">// G = LMS positions in sorted order of their suffixes</span>
+    vector&lt;<span class="hljs-type">int</span>&gt; G = <span class="hljs-built_in">SA</span>(T2);
+    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> k = <span class="hljs-number">0</span>; k &lt; m; k ++)
+        G[k] = l[G[k]];
+
+    <span class="hljs-comment">// ---------------------------------------------------------------</span>
+    <span class="hljs-comment">// PHASE 3: seed with G and induce the actual suffix array (section 4)</span>
+    <span class="hljs-comment">// ---------------------------------------------------------------</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">induced_sort</span>(G);
+}
+
+<span class="hljs-comment">// Convenience wrapper for arbitrary non-negative input: s[i] in [0, K).</span>
+<span class="hljs-comment">// Remaps s to satisfy section 1 in O(n + K), and drops the sentinel from the result.</span>
+<span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">suffix_array</span><span class="hljs-params">(<span class="hljs-type">const</span> vector&lt;<span class="hljs-type">int</span>&gt; &amp;s, <span class="hljs-type">int</span> K)</span>
+</span>{
+    <span class="hljs-type">const</span> <span class="hljs-type">int</span> n = (<span class="hljs-type">int</span>)s.<span class="hljs-built_in">size</span>();
+
+    <span class="hljs-comment">// rank[x] = 1 + number of distinct symbols in s smaller than x</span>
+    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">rank</span><span class="hljs-params">(K, <span class="hljs-number">0</span>)</span></span>;
+    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> x : s)
+        rank[x] = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> x = <span class="hljs-number">0</span>, r = <span class="hljs-number">0</span>; x &lt; K; x ++)
+        <span class="hljs-keyword">if</span>(rank[x])
+            rank[x] = ++ r;
+
+    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">T</span><span class="hljs-params">(n + <span class="hljs-number">1</span>)</span></span>;
+    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; i ++)
+        T[i] = rank[s[i]];
+    T[n] = <span class="hljs-number">0</span>;
+
+    vector&lt;<span class="hljs-type">int</span>&gt; A = <span class="hljs-built_in">SA</span>(T);
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(A.<span class="hljs-built_in">begin</span>() + <span class="hljs-number">1</span>, A.<span class="hljs-built_in">end</span>());     <span class="hljs-comment">// A[0] is always the sentinel</span>
+}
+</code></pre>
+</div>
+</details>
+<!----></article></section><!--]--><!--]--><!--astro:end--></astro-island> </main> <!-- Terminal (desktop only) --> <aside class="hidden md:block"> <astro-island uid="Z2ejFBI" component-url="/_astro/TerminalPane.D2hkyxKp.js" component-export="default" renderer-url="/_astro/client.svelte.DSigbiJE.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;TerminalPane&quot;,&quot;value&quot;:true}" await-children><!--[--><div class="h-full flex flex-col desktop-wrapper svelte-1mq48mh" style="--tw-bg: #0a0a0a; --tw-bg-end: #0d0d0d; --tw-border: rgba(100, 255, 218, 0.15); --tw-border-focus: rgba(100, 255, 218, 0.4); --tw-glow: rgba(100, 255, 218, 0.1); --tw-glow-strong: rgba(100, 255, 218, 0.3); --tw-accent: #64ffda; --tw-accent-muted: rgba(100, 255, 218, 0.6); --tw-shadow: rgba(0, 0, 0, 0.3);"><button class="desktop-toggle flex svelte-1mq48mh" aria-label="Collapse terminal">▶</button> <!--[!--><!--]--> <div class="flex-1 overflow-hidden"><div class="terminal-content svelte-1mq48mh"><div class="terminal-shell-outer h-full w-full svelte-scxdjl"><div class="terminal-shell svelte-scxdjl"></div></div><!----></div></div></div><!--]--><!--astro:end--></astro-island> </aside> </div> </body></html>

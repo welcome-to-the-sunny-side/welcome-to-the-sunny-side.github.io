@@ -12,7 +12,7 @@
 //   - `displayMode: musings` (MusingsStream fetches + decrypts at runtime)
 //   - raw .html content (contains inline <script>s that ContentPane re-executes
 //     after mount; pre-rendering would run them twice)
-import { list as vfsList, isDir } from './virtualFs';
+import { list as vfsList, isDir, getVirtualFs, type FsNode } from './virtualFs';
 import { parseFrontmatter } from './frontmatter';
 import { getRenderer } from './markdown';
 import type { InitialContent, NavEntry } from './contentTypes';
@@ -78,6 +78,29 @@ async function render(path: string): Promise<InitialContent> {
   const html = md.render(body);
   untypeset.set(path, html);
   return { kind: 'md', path, html: inlineFigures(await typesetMath(html)), frontmatter: fm };
+}
+
+/** Markdown source of a build-rendered page (what /<path>.md serves for
+ *  AI agents), or null for pages that are not plain markdown posts. */
+export async function markdownSource(path: string): Promise<string | null> {
+  if ((await prerenderPath(path)).kind !== 'md') return null;
+  return mdSources['/src/content' + path.replace(/\.html$/, '.md')] ?? null;
+}
+
+/** VFS paths ("/algo/theory/sais.html") of every page that has a markdown source. */
+export async function markdownPagePaths(): Promise<string[]> {
+  const files: string[] = [];
+  const walk = (node: FsNode) => {
+    if (node.type === 'file') {
+      if (node.path.endsWith('.html')) files.push(node.path);
+    } else if (node.children) {
+      for (const child of Object.values(node.children)) walk(child);
+    }
+  };
+  walk(getVirtualFs());
+  const out: string[] = [];
+  for (const f of files) if ((await markdownSource(f)) !== null) out.push(f);
+  return out;
 }
 
 /** <title> for the page. */

@@ -46,6 +46,8 @@ Four moving pieces:
 │  │   ├─ index.astro                 "/" → BaseLayout (home)
 │  │   ├─ [...slug].astro             catch-all → prerenderPath() → BaseLayout
 │  │   ├─ prerendered/[...slug].json.ts  same render as JSON, for client-side navigation
+│  │   ├─ [...slug].md.ts             markdown source of each post, for AI agents
+│  │   ├─ llms.txt.ts                 /llms.txt index of those .md copies
 │  │   └─ sitemap.xml.ts              static sitemap of every VFS page
 │  ├─ skins/
 │  │   ├─ types.ts                    Skin interface
@@ -292,6 +294,8 @@ npm run deploy   # build + push dist/ to gh-pages
 **Output filenames.** `build.format: 'file'` plus slugs that already end in `.html` makes Astro write `dist/foo.html.html`. The `postbuild` hook runs `tools/fix-html-filenames.mjs`, which renames those to `foo.html` (and drops the root `index.html.html`, a duplicate of the `index.astro` output) so `dist/` matches the site's URLs without relying on GitHub Pages' append-`.html` fallback. `astro preview` therefore serves article URLs correctly.
 
 **Crawler surface.** `src/pages/sitemap.xml.ts` emits `dist/sitemap.xml` listing every VFS page (using `site` from `astro.config.mjs`), and `public/robots.txt` points at it. The live domain's `robots.txt` is fronted by Cloudflare's managed content-signals block; our file is appended after it.
+
+**Agent surface.** Every build-rendered markdown page also serves its raw markdown source at the same path with `.md` (`/algo/theory/sais.md`, from `src/pages/[...slug].md.ts` via `markdownSource()` / `markdownPagePaths()` in `prerender.ts`). The rendered HTML is a poor read for agents: MathJax output turns into doubled text (`𝑇𝑖Ti` for `T_i`), inline SVG figures turn into label soup, and the page is ~10× larger. The copies are deliberately invisible to people. Pages point to them only through `<link rel="alternate" type="text/markdown">` in `<head>` (the `markdownPath` prop of `BaseLayout`), and `/llms.txt` (`src/pages/llms.txt.ts`, llmstxt.org convention) lists them all. Don't use hidden on-page text telling agents to fetch elsewhere: careful agents treat it as prompt injection, and search engines treat it as cloaking. Musings, raw `.html` pages and directory listings get no `.md`.
 
 ---
 

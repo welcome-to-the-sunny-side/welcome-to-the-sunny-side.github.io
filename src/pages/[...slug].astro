@@ -29,6 +29,8 @@ const initial = await prerenderPath('/' + slug);
 const title = pageTitle(initial);
 const description = pageDescription(initial);
 const canonicalPath = initial.kind === 'home' ? '/' : initial.path;
+// Markdown source for agents (src/pages/[...slug].md.ts), linked from <head> only.
+const markdownPath = initial.kind === 'md' ? initial.path.replace(/\.html$/, '.md') : null;
 
 // The article HTML (typeset math included) is large; keep it out of the
 // island's serialized props, which would ship it a second time. Astro skips
@@ -39,4 +41,4 @@ if (pageInitial.kind === 'md') {
   Object.defineProperty(pageInitial, 'html', { value: initial.kind === 'md' ? initial.html : '', enumerable: false });
 }
 ---
-<BaseLayout initial={pageInitial} {title} {description} {canonicalPath} />
+<BaseLayout initial={pageInitial} {title} {description} {canonicalPath} {markdownPath} />

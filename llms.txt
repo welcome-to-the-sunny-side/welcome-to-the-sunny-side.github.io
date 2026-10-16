@@ -1,0 +1,36 @@
+# Welcome to the Sunny Side!
+
+> Personal site and blog: algorithms (problems, theory, contests), literature, life and miscellany.
+
+Each page at https://www.welcome-to-the-sunny-side.com/<path>.html has its markdown source at https://www.welcome-to-the-sunny-side.com/<path>.md; math is TeX between $...$ / $$...$$. Prefer the markdown when reading a post.
+
+## Pages
+
+- [About](https://www.welcome-to-the-sunny-side.com/about.md)
+- [algo/about](https://www.welcome-to-the-sunny-side.com/algo/about.md)
+- [algo/contests/about](https://www.welcome-to-the-sunny-side.com/algo/contests/about.md)
+- [ARC-205](https://www.welcome-to-the-sunny-side.com/algo/contests/arc-205.md)
+- [CF-2210](https://www.welcome-to-the-sunny-side.com/algo/contests/cf-2210.md)
+- [algo/misc/good_problems](https://www.welcome-to-the-sunny-side.com/algo/misc/good_problems.md)
+- [algo/misc/square_root_supremacy](https://www.welcome-to-the-sunny-side.com/algo/misc/square_root_supremacy.md)
+- [algo/notes/about](https://www.welcome-to-the-sunny-side.com/algo/notes/about.md)
+- [algo/problems/about](https://www.welcome-to-the-sunny-side.com/algo/problems/about.md)
+- [CF-105633L](https://www.welcome-to-the-sunny-side.com/algo/problems/cf-105633l.md)
+- [CF-1967C](https://www.welcome-to-the-sunny-side.com/algo/problems/cf-1967c.md)
+- [CF-2056F1](https://www.welcome-to-the-sunny-side.com/algo/problems/cf-2056f1.md)
+- [CF-2056F2](https://www.welcome-to-the-sunny-side.com/algo/problems/cf-2056f2.md)
+- [CF-2068E](https://www.welcome-to-the-sunny-side.com/algo/problems/cf-2068e.md)
+- [CF-2113E](https://www.welcome-to-the-sunny-side.com/algo/problems/cf-2113e.md)
+- [CF-2128F](https://www.welcome-to-the-sunny-side.com/algo/problems/cf-2128f.md)
+- [CF-468D](https://www.welcome-to-the-sunny-side.com/algo/problems/cf-468d.md)
+- [algo/theory/about](https://www.welcome-to-the-sunny-side.com/algo/theory/about.md)
+- [Finding K neighbours in an implicitly defined bipartite graph](https://www.welcome-to-the-sunny-side.com/algo/theory/detect_k_neighbours_bip.md)
+- [Offline Incremental SCC](https://www.welcome-to-the-sunny-side.com/algo/theory/offline_incremental_scc.md)
+- [Suffix arrays in O(n) using SA-IS](https://www.welcome-to-the-sunny-side.com/algo/theory/sais.md)
+- [A funny way to construct suffix tree and do other things](https://www.welcome-to-the-sunny-side.com/algo/theory/suffix_tree_funny.md)
+- [games/about](https://www.welcome-to-the-sunny-side.com/games/about.md)
+- [AWF 2026](https://www.welcome-to-the-sunny-side.com/life/icpc-short.md)
+- [ICPC](https://www.welcome-to-the-sunny-side.com/life/icpc.md)
+- [lit/about](https://www.welcome-to-the-sunny-side.com/lit/about.md)
+- [lit/list](https://www.welcome-to-the-sunny-side.com/lit/list.md)
+- [misc/about](https://www.welcome-to-the-sunny-side.com/misc/about.md)

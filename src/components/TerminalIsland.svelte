@@ -455,11 +455,14 @@ onMount(async () => {
     return false; // fallback return for TypeScript
   }
 
-  // Helper to clear ghost suggestion (erase to end of line)
+  // Helper to clear ghost suggestion. The ghost sits after the end of the
+  // buffer and can wrap onto the rows below, so erase from the buffer's end
+  // to the end of the screen (`\x1b[K` alone left the wrapped part behind).
   function clearGhost() {
     if (!ghostActive) return;
     term.write('\x1b[s');        // save cursor
-    term.write('\x1b[K');        // erase to end of line
+    if (cursorPos < buffer.length) term.write(`\x1b[${buffer.length - cursorPos}C`); // to end of buffer, as in showGhost
+    term.write('\x1b[J');        // erase to end of screen
     term.write('\x1b[u');        // restore cursor
     ghostActive = false;
     ghostText = '';

@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en" class="h-full"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Suffix arrays in O(n) using SA-IS · Welcome to the Sunny Side!</title><meta name="description" content="While the usual $O(n \log{n})$ suffix array algorithm described here suffices for almost all of one's competitive-programming needs, suffix structures turn o…"><link rel="canonical" href="https://www.welcome-to-the-sunny-side.com/algo/theory/sais.html"><link rel="alternate" type="text/markdown" href="/algo/theory/sais.md"><link rel="icon" href="/favicon.ico"><script async src="https://www.googletagmanager.com/gtag/js?id=G-FDGES615HV"></script><script type="module">window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-FDGES615HV");</script><link rel="stylesheet" href="/_astro/_slug_.BorOrAJL.css"></head> <body class="h-full"> <!-- Below md the document itself scrolls (main just grows): iOS WebKit lags
          scrolling a math-heavy <main> that holds nested scroll areas (code,
-         spoilers). From md up, main is the scroll container next to the terminal. --> <div class="min-h-[100dvh] md:h-screen w-screen grid grid-cols-1 grid-rows-[auto_1fr] md:grid-cols-[1fr_auto] md:grid-rows-1"> <!-- Mobile breadcrumb nav --> <div class="md:hidden sticky top-0 z-10"> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z1AQ8aI" component-url="/_astro/MobileNav.Dpd6-uCh.js" component-export="default" renderer-url="/_astro/client.svelte.BPxPxnMb.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;MobileNav&quot;,&quot;value&quot;:true}" await-children><!--[--><nav class="md:hidden flex items-center px-3 py-2 bg-surface border-b border-accent-subtle font-mono text-sm"><div class="flex-1 flex items-center min-w-0 overflow-x-auto whitespace-nowrap"><!--[--><!--[!--><!--]--> <!--[!--><button class="crumb-link text-text-muted hover:text-accent transition-colors duration-150 svelte-xffx7i">~</button><!--]--><!--[--><span class="text-accent mx-1 select-none">/</span><!--]--> <!--[--><span class="text-text font-medium">home.html</span><!--]--><!--]--></div> <button class="flex-shrink-0 ml-3 text-text-muted hover:text-accent transition-colors duration-150 text-base leading-none" aria-label="Switch skin (current: dark)">☾</button></nav><!--]--><!--astro:end--></astro-island> </div> <!-- Content --> <main class="overflow-x-clip md:overflow-x-hidden md:overflow-y-auto bg-surface text-text transition-colors duration-150 ease-retro min-h-0"> <astro-island uid="2mUNFa" component-url="/_astro/ContentPane.zWORMBRb.js" component-export="default" renderer-url="/_astro/client.svelte.BPxPxnMb.js" props="{&quot;initial&quot;:[0,{&quot;kind&quot;:[0,&quot;md&quot;],&quot;path&quot;:[0,&quot;/algo/theory/sais.html&quot;],&quot;frontmatter&quot;:[0,{&quot;displayMode&quot;:[0,&quot;blog&quot;],&quot;title&quot;:[0,&quot;Suffix arrays in O(n) using SA-IS&quot;],&quot;date&quot;:[0,&quot;2026-10-16&quot;],&quot;tags&quot;:[1,[[0,&quot;algorithm&quot;]]]}]}]}" ssr client="load" opts="{&quot;name&quot;:&quot;ContentPane&quot;,&quot;value&quot;:true}" await-children><!--[--><!--[1--><section class="prose prose-invert mx-auto max-w-4xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro"><header class="mb-8"><h1 class="font-sans font-bold leading-tight tracking-tight mb-3 text-[2.5rem] md:text-[3rem] text-accent">Suffix arrays in O(n) using SA-IS</h1> <!--[--><p class="mt-2 text-xs text-text-muted">16/10/2026</p><!--]--> <!--[--><ul class="mt-4 flex flex-wrap gap-2 list-none pl-0"><!--[--><li class="rounded-sm border border-accent-subtle px-2 py-1 text-xs font-medium text-text-muted transition-colors duration-150 ease-retro">algorithm</li><!--]--></ul><!--]-->  <div class="prose-headings:font-sans prose-p:font-sans prose-li:font-sans prose-blockquote:font-sans prose-td:font-sans prose-th:font-sans prose-p:tracking-normal prose-li:tracking-normal prose-blockquote:tracking-normal prose-td:tracking-normal prose-th:tracking-normal"><p>Raw Markdown for this page can be found <a href="/algo/theory/sais.md">here</a>.</p></div></header> <article class="prose prose-invert prose-headings:font-sans prose-p:font-sans prose-li:font-sans prose-blockquote:font-sans prose-td:font-sans prose-th:font-sans prose-p:tracking-normal prose-li:tracking-normal prose-blockquote:tracking-normal prose-td:tracking-normal prose-th:tracking-normal max-w-none"><!----><style>
+         spoilers). From md up, main is the scroll container next to the terminal. --> <div class="min-h-[100dvh] md:h-screen w-screen grid grid-cols-1 grid-rows-[auto_1fr] md:grid-cols-[1fr_auto] md:grid-rows-1"> <!-- Mobile breadcrumb nav --> <div class="md:hidden sticky top-0 z-10"> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z1AQ8aI" component-url="/_astro/MobileNav.Dpd6-uCh.js" component-export="default" renderer-url="/_astro/client.svelte.BPxPxnMb.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;MobileNav&quot;,&quot;value&quot;:true}" await-children><!--[--><nav class="md:hidden flex items-center px-3 py-2 bg-surface border-b border-accent-subtle font-mono text-sm"><div class="flex-1 flex items-center min-w-0 overflow-x-auto whitespace-nowrap"><!--[--><!--[!--><!--]--> <!--[!--><button class="crumb-link text-text-muted hover:text-accent transition-colors duration-150 svelte-xffx7i">~</button><!--]--><!--[--><span class="text-accent mx-1 select-none">/</span><!--]--> <!--[--><span class="text-text font-medium">home.html</span><!--]--><!--]--></div> <button class="flex-shrink-0 ml-3 text-text-muted hover:text-accent transition-colors duration-150 text-base leading-none" aria-label="Switch skin (current: dark)">☾</button></nav><!--]--><!--astro:end--></astro-island> </div> <!-- Content --> <main class="overflow-x-clip md:overflow-x-hidden md:overflow-y-auto bg-surface text-text transition-colors duration-150 ease-retro min-h-0"> <astro-island uid="Z1CoY9w" component-url="/_astro/ContentPane.Cj9TXeUO.js" component-export="default" renderer-url="/_astro/client.svelte.BPxPxnMb.js" props="{&quot;initial&quot;:[0,{&quot;kind&quot;:[0,&quot;md&quot;],&quot;path&quot;:[0,&quot;/algo/theory/sais.html&quot;],&quot;frontmatter&quot;:[0,{&quot;displayMode&quot;:[0,&quot;blog&quot;],&quot;title&quot;:[0,&quot;Suffix arrays in O(n) using SA-IS&quot;],&quot;date&quot;:[0,&quot;2026-10-16&quot;],&quot;tags&quot;:[1,[[0,&quot;algorithm&quot;]]]}]}]}" ssr client="load" opts="{&quot;name&quot;:&quot;ContentPane&quot;,&quot;value&quot;:true}" await-children><!--[--><!--[1--><section class="prose prose-invert mx-auto max-w-4xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro"><header class="mb-8"><h1 class="font-sans font-bold leading-tight tracking-tight mb-3 text-[2.5rem] md:text-[3rem] text-accent">Suffix arrays in O(n) using SA-IS</h1> <!--[--><p class="mt-2 text-xs text-text-muted">16/10/2026</p><!--]--> <!--[--><ul class="mt-4 flex flex-wrap gap-2 list-none pl-0"><!--[--><li class="rounded-sm border border-accent-subtle px-2 py-1 text-xs font-medium text-text-muted transition-colors duration-150 ease-retro">algorithm</li><!--]--></ul><!--]-->  <div class="prose-headings:font-sans prose-p:font-sans prose-li:font-sans prose-blockquote:font-sans prose-td:font-sans prose-th:font-sans prose-p:tracking-normal prose-li:tracking-normal prose-blockquote:tracking-normal prose-td:tracking-normal prose-th:tracking-normal"><p>Raw Markdown for this page can be found <a href="/algo/theory/sais.md">here</a>.</p></div></header> <article class="prose prose-invert prose-headings:font-sans prose-p:font-sans prose-li:font-sans prose-blockquote:font-sans prose-td:font-sans prose-th:font-sans prose-p:tracking-normal prose-li:tracking-normal prose-blockquote:tracking-normal prose-td:tracking-normal prose-th:tracking-normal max-w-none"><!----><style>
 mjx-container[overflow="scroll"][display] {
   overflow: auto clip;
   min-width: initial !important;
@@ -1489,9 +1489,9 @@ By theorem 2.3, we cannot have <mjx-container class="MathJax" jax="CHTML" overfl
 <p>Let's first consider a really inefficient procedure to sort L-type suffixes while only making use of LMS-types (besides the L-types). This is really the sort of algorithm where it's simpler to use an unambiguous, real programming language rather than pseudocode, so you'll have to bear with C++ snippets throughout.</p>
 <details><summary class="spoiler-summary">Procedure 1</summary>
 <div class="spoiler-content">
-<pre class="hljs"><code><span class="hljs-comment">// Given n, T, Q, S, bucket boundaries (see code in theorem 2.4)</span>
+<pre class="hljs"><code><span class="hljs-comment">// Given n, T, S, bucket boundaries (see code in theorem 2.4)</span>
 <span class="hljs-type">int</span> n;
-vector&lt;<span class="hljs-type">int</span>&gt; T, Q, head, tail;
+vector&lt;<span class="hljs-type">int</span>&gt; T, head, tail;
 vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; S;          <span class="hljs-comment">//suffixes</span>
 
 <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">A</span><span class="hljs-params">(n + <span class="hljs-number">1</span>, <span class="hljs-number">-1</span>)</span></span>;
@@ -1501,12 +1501,12 @@ set&lt;pair&lt;vector&lt;<span class="hljs-type">int</span>&gt;, <span class="hl
 <span class="hljs-keyword">auto</span> extend = [&amp;](<span class="hljs-type">int</span> i) -&gt; <span class="hljs-type">void</span>
 {
     <span class="hljs-type">int</span> j = i - <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_L_type</span>(Q[j]))
+    <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_L_type</span>(j))
         q.<span class="hljs-built_in">insert</span>({S[j], j});
 };
 
 <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= n; i ++)
-    <span class="hljs-keyword">if</span>(<span class="hljs-built_in">is_LMS_type</span>(Q[i]))
+    <span class="hljs-keyword">if</span>(<span class="hljs-built_in">is_LMS_type</span>(i))
         q.<span class="hljs-built_in">insert</span>({S[i], i});
 
 <span class="hljs-keyword">while</span>(!q.<span class="hljs-built_in">empty</span>())
@@ -1515,7 +1515,7 @@ set&lt;pair&lt;vector&lt;<span class="hljs-type">int</span>&gt;, <span class="hl
     q.<span class="hljs-built_in">erase</span>(q.<span class="hljs-built_in">begin</span>());
 
     <span class="hljs-comment">//we do not place the LMS types into A</span>
-    <span class="hljs-keyword">if</span>(<span class="hljs-built_in">is_L_type</span>(Q[i]))
+    <span class="hljs-keyword">if</span>(<span class="hljs-built_in">is_L_type</span>(i))
     {
         A[head[T[i]]] = i;
         head[T[i]] ++;
@@ -1544,9 +1544,9 @@ set&lt;pair&lt;vector&lt;<span class="hljs-type">int</span>&gt;, <span class="hl
 <p>Now, we make a subtle modification to this procedure that preserves correctness, but allows us to later optimise it. Consider the following:</p>
 <details><summary class="spoiler-summary">Procedure 2</summary>
 <div class="spoiler-content">
-<pre class="hljs"><code><span class="hljs-comment">// Given n, T, Q, S, bucket boundaries (see code in theorem 2.4)</span>
+<pre class="hljs"><code><span class="hljs-comment">// Given n, T, S, bucket boundaries (see code in theorem 2.4)</span>
 <span class="hljs-type">int</span> n;
-vector&lt;<span class="hljs-type">int</span>&gt; T, Q, head, tail;
+vector&lt;<span class="hljs-type">int</span>&gt; T, head, tail;
 vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; S;          <span class="hljs-comment">//suffixes</span>
 
 <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">A</span><span class="hljs-params">(n + <span class="hljs-number">1</span>, <span class="hljs-number">-1</span>)</span></span>;       <span class="hljs-comment">//suffix array</span>
@@ -1556,7 +1556,7 @@ set&lt;pair&lt;vector&lt;<span class="hljs-type">int</span>&gt;, <span class="hl
 <span class="hljs-keyword">auto</span> extend2 = [&amp;](<span class="hljs-type">int</span> i) -&gt; <span class="hljs-type">void</span>
 {
     <span class="hljs-type">int</span> j = i - <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_L_type</span>(Q[j]))
+    <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_L_type</span>(j))
     {
         A[head[T[j]]] = j;
         head[T[j]] ++;
@@ -1565,7 +1565,7 @@ set&lt;pair&lt;vector&lt;<span class="hljs-type">int</span>&gt;, <span class="hl
 };
 
 <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= n; i ++)
-    <span class="hljs-keyword">if</span>(<span class="hljs-built_in">is_LMS_type</span>(Q[i]))
+    <span class="hljs-keyword">if</span>(<span class="hljs-built_in">is_LMS_type</span>(i))
         q.<span class="hljs-built_in">insert</span>({S[i], i});
 
 <span class="hljs-keyword">while</span>(!q.<span class="hljs-built_in">empty</span>())
@@ -1648,9 +1648,9 @@ for character c from 0 to n:
 <p>Let's finally look at the L-induce procedure, which takes <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="G" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="G"><mjx-c class="mjx-c1D43A">𝐺</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="G"><mi data-latex="G">G</mi></math></mjx-assistive-mml></mjx-container> and computes the L-regions of <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="A" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="A"><mjx-c class="mjx-c1D434">𝐴</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="A"><mi data-latex="A">A</mi></math></mjx-assistive-mml></mjx-container>. An implementation choice here is that since the S-regions of <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="A" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="A"><mjx-c class="mjx-c1D434">𝐴</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="A"><mi data-latex="A">A</mi></math></mjx-assistive-mml></mjx-container> are otherwise unused during this phase, we just put all LMS positions from the given <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="G" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="G"><mjx-c class="mjx-c1D43A">𝐺</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="G"><mi data-latex="G">G</mi></math></mjx-assistive-mml></mjx-container> at the ends of their respective S-buckets in <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="A" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="A"><mjx-c class="mjx-c1D434">𝐴</mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="A"><mi data-latex="A">A</mi></math></mjx-assistive-mml></mjx-container>, preserving their order.</p>
 <details><summary class="spoiler-summary">Procedure 3</summary>
 <div class="spoiler-content">
-<pre class="hljs"><code><span class="hljs-comment">// Given n, T, Q, and the bucket boundaries (see code in theorem 2.4)</span>
+<pre class="hljs"><code><span class="hljs-comment">// Given n, T, and the bucket boundaries (see code in theorem 2.4)</span>
 <span class="hljs-type">int</span> n;
-vector&lt;<span class="hljs-type">int</span>&gt; T, Q, head, tail;
+vector&lt;<span class="hljs-type">int</span>&gt; T, head, tail;
 
 <span class="hljs-comment">// Of course, given G too!</span>
 vector&lt;<span class="hljs-type">int</span>&gt; G;
@@ -1665,7 +1665,7 @@ vector&lt;<span class="hljs-type">int</span>&gt; G;
 <span class="hljs-keyword">auto</span> extend2 = [&amp;](<span class="hljs-type">int</span> i) -&gt; <span class="hljs-type">void</span>
 {
     <span class="hljs-type">int</span> j = i - <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_L_type</span>(Q[j]))
+    <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_L_type</span>(j))
     {
         A[head[T[j]]] = j;
         head[T[j]] ++;
@@ -1683,7 +1683,7 @@ vector&lt;<span class="hljs-type">int</span>&gt; G;
 
 <span class="hljs-comment">// clean up LMS types from A</span>
 <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= n; i ++)
-    <span class="hljs-keyword">if</span>(A[i] != <span class="hljs-number">-1</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_LMS_type</span>(Q[A[i]]))
+    <span class="hljs-keyword">if</span>(A[i] != <span class="hljs-number">-1</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_LMS_type</span>(A[i]))
         A[i] = <span class="hljs-number">-1</span>;
 </code></pre>
 </div>
@@ -1695,16 +1695,16 @@ vector&lt;<span class="hljs-type">int</span>&gt; G;
 <p>Anyway, let's look at the procedure and then talk about it:</p>
 <details><summary class="spoiler-summary">Procedure 4</summary>
 <div class="spoiler-content">
-<pre class="hljs"><code><span class="hljs-comment">// Given n, T, Q, bucket boundaries, and A with L-regions computed</span>
+<pre class="hljs"><code><span class="hljs-comment">// Given n, T, bucket boundaries, and A with L-regions computed</span>
 <span class="hljs-comment">// Note that these are freshly computed bucket boundaries, not those</span>
 <span class="hljs-comment">// modified in the L phase. </span>
 <span class="hljs-type">int</span> n;
-vector&lt;<span class="hljs-type">int</span>&gt; T, Q, head, tail, A;
+vector&lt;<span class="hljs-type">int</span>&gt; T, head, tail, A;
 
 <span class="hljs-keyword">auto</span> extend3 = [&amp;](<span class="hljs-type">int</span> i) -&gt; <span class="hljs-type">void</span>
 {
     <span class="hljs-type">int</span> j = i - <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_S_type</span>(Q[j]))
+    <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_S_type</span>(j))
     {
         tail[T[j]] --;
         A[tail[T[j]]] = j;
@@ -2088,21 +2088,21 @@ for character c from 0 to n:
 <p>This allows us to easily optimise procedure 5.5 to the following <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="O(n)" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="O"><mjx-c class="mjx-c1D442">𝑂</mjx-c></mjx-mi><mjx-mo data-latex="("><mjx-c class="mjx-c28">(</mjx-c></mjx-mo><mjx-mi data-latex="n"><mjx-c class="mjx-c1D45B">𝑛</mjx-c></mjx-mi><mjx-mo data-latex=")"><mjx-c class="mjx-c29">)</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="O(n)"><mi data-latex="O">O</mi><mo data-latex="(" stretchy="false">(</mo><mi data-latex="n">n</mi><mo data-latex=")" stretchy="false">)</mo></math></mjx-assistive-mml></mjx-container> procedure (note that we don't explicitly sort <mjx-container class="MathJax" jax="CHTML" overflow="overflow" style="font-size: 113.1%; position: relative;"><mjx-math data-latex="T[E_i, E_i]" class="NCM-N" aria-hidden="true"><mjx-mi data-latex="T"><mjx-c class="mjx-c1D447">𝑇</mjx-c></mjx-mi><mjx-mo data-latex="["><mjx-c class="mjx-c5B">[</mjx-c></mjx-mo><mjx-msub data-latex="E_i"><mjx-mi data-latex="E"><mjx-c class="mjx-c1D438">𝐸</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.028em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo data-latex=","><mjx-c class="mjx-c2C">,</mjx-c></mjx-mo><mjx-msub space="2" data-latex="E_i"><mjx-mi data-latex="E"><mjx-c class="mjx-c1D438">𝐸</mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.028em;"><mjx-mi size="s" data-latex="i"><mjx-c class="mjx-c1D456">𝑖</mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo data-latex="]"><mjx-c class="mjx-c5D">]</mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML" data-latex="T[E_i, E_i]"><mi data-latex="T">T</mi><mo data-latex="[" stretchy="false">[</mo><msub data-latex="E_i"><mi data-latex="E">E</mi><mi data-latex="i">i</mi></msub><mo data-latex=",">,</mo><msub data-latex="E_i"><mi data-latex="E">E</mi><mi data-latex="i">i</mi></msub><mo data-latex="]" stretchy="false">]</mo></math></mjx-assistive-mml></mjx-container>, instead we just place each LMS position at the tail of its respective bucket).</p>
 <details><summary class="spoiler-summary">Procedure 6</summary>
 <div class="spoiler-content">
-<pre class="hljs"><code><span class="hljs-comment">// Given n, T, Q, and the bucket boundaries (see code in theorem 2.4)</span>
+<pre class="hljs"><code><span class="hljs-comment">// Given n, T, and the bucket boundaries (see code in theorem 2.4)</span>
 <span class="hljs-type">int</span> n;
-vector&lt;<span class="hljs-type">int</span>&gt; T, Q, head, tail;
+vector&lt;<span class="hljs-type">int</span>&gt; T, head, tail;
 
 <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">C</span><span class="hljs-params">(n + <span class="hljs-number">1</span>, <span class="hljs-number">-1</span>)</span></span>;
 
 <span class="hljs-comment">// Seeding - we put LMS positions at the tails of their S-buckets </span>
 <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= n; i ++)
-    <span class="hljs-keyword">if</span>(<span class="hljs-built_in">is_LMS_type</span>(Q[i]))
+    <span class="hljs-keyword">if</span>(<span class="hljs-built_in">is_LMS_type</span>(i))
         C[--tail[T[i]]] = i;
 
 <span class="hljs-keyword">auto</span> extend2 = [&amp;](<span class="hljs-type">int</span> i) -&gt; <span class="hljs-type">void</span>
 {
     <span class="hljs-type">int</span> j = i - <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_L_type</span>(Q[j]))
+    <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_L_type</span>(j))
     {
         C[head[T[j]]] = j;
         head[T[j]] ++;
@@ -2120,7 +2120,7 @@ vector&lt;<span class="hljs-type">int</span>&gt; T, Q, head, tail;
 
 <span class="hljs-comment">// clean up LMS types from C</span>
 <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= n; i ++)
-    <span class="hljs-keyword">if</span>(C[i] != <span class="hljs-number">-1</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_LMS_type</span>(Q[C[i]]))
+    <span class="hljs-keyword">if</span>(C[i] != <span class="hljs-number">-1</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_LMS_type</span>(C[i]))
         C[i] = <span class="hljs-number">-1</span>;
 </code></pre>
 </div>
@@ -2222,9 +2222,9 @@ SA(T):
         }
     <span class="hljs-type">const</span> <span class="hljs-type">int</span> m = (<span class="hljs-type">int</span>)l.<span class="hljs-built_in">size</span>();
 
-    <span class="hljs-keyword">auto</span> is_L = [&amp;](<span class="hljs-type">int</span> i) { <span class="hljs-keyword">return</span> Q[i] == L_TYPE; };
-    <span class="hljs-keyword">auto</span> is_S = [&amp;](<span class="hljs-type">int</span> i) { <span class="hljs-keyword">return</span> Q[i] != L_TYPE; };
-    <span class="hljs-keyword">auto</span> is_LMS = [&amp;](<span class="hljs-type">int</span> i) { <span class="hljs-keyword">return</span> Q[i] == LMS_TYPE; };
+    <span class="hljs-keyword">auto</span> is_L_type = [&amp;](<span class="hljs-type">int</span> i) { <span class="hljs-keyword">return</span> Q[i] == L_TYPE; };
+    <span class="hljs-keyword">auto</span> is_S_type = [&amp;](<span class="hljs-type">int</span> i) { <span class="hljs-keyword">return</span> Q[i] != L_TYPE; };
+    <span class="hljs-keyword">auto</span> is_LMS_type = [&amp;](<span class="hljs-type">int</span> i) { <span class="hljs-keyword">return</span> Q[i] == LMS_TYPE; };
 
     <span class="hljs-comment">// ---------------------------------------------------------------</span>
     <span class="hljs-comment">// Bucket boundaries (section 2): the bucket for symbol c is [head[c], tail[c])</span>
@@ -2275,13 +2275,13 @@ SA(T):
             <span class="hljs-keyword">if</span>(A[i] == <span class="hljs-number">-1</span>)
                 <span class="hljs-keyword">continue</span>;
             <span class="hljs-type">int</span> j = A[i] - <span class="hljs-number">1</span>;
-            <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_L</span>(j))
+            <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_L_type</span>(j))
                 A[head[T[j]] ++] = j;
         }
 
         <span class="hljs-comment">// clean up: remove the seeded LMS positions, the S-induce places them again</span>
         <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; N; i ++)
-            <span class="hljs-keyword">if</span>(A[i] != <span class="hljs-number">-1</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_LMS</span>(A[i]))
+            <span class="hljs-keyword">if</span>(A[i] != <span class="hljs-number">-1</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_LMS_type</span>(A[i]))
                 A[i] = <span class="hljs-number">-1</span>;
 
         <span class="hljs-comment">// S-induce: walk right to left; if A[i] - 1 is S-type, prepend it to the</span>
@@ -2293,7 +2293,7 @@ SA(T):
             <span class="hljs-keyword">if</span>(A[i] == <span class="hljs-number">-1</span>)
                 <span class="hljs-keyword">continue</span>;
             <span class="hljs-type">int</span> j = A[i] - <span class="hljs-number">1</span>;
-            <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_S</span>(j))
+            <span class="hljs-keyword">if</span>(j &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_S_type</span>(j))
                 A[-- tail[T[j]]] = j;
         }
 
@@ -2325,8 +2325,8 @@ SA(T):
         {
             <span class="hljs-keyword">if</span>(T[i + k] != T[j + k])
                 <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
-            <span class="hljs-type">bool</span> end_i = (k &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_LMS</span>(i + k));
-            <span class="hljs-type">bool</span> end_j = (k &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_LMS</span>(j + k));
+            <span class="hljs-type">bool</span> end_i = (k &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_LMS_type</span>(i + k));
+            <span class="hljs-type">bool</span> end_j = (k &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">is_LMS_type</span>(j + k));
             <span class="hljs-keyword">if</span>(end_i <span class="hljs-keyword">or</span> end_j)
                 <span class="hljs-keyword">return</span> end_i <span class="hljs-keyword">and</span> end_j;
         }
@@ -2339,7 +2339,7 @@ SA(T):
     <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> k = <span class="hljs-number">0</span>; k &lt; N; k ++)
     {
         <span class="hljs-type">int</span> j = C[k];
-        <span class="hljs-keyword">if</span>(!<span class="hljs-built_in">is_LMS</span>(j))
+        <span class="hljs-keyword">if</span>(!<span class="hljs-built_in">is_LMS_type</span>(j))
             <span class="hljs-keyword">continue</span>;
         <span class="hljs-keyword">if</span>(last == <span class="hljs-number">-1</span> <span class="hljs-keyword">or</span> !<span class="hljs-built_in">equal</span>(last, j))
             label ++;

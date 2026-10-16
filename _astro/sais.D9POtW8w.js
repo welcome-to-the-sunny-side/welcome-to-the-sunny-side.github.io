@@ -227,9 +227,9 @@ Let's first consider a really inefficient procedure to sort L-type suffixes whil
 <div class = "spoiler-content">
 
 \`\`\`cpp
-// Given n, T, Q, S, bucket boundaries (see code in theorem 2.4)
+// Given n, T, S, bucket boundaries (see code in theorem 2.4)
 int n;
-vector<int> T, Q, head, tail;
+vector<int> T, head, tail;
 vector<vector<int>> S;          //suffixes
 
 vector<int> A(n + 1, -1);
@@ -239,12 +239,12 @@ set<pair<vector<int>, int>> q;
 auto extend = [&](int i) -> void
 {
     int j = i - 1;
-    if(j >= 0 and is_L_type(Q[j]))
+    if(j >= 0 and is_L_type(j))
         q.insert({S[j], j});
 };
 
 for(int i = 0; i <= n; i ++)
-    if(is_LMS_type(Q[i]))
+    if(is_LMS_type(i))
         q.insert({S[i], i});
 
 while(!q.empty())
@@ -253,7 +253,7 @@ while(!q.empty())
     q.erase(q.begin());
 
     //we do not place the LMS types into A
-    if(is_L_type(Q[i]))
+    if(is_L_type(i))
     {
         A[head[T[i]]] = i;
         head[T[i]] ++;
@@ -288,9 +288,9 @@ Now, we make a subtle modification to this procedure that preserves correctness,
 <div class = "spoiler-content">
 
 \`\`\`cpp
-// Given n, T, Q, S, bucket boundaries (see code in theorem 2.4)
+// Given n, T, S, bucket boundaries (see code in theorem 2.4)
 int n;
-vector<int> T, Q, head, tail;
+vector<int> T, head, tail;
 vector<vector<int>> S;          //suffixes
 
 vector<int> A(n + 1, -1);       //suffix array
@@ -300,7 +300,7 @@ set<pair<vector<int>, int>> q;
 auto extend2 = [&](int i) -> void
 {
     int j = i - 1;
-    if(j >= 0 and is_L_type(Q[j]))
+    if(j >= 0 and is_L_type(j))
     {
         A[head[T[j]]] = j;
         head[T[j]] ++;
@@ -309,7 +309,7 @@ auto extend2 = [&](int i) -> void
 };
 
 for(int i = 0; i <= n; i ++)
-    if(is_LMS_type(Q[i]))
+    if(is_LMS_type(i))
         q.insert({S[i], i});
 
 while(!q.empty())
@@ -421,9 +421,9 @@ Let's finally look at the L-induce procedure, which takes $G$ and computes the L
 <div class = "spoiler-content">
 
 \`\`\`cpp
-// Given n, T, Q, and the bucket boundaries (see code in theorem 2.4)
+// Given n, T, and the bucket boundaries (see code in theorem 2.4)
 int n;
-vector<int> T, Q, head, tail;
+vector<int> T, head, tail;
 
 // Of course, given G too!
 vector<int> G;
@@ -438,7 +438,7 @@ for(auto i : G)
 auto extend2 = [&](int i) -> void
 {
     int j = i - 1;
-    if(j >= 0 and is_L_type(Q[j]))
+    if(j >= 0 and is_L_type(j))
     {
         A[head[T[j]]] = j;
         head[T[j]] ++;
@@ -456,7 +456,7 @@ l_induce();
 
 // clean up LMS types from A
 for(int i = 0; i <= n; i ++)
-    if(A[i] != -1 and is_LMS_type(Q[A[i]]))
+    if(A[i] != -1 and is_LMS_type(A[i]))
         A[i] = -1;
 \`\`\`
 
@@ -477,16 +477,16 @@ Anyway, let's look at the procedure and then talk about it:
 <div class = "spoiler-content">
 
 \`\`\`cpp
-// Given n, T, Q, bucket boundaries, and A with L-regions computed
+// Given n, T, bucket boundaries, and A with L-regions computed
 // Note that these are freshly computed bucket boundaries, not those
 // modified in the L phase. 
 int n;
-vector<int> T, Q, head, tail, A;
+vector<int> T, head, tail, A;
 
 auto extend3 = [&](int i) -> void
 {
     int j = i - 1;
-    if(j >= 0 and is_S_type(Q[j]))
+    if(j >= 0 and is_S_type(j))
     {
         tail[T[j]] --;
         A[tail[T[j]]] = j;
@@ -789,21 +789,21 @@ This allows us to easily optimise procedure 5.5 to the following $O(n)$ procedur
 <div class = "spoiler-content">
 
 \`\`\`cpp
-// Given n, T, Q, and the bucket boundaries (see code in theorem 2.4)
+// Given n, T, and the bucket boundaries (see code in theorem 2.4)
 int n;
-vector<int> T, Q, head, tail;
+vector<int> T, head, tail;
 
 vector<int> C(n + 1, -1);
 
 // Seeding - we put LMS positions at the tails of their S-buckets 
 for(int i = 0; i <= n; i ++)
-    if(is_LMS_type(Q[i]))
+    if(is_LMS_type(i))
         C[--tail[T[i]]] = i;
 
 auto extend2 = [&](int i) -> void
 {
     int j = i - 1;
-    if(j >= 0 and is_L_type(Q[j]))
+    if(j >= 0 and is_L_type(j))
     {
         C[head[T[j]]] = j;
         head[T[j]] ++;
@@ -821,7 +821,7 @@ l_induce();
 
 // clean up LMS types from C
 for(int i = 0; i <= n; i ++)
-    if(C[i] != -1 and is_LMS_type(Q[C[i]]))
+    if(C[i] != -1 and is_LMS_type(C[i]))
         C[i] = -1;
 \`\`\`
 
@@ -936,9 +936,9 @@ vector<int> SA(const vector<int> &T)
         }
     const int m = (int)l.size();
 
-    auto is_L = [&](int i) { return Q[i] == L_TYPE; };
-    auto is_S = [&](int i) { return Q[i] != L_TYPE; };
-    auto is_LMS = [&](int i) { return Q[i] == LMS_TYPE; };
+    auto is_L_type = [&](int i) { return Q[i] == L_TYPE; };
+    auto is_S_type = [&](int i) { return Q[i] != L_TYPE; };
+    auto is_LMS_type = [&](int i) { return Q[i] == LMS_TYPE; };
 
     // ---------------------------------------------------------------
     // Bucket boundaries (section 2): the bucket for symbol c is [head[c], tail[c])
@@ -989,13 +989,13 @@ vector<int> SA(const vector<int> &T)
             if(A[i] == -1)
                 continue;
             int j = A[i] - 1;
-            if(j >= 0 and is_L(j))
+            if(j >= 0 and is_L_type(j))
                 A[head[T[j]] ++] = j;
         }
 
         // clean up: remove the seeded LMS positions, the S-induce places them again
         for(int i = 0; i < N; i ++)
-            if(A[i] != -1 and is_LMS(A[i]))
+            if(A[i] != -1 and is_LMS_type(A[i]))
                 A[i] = -1;
 
         // S-induce: walk right to left; if A[i] - 1 is S-type, prepend it to the
@@ -1007,7 +1007,7 @@ vector<int> SA(const vector<int> &T)
             if(A[i] == -1)
                 continue;
             int j = A[i] - 1;
-            if(j >= 0 and is_S(j))
+            if(j >= 0 and is_S_type(j))
                 A[-- tail[T[j]]] = j;
         }
 
@@ -1039,8 +1039,8 @@ vector<int> SA(const vector<int> &T)
         {
             if(T[i + k] != T[j + k])
                 return false;
-            bool end_i = (k > 0 and is_LMS(i + k));
-            bool end_j = (k > 0 and is_LMS(j + k));
+            bool end_i = (k > 0 and is_LMS_type(i + k));
+            bool end_j = (k > 0 and is_LMS_type(j + k));
             if(end_i or end_j)
                 return end_i and end_j;
         }
@@ -1053,7 +1053,7 @@ vector<int> SA(const vector<int> &T)
     for(int k = 0; k < N; k ++)
     {
         int j = C[k];
-        if(!is_LMS(j))
+        if(!is_LMS_type(j))
             continue;
         if(last == -1 or !equal(last, j))
             label ++;

@@ -705,12 +705,12 @@ Therefore, the two must have the same form and the proof of theorem 2.4 applies.
 
 Consequently, $C$ can be divided into buckets just like $A$. That is, it takes the following form:
 
-- First, we have L-type suffixes that start with symbol $0$.
-- Then, we have S-type suffixes that start with symbol $0$.
-- Then, L-type suffixes that start with symbol $1$.
-- Then, S-type suffixes that start with symbol $1$.
-- Then, L-type suffixes that start with symbol $2$.
-- Then, S-type suffixes that start with symbol $2$.
+- First, we have L-type LMS-substrings that start with symbol $0$.
+- Then, we have S-type LMS-substrings that start with symbol $0$.
+- Then, L-type LMS-substrings that start with symbol $1$.
+- Then, S-type LMS-substrings that start with symbol $1$.
+- Then, L-type LMS-substrings that start with symbol $2$.
+- Then, S-type LMS-substrings that start with symbol $2$.
 - ...and so on
 
 Now, let's try to adapt our old procedure 2 to produce $C$:

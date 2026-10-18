@@ -268,7 +268,7 @@ while(!q.empty())
 
 This inefficient procedure essentially does the following:
 1. It first inserts all the LMS-suffixes into a heap (that uses the standard lexicographical comparator).
-2. Then, it repeatedly picks the smallest suffix from the heap and:
+2. Then, it repeatedly picks and deletes the smallest suffix from the heap and:
     1. If the suffix corresponds to an L-type position $i$, it places $i$ at the first free position in the L-bucket corresponding to $T_i$ in $A$.
     2. Then, if position $i - 1$ is L-type, it inserts $S_{i - 1}$ into the heap (i.e. it extends the removed suffix by one character on the left, or equivalently in the slope-view - moves one step up to the left).
 
@@ -842,7 +842,7 @@ The justification of its correctness is basically identical to that of procedure
 
 Now that we have filled the L-regions of $C$, we turn our attention back to the S-regions. A (perhaps) surprising fact - we don't need to change anything at all about procedure 4. Running the S-induce on $C$ now will correctly compute the S-regions!!
 
-Once again, the proof is very similar to what we've done before (one change to note is that the position of an L-type $i$ within the suffix array previously encoded information about $S_i$, but now encodes information about $P_i$), and is left as an exercise to the reader.
+Once again, the proof is very similar to what we've done before (the changes relative to the previous S-induce are just that $i$ now represents $P_i$ instead of $S_i$ and strings can therefore be equal), and is left as an exercise to the reader.
 
 And... we end up with $C$, correctly and efficiently computed.
 

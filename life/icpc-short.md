@@ -5,6 +5,7 @@ date: 2026-03-18
 tags: ["sport programming"]
 ---
 
+This is a shorter version of [this blog](https://www.welcome-to-the-sunny-side.com/life/icpc.html).
 
 ### The Contest
 

@@ -204,7 +204,7 @@ the matching image is downloaded.
    title: My Post
    date: 2025-06-14
    tags: [algorithm]
-   displayMode: blog        # blog header (title, date, tags) and blog styling
+   displayMode: blog        # blog header (title, date, tags, (.md) link), contents tree, blog styling
    ---
    ```
 

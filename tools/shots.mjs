@@ -37,7 +37,7 @@ async function walkHtml(dir, base = dir) {
   for (const ent of await readdir(dir, { withFileTypes: true })) {
     const p = path.join(dir, ent.name);
     if (ent.isDirectory()) {
-      if (ent.name === 'prerendered' || ent.name === 'assets' || ent.name === 'musings') continue;
+      if (ent.name === 'assets' || ent.name === 'musings') continue;
       out.push(...(await walkHtml(p, base)));
     } else if (ent.name.endsWith('.html') && ent.name !== '404.html') {
       out.push('/' + path.relative(base, p).split(path.sep).join('/'));

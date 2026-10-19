@@ -115,12 +115,12 @@ main::-webkit-scrollbar-thumb:hover, html::-webkit-scrollbar-thumb:hover {
   font-family: var(--font-mono);
 }
 
-/* Comments in pseudocode fences (see src/lib/markdown.ts) */
+/* Comments in pseudocode fences (see src/lib/markdown.js) */
 .hljs .pseudo-comment {
   color: #7ee787;
 }
 
-/* Inline SVG figures (src/lib/figures.ts): scale to the column like an <img>;
+/* Inline SVG figures (src/build/figures.js): scale to the column like an <img>;
    colours and fonts come from the skin's fig-* variables */
 .svg-figure svg {
   display: block;

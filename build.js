@@ -34,6 +34,9 @@ rmSync(OUT, { recursive: true, force: true });
 cpSync('public', OUT, { recursive: true });
 
 const { files, dirs, tree, dates } = scanContent();
+for (const f of files) {
+  if (f.path.endsWith('/index.html')) throw new Error(`${f.src}: index pages are generated for every directory; rename this file`);
+}
 const assets = { css: await buildCss(), js: await buildJs() };
 
 const write = (urlPath, content) => {

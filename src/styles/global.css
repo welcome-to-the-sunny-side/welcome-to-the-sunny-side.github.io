@@ -88,6 +88,19 @@ main::-webkit-scrollbar-thumb:hover, html::-webkit-scrollbar-thumb:hover {
   transform: translateY(-1px);
 }
 
+/* The blog header's "(.md)" link to the page's markdown source: an
+   afterthought, coloured like the date until hovered. */
+.prose a.md-source {
+  color: theme('colors.text-muted');
+  text-decoration: none;
+  opacity: 1;
+  transition: color 0.15s;
+}
+
+.prose a.md-source:hover {
+  color: theme('colors.accent');
+}
+
 /* Override Tailwind Typography blockquote color/opacity */
 .prose blockquote,
 .prose-invert blockquote {

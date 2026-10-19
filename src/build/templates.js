@@ -128,10 +128,12 @@ export function plainBody(html) {
 }
 
 export function blogBody(fm, html, markdownHref, headings = []) {
-  const date = fm.date
-    // Shown in the reader's locale; src/client/site.js rewrites it from data-date.
-    ? `<p class="mt-2 text-xs text-text-muted" data-date="${esc(fm.date)}">${esc(new Date(fm.date).toLocaleDateString('en-US'))}</p>`
-    : '';
+  // The line under the title: the date (shown in the reader's locale;
+  // src/client/site.js rewrites it from data-date) and, at the right, a link
+  // to the page's markdown source.
+  const meta = `<p class="mt-2 flex justify-between text-xs text-text-muted">` +
+    `<span${fm.date ? ` data-date="${esc(fm.date)}"` : ''}>${fm.date ? esc(new Date(fm.date).toLocaleDateString('en-US')) : ''}</span>` +
+    `<a href="${esc(markdownHref)}" class="md-source" title="This page's markdown source">(.md)</a></p>`;
   const tags = fm.tags?.length
     ? `<ul class="mt-4 flex flex-wrap gap-2 list-none pl-0">` +
       fm.tags.map((t) => `<li class="rounded-sm border border-accent-subtle px-2 py-1 text-xs font-medium text-text-muted transition-colors duration-150 ease-retro">${esc(t)}</li>`).join('') +
@@ -141,8 +143,7 @@ export function blogBody(fm, html, markdownHref, headings = []) {
     `<section class="${PROSE} mx-auto max-w-4xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro">` +
     `<header class="mb-8">` +
     `<h1 class="font-bold leading-tight tracking-tight mb-3 text-[2.5rem] md:text-[3rem] text-[color:var(--title)] dark:font-sans dark:text-accent">${esc(fm.title ?? 'Untitled')}</h1>` +
-    date + tags +
-    `<div class="${PROSE_BODY}"><p>Raw Markdown for this page can be found <a href="${esc(markdownHref)}">here</a>.</p></div>` +
+    meta + tags +
     `</header>` +
     `<article class="${PROSE} ${PROSE_BODY} max-w-none">${html}</article>` +
     `</section>`;

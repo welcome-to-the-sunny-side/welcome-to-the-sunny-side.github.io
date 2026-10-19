@@ -8,6 +8,7 @@
 import http from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -61,7 +62,7 @@ export function serve(dir = 'dist', port = 4321) {
   return new Promise((resolve) => server.listen(port, () => resolve(server)));
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const port = Number(process.argv[2] ?? 4321);
   await serve(process.argv[3] ?? 'dist', port);
   console.log(`Serving ${process.argv[3] ?? 'dist'}/ at http://localhost:${port}`);

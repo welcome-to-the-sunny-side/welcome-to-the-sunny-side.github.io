@@ -8,7 +8,7 @@
 }
 
 @media (min-width: 1700px) {
-  [data-term-collapsed] .toc {
+  .toc {
     display: block;
     position: fixed;
     top: 1.5rem;
@@ -20,8 +20,21 @@
     overflow-y: auto;
     scrollbar-width: none;
     font-family: var(--font-mono);
-    font-size: 0.62rem;
+    font-size: 0.7rem;
     line-height: 1.5;
+    /* Hidden while the terminal is open: the post is centred in a narrower
+       pane then, so the margin isn't there. */
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  /* Fade in only once the pane has finished collapsing (0.3s in
+     terminal.css), so the tree never overlaps the post while it re-centres.
+     Hiding (above) has no transition: the post moves back as soon as the pane reopens. */
+  [data-term-collapsed] .toc {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.2s ease 0.3s, visibility 0s 0.3s;
   }
 }
 

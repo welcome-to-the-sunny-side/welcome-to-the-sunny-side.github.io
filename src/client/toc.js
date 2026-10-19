@@ -7,7 +7,8 @@ export function startToc() {
   const update = () => {
     queued = false;
     const toc = main.querySelector('.toc');
-    if (!toc?.getClientRects().length) return; // no tree, or hidden (terminal open / narrow window)
+    // no tree, or hidden (terminal open / narrow window)
+    if (!toc || getComputedStyle(toc).display === 'none' || !document.documentElement.hasAttribute('data-term-collapsed')) return;
     // The current section: the last heading above a line a quarter down the
     // pane, or the last heading once scrolled to the bottom.
     const line = main.getBoundingClientRect().top + main.clientHeight / 4;

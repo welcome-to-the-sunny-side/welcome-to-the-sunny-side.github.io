@@ -272,7 +272,9 @@ Blog posts carry a contents tree of their headings (`contentsTree` in
 `templates.js`, two or more headings). It is shown in the left margin only on
 desktop with the terminal collapsed and a window at least 1700px wide, which
 is where it fits beside the centred post without moving it (`toc.css`);
-otherwise it is `display: none`, so the page is unchanged.
+otherwise it is hidden, so the page is unchanged. When the terminal collapses
+the tree fades in only after the pane's 0.3s width transition, once the post
+has re-centred; when it reopens the tree vanishes at once.
 
 - **Tree shape is relative.** A heading's parent is the nearest earlier
   heading of a strictly higher level; headings with none are roots. So

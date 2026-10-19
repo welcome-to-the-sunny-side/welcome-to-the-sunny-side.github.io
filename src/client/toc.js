@@ -16,7 +16,10 @@ export function startToc() {
     let current = null;
     for (const a of toc.querySelectorAll('a')) {
       const h = document.getElementById(a.hash.slice(1));
-      if (!h?.offsetParent) continue;
+      // Skip headings inside a closed spoiler: that section can't be the one
+      // being read. (offsetParent isn't enough: Chrome lays out closed
+      // <details> content with content-visibility, so it still has one.)
+      if (!h?.offsetParent || h.closest('details:not([open])')) continue;
       if (atEnd || h.getBoundingClientRect().top <= line) current = a.parentElement;
       else break;
     }
@@ -34,15 +37,21 @@ export function startToc() {
   main.addEventListener('scroll', schedule, { passive: true });
   addEventListener('resize', schedule);
   addEventListener('site:load', schedule);
+  // Opening or closing a spoiler moves everything below it.
+  main.addEventListener('toggle', schedule, true);
   // The tree appears when the terminal collapses.
   new MutationObserver(schedule).observe(document.documentElement, { attributeFilter: ['data-term-collapsed'] });
   schedule();
 
-  // Entries scroll to their heading without touching the URL.
+  // Entries scroll to their heading without touching the URL, first opening
+  // any spoilers the heading is inside.
   main.addEventListener('click', (e) => {
     const a = e.target.closest('.toc a');
     if (!a) return;
     e.preventDefault();
-    document.getElementById(a.hash.slice(1))?.scrollIntoView({ behavior: 'smooth' });
+    const h = document.getElementById(a.hash.slice(1));
+    if (!h) return;
+    for (let d = h.closest('details:not([open])'); d; d = d.parentElement.closest('details:not([open])')) d.open = true;
+    h.scrollIntoView({ behavior: 'smooth' });
   });
 }

@@ -120,7 +120,10 @@ SA-IS post, while Android/Blink was fine. Any one of these fixed it in
 on-device tests: document scroll, removing the nested scrollers, removing the
 math, or `content-visibility: auto`. The hidden assistive MathML was not the
 cause. The scrollbar styles in `global.css` target both `main` and `html` for
-this reason.
+this reason. `scrollbar-color` is inherited, so the terminal's viewport sets
+its own (from the terminal theme, `terminal.css`); otherwise it would wear the
+content skin's. Where `scrollbar-color` is supported (Chrome 121+, Firefox) it
+overrides the `::-webkit-scrollbar` rules, which only matter for Safari.
 
 ### Client-side navigation (`src/client/router.js`)
 

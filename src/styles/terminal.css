@@ -97,6 +97,16 @@
   height: 100%;
 }
 
+/* The terminal's scrollbar follows the terminal theme, not the content skin.
+   Set explicitly because scrollbar-color is inherited: without this the
+   viewport would take the skin's from <html> (global.css). Browsers that
+   support scrollbar-color ignore the ::-webkit-scrollbar rules below; those
+   are for the rest (Safari). */
+.terminal-shell .xterm-viewport {
+  scrollbar-width: thin;
+  scrollbar-color: var(--tp-scrollbar-thumb) var(--tp-scrollbar-track);
+}
+
 .terminal-shell .xterm-viewport::-webkit-scrollbar {
   width: 8px;
 }

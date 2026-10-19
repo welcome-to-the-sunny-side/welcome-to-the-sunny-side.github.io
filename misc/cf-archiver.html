@@ -1,3 +1,587 @@
-<!DOCTYPE html><html lang="en" class="h-full"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>cf-archiver · Welcome to the Sunny Side!</title><link rel="canonical" href="https://www.welcome-to-the-sunny-side.com/misc/cf-archiver.html"><link rel="icon" href="/favicon.ico"><script async src="https://www.googletagmanager.com/gtag/js?id=G-FDGES615HV"></script><script type="module">window.dataLayer=window.dataLayer||[];function a(){dataLayer.push(arguments)}a("js",new Date);a("config","G-FDGES615HV");</script><link rel="stylesheet" href="/_astro/_slug_.BorOrAJL.css"></head> <body class="h-full"> <!-- Below md the document itself scrolls (main just grows): iOS WebKit lags
-         scrolling a math-heavy <main> that holds nested scroll areas (code,
-         spoilers). From md up, main is the scroll container next to the terminal. --> <div class="min-h-[100dvh] md:h-screen w-screen grid grid-cols-1 grid-rows-[auto_1fr] md:grid-cols-[1fr_auto] md:grid-rows-1"> <!-- Mobile breadcrumb nav --> <div class="md:hidden sticky top-0 z-10"> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z1AQ8aI" component-url="/_astro/MobileNav.Dpd6-uCh.js" component-export="default" renderer-url="/_astro/client.svelte.BPxPxnMb.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;MobileNav&quot;,&quot;value&quot;:true}" await-children><!--[--><nav class="md:hidden flex items-center px-3 py-2 bg-surface border-b border-accent-subtle font-mono text-sm"><div class="flex-1 flex items-center min-w-0 overflow-x-auto whitespace-nowrap"><!--[--><!--[!--><!--]--> <!--[!--><button class="crumb-link text-text-muted hover:text-accent transition-colors duration-150 svelte-xffx7i">~</button><!--]--><!--[--><span class="text-accent mx-1 select-none">/</span><!--]--> <!--[--><span class="text-text font-medium">home.html</span><!--]--><!--]--></div> <button class="flex-shrink-0 ml-3 text-text-muted hover:text-accent transition-colors duration-150 text-base leading-none" aria-label="Switch skin (current: dark)">☾</button></nav><!--]--><!--astro:end--></astro-island> </div> <!-- Content --> <main class="overflow-x-clip md:overflow-x-hidden md:overflow-y-auto bg-surface text-text transition-colors duration-150 ease-retro min-h-0"> <astro-island uid="ZH7SPO" component-url="/_astro/ContentPane.-NXNr_Ql.js" component-export="default" renderer-url="/_astro/client.svelte.BPxPxnMb.js" props="{&quot;initial&quot;:[0,{&quot;kind&quot;:[0,&quot;client&quot;],&quot;path&quot;:[0,&quot;/misc/cf-archiver.html&quot;]}]}" ssr client="load" opts="{&quot;name&quot;:&quot;ContentPane&quot;,&quot;value&quot;:true}" await-children><!--[--><!--[!--><!--[!--><div id="content-html-container" class="prose prose-invert p-4 max-w-none bg-surface text-text transition-colors duration-150 ease-retro"><!----><!----></div><!--]--><!--]--><!--]--><!--astro:end--></astro-island> </main> <!-- Terminal (desktop only) --> <aside class="hidden md:block"> <astro-island uid="Z2ejFBI" component-url="/_astro/TerminalPane.D84Pc5s_.js" component-export="default" renderer-url="/_astro/client.svelte.BPxPxnMb.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;TerminalPane&quot;,&quot;value&quot;:true}" await-children><!--[--><div class="h-full flex flex-col desktop-wrapper svelte-1mq48mh" style="--tw-bg: #0a0a0a; --tw-bg-end: #0d0d0d; --tw-border: rgba(100, 255, 218, 0.15); --tw-border-focus: rgba(100, 255, 218, 0.4); --tw-glow: rgba(100, 255, 218, 0.1); --tw-glow-strong: rgba(100, 255, 218, 0.3); --tw-accent: #64ffda; --tw-accent-muted: rgba(100, 255, 218, 0.6); --tw-shadow: rgba(0, 0, 0, 0.3);"><button class="desktop-toggle flex svelte-1mq48mh" aria-label="Collapse terminal">▶</button> <!--[!--><!--]--> <div class="flex-1 overflow-hidden"><div class="terminal-content svelte-1mq48mh"><div class="terminal-shell-outer h-full w-full svelte-scxdjl"><div class="terminal-shell svelte-scxdjl"></div></div><!----></div></div></div><!--]--><!--astro:end--></astro-island> </aside> </div> </body></html>
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-bg text-text font-serif dark:font-mono" data-skin="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cf-archiver · Welcome to the Sunny Side!</title>
+<link rel="canonical" href="https://www.welcome-to-the-sunny-side.com/misc/cf-archiver.html">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="/site.css?v=c77f57fbb1">
+<script>(()=>{const d=document.documentElement;try{const s=localStorage.getItem('wtss-skin');if(s==='dark'||s==='sunny')d.dataset.skin=s;const t=localStorage.getItem('wtss-terminal-theme');if(t)d.dataset.tskin=t;if(sessionStorage.getItem('terminalCollapsed')==='true')d.dataset.termCollapsed=''}catch{}})()</script>
+<script type="module" src="/js/site.js?v=1724dcb2f7"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FDGES615HV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-FDGES615HV');</script>
+</head>
+<body class="h-full bg-bg text-text font-serif dark:font-mono">
+<div class="min-h-[100dvh] md:h-screen w-screen grid grid-cols-1 grid-rows-[auto_1fr] md:grid-cols-[1fr_auto] md:grid-rows-1">
+<div class="md:hidden sticky top-0 z-10"><nav class="md:hidden flex items-center px-3 py-2 bg-surface border-b border-accent-subtle font-mono text-sm"><div class="flex-1 flex items-center min-w-0 overflow-x-auto whitespace-nowrap"><button class="crumb-link text-text-muted hover:text-accent transition-colors duration-150" data-href="/index.html">~</button><span class="text-accent mx-1 select-none">/</span><button class="crumb-link text-text-muted hover:text-accent transition-colors duration-150" data-href="/misc/index.html">misc</button><span class="text-accent mx-1 select-none">/</span><span class="text-text font-medium">cf-archiver.html</span></div><button class="skin-toggle flex-shrink-0 ml-3 text-text-muted hover:text-accent transition-colors duration-150 text-base leading-none" aria-label="Switch skin"><span class="dark:hidden">☀</span><span class="hidden dark:inline">☾</span></button></nav></div>
+<main class="overflow-x-clip md:overflow-x-hidden md:overflow-y-auto bg-surface text-text transition-colors duration-150 ease-retro min-h-0">
+<div id="content-html-container" class="prose dark:prose-invert p-4 max-w-none bg-surface text-text transition-colors duration-150 ease-retro">
+
+
+  <meta charset="utf-8" />
+  <title>CF Archiver</title>
+  <meta name="wtss:date" content="2025-01-16" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+
+
+  <!-- Input Panel -->
+  <section id="input-panel" class="w-full max-w-2xl mx-auto flex flex-col justify-center space-y-4 py-8">
+    <!-- Mode Selector -->
+    <div class="w-full flex gap-2 p-1 bg-bg border border-text-muted/30 rounded">
+      <button id="mode-csv" class="flex-1 px-4 py-2 text-sm rounded bg-accent/10 border border-accent/30 text-accent font-mono transition">
+        csv export
+      </button>
+      <button id="mode-code" class="flex-1 px-4 py-2 text-sm rounded bg-transparent text-text-muted font-mono hover:text-text transition">
+        code fetch
+      </button>
+    </div>
+
+    <!-- CSV Mode Form -->
+    <div id="csv-form" class="w-full space-y-3">
+      <textarea
+        id="usernames-input"
+        rows="4"
+        placeholder="usernames (comma or newline separated)"
+        class="w-full px-3 py-2 bg-bg border border-text-muted/20 rounded text-sm text-text focus:outline-none focus:border-accent/40 resize-none font-mono"
+      ></textarea>
+
+      <div class="flex gap-2">
+        <button id="btn-csv-fetch" class="px-4 py-2 text-sm rounded bg-accent/10 border border-accent/30 text-accent hover:bg-accent/20 transition font-mono">
+          export
+        </button>
+        <button id="btn-csv-clear" class="px-4 py-2 text-sm rounded bg-bg border border-text-muted/20 text-text-muted hover:text-text hover:border-text-muted/40 transition font-mono">
+          clear
+        </button>
+      </div>
+
+      <div id="csv-cache-indicator" class="text-xs text-text-muted font-mono"></div>
+    </div>
+
+    <!-- Code Mode Form -->
+    <div id="code-form" class="hidden w-full space-y-3">
+      <input
+        id="code-username"
+        type="text"
+        placeholder="username"
+        class="w-full px-3 py-2 bg-bg border border-text-muted/20 rounded text-sm text-text focus:outline-none focus:border-accent/40 font-mono"
+      />
+      <input
+        id="code-apikey"
+        type="text"
+        placeholder="api key"
+        class="w-full px-3 py-2 bg-bg border border-text-muted/20 rounded text-sm text-text focus:outline-none focus:border-accent/40 font-mono"
+      />
+      <input
+        id="code-apisecret"
+        type="password"
+        placeholder="api secret"
+        class="w-full px-3 py-2 bg-bg border border-text-muted/20 rounded text-sm text-text focus:outline-none focus:border-accent/40 font-mono"
+      />
+
+      <div class="text-xs text-text-muted font-mono">
+        <a href="https://codeforces.com/settings/api" target="_blank" class="text-accent/70 hover:text-accent underline">generate api key</a>
+        · credentials used locally only
+      </div>
+
+      <div class="flex gap-2">
+        <button id="btn-code-fetch" class="px-4 py-2 text-sm rounded bg-accent/10 border border-accent/30 text-accent hover:bg-accent/20 transition font-mono">
+          fetch code
+        </button>
+        <button id="btn-code-clear" class="px-4 py-2 text-sm rounded bg-bg border border-text-muted/20 text-text-muted hover:text-text hover:border-text-muted/40 transition font-mono">
+          clear
+        </button>
+      </div>
+
+      <div id="code-cache-indicator" class="text-xs text-text-muted font-mono"></div>
+    </div>
+  </section>
+
+  <!-- Progress Panel -->
+  <section id="progress-panel" class="hidden w-full max-w-2xl mx-auto py-8 space-y-4">
+    <div class="space-y-2">
+      <div class="w-full bg-bg border border-text-muted/20 rounded h-2 overflow-hidden">
+        <div id="progress-bar" class="h-full bg-accent transition-all duration-300" style="width: 0%"></div>
+      </div>
+
+      <div id="progress-text" class="text-xs text-text-muted font-mono"></div>
+
+      <div id="error-log" class="mt-3 space-y-1 text-xs text-text-muted max-h-32 overflow-y-auto font-mono"></div>
+    </div>
+  </section>
+
+  <!-- Results Panel -->
+  <section id="results-panel" class="hidden w-full max-w-2xl mx-auto py-8 space-y-4">
+    <div id="results-stats" class="grid grid-cols-3 gap-3 text-center font-mono text-sm">
+      <div class="p-3 bg-bg border border-text-muted/20 rounded">
+        <div id="stat-users" class="text-lg text-accent">0</div>
+        <div class="text-xs text-text-muted mt-1">users</div>
+      </div>
+      <div class="p-3 bg-bg border border-text-muted/20 rounded">
+        <div id="stat-problems" class="text-lg text-accent">0</div>
+        <div class="text-xs text-text-muted mt-1">problems</div>
+      </div>
+      <div class="p-3 bg-bg border border-text-muted/20 rounded">
+        <div id="stat-submissions" class="text-lg text-accent">0</div>
+        <div class="text-xs text-text-muted mt-1">submissions</div>
+      </div>
+    </div>
+
+    <div class="flex gap-2">
+      <button id="btn-download" class="px-4 py-2 text-sm rounded bg-accent/10 border border-accent/30 text-accent hover:bg-accent/20 transition font-mono">
+        download
+      </button>
+      <button id="btn-restart" class="px-4 py-2 text-sm rounded bg-bg border border-text-muted/20 text-text-muted hover:text-text hover:border-text-muted/40 transition font-mono">
+        restart
+      </button>
+    </div>
+  </section>
+
+<script>
+(function () {
+  const CSV_STORAGE_KEY = 'cf-archiver-users';
+  const CODE_STORAGE_KEY = 'cf-archiver-code-username';
+  const API_DELAY = 4000; // 4 seconds between requests
+  const MAX_RETRIES = 2;
+
+  // Language to extension mapping
+  const LANG_TO_EXT = {
+    'GNU C++': '.cpp', 'GNU C++11': '.cpp', 'GNU C++14': '.cpp', 'GNU C++17': '.cpp',
+    'GNU C++20': '.cpp', 'GNU C++23': '.cpp',
+    'Clang++17 Diagnostics': '.cpp', 'Clang++20 Diagnostics': '.cpp',
+    'MS C++': '.cpp', 'MS C++ 2017': '.cpp',
+    'Python 2': '.py', 'Python 3': '.py', 'PyPy 2': '.py', 'PyPy 3': '.py',
+    'PyPy 3-64': '.py',
+    'Java 8': '.java', 'Java 11': '.java', 'Java 17': '.java', 'Java 21': '.java',
+    'C# 8': '.cs', 'C# 10': '.cs', 'C# Mono 6': '.cs',
+    'Kotlin 1.4': '.kt', 'Kotlin 1.5': '.kt', 'Kotlin 1.6': '.kt', 'Kotlin 1.7': '.kt',
+    'Go': '.go',
+    'Rust 2021': '.rs',
+    'JavaScript': '.js', 'Node.js': '.js',
+    'D': '.d',
+    'Haskell': '.hs',
+    'OCaml': '.ml',
+    'Scala': '.scala',
+    'Ruby 3': '.rb',
+    'PHP': '.php',
+    'Perl': '.pl',
+    'Delphi': '.pas', 'Free Pascal': '.pas',
+    'Q#': '.qs',
+  };
+
+  // DOM elements
+  const inputPanel = document.getElementById('input-panel');
+  const progressPanel = document.getElementById('progress-panel');
+  const resultsPanel = document.getElementById('results-panel');
+  const modeCSVBtn = document.getElementById('mode-csv');
+  const modeCodeBtn = document.getElementById('mode-code');
+  const csvForm = document.getElementById('csv-form');
+  const codeForm = document.getElementById('code-form');
+  const progressBar = document.getElementById('progress-bar');
+  const progressText = document.getElementById('progress-text');
+  const errorLog = document.getElementById('error-log');
+
+  // Global state
+  let currentMode = 'csv';
+  let problemsMap = new Map();
+  let totalSubmissions = 0;
+  let processedUsers = 0;
+  let zipData = null; // For code mode
+
+  // Mode switching
+  function switchMode(mode) {
+    currentMode = mode;
+    if (mode === 'csv') {
+      csvForm.classList.remove('hidden');
+      codeForm.classList.add('hidden');
+      modeCSVBtn.className = 'flex-1 px-4 py-2 text-sm rounded bg-accent/10 border border-accent/30 text-accent font-mono transition';
+      modeCodeBtn.className = 'flex-1 px-4 py-2 text-sm rounded bg-transparent text-text-muted font-mono hover:text-text transition';
+    } else {
+      csvForm.classList.add('hidden');
+      codeForm.classList.remove('hidden');
+      modeCSVBtn.className = 'flex-1 px-4 py-2 text-sm rounded bg-transparent text-text-muted font-mono hover:text-text transition';
+      modeCodeBtn.className = 'flex-1 px-4 py-2 text-sm rounded bg-accent/10 border border-accent/30 text-accent font-mono transition';
+    }
+  }
+
+  modeCSVBtn.addEventListener('click', () => switchMode('csv'));
+  modeCodeBtn.addEventListener('click', () => switchMode('code'));
+
+  // CSV Mode: Load/Save cache
+  function loadCSVCache() {
+    const cached = localStorage.getItem(CSV_STORAGE_KEY);
+    if (cached) {
+      document.getElementById('usernames-input').value = cached;
+      document.getElementById('csv-cache-indicator').textContent = 'cached';
+    }
+  }
+
+  function saveCSVCache(usernames) {
+    localStorage.setItem(CSV_STORAGE_KEY, usernames);
+  }
+
+  document.getElementById('btn-csv-clear').addEventListener('click', () => {
+    localStorage.removeItem(CSV_STORAGE_KEY);
+    document.getElementById('usernames-input').value = '';
+    document.getElementById('csv-cache-indicator').textContent = '';
+  });
+
+  // Code Mode: Load/Save cache
+  function loadCodeCache() {
+    const cached = localStorage.getItem(CODE_STORAGE_KEY);
+    if (cached) {
+      document.getElementById('code-username').value = cached;
+      document.getElementById('code-cache-indicator').textContent = 'cached username';
+    }
+  }
+
+  function saveCodeCache(username) {
+    localStorage.setItem(CODE_STORAGE_KEY, username);
+  }
+
+  document.getElementById('btn-code-clear').addEventListener('click', () => {
+    localStorage.removeItem(CODE_STORAGE_KEY);
+    document.getElementById('code-username').value = '';
+    document.getElementById('code-apikey').value = '';
+    document.getElementById('code-apisecret').value = '';
+    document.getElementById('code-cache-indicator').textContent = '';
+  });
+
+  // Utilities
+  function parseUsernames(input) {
+    return input.split(/[\n,]+/).map(u => u.trim()).filter(u => u.length > 0);
+  }
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async function fetchWithRetry(url, retries = MAX_RETRIES) {
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.status === 'OK') {
+          return data.result;
+        } else if (data.status === 'FAILED') {
+          if (data.comment === 'Call limit exceeded' && attempt < retries) {
+            await sleep(API_DELAY);
+            continue;
+          }
+          throw new Error(data.comment || 'API request failed');
+        }
+      } catch (error) {
+        if (attempt === retries) throw error;
+        await sleep(1000 * (attempt + 1));
+      }
+    }
+  }
+
+  function toISO8601(unixTimestamp) {
+    return new Date(unixTimestamp * 1000).toISOString();
+  }
+
+  function getProblemId(submission) {
+    const contestId = submission.problem.contestId || submission.contestId || 'unknown';
+    const index = submission.problem.index;
+    return `${contestId}${index}`;
+  }
+
+  function logError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.textContent = `× ${message}`;
+    errorLog.appendChild(errorDiv);
+  }
+
+  function updateProgress(current, total, message) {
+    const percentage = (current / total) * 100;
+    progressBar.style.width = `${percentage}%`;
+    progressText.textContent = message;
+  }
+
+  // SHA-512 implementation using Web Crypto API
+  async function sha512(message) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-512', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  // Generate API signature
+  async function generateApiSig(methodName, params, secret) {
+    const rand = Math.random().toString(36).substring(2, 8);
+    const sortedParams = Object.keys(params).sort().map(key => `${key}=${params[key]}`).join('&');
+    const toHash = `${rand}/${methodName}?${sortedParams}#${secret}`;
+    const hash = await sha512(toHash);
+    return rand + hash;
+  }
+
+  // Build authenticated API URL
+  async function buildAuthUrl(methodName, params, apiKey, apiSecret) {
+    const time = Math.floor(Date.now() / 1000);
+    const allParams = { ...params, apiKey, time };
+    const apiSig = await generateApiSig(methodName, allParams, apiSecret);
+    const queryString = Object.keys(allParams).map(k => `${k}=${encodeURIComponent(allParams[k])}`).join('&');
+    return `https://codeforces.com/api/${methodName}?${queryString}&apiSig=${apiSig}`;
+  }
+
+  // CSV Mode: Process submissions
+  function processSubmissions(submissions) {
+    const acSubmissions = submissions.filter(s => s.verdict === 'OK');
+
+    for (const sub of acSubmissions) {
+      const problemId = getProblemId(sub);
+      const submissionId = sub.id;
+      const acTime = sub.creationTimeSeconds;
+      const contestId = sub.problem.contestId || sub.contestId || 'unknown';
+
+      if (!problemsMap.has(problemId)) {
+        problemsMap.set(problemId, {
+          id: problemId,
+          contestId: contestId,
+          name: sub.problem.name,
+          rating: sub.problem.rating || 'N/A',
+          tags: sub.problem.tags || [],
+          earliestAcTime: acTime,
+          submissionIds: new Set([submissionId])
+        });
+      } else {
+        const existing = problemsMap.get(problemId);
+        existing.submissionIds.add(submissionId);
+        if (acTime < existing.earliestAcTime) {
+          existing.earliestAcTime = acTime;
+        }
+      }
+    }
+
+    totalSubmissions += acSubmissions.length;
+  }
+
+  // CSV Mode: Main process
+  async function processCSVMode() {
+    const input = document.getElementById('usernames-input').value.trim();
+    if (!input) {
+      document.getElementById('csv-cache-indicator').textContent = 'enter usernames';
+      return;
+    }
+
+    const usernames = parseUsernames(input);
+    if (usernames.length === 0) {
+      document.getElementById('csv-cache-indicator').textContent = 'no valid usernames';
+      return;
+    }
+
+    saveCSVCache(input);
+    problemsMap.clear();
+    totalSubmissions = 0;
+    processedUsers = 0;
+    errorLog.innerHTML = '';
+
+    inputPanel.classList.add('hidden');
+    resultsPanel.classList.add('hidden');
+    progressPanel.classList.remove('hidden');
+
+    for (let i = 0; i < usernames.length; i++) {
+      const handle = usernames[i];
+      updateProgress(i, usernames.length, `fetching ${handle}...`);
+
+      try {
+        const url = `https://codeforces.com/api/user.status?handle=${handle}&from=1&count=100000`;
+        const submissions = await fetchWithRetry(url);
+        processSubmissions(submissions);
+        processedUsers++;
+
+        if (i < usernames.length - 1) await sleep(API_DELAY);
+      } catch (error) {
+        logError(`${handle}: ${error.message}`);
+      }
+    }
+
+    updateProgress(usernames.length, usernames.length, 'done');
+    setTimeout(() => showResults(usernames.length, 'csv'), 500);
+  }
+
+  // Code Mode: Main process
+  async function processCodeMode() {
+    const username = document.getElementById('code-username').value.trim();
+    const apiKey = document.getElementById('code-apikey').value.trim();
+    const apiSecret = document.getElementById('code-apisecret').value.trim();
+
+    if (!username || !apiKey || !apiSecret) {
+      document.getElementById('code-cache-indicator').textContent = 'all fields required';
+      return;
+    }
+
+    saveCodeCache(username);
+    errorLog.innerHTML = '';
+
+    inputPanel.classList.add('hidden');
+    resultsPanel.classList.add('hidden');
+    progressPanel.classList.remove('hidden');
+
+    try {
+      updateProgress(0, 3, 'fetching submissions...');
+
+      // Fetch submissions with source code
+      const url = await buildAuthUrl('user.status', {
+        handle: username,
+        from: 1,
+        count: 100000,
+        includeSources: true
+      }, apiKey, apiSecret);
+
+      const submissions = await fetchWithRetry(url);
+      const acSubmissions = submissions.filter(s => s.verdict === 'OK' && s.sourceBase64);
+
+      updateProgress(1, 3, `creating zip (${acSubmissions.length} files)...`);
+
+      // Create ZIP
+      const zip = new JSZip();
+      const cfFolder = zip.folder('cf');
+
+      for (const sub of acSubmissions) {
+        const contestId = sub.problem.contestId || sub.contestId || 'unknown';
+        const problemId = getProblemId(sub);
+        const submissionId = sub.id;
+        const lang = sub.programmingLanguage;
+        const ext = LANG_TO_EXT[lang] || '.cpp';
+
+        // Decode base64 source code
+        let sourceCode;
+        try {
+          const decoded = atob(sub.sourceBase64);
+          sourceCode = decodeURIComponent(escape(decoded)); // Handle UTF-8
+        } catch (e) {
+          // Fallback if UTF-8 decoding fails
+          sourceCode = atob(sub.sourceBase64);
+        }
+
+        const contestFolder = cfFolder.folder(contestId.toString());
+        const filename = `${problemId}_${submissionId}${ext}`;
+        contestFolder.file(filename, sourceCode);
+      }
+
+      updateProgress(2, 3, 'generating archive...');
+
+      zipData = await zip.generateAsync({ type: 'blob' });
+      totalSubmissions = acSubmissions.length;
+
+      updateProgress(3, 3, 'done');
+      setTimeout(() => showResults(1, 'code'), 500);
+
+      // Clear sensitive data
+      document.getElementById('code-apikey').value = '';
+      document.getElementById('code-apisecret').value = '';
+
+    } catch (error) {
+      logError(`failed: ${error.message}`);
+      setTimeout(() => {
+        progressPanel.classList.add('hidden');
+        inputPanel.classList.remove('hidden');
+      }, 2000);
+    }
+  }
+
+  // Show results
+  function showResults(userCount, mode) {
+    progressPanel.classList.add('hidden');
+    resultsPanel.classList.remove('hidden');
+
+    document.getElementById('stat-users').textContent = userCount;
+
+    if (mode === 'csv') {
+      document.getElementById('stat-problems').textContent = problemsMap.size;
+      document.getElementById('stat-submissions').textContent = totalSubmissions;
+      document.getElementById('btn-download').textContent = 'download csv';
+    } else {
+      document.getElementById('stat-problems').textContent = '—';
+      document.getElementById('stat-submissions').textContent = totalSubmissions;
+      document.getElementById('btn-download').textContent = 'download zip';
+    }
+  }
+
+  // Generate CSV
+  function generateCSV() {
+    const headers = ['id', 'contestid', 'problem_name', 'earliest_ac_time', 'rating', 'tags', 'submission_ids', 'links'];
+    const rows = [headers];
+
+    const sortedProblems = Array.from(problemsMap.values()).sort((a, b) => {
+      const aMatch = a.id.match(/^(\d+)/);
+      const bMatch = b.id.match(/^(\d+)/);
+      const aNum = aMatch ? parseInt(aMatch[1]) : 0;
+      const bNum = bMatch ? parseInt(bMatch[1]) : 0;
+      if (aNum !== bNum) return aNum - bNum;
+      return a.id.localeCompare(b.id);
+    });
+
+    for (const problem of sortedProblems) {
+      const submissionIds = Array.from(problem.submissionIds).sort((a, b) => b - a);
+      const links = submissionIds.map(subId =>
+        `https://codeforces.com/contest/${problem.contestId}/submission/${subId}`
+      );
+
+      const row = [
+        problem.id,
+        problem.contestId,
+        `"${problem.name.replace(/"/g, '""')}"`,
+        toISO8601(problem.earliestAcTime),
+        problem.rating,
+        `"${problem.tags.join('; ')}"`,
+        `"${submissionIds.join('; ')}"`,
+        `"${links.join('; ')}"`
+      ];
+      rows.push(row);
+    }
+
+    return rows.map(row => row.join(',')).join('\n');
+  }
+
+  // Download handlers
+  function downloadCSV() {
+    const csv = generateCSV();
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `cf-archive-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function downloadZip() {
+    if (!zipData) return;
+    const url = URL.createObjectURL(zipData);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `cf-code-archive-${new Date().toISOString().split('T')[0]}.zip`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // Event listeners
+  document.getElementById('btn-csv-fetch').addEventListener('click', processCSVMode);
+  document.getElementById('btn-code-fetch').addEventListener('click', processCodeMode);
+  document.getElementById('btn-download').addEventListener('click', () => {
+    if (currentMode === 'csv') downloadCSV();
+    else downloadZip();
+  });
+  document.getElementById('btn-restart').addEventListener('click', () => {
+    resultsPanel.classList.add('hidden');
+    inputPanel.classList.remove('hidden');
+  });
+
+  // Initialize
+  loadCSVCache();
+  loadCodeCache();
+})();
+</script>
+
+
+</div>
+</main>
+<aside class="hidden md:block"><div class="h-full flex flex-col desktop-wrapper focused"><span class="collapsed-label">terminal</span><div class="flex-1 overflow-hidden"><div class="terminal-content"><div class="terminal-shell-outer h-full w-full"><div class="terminal-shell"></div></div></div></div></div></aside>
+</div>
+</body>
+</html>

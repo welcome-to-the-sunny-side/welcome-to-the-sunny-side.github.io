@@ -1,31 +1,32 @@
 // Shared markdown-it renderer: lazy singleton with C++ highlight.js support
 // and a small inline-rule plugin that protects $...$, $$...$$, \(...\), \[...\]
 // from markdown-it's emphasis/strong rules so MathJax can typeset them later.
+// Used by the build (src/build/render.js) and by the musings page in the browser.
 
 const HLJS_CPP_ALIASES = ['cpp', 'c++', 'cc', 'cxx', 'hpp', 'hxx'];
 
 // Fences used for pseudocode: no grammar is loaded, we only colour `#` comments.
 const PSEUDO_ALIASES = ['pseudo'];
 
-let cached: Promise<any> | null = null;
+let cached = null;
 
-export function getRenderer(): Promise<any> {
+export function getRenderer() {
   return (cached ??= build());
 }
 
-async function build(): Promise<any> {
+async function build() {
   const [MarkdownItMod, hljsCoreMod, cppMod] = await Promise.all([
     import('markdown-it'),
     import('highlight.js/lib/core'),
     import('highlight.js/lib/languages/cpp'),
   ]);
-  const MarkdownIt = (MarkdownItMod as any).default;
-  const hljs = (hljsCoreMod as any).default;
-  hljs.registerLanguage('cpp', (cppMod as any).default);
+  const MarkdownIt = MarkdownItMod.default;
+  const hljs = hljsCoreMod.default;
+  hljs.registerLanguage('cpp', cppMod.default);
   const md = new MarkdownIt({
     html: true,
     linkify: true,
-    highlight: (str: string, lang: string): string => {
+    highlight: (str, lang) => {
       const norm = (lang || '').toLowerCase();
       if (HLJS_CPP_ALIASES.includes(norm)) {
         try {
@@ -47,8 +48,8 @@ async function build(): Promise<any> {
 // Register four inline rules — one per math delimiter pair — that match before
 // emphasis runs and emit the math span as a raw html_inline token. Net effect:
 // markdown-it leaves the math untouched, MathJax picks it up at typeset time.
-function mathProtectionPlugin(md: any) {
-  const make = (open: string, close: string, allowEscape: boolean) => (state: any, silent: boolean) => {
+function mathProtectionPlugin(md) {
+  const make = (open, close, allowEscape) => (state, silent) => {
     if (state.src.slice(state.pos, state.pos + open.length) !== open) return false;
     let end = state.pos + open.length;
     while (true) {

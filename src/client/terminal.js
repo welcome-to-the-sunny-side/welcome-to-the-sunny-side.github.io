@@ -1,43 +1,70 @@
-<script lang="ts">
-import { onMount, onDestroy } from 'svelte';
-import { get } from 'svelte/store';
-import { currentPath } from '../stores/router';
-import { list, isFile, isDir, resolvePath } from '../lib/virtualFs';
-import { listSkins, wearSkin } from '../stores/skin';
-import { currentTerminalTheme, listTerminalThemes, setTerminalTheme } from '../stores/terminalTheme';
-import type { TerminalTheme } from '../stores/terminalTheme';
-import 'xterm/css/xterm.css';
+// The terminal: an xterm.js shell over the VFS (ls, cd, open, pop, skins, ...)
+// with its own line editor: history, ghost-text completion, cursor movement
+// and line wrapping are all handled here, since xterm.js only draws.
+//
+// Loaded on demand by src/client/pane.js, which owns the pane around it.
+//
+// xterm.js gotchas (both load-bearing below):
+//   - cursor-movement escapes (\x1b[D, \x1b[C) don't wrap across visual rows;
+//     fix bugs at line boundaries by handling the boundary case, not by
+//     rewriting the editing functions.
+//   - onKey and onData fire alongside each other, not as alternatives:
+//     preventDefault() in onKey only stops browser defaults, and escape
+//     sequences (arrows, Shift+Tab) still reach writeChar as data, where the
+//     escSeq parser swallows them.
+import { Terminal } from 'xterm';
+import { FitAddon } from '@xterm/addon-fit';
+import { list, isFile, isDir, resolvePath, DATES } from './vfs.js';
+import { currentPath, push, isLoading as navigating } from './router.js';
+import { SKINS, wearSkin } from './skin.js';
+import { THEMES, DEFAULT_THEME, STORAGE_KEY } from './terminalThemes.js';
 
 // Dynamic color helpers — updated when theme changes
-let ttheme: TerminalTheme = get(currentTerminalTheme);
+let ttheme = savedTheme();
 let PATH_COLOR = `\x1b[38;2;${ttheme.ui.pathRgb}m`;
 let FILE_COLOR = `\x1b[38;2;${ttheme.ui.fileRgb}m`;
 let DIR_COLOR = ttheme.ui.dirColor;
 
-function updateColors(t: TerminalTheme) {
+function updateColors(t) {
   ttheme = t;
   PATH_COLOR = `\x1b[38;2;${t.ui.pathRgb}m`;
   FILE_COLOR = `\x1b[38;2;${t.ui.fileRgb}m`;
   DIR_COLOR = t.ui.dirColor;
 }
 
-let container: HTMLDivElement;
-// reactive focus state for border highlight
-export let isFocused = true;
-// Expose terminal instance for external focus control
-let termInstance: any;
-let fitAddon: any; // store FitAddon instance for external resizing
-// Called after a successful resize to redraw the current input line
-let afterResizeCallback: (() => void) | null = null;
-
-export function focusTerminal() {
-  termInstance?.focus();
+function savedTheme() {
+  try {
+    return THEMES[localStorage.getItem(STORAGE_KEY)] ?? DEFAULT_THEME;
+  } catch {
+    return DEFAULT_THEME;
+  }
 }
+
+// `tskin`: the pane's colours follow <html data-tskin> (CSS generated from
+// terminalThemes.js); xterm's palette is set here. Old output is cleared so
+// stale colours don't linger.
+function setTerminalTheme(name) {
+  const theme = THEMES[name];
+  if (!theme) throw new Error(`Terminal theme not found: ${name}`);
+  try {
+    localStorage.setItem(STORAGE_KEY, name);
+  } catch {}
+  document.documentElement.dataset.tskin = name;
+  updateColors(theme);
+  termInstance.options.theme = theme.xterm;
+  termInstance.clear();
+}
+
+let container;
+let termInstance;
+let fitAddon;
+// Called after a successful resize to redraw the current input line
+let afterResizeCallback = null;
 
 // Fit terminal but reserve one row at the bottom for visual breathing room
 function fitWithPadding() {
   if (!fitAddon || !termInstance) return;
-  // Don't resize if the container is hidden (e.g., mobile collapsed state)
+  // Don't resize if the container is hidden (e.g., collapsed pane)
   if (container && (container.offsetHeight === 0 || container.offsetWidth === 0)) return;
   const dims = fitAddon.proposeDimensions();
   if (dims && dims.cols > 2 && dims.rows > 1) {
@@ -46,35 +73,23 @@ function fitWithPadding() {
   }
 }
 
-// Re-fit terminal when its container size increases (e.g., after mobile expand)
-export function resizeTerminal() {
-  fitWithPadding();
-}
-
-// --- Date index (prebuilt at build-time) ---
-let DATE_INDEX: Record<string, number> = {};
-
-// --- Loading state ---
+// --- Loading state (a navigation is in progress) ---
 let isLoading = false;
-let loadingSpinnerInterval: number | null = null;
+let loadingSpinnerInterval = null;
 const spinnerFrames = ['⣾', '⣽', '⣻', '⢿', '⡿', '⣟', '⣯', '⣷'];
 let spinnerFrame = 0;
-let unsubLoading: (() => void) | null = null;
-let unsubTheme: (() => void) | null = null;
-let hasShownInitialBanner = false;
 
 // --- Date helpers ---
 // All dates are precomputed at build time and provided as epoch millis.
-function dateForHtml(htmlPath: string): number {
-  return DATE_INDEX[htmlPath] ?? Infinity;
+function dateForHtml(htmlPath) {
+  return DATES[htmlPath] ?? Infinity;
 }
 
 // Cache directory min / max dates to avoid recomputation during a single ls.
-type CacheRec = { min?: number; max?: number };
-const dirDateCache: Record<string, CacheRec> = {};
+const dirDateCache = {};
 
 // Recursively obtain the minimum / maximum date of any markdown file in a directory subtree.
-function getDirDate(dirPath: string, wantMax: boolean): number {
+function getDirDate(dirPath, wantMax) {
   const cached = dirDateCache[dirPath];
   if (cached && (wantMax ? cached.max !== undefined : cached.min !== undefined)) {
     // Always return a number, never undefined
@@ -85,7 +100,7 @@ function getDirDate(dirPath: string, wantMax: boolean): number {
   const children = list(dirPath) || [];
   for (const name of children) {
     const child = dirPath === '/' ? '/' + name : `${dirPath}/${name}`;
-    let ts: number;
+    let ts;
     if (isDir(child)) {
       ts = getDirDate(child, wantMax);
     } else if (child.endsWith('.html')) {
@@ -101,7 +116,7 @@ function getDirDate(dirPath: string, wantMax: boolean): number {
 }
 
 // Sort names inside a directory according to date ordering, keeping lexicographic tiebreak.
-function sortNamesByDate(dirPath: string, names: string[], mode: 'asc' | 'desc'): string[] {
+function sortNamesByDate(dirPath, names, mode) {
   const wantMax = mode === 'desc'; // newest first uses max date key
   return [...names].sort((a, b) => {
     const pathA = dirPath === '/' ? '/' + a : `${dirPath}/${a}`;
@@ -116,8 +131,6 @@ function sortNamesByDate(dirPath: string, names: string[], mode: 'asc' | 'desc')
   });
 }
 
-// No getRaw/RAW_FILES anymore – dates come from DATE_INDEX
-
 function startLoadingSpinner() {
   if (loadingSpinnerInterval || !termInstance) return; // Already running or no terminal
   
@@ -130,10 +143,10 @@ function startLoadingSpinner() {
     spinnerFrame = (spinnerFrame + 1) % spinnerFrames.length;
     // Update spinner in-place on the same line
     termInstance?.write(`\r\x1b[2K${spinnerFrames[spinnerFrame]} Loading...`);
-  }, 100) as any;
+  }, 100);
 }
 
-function stopLoadingSpinner(promptFn?: () => void) {
+function stopLoadingSpinner(promptFn) {
   if (loadingSpinnerInterval) {
     clearInterval(loadingSpinnerInterval);
     loadingSpinnerInterval = null;
@@ -151,29 +164,21 @@ function stopLoadingSpinner(promptFn?: () => void) {
   }
 }
 
-onMount(async () => {
-  isFocused = true; // Ensure border is active on mount
-  
-  // Preload date index
-  try {
-    // In dev, bypass stale caches so new/edited content dates show up immediately.
-    const cacheMode: RequestCache = import.meta.env.DEV ? 'reload' : 'force-cache';
-    const url = import.meta.env.DEV ? `/vfs-date-index.json?ts=${Date.now()}` : '/vfs-date-index.json';
-    const res = await fetch(url, { cache: cacheMode });
-    if (res.ok) {
-      DATE_INDEX = await res.json();
-    }
-  } catch {}
+/**
+ * Mount the terminal in `el`. `onFocusChange(focused)` is told when it gains
+ * or loses keyboard focus. Returns { focus, resize }.
+ */
+export async function mountTerminal(el, onFocusChange) {
+  container = el;
   // xterm measures its cell size once, at open: wait for the webfont or the
   // grid is sized for the fallback font (line spacing then varies by load).
-  try { await document.fonts.load(`16px "IBM Plex Mono"`); } catch {}
-  const { Terminal } = await import('xterm');
-  const { FitAddon } = await import('@xterm/addon-fit');
-  const initialTheme = get(currentTerminalTheme);
+  try {
+    await document.fonts.load('16px "IBM Plex Mono"');
+  } catch {}
   // xterm fontSize is a JS number, so it can't follow the clamp() on :root directly — read it once at mount.
   const rootPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
   const term = new Terminal({
-    theme: initialTheme.xterm,
+    theme: ttheme.xterm,
     cursorBlink: false,
     fontFamily: 'IBM Plex Mono, SF Mono, Menlo, Monaco, Consolas, monospace',
     fontSize: Math.round(rootPx), // 1rem, same as dark-skin body text
@@ -189,7 +194,7 @@ onMount(async () => {
   fitAddon = fit;
   term.loadAddon(fit);
   // Let browser-native shortcuts pass through instead of being captured by xterm
-  term.attachCustomKeyEventHandler((e: KeyboardEvent) => {
+  term.attachCustomKeyEventHandler((e) => {
     if (e.ctrlKey || e.metaKey) {
       // Ctrl+Backspace: delete the previous word in our input buffer instead
       // of letting the browser handle it (xterm's hidden textarea makes the
@@ -207,16 +212,14 @@ onMount(async () => {
   fitWithPadding();
   term.focus();
 
-  function setFocusStyle(focused: boolean) {
-    isFocused = focused;
-  }
-  term.textarea?.addEventListener('focus', () => setFocusStyle(true));
-  term.textarea?.addEventListener('blur', () => setFocusStyle(false));
+  onFocusChange(true);
+  term.textarea?.addEventListener('focus', () => onFocusChange(true));
+  term.textarea?.addEventListener('blur', () => onFocusChange(false));
 
-  let cwd: string[] = [];
-  let history: string[] = ['/'];
+  let cwd = [];
+  let history = ['/'];
   // In-terminal command history (↑ / ↓)
-  let cmdHistory: string[] = [];
+  let cmdHistory = [];
   // Index into cmdHistory. 0 .. length-1 = stored commands, length = current typing
   let histIndex = 0;
   let savedBuffer = '';
@@ -224,7 +227,7 @@ onMount(async () => {
   let cursorPos = 0; // cursor position within the buffer
   // --- Autocomplete state ---
   const COMMANDS = ['ls', 'cd', 'open', 'pop', 'clear', 'help', 'cskin', 'cskins', 'tskin', 'tskins'];
-  let completions: string[] = [];
+  let completions = [];
   let compIndex = 0;
   let ghostActive = false;
   let ghostText = '';
@@ -234,7 +237,7 @@ onMount(async () => {
     term.write(`${PATH_COLOR}${path}\x1b[0m $ `);
   };
 
-  function exec(command: string): boolean {
+  function exec(command) {
     if (!command) return false;
     const [cmd, ...args] = command.split(/\s+/);
     switch (cmd) {
@@ -259,7 +262,7 @@ onMount(async () => {
 
         const dateDesc = flags.includes('-d') || flags.includes('-dl');
         const dateAsc = flags.includes('-de');
-        const dateMode: 'asc' | 'desc' | null = dateDesc ? 'desc' : (dateAsc ? 'asc' : null);
+        const dateMode = dateDesc ? 'desc' : (dateAsc ? 'asc' : null);
 
         if (!recursive) {
           let children = list(fullPath) || [];
@@ -284,8 +287,8 @@ onMount(async () => {
           });
         } else {
           // Recursive tree view
-          const lines: string[] = [];
-          const buildLines = (seg: string[], prefix = '') => {
+          const lines = [];
+          const buildLines = (seg, prefix = '') => {
             let dirPathCur = '/' + seg.join('/');
             let children = list(dirPathCur) || [];
             if (dateMode) {
@@ -344,7 +347,7 @@ onMount(async () => {
           const fullPath = '/' + pathArr.join('/');
           
           // Check if we're already on this path
-          const currentPathValue = get(currentPath);
+          const currentPathValue = currentPath();
           
           if (currentPathValue === fullPath) {
             term.writeln(`Already viewing: ${file}`);
@@ -352,7 +355,7 @@ onMount(async () => {
           }
           
           history.push(fullPath);
-          currentPath.push(fullPath);
+          push(fullPath);
           return true; // navigation triggered
         } else {
           term.writeln(`open: file not found: ${file}`);
@@ -363,7 +366,7 @@ onMount(async () => {
         if (history.length > 1) {
           history.pop();
           const last = history[history.length - 1];
-          currentPath.push(last);
+          push(last);
           return true; // navigation triggered
         } else {
           term.writeln('pop: history empty');
@@ -374,7 +377,7 @@ onMount(async () => {
         term.clear();
         return false;
       case 'cskins': {
-        const names = listSkins();
+        const names = SKINS;
         names.forEach((name, idx) => {
           const branch = idx === names.length - 1 ? '└─ ' : '├─ ';
           term.writeln(branch + name);
@@ -396,7 +399,7 @@ onMount(async () => {
         return false;
       }
       case 'tskins': {
-        const names = listTerminalThemes();
+        const names = Object.keys(THEMES);
         names.forEach((name, idx) => {
           const branch = idx === names.length - 1 ? '└─ ' : '├─ ';
           term.writeln(branch + name);
@@ -471,7 +474,7 @@ onMount(async () => {
     ghostText = '';
   }
 
-  function showGhost(text: string) {
+  function showGhost(text) {
     clearGhost();
     if (!text) return;
     // Save cursor, move to end of buffer, show ghost, restore cursor
@@ -484,11 +487,11 @@ onMount(async () => {
     ghostText = text;
   }
 
-  function buildCommandCompletions(prefix: string): string[] {
+  function buildCommandCompletions(prefix) {
     return COMMANDS.filter(c => c.startsWith(prefix));
   }
 
-  function buildPathCompletions(prefix: string): string[] {
+  function buildPathCompletions(prefix) {
     // Split prefix into dir part + base part
     const lastSlash = prefix.lastIndexOf('/');
     const dirInput = lastSlash === -1 ? '' : prefix.slice(0, lastSlash + 1); // keep trailing '/'
@@ -518,7 +521,7 @@ onMount(async () => {
     const tokens = buffer.split(/\s+/);
     const first = tokens[0] || '';
     const current = tokens[tokens.length - 1] || '';
-    let cands: string[] = [];
+    let cands = [];
     if (tokens.length === 1) {
       cands = buildCommandCompletions(current);
     } else if (['cd', 'ls', 'open'].includes(first)) {
@@ -571,7 +574,7 @@ onMount(async () => {
     }
   }
 
-  function moveCursor(dir: 'left' | 'right') {
+  function moveCursor(dir) {
     if (dir === 'left' && cursorPos > 0) {
       cursorPos--;
       term.write('\x1b[D'); // move cursor left
@@ -581,7 +584,7 @@ onMount(async () => {
     }
   }
 
-  function insertChar(char: string) {
+  function insertChar(char) {
     buffer = buffer.slice(0, cursorPos) + char + buffer.slice(cursorPos);
     cursorPos++;
     
@@ -614,8 +617,8 @@ onMount(async () => {
   function deleteWord() {
     if (cursorPos === 0) return;
     let target = cursorPos;
-    const isSpace = (c: string) => /\s/.test(c);
-    const isWord = (c: string) => /\w/.test(c);
+    const isSpace = (c) => /\s/.test(c);
+    const isWord = (c) => /\w/.test(c);
     while (target > 0 && isSpace(buffer[target - 1])) target--;
     if (target > 0) {
       const wordRun = isWord(buffer[target - 1]);
@@ -674,7 +677,7 @@ onMount(async () => {
   }
 
   let escSeq = '';
-  const writeChar = (data: string) => {
+  const writeChar = (data) => {
     // Disable input during loading
     if (isLoading) return;
 
@@ -810,129 +813,22 @@ onMount(async () => {
   term.writeln('Type help for command list.');
   term.writeln('');
   prompt();
-  hasShownInitialBanner = true;
 
-  // Set up loading state subscription now that initial banner is shown
-  unsubLoading = currentPath.loading.subscribe((loading) => {
-    isLoading = loading;
-    if (loading) {
-      startLoadingSpinner();
-    } else {
-      // Avoid printing the ack before we've shown the initial banner
-      if (!hasShownInitialBanner) return;
-      stopLoadingSpinner(prompt);
-    }
+  // Navigations (from here, links, breadcrumbs) show a spinner and lock input.
+  if (navigating()) {
+    isLoading = true;
+    startLoadingSpinner();
+  } else {
+    stopLoadingSpinner(prompt);
+  }
+  addEventListener('site:navstart', () => {
+    isLoading = true;
+    startLoadingSpinner();
+  });
+  addEventListener('site:navend', () => {
+    isLoading = false;
+    stopLoadingSpinner(prompt);
   });
 
-  // Live-switch terminal theme — clear old output so stale colors don't linger
-  function applyThemeCssVars(t: TerminalTheme) {
-    if (!container) return;
-    container.style.setProperty('--tt-cursor', t.xterm.cursor);
-    container.style.setProperty('--tt-selection', t.xterm.selectionBackground);
-    container.style.setProperty('--tt-scrollbar-thumb', t.wrapper.glowStrong);
-    container.style.setProperty('--tt-scrollbar-thumb-hover', t.wrapper.borderFocus);
-    container.style.setProperty('--tt-scrollbar-track', t.wrapper.glow);
-  }
-  applyThemeCssVars(get(currentTerminalTheme));
-
-  // Subscribe fires synchronously with current value — skip clearing on that initial call.
-  let isInitialThemeSubscribe = true;
-  unsubTheme = currentTerminalTheme.subscribe((t) => {
-    updateColors(t);
-    if (termInstance) {
-      termInstance.options.theme = t.xterm;
-      applyThemeCssVars(t);
-      if (!isInitialThemeSubscribe) {
-        termInstance.clear();
-      }
-    }
-    isInitialThemeSubscribe = false;
-  });
-
-});
-
-onDestroy(() => {
-  if (unsubLoading) {
-    unsubLoading();
-  }
-  if (unsubTheme) {
-    unsubTheme();
-  }
-  if (loadingSpinnerInterval) {
-    clearInterval(loadingSpinnerInterval);
-  }
-});
-</script>
-
-<style>
-  .terminal-shell-outer {
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    overflow: hidden;
-    position: relative;
-    padding: 8px;
-    box-sizing: border-box;
-  }
-
-  .terminal-shell {
-    width: 100%;
-    height: 100%;
-  }
-  
-  
-  /* Modern scrollbar — colors from terminal theme CSS vars */
-  :global(.terminal-shell .xterm-viewport::-webkit-scrollbar) {
-    width: 8px;
-  }
-
-  :global(.terminal-shell .xterm-viewport::-webkit-scrollbar-track) {
-    background: var(--tt-scrollbar-track, rgba(0, 0, 0, 0.2));
-    border-radius: 4px;
-  }
-
-  :global(.terminal-shell .xterm-viewport::-webkit-scrollbar-thumb) {
-    background: var(--tt-scrollbar-thumb, rgba(100, 255, 218, 0.3));
-    border-radius: 4px;
-    transition: background 0.2s ease;
-  }
-
-  :global(.terminal-shell .xterm-viewport::-webkit-scrollbar-thumb:hover) {
-    background: var(--tt-scrollbar-thumb-hover, rgba(100, 255, 218, 0.5));
-  }
-
-  /* Do not pad internal xterm layers; padding here breaks selection alignment */
-  /* Intentionally empty: keep .xterm-screen without custom padding */
-
-  /* Cursor styling — driven by terminal theme */
-  :global(.terminal-shell .xterm-cursor-layer .xterm-cursor-bar) {
-    background-color: var(--tt-cursor, #64ffda) !important;
-    width: 2px !important;
-  }
-
-  :global(.terminal-shell .xterm-cursor-layer .xterm-cursor-block) {
-    background-color: var(--tt-cursor, #64ffda) !important;
-    opacity: 0.8;
-  }
-
-  /* Selection styling — driven by terminal theme */
-  :global(.terminal-shell .xterm-selection div) {
-    background-color: var(--tt-selection, rgba(100, 255, 218, 0.2)) !important;
-    border: none !important;
-  }
-  
-  /* xterm relies on fixed cell measurements; isolate it from page typography. */
-  :global(.terminal-shell .xterm),
-  :global(.terminal-shell .xterm *) {
-    box-sizing: content-box;
-    font-kerning: none !important;
-    font-variant-ligatures: none !important;
-    letter-spacing: 0 !important;
-    text-rendering: geometricPrecision !important;
-  }
-
-</style>
-
-<div class="terminal-shell-outer h-full w-full" class:focused={isFocused}>
-  <div bind:this={container} class="terminal-shell"></div>
-</div>
+  return { focus: () => term.focus(), resize: fitWithPadding };
+}

@@ -1,17 +1,16 @@
-// Strip-and-parse a minimal YAML front matter. Shared by the build-time
-// pre-renderer ([...slug].astro) and the client-side ContentPane. Supports:
+// Strip-and-parse a minimal YAML front matter. Supports:
 //   key: value
 //   key: "value" or 'value'   (quotes stripped if matched pair)
 //   key: [a, "b", 'c']        (one-line list, comma-separated)
 // That is the entire surface the content uses; no YAML library needed.
-export function parseFrontmatter(raw: string): { fm: Record<string, any>; body: string } {
+export function parseFrontmatter(raw) {
   if (!raw.startsWith('---')) return { fm: {}, body: raw };
   const end = raw.indexOf('\n---', 3);
   if (end === -1) return { fm: {}, body: raw };
   const yaml = raw.slice(3, end).trim();
   const body = raw.slice(end + 4);
-  const fm: Record<string, any> = {};
-  const stripQuotes = (s: string) => s.replace(/^(['"])(.*)\1$/, '$2');
+  const fm = {};
+  const stripQuotes = (s) => s.replace(/^(['"])(.*)\1$/, '$2');
   for (const line of yaml.split(/\r?\n/)) {
     const colon = line.indexOf(':');
     if (colon === -1) continue;

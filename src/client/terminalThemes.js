@@ -1,53 +1,12 @@
-import { writable } from 'svelte/store';
+// Terminal themes (`tskin`). `xterm` is xterm.js's palette and `ui` the colours
+// the terminal writes itself (prompt, files, dirs); both are used by
+// src/client/terminal.js. `wrapper` styles the pane around it: build.js turns
+// it into CSS (themeCss below) keyed on <html data-tskin>, so the pane is
+// drawn in the saved theme before any JS runs.
 
-export interface TerminalTheme {
-  name: string;
-  // xterm.js theme object
-  xterm: {
-    background: string;
-    foreground: string;
-    cursor: string;
-    cursorAccent: string;
-    selectionBackground: string;
-    selectionForeground: string;
-    black: string;
-    red: string;
-    green: string;
-    yellow: string;
-    blue: string;
-    magenta: string;
-    cyan: string;
-    white: string;
-    brightBlack: string;
-    brightRed: string;
-    brightGreen: string;
-    brightYellow: string;
-    brightBlue: string;
-    brightMagenta: string;
-    brightCyan: string;
-    brightWhite: string;
-  };
-  // Colors used by terminal output (prompt, files, dirs) as RGB triples for ANSI escapes
-  ui: {
-    pathRgb: string;      // prompt path color
-    fileRgb: string;      // file listing color
-    dirColor: string;     // ANSI escape for directory color
-  };
-  // Wrapper styling (TerminalPane.svelte border, glow, toggle)
-  wrapper: {
-    bg: string;           // background gradient start
-    bgEnd: string;        // background gradient end
-    border: string;       // border color
-    borderFocus: string;  // border color when focused
-    glow: string;         // accent color for glows/shadows (rgba)
-    glowStrong: string;   // stronger glow variant
-    accent: string;       // solid accent (toggle icon, label)
-    accentMuted: string;  // muted accent (toggle border, label)
-    shadow: string;       // outer box-shadow color (dark for dark themes, subtle for light)
-  };
-}
+export const STORAGE_KEY = 'wtss-terminal-theme';
 
-const classic: TerminalTheme = {
+const classic = {
   name: 'classic',
   xterm: {
     background: '#0a0a0a',
@@ -91,7 +50,7 @@ const classic: TerminalTheme = {
   },
 };
 
-const solarized: TerminalTheme = {
+const solarized = {
   name: 'solarized',
   xterm: {
     background: '#fdf6e3',
@@ -135,7 +94,7 @@ const solarized: TerminalTheme = {
   },
 };
 
-const gruvbox: TerminalTheme = {
+const gruvbox = {
   name: 'gruvbox',
   xterm: {
     background: '#fbf1c7',
@@ -179,7 +138,7 @@ const gruvbox: TerminalTheme = {
   },
 };
 
-const dracula: TerminalTheme = {
+const dracula = {
   name: 'dracula',
   xterm: {
     background: '#282a36',
@@ -223,7 +182,7 @@ const dracula: TerminalTheme = {
   },
 };
 
-const nord: TerminalTheme = {
+const nord = {
   name: 'nord',
   xterm: {
     background: '#2e3440',
@@ -267,31 +226,20 @@ const nord: TerminalTheme = {
   },
 };
 
-const THEMES: Record<string, TerminalTheme> = {
-  [classic.name]: classic,
-  [solarized.name]: solarized,
-  [gruvbox.name]: gruvbox,
-  [dracula.name]: dracula,
-  [nord.name]: nord,
-};
+export const THEMES = { classic, solarized, gruvbox, dracula, nord };
+export const DEFAULT_THEME = classic;
 
-function loadInitial(): TerminalTheme {
-  if (typeof localStorage === 'undefined') return classic;
-  const saved = localStorage.getItem('wtss-terminal-theme');
-  return (saved && THEMES[saved]) ? THEMES[saved] : classic;
-}
-
-export const currentTerminalTheme = writable<TerminalTheme>(loadInitial());
-
-export function listTerminalThemes(): string[] {
-  return Object.keys(THEMES);
-}
-
-export function setTerminalTheme(name: string) {
-  const theme = THEMES[name];
-  if (!theme) throw new Error(`Terminal theme not found: ${name}`);
-  currentTerminalTheme.set(theme);
-  if (typeof localStorage !== 'undefined') {
-    localStorage.setItem('wtss-terminal-theme', name);
-  }
+/** One CSS rule per theme setting the pane's --tp-* variables (classic also on bare :root). */
+export function themeCss() {
+  return Object.values(THEMES).map((t) => {
+    const sel = t === DEFAULT_THEME ? `:root,:root[data-tskin="${t.name}"]` : `:root[data-tskin="${t.name}"]`;
+    const w = t.wrapper;
+    const vars = {
+      bg: w.bg, 'bg-end': w.bgEnd, border: w.border, 'border-focus': w.borderFocus, glow: w.glow,
+      'glow-strong': w.glowStrong, accent: w.accent, 'accent-muted': w.accentMuted, shadow: w.shadow,
+      cursor: t.xterm.cursor, selection: t.xterm.selectionBackground,
+      'scrollbar-thumb': w.glowStrong, 'scrollbar-thumb-hover': w.borderFocus, 'scrollbar-track': w.glow,
+    };
+    return `${sel}{${Object.entries(vars).map(([k, v]) => `--tp-${k}:${v}`).join(';')}}`;
+  }).join('\n');
 }

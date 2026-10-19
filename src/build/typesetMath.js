@@ -2,13 +2,13 @@
 // into finished CHTML, so phones never download or run MathJax for normal
 // posts (typesetting ~500 expressions client-side made the SA-IS post lag).
 //
-// Server-only, like prerender.ts. The output is self-contained: a <style>
+// Build-time only. The output is self-contained: a <style>
 // block with the CHTML rules for the glyphs this page uses, followed by the
 // typeset HTML. Fonts load from jsDelivr, pinned to the installed version.
 //
 // Display math keeps its TeX in `data-tex`. Breaking a long display equation
-// needs the real column width, which only the browser knows, so ContentPane
-// re-typesets just the ones that overflow (see rebreakDisplayMath there).
+// needs the real column width, which only the browser knows, so the client
+// re-typesets just the ones that overflow (rebreakDisplayMath in src/client/site.js).
 import { mathjax } from '@mathjax/src/js/mathjax.js';
 import { TeX } from '@mathjax/src/js/input/tex.js';
 import { CHTML } from '@mathjax/src/js/output/chtml.js';
@@ -17,7 +17,7 @@ import { RegisterHTMLHandler } from '@mathjax/src/js/handlers/html.js';
 import { AssistiveMmlHandler } from '@mathjax/src/js/a11y/assistive-mml.js';
 import '@mathjax/src/js/util/asyncLoad/esm.js';
 import { MathJaxNewcmFont } from '@mathjax/mathjax-newcm-font/js/chtml.js';
-import fontPkg from '@mathjax/mathjax-newcm-font/package.json';
+import fontPkg from '@mathjax/mathjax-newcm-font/package.json' with { type: 'json' };
 
 // The CDN build's default packages plus everything it would autoload.
 import '@mathjax/src/js/input/tex/base/BaseConfiguration.js';
@@ -46,7 +46,7 @@ const PACKAGES = [
   'mhchem', 'unicode', 'verb',
 ];
 
-// Keep in step with the client config in ContentPane.svelte.
+// Keep in step with the client config in src/client/site.js.
 const TEX_OPTIONS = {
   inlineMath: [['$', '$'], ['\\(', '\\)']],
   displayMath: [['$$', '$$'], ['\\[', '\\]']],
@@ -57,9 +57,9 @@ const FONT_URL = `https://cdn.jsdelivr.net/npm/@mathjax/mathjax-newcm-font@${fon
 const adaptor = liteAdaptor();
 AssistiveMmlHandler(RegisterHTMLHandler(adaptor));
 
-const hasMath = (html: string) => /\$|\\\(|\\\[/.test(html);
+const hasMath = (html) => /\$|\\\(|\\\[/.test(html);
 
-export async function typesetMath(html: string): Promise<string> {
+export async function typesetMath(html) {
   if (!hasMath(html)) return html;
   // Fresh jax per page so each page's stylesheet only covers its own glyphs.
   const chtml = new CHTML({
@@ -78,6 +78,6 @@ export async function typesetMath(html: string): Promise<string> {
   for (const item of items) {
     if (item.display) adaptor.setAttribute(item.typesetRoot, 'data-tex', item.math);
   }
-  const css = adaptor.cssText(chtml.styleSheet(doc) as any);
+  const css = adaptor.cssText(chtml.styleSheet(doc));
   return `<style>${css}</style>` + adaptor.innerHTML(adaptor.body(doc.document));
 }

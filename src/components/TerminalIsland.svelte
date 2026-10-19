@@ -164,6 +164,9 @@ onMount(async () => {
       DATE_INDEX = await res.json();
     }
   } catch {}
+  // xterm measures its cell size once, at open: wait for the webfont or the
+  // grid is sized for the fallback font (line spacing then varies by load).
+  try { await document.fonts.load(`16px "IBM Plex Mono"`); } catch {}
   const { Terminal } = await import('xterm');
   const { FitAddon } = await import('@xterm/addon-fit');
   const initialTheme = get(currentTerminalTheme);

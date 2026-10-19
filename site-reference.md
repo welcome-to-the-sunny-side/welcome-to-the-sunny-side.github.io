@@ -287,6 +287,11 @@ has re-centred; when it reopens the tree vanishes at once.
   colour; the path down to it is in the text colour and open, so its
   children show; every other branch is collapsed. Clicking an entry scrolls
   to the heading without changing the URL.
+- **Spoilers.** Headings inside a closed `<details>` are listed but never
+  current (checked with `closest('details:not([open])')`: Chrome gives
+  closed-spoiler content an `offsetParent`). Clicking one opens the spoilers
+  around it first. Opening or closing a spoiler re-evaluates the current
+  section, since everything below it moves.
 - Roots are always listed. Branch glyphs (`├─`, `└─`) match the index pages.
 
 ### Custom elements

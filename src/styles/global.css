@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap");
 @import "highlight.js/styles/github-dark.css";
 @import "./custom-elements.css";
+@import "./skins.css";
 
 @tailwind base;
 @tailwind components;
@@ -87,6 +88,19 @@ main::-webkit-scrollbar-thumb:hover, html::-webkit-scrollbar-thumb:hover {
   transform: translateY(-1px);
 }
 
+/* The blog header's "(.md)" link to the page's markdown source: an
+   afterthought, coloured like the date until hovered. */
+.prose a.md-source {
+  color: theme('colors.text-muted');
+  text-decoration: none;
+  opacity: 1;
+  transition: color 0.15s;
+}
+
+.prose a.md-source:hover {
+  color: theme('colors.accent');
+}
+
 /* Override Tailwind Typography blockquote color/opacity */
 .prose blockquote,
 .prose-invert blockquote {
@@ -114,12 +128,12 @@ main::-webkit-scrollbar-thumb:hover, html::-webkit-scrollbar-thumb:hover {
   font-family: var(--font-mono);
 }
 
-/* Comments in pseudocode fences (see src/lib/markdown.ts) */
+/* Comments in pseudocode fences (see src/lib/markdown.js) */
 .hljs .pseudo-comment {
   color: #7ee787;
 }
 
-/* Inline SVG figures (src/lib/figures.ts): scale to the column like an <img>;
+/* Inline SVG figures (src/build/figures.js): scale to the column like an <img>;
    colours and fonts come from the skin's fig-* variables */
 .svg-figure svg {
   display: block;

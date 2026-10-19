@@ -1,0 +1,163 @@
+/* Desktop terminal pane (markup in src/build/templates.js, behaviour in
+   src/client/terminal.js). The --tp-* colours come from the terminal theme:
+   build.js generates one rule per theme in src/client/terminalThemes.js,
+   keyed on <html data-tskin>. Collapsed state is <html data-term-collapsed>. */
+
+.desktop-wrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, var(--tp-bg) 0%, var(--tp-bg-end) 100%);
+  border: 1px solid var(--tp-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow:
+    0 8px 32px var(--tp-shadow),
+    inset 0 1px 0 var(--tp-glow);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: clamp(320px, 30vw, 600px);
+}
+
+[data-term-collapsed] .desktop-wrapper {
+  width: 32px !important;
+}
+
+.desktop-wrapper.focused {
+  border-color: var(--tp-border-focus);
+  box-shadow:
+    0 8px 32px var(--tp-shadow),
+    0 0 0 1px var(--tp-glow),
+    inset 0 1px 0 var(--tp-glow);
+}
+
+.desktop-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--tp-glow-strong), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.desktop-wrapper.focused::before {
+  opacity: 1;
+}
+
+.terminal-content {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+[data-term-collapsed] .terminal-content {
+  display: none;
+}
+
+/* Vertical "terminal" label, shown while collapsed */
+.collapsed-label {
+  display: none;
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--tp-accent-muted);
+  user-select: none;
+  pointer-events: none;
+  letter-spacing: 0.15em;
+}
+
+[data-term-collapsed] .collapsed-label {
+  display: block;
+}
+
+/* ===== xterm.js host ===== */
+
+.terminal-shell-outer {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  position: relative;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.terminal-shell {
+  width: 100%;
+  height: 100%;
+}
+
+/* The terminal's scrollbar follows the terminal theme, not the content skin.
+   Set explicitly because scrollbar-color is inherited: without this the
+   viewport would take the skin's from <html> (global.css). Browsers that
+   support scrollbar-color ignore the ::-webkit-scrollbar rules below; those
+   are for the rest (Safari). Not `scrollbar-width: thin`: xterm sizes its
+   columns around the scrollbar, so that would rewrap the terminal. */
+.terminal-shell .xterm-viewport {
+  scrollbar-color: var(--tp-scrollbar-thumb) var(--tp-scrollbar-track);
+}
+
+.terminal-shell .xterm-viewport::-webkit-scrollbar {
+  width: 8px;
+}
+
+.terminal-shell .xterm-viewport::-webkit-scrollbar-track {
+  background: var(--tp-scrollbar-track);
+  border-radius: 4px;
+}
+
+.terminal-shell .xterm-viewport::-webkit-scrollbar-thumb {
+  background: var(--tp-scrollbar-thumb);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.terminal-shell .xterm-viewport::-webkit-scrollbar-thumb:hover {
+  background: var(--tp-scrollbar-thumb-hover);
+}
+
+/* Do not pad internal xterm layers; padding there breaks selection alignment. */
+
+.terminal-shell .xterm-cursor-layer .xterm-cursor-bar {
+  background-color: var(--tp-cursor) !important;
+  width: 2px !important;
+}
+
+.terminal-shell .xterm-cursor-layer .xterm-cursor-block {
+  background-color: var(--tp-cursor) !important;
+  opacity: 0.8;
+}
+
+.terminal-shell .xterm-selection div {
+  background-color: var(--tp-selection) !important;
+  border: none !important;
+}
+
+/* xterm relies on fixed cell measurements; isolate it from page typography. */
+.terminal-shell .xterm,
+.terminal-shell .xterm * {
+  box-sizing: content-box;
+  font-kerning: none !important;
+  font-variant-ligatures: none !important;
+  letter-spacing: 0 !important;
+  text-rendering: geometricPrecision !important;
+}
+
+/* ===== Mobile breadcrumb bar ===== */
+
+.crumb-link {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 0.5px;
+}

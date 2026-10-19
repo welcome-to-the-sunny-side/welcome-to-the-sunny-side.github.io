@@ -1,5 +1,5 @@
 /* Colours and fonts for the SA-IS figures, one block per skin.
-   Inlined (once) into any page that uses a figure from this folder, by src/lib/figures.ts.
+   Inlined (once) into any page that uses a figure from this folder, by src/build/figures.js.
    Also read by bs/sais/claude/fig.py for its preview PNGs. Mono text uses the skin's --font-mono. */
 
 [data-skin="sunny"] .svg-figure[data-svg^="sais/"] {

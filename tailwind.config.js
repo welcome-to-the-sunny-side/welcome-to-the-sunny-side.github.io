@@ -1,9 +1,10 @@
+import typography from '@tailwindcss/typography';
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    './src/**/*.{astro,html,js,jsx,ts,tsx,vue,svelte,md}',
-  ],
-  darkMode: 'class',
+export default {
+  content: ['./src/**/*.{js,html,md}'],
+  // `dark:` means "the dark skin is on" (<html data-skin="dark">, see src/styles/skins.css).
+  darkMode: ['selector', '[data-skin="dark"]'],
   theme: {
     extend: {
       colors: {
@@ -70,7 +71,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-  ],
+  plugins: [typography],
 };

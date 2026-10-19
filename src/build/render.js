@@ -1,6 +1,7 @@
 // Markdown page → finished HTML: markdown-it, then math typeset by MathJax,
 // then SVG figures inlined (in that order: MathJax would read the `$` in
-// figure text as math). Also derives the page's meta description.
+// figure text as math). Also gives headings ids (collected for the blog
+// contents tree) and derives the page's meta description.
 import { getRenderer } from '../lib/markdown.js';
 import { parseFrontmatter } from './frontmatter.js';
 import { typesetMath } from './typesetMath.js';
@@ -10,12 +11,30 @@ export async function renderMarkdown(raw) {
   const { fm, body } = parseFrontmatter(raw);
   const md = await getRenderer();
   const html = md.render(body);
+  const { html: anchored, headings } = anchorHeadings(html);
   return {
     fm,
-    html: inlineFigures(await typesetMath(html)),
+    html: inlineFigures(await typesetMath(anchored)),
+    headings,
     // From markdown-it's output: in typeset math only the screen-reader MathML has text.
     description: describe(html),
   };
+}
+
+/** Gives each markdown heading an id; returns them as [{ level, id, text }] in document order. */
+function anchorHeadings(html) {
+  const headings = [];
+  const taken = new Set();
+  html = html.replace(/<h([1-6])>([\s\S]*?)<\/h\1>/g, (_, level, inner) => {
+    const text = htmlToText(inner);
+    const base = text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'section';
+    let id = base;
+    for (let n = 2; taken.has(id); n++) id = `${base}-${n}`;
+    taken.add(id);
+    headings.push({ level: Number(level), id, text });
+    return `<h${level} id="${id}">${inner}</h${level}>`;
+  });
+  return { html, headings };
 }
 
 /** Plain-text <meta name="description">: the first substantial paragraph, falling back to the whole text. */

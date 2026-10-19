@@ -127,7 +127,7 @@ export function plainBody(html) {
   return `<div id="content-html-container" class="${PROSE} p-4 max-w-none bg-surface text-text transition-colors duration-150 ease-retro">${html}</div>`;
 }
 
-export function blogBody(fm, html, markdownHref) {
+export function blogBody(fm, html, markdownHref, headings = []) {
   const date = fm.date
     // Shown in the reader's locale; src/client/site.js rewrites it from data-date.
     ? `<p class="mt-2 text-xs text-text-muted" data-date="${esc(fm.date)}">${esc(new Date(fm.date).toLocaleDateString('en-US'))}</p>`
@@ -137,7 +137,8 @@ export function blogBody(fm, html, markdownHref) {
       fm.tags.map((t) => `<li class="rounded-sm border border-accent-subtle px-2 py-1 text-xs font-medium text-text-muted transition-colors duration-150 ease-retro">${esc(t)}</li>`).join('') +
       `</ul>`
     : '';
-  return `<section class="${PROSE} mx-auto max-w-4xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro">` +
+  return contentsTree(headings) +
+    `<section class="${PROSE} mx-auto max-w-4xl px-4 py-6 bg-surface text-text transition-colors duration-150 ease-retro">` +
     `<header class="mb-8">` +
     `<h1 class="font-bold leading-tight tracking-tight mb-3 text-[2.5rem] md:text-[3rem] text-[color:var(--title)] dark:font-sans dark:text-accent">${esc(fm.title ?? 'Untitled')}</h1>` +
     date + tags +
@@ -145,4 +146,28 @@ export function blogBody(fm, html, markdownHref) {
     `</header>` +
     `<article class="${PROSE} ${PROSE_BODY} max-w-none">${html}</article>` +
     `</section>`;
+}
+
+// The blog contents tree (shown beside the post when the terminal is
+// collapsed and the window is wide enough; src/styles/toc.css, src/client/toc.js).
+// A heading's parent is the nearest earlier heading of a strictly higher level
+// (`# ### ##` makes both later headings children of the first); headings with
+// none are roots. Only tree depth matters from here on, never heading level.
+function contentsTree(headings) {
+  if (headings.length < 2) return '';
+  const roots = [];
+  const stack = [];
+  for (const h of headings) {
+    const node = { ...h, children: [] };
+    while (stack.length && stack[stack.length - 1].level >= h.level) stack.pop();
+    (stack.length ? stack[stack.length - 1].children : roots).push(node);
+    stack.push(node);
+  }
+  const list = (nodes) =>
+    `<ul>` +
+    nodes.map((n, i) =>
+      `<li><a href="#${esc(n.id)}"><span class="toc-branch">${i === nodes.length - 1 ? '└─' : '├─'}</span><span>${esc(n.text)}</span></a>` +
+      (n.children.length ? list(n.children) : '') + `</li>`).join('') +
+    `</ul>`;
+  return `<nav class="toc" aria-label="Contents">${list(roots)}</nav>`;
 }

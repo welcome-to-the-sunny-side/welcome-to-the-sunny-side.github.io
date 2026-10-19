@@ -1,0 +1,69 @@
+/* Blog contents tree (markup: contentsTree in src/build/templates.js,
+   behaviour: src/client/toc.js). Shown only with the terminal collapsed and
+   only where it fits in the margin beside the post, so it never moves the
+   post. Styling depends on depth in the tree, never on heading level. */
+
+.toc {
+  display: none;
+}
+
+@media (min-width: 1700px) {
+  [data-term-collapsed] .toc {
+    display: block;
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    /* the margin beside the centred post (max-w-4xl), less the collapsed
+       pane and the content scrollbar, less breathing room either side */
+    width: calc((100vw - 56rem - 48px) / 2 - 3rem);
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+    scrollbar-width: none;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    line-height: 1.5;
+  }
+}
+
+.toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* children sit under their parent's text, past its branch glyph */
+.toc ul ul {
+  display: none;
+  padding-left: 3ch;
+}
+
+.toc li.open > ul {
+  display: block;
+}
+
+.toc a {
+  display: flex;
+  gap: 1ch;
+  padding: 0.2em 0;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 150ms;
+}
+
+.toc a:hover {
+  color: var(--accent);
+}
+
+.toc-branch {
+  flex-shrink: 0;
+  user-select: none;
+}
+
+/* the path down to the current section; the current section itself */
+.toc li.open > a {
+  color: var(--text);
+}
+
+.toc li.active > a {
+  color: var(--accent);
+}

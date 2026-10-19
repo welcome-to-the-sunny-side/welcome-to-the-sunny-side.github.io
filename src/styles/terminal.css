@@ -101,9 +101,9 @@
    Set explicitly because scrollbar-color is inherited: without this the
    viewport would take the skin's from <html> (global.css). Browsers that
    support scrollbar-color ignore the ::-webkit-scrollbar rules below; those
-   are for the rest (Safari). */
+   are for the rest (Safari). Not `scrollbar-width: thin`: xterm sizes its
+   columns around the scrollbar, so that would rewrap the terminal. */
 .terminal-shell .xterm-viewport {
-  scrollbar-width: thin;
   scrollbar-color: var(--tp-scrollbar-thumb) var(--tp-scrollbar-track);
 }
 

@@ -63,9 +63,9 @@ for (const f of files) {
     }));
     continue;
   }
-  const { fm, html, description } = await renderMarkdown(f.raw);
+  const { fm, html, headings, description } = await renderMarkdown(f.raw);
   const markdown = f.path.replace(/\.html$/, '.md');
-  const body = fm.displayMode === 'blog' ? blogBody(fm, html, markdown) : plainBody(html);
+  const body = fm.displayMode === 'blog' ? blogBody(fm, html, markdown, headings) : plainBody(html);
   write(f.path, shell({ path: f.path, title: titleForPage(f.path, fm), body, description, canonical: f.path, markdown, assets }));
   write(markdown, f.raw);
   markdownPages.push({ path: f.path, title: fm.title, markdown });
@@ -120,6 +120,7 @@ async function buildCss() {
     tw.css,
     readFileSync('node_modules/xterm/css/xterm.css', 'utf8'),
     readFileSync('src/styles/terminal.css', 'utf8'),
+    readFileSync('src/styles/toc.css', 'utf8'),
     themeCss(),
     homeBackgroundCss(),
   ].join('\n');

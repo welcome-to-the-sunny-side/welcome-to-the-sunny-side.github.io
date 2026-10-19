@@ -35,7 +35,7 @@ src/
 ├─ figures/                  SVG figures, inlined into markdown pages at build time
 ├─ build/                    build-time code (Node only)
 │   ├─ vfs.js                scans src/content → page list, tree, dates
-│   ├─ render.js             markdown page → HTML (+ meta description)
+│   ├─ render.js             markdown page → HTML (+ heading ids, meta description)
 │   ├─ frontmatter.js        tiny YAML frontmatter parser
 │   ├─ typesetMath.js        MathJax in Node → CHTML
 │   ├─ figures.js            SVG figure inlining
@@ -47,6 +47,7 @@ src/
 │   ├─ router.js             client-side navigation
 │   ├─ skin.js               cskin: switching content skins
 │   ├─ pane.js               terminal pane: collapse, shortcuts, lazy-loads terminal.js
+│   ├─ toc.js                blog contents tree: tracks the section being read
 │   ├─ terminal.js           the xterm.js terminal and its commands
 │   ├─ terminalThemes.js     tskin themes (also read by build.js for CSS)
 │   ├─ vfs.js                the browser's copy of the VFS
@@ -57,7 +58,8 @@ src/
     ├─ global.css            Tailwind entry: fonts, highlight.js theme, base styles
     ├─ skins.css             the skins' CSS variables
     ├─ custom-elements.css   spoiler / theorem-box / outline-list styles
-    └─ terminal.css          the terminal pane and breadcrumb styles
+    ├─ terminal.css          the terminal pane and breadcrumb styles
+    └─ toc.css               the blog contents tree
 public/                      copied into dist/ as is (assets, musings blobs, CNAME, ...)
 tools/
 ├─ serve.mjs                 static server for dist/ (npm run serve)
@@ -257,9 +259,33 @@ the matching image is downloaded.
   `rebreakDisplayMath()` (`src/client/mathjax.js`) re-typesets only the ones
   that overflow, on load and when a `<details>` spoiler opens. Pages where
   everything fits never load MathJax.
+- **Heading ids.** Every markdown heading gets an `id` slugged from its text
+  (`4.1 L-induce` → `4-1-l-induce`, repeats get `-2`, `-3`), before
+  typesetting, so headings with math would slug their TeX.
 - **Description.** `<meta name="description">` is the first paragraph of 40+
   characters of markdown-it's output (before typesetting, so math reads as
   TeX), cut to 160 characters.
+
+### Contents tree (blog posts)
+
+Blog posts carry a contents tree of their headings (`contentsTree` in
+`templates.js`, two or more headings). It is shown in the left margin only on
+desktop with the terminal collapsed and a window at least 1700px wide, which
+is where it fits beside the centred post without moving it (`toc.css`);
+otherwise it is `display: none`, so the page is unchanged.
+
+- **Tree shape is relative.** A heading's parent is the nearest earlier
+  heading of a strictly higher level; headings with none are roots. So
+  `# ### ##` gives one root with two children, and posts that use `###` only,
+  or skip levels, still get a sensible tree. Styling depends only on depth in
+  the tree, never on heading level.
+- **Behaviour** (`src/client/toc.js`): the current section is the last
+  heading above a line a quarter of the way down the pane (or the last
+  heading, once scrolled to the bottom). It is highlighted in the accent
+  colour; the path down to it is in the text colour and open, so its
+  children show; every other branch is collapsed. Clicking an entry scrolls
+  to the heading without changing the URL.
+- Roots are always listed. Branch glyphs (`├─`, `└─`) match the index pages.
 
 ### Custom elements
 

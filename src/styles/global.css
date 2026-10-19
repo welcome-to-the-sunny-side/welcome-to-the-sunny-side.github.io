@@ -88,6 +88,21 @@ main::-webkit-scrollbar-thumb:hover, html::-webkit-scrollbar-thumb:hover {
   transform: translateY(-1px);
 }
 
+/* The blog header's "view as markdown" link: quiet, underlined in the accent
+   like the breadcrumbs. */
+.prose a.md-source {
+  color: theme('colors.text-muted');
+  opacity: 1;
+  text-decoration-color: theme('colors.accent');
+  text-underline-offset: 3px;
+  text-decoration-thickness: 0.5px;
+  transition: color 0.15s;
+}
+
+.prose a.md-source:hover {
+  color: theme('colors.accent');
+}
+
 /* Override Tailwind Typography blockquote color/opacity */
 .prose blockquote,
 .prose-invert blockquote {

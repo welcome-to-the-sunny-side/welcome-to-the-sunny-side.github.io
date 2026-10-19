@@ -488,9 +488,9 @@ Tried 2026-10-16 and frozen; sunny still uses its own home image
   path with `.md` (`/algo/theory/sais.md`). Rendered HTML is a poor read for
   agents: MathJax output turns into doubled text (`𝑇𝑖Ti` for `T_i`), inline
   SVG becomes label soup, and the page is ~10× larger. Pages point to the
-  copy three ways: a visible line in the blog header ("Raw Markdown for this
-  page can be found here." — the only one agents that just fetch the HTML
-  see, since fetch tools drop `<head>`), `<link rel="alternate"
+  copy three ways: a visible "view as markdown" link beside the date in the
+  blog header (the only one agents that just fetch the HTML see, since fetch
+  tools drop `<head>`; keep it a real link in the body), `<link rel="alternate"
   type="text/markdown">`, and `/llms.txt` (llmstxt.org), which lists them
   all. Don't use hidden on-page text telling agents to go elsewhere: careful
   agents treat it as prompt injection, and search engines as cloaking.

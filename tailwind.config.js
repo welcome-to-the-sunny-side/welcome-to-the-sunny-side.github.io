@@ -5,6 +5,10 @@ export default {
   content: ['./src/**/*.{js,html,md}'],
   // `dark:` means "the dark skin is on" (<html data-skin="dark">, see src/styles/skins.css).
   darkMode: ['selector', '[data-skin="dark"]'],
+  // `hover:` only on devices that really hover: on touch screens a tapped
+  // element keeps :hover, and after an in-place navigation that lands on
+  // whatever new element sits at the same spot.
+  future: { hoverOnlyWhenSupported: true },
   theme: {
     extend: {
       colors: {

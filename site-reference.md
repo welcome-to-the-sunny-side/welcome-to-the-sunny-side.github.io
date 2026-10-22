@@ -145,6 +145,14 @@ there is only one rendering of it, the static file.
 - After every swap (and once at startup) `site:load` fires. `site.js` uses
   it to localize blog dates, re-break overflowing display math (§5) and
   typeset raw pages that need client MathJax (§6).
+- The live site sits behind Cloudflare. Keep its Scrape Shield → Email
+  Address Obfuscation off: it rewrites addresses in served HTML and decodes
+  them with a script that only runs on a full load, so an address reached
+  by navigation would read `[email protected]`.
+- Tailwind's `hover:` only applies on devices that really hover
+  (`future.hoverOnlyWhenSupported`): on touch screens a tapped element keeps
+  `:hover`, which after a swap lands on whatever sits at the same spot (e.g.
+  the same row of the next index page).
 
 ### Skins (`cskin`) — `src/styles/skins.css`, `src/client/skin.js`
 

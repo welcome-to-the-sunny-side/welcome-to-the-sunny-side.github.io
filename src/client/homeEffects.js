@@ -5,8 +5,9 @@
 // changes (navigation, skin, window size, tab switch). tools/shots.mjs sets
 // window.__wtssStill to keep them off, since they're random.
 import { glitch } from './homeGlitch.js';
+import { shards } from './homeShards.js';
 
-const EFFECTS = { dark: glitch };
+const EFFECTS = { dark: glitch, sunny: shards };
 const DESKTOP = matchMedia('(min-width: 768px)');
 
 let running = null; // { el, effect, stop }

@@ -11,6 +11,7 @@ Each page at https://www.welcome-to-the-sunny-side.com/<path>.html has its markd
 - [algo/contests/about](https://www.welcome-to-the-sunny-side.com/algo/contests/about.md)
 - [ARC-205](https://www.welcome-to-the-sunny-side.com/algo/contests/arc-205.md)
 - [CF-2210](https://www.welcome-to-the-sunny-side.com/algo/contests/cf-2210.md)
+- [algo/misc/bad_problems](https://www.welcome-to-the-sunny-side.com/algo/misc/bad_problems.md)
 - [algo/misc/good_problems](https://www.welcome-to-the-sunny-side.com/algo/misc/good_problems.md)
 - [algo/misc/square_root_supremacy](https://www.welcome-to-the-sunny-side.com/algo/misc/square_root_supremacy.md)
 - [algo/notes/about](https://www.welcome-to-the-sunny-side.com/algo/notes/about.md)

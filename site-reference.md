@@ -210,8 +210,8 @@ holding (it listens to `site:load`, `data-skin` changes, media queries and
 ~100–400 ms redraws a few horizontal bands of the same image, shifted sideways
 and split into red and cyan copies (additive, so an unshifted band is
 invisible), and now and then moves a block; between bursts the canvas is empty
-and nothing runs. `src/styles/home.css` adds a faint rolling refresh band and
-nothing else, in pure CSS (transform only), keyed on the `live`
+and nothing runs. `src/styles/home.css` adds a faint rolling refresh band in
+pure CSS (transform only), keyed on the `live`
 class the module puts on `.home-bg` while it runs, so the JS alone decides when
 anything moves. `window.__wtssStill = true` (set by `tools/shots.mjs`) keeps
 it all off.

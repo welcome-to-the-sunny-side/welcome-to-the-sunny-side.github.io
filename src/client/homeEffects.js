@@ -5,9 +5,8 @@
 // changes (navigation, skin, window size, tab switch). tools/shots.mjs sets
 // window.__wtssStill to keep them off, since they're random.
 import { glitch } from './homeGlitch.js';
-import { ripple } from './homeRipple.js';
 
-const EFFECTS = { dark: glitch, sunny: ripple };
+const EFFECTS = { dark: glitch };
 const DESKTOP = matchMedia('(min-width: 768px)');
 
 let running = null; // { el, effect, stop }

@@ -49,9 +49,7 @@ src/
 │   ├─ pane.js               terminal pane: collapse, shortcuts, lazy-loads terminal.js
 │   ├─ toc.js                blog contents tree: tracks the section being read
 │   ├─ homeEffects.js        animated home backgrounds: one effect per skin
-│   ├─ homeBg.js             helpers shared by the home effects
 │   ├─ homeGlitch.js         the dark skin's effect: glitch bursts
-│   ├─ homeRipple.js         the sunny skin's effect: ripples (WebGL)
 │   ├─ terminal.js           the xterm.js terminal and its commands
 │   ├─ terminalThemes.js     tskin themes (also read by build.js for CSS)
 │   ├─ vfs.js                the browser's copy of the VFS
@@ -207,21 +205,12 @@ the matching image is downloaded.
 effect per skin over `.home-bg` while the home page is shown in a visible tab,
 and stops or swaps it on navigation, skin change, resize below 768px or tab
 switch. An effect is a function that takes the `.home-bg` element and returns
-its stop function; register one in `EFFECTS` there. Shared helpers are in
-`src/client/homeBg.js`: the overlay canvas, the cover/center fit, and the
-background image lookup, which is polled when an effect needs it, not done at
-start: in Brave and Edge, during page load, `.home-bg` can report no
-background yet.
-
-- **dark** — `src/client/homeGlitch.js`: every few seconds a short burst tears
-  horizontal bands of the image sideways with a red/cyan split, on a 2D canvas
-  that redraws the same image.
-- **sunny** — `src/client/homeRipple.js`: every few seconds a ripple spreads
-  from the pool at the girl's feet, flattened for perspective, and bends the
-  shards as it passes. A WebGL shader draws the warped image only around the
-  ring (transparent elsewhere) and leaves a soft capsule around the girl still.
-  Its positions are in the sunny pc image's own pixels (1500×1049): change
-  `POOL`/`GIRL` there if that image is replaced.
+its stop function; register one in `EFFECTS` there. Only dark has one so far:
+`src/client/homeGlitch.js`, where every few seconds a short burst tears
+horizontal bands of the image sideways with a red/cyan split on a canvas that
+redraws the same image (cover/center fit). It reads the background image from
+the computed style at burst time, not at start: in Brave and Edge, during page
+load, `.home-bg` can report no background yet.
 
 ---
 

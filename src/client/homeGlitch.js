@@ -5,16 +5,18 @@
 //
 // The canvas redraws the background image itself, with the same cover/center
 // fit, so a band left in place is invisible.
-import { rand, backgroundImage, cover, overlay } from './homeBg.js';
-
+const rand = (a, b) => a + Math.random() * (b - a);
 const randInt = (a, b) => Math.floor(rand(a, b + 1));
 const calm = () => rand(2500, 7000); // the gap between bursts
 
 export function glitch(el) {
-  const canvas = overlay(el);
+  const canvas = document.createElement('canvas');
+  canvas.className = 'absolute inset-0 w-full h-full pointer-events-none';
+  canvas.setAttribute('aria-hidden', 'true');
+  el.append(canvas);
   const ctx = canvas.getContext('2d');
-  const image = backgroundImage(el);
 
+  let im = null;
   let layers = null; // the image at canvas size: plain, red only, cyan only
   let timer = setTimeout(burst, rand(800, 2000));
   let raf = 0;
@@ -28,16 +30,32 @@ export function glitch(el) {
     canvas.remove();
   };
 
-  function build(im) {
-    const dpr = canvas.fit();
-    const { width: w, height: h } = canvas;
-    const fit = cover(w, h, im.naturalWidth, im.naturalHeight);
+  // Is the background image loaded? Looked up lazily and polled, not awaited:
+  // in Brave and Edge, while the page is still loading, .home-bg can report no
+  // background yet, and a load event for it may never come.
+  function ready() {
+    if (!im) {
+      const url = /url\("?(.*?)"?\)/.exec(getComputedStyle(el).backgroundImage)?.[1];
+      if (!url) return false;
+      im = new Image();
+      im.src = url;
+    }
+    return im.complete && im.naturalWidth > 0;
+  }
+
+  function build() {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const w = (canvas.width = Math.round(el.clientWidth * dpr));
+    const h = (canvas.height = Math.round(el.clientHeight * dpr));
+    const s = Math.max(w / im.naturalWidth, h / im.naturalHeight);
+    const dw = im.naturalWidth * s;
+    const dh = im.naturalHeight * s;
     const layer = (tint) => {
       const c = document.createElement('canvas');
       c.width = w;
       c.height = h;
       const g = c.getContext('2d');
-      g.drawImage(im, fit.x, fit.y, im.naturalWidth * fit.s, im.naturalHeight * fit.s);
+      g.drawImage(im, (w - dw) / 2, (h - dh) / 2, dw, dh);
       if (tint) {
         g.globalCompositeOperation = 'multiply';
         g.fillStyle = tint;
@@ -49,12 +67,11 @@ export function glitch(el) {
   }
 
   function burst() {
-    const im = image();
-    if (!im) {
-      timer = setTimeout(burst, calm()); // not loaded yet: skip; the next tries again
+    if (!ready()) {
+      timer = setTimeout(burst, calm()); // skip this one; the next tries again
       return;
     }
-    const L = (layers ??= build(im));
+    const L = (layers ??= build());
     const strength = Math.random() < 0.2 ? 1 : rand(0.35, 0.7);
     const end = performance.now() + rand(90, 260) * (0.6 + strength);
     let last = 0;

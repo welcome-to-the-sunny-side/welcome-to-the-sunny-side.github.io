@@ -14,18 +14,7 @@
 }
 
 /* While the glitch is live (dark skin, desktop; homeGlitch.js decides): a
-   faint CRT refresh band rolling down, and a slight brightness flicker.
-   Transform and opacity only, so both stay on the GPU. */
-.home-bg.live::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: #000;
-  opacity: 0;
-  animation: home-flicker 5s steps(1) infinite;
-}
-
+   faint CRT refresh band rolling down. Transform only, so it stays on the GPU. */
 .home-bg.live::after {
   content: "";
   position: absolute;
@@ -41,14 +30,4 @@
 @keyframes home-roll {
   from { transform: translateY(-100%); }
   to { transform: translateY(400%); }
-}
-
-@keyframes home-flicker {
-  0%, 100% { opacity: 0; }
-  41% { opacity: 0.06; }
-  42% { opacity: 0; }
-  43% { opacity: 0.04; }
-  44% { opacity: 0; }
-  78% { opacity: 0.05; }
-  79% { opacity: 0; }
 }

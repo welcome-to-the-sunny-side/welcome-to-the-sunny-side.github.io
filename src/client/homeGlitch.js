@@ -1,8 +1,8 @@
 // Home page glitch (dark skin, desktop only): every few seconds a short burst
 // tears horizontal bands of the background sideways with a red/cyan channel
 // split, now and then shifts a block, then everything snaps back. Between
-// bursts the canvas is empty and nothing runs. The faint rolling band and
-// flicker underneath are plain CSS (src/styles/home.css), switched on by the
+// bursts the canvas is empty and nothing runs. The faint rolling band
+// underneath is plain CSS (src/styles/home.css), switched on by the
 // `live` class this module puts on .home-bg, so this file alone decides when
 // anything moves. tools/shots.mjs sets window.__wtssStill to keep it all off.
 //
@@ -12,6 +12,13 @@ const DESKTOP = matchMedia('(min-width: 768px)');
 const CALM = matchMedia('(prefers-reduced-motion: reduce)');
 
 let active = null;
+
+// Debug trail for the proof of concept: `__glitchLog` in the console.
+const log = (window.__glitchLog = []);
+const note = (...m) => {
+  log.push(`${Math.round(performance.now())}ms ${m.join(' ')}`);
+  if (log.length > 60) log.shift();
+};
 
 export function startHomeGlitch() {
   addEventListener('site:load', sync);
@@ -25,6 +32,7 @@ export function startHomeGlitch() {
 function sync() {
   const el = document.querySelector('.home-bg');
   const want = !!el && !window.__wtssStill && document.documentElement.dataset.skin === 'dark' && DESKTOP.matches && !CALM.matches && !document.hidden;
+  note('sync', `el=${!!el}`, `skin=${document.documentElement.dataset.skin}`, `desktop=${DESKTOP.matches}`, `hidden=${document.hidden}`, `want=${want}`, `active=${!!active}`, `sameEl=${active?.el === el}`);
   if (active && (!want || active.el !== el)) {
     active.stop();
     active = null;
@@ -36,6 +44,7 @@ const rand = (a, b) => a + Math.random() * (b - a);
 const randInt = (a, b) => Math.floor(rand(a, b + 1));
 
 function mount(el) {
+  note('mount');
   const canvas = document.createElement('canvas');
   canvas.className = 'home-glitch';
   canvas.setAttribute('aria-hidden', 'true');
@@ -58,6 +67,7 @@ function mount(el) {
     // already loaded, so this is a cache hit, and onload works everywhere.
     const im = new Image();
     im.onload = () => {
+      note('image loaded', `stopped=${stopped}`, `${im.naturalWidth}x${im.naturalHeight}`);
       if (stopped) return;
       img = im;
       schedule(rand(800, 2000));
@@ -72,6 +82,7 @@ function mount(el) {
   window.__glitchNow = () => { clearTimeout(timer); burst(); };
 
   function schedule(ms) {
+    note('schedule', Math.round(ms));
     timer = setTimeout(burst, ms);
   }
 
@@ -133,12 +144,14 @@ function mount(el) {
   }
 
   function burst() {
+    note('burst', `stopped=${stopped}`, `img=${!!img}`, `el=${el.clientWidth}x${el.clientHeight}`, `connected=${el.isConnected}`);
     if (stopped || !img) return;
     let L;
     try {
       if (!layers) build();
       L = layers;
     } catch (err) {
+      note('build failed', err);
       console.warn('[homeGlitch] could not prepare the image', err);
       return;
     }
@@ -148,6 +161,7 @@ function mount(el) {
     const tick = (now) => {
       if (stopped) return;
       if (now >= end) {
+        note('burst end', `canvas=${canvas.width}x${canvas.height}`);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         // Sometimes a quick aftershock, otherwise a calm stretch.
         schedule(Math.random() < 0.3 ? rand(120, 400) : rand(2500, 7000));
@@ -157,6 +171,7 @@ function mount(el) {
         try {
           frame(L, strength);
         } catch (err) {
+          note('frame failed', err);
           console.warn('[homeGlitch] frame failed', err);
         }
         last = now;
@@ -169,6 +184,7 @@ function mount(el) {
   return {
     el,
     stop() {
+      note('stop');
       stopped = true;
       clearTimeout(timer);
       cancelAnimationFrame(raf);

@@ -54,14 +54,22 @@ function mount(el) {
 
   const url = /url\("?(.*?)"?\)/.exec(getComputedStyle(el).backgroundImage)?.[1];
   if (url) {
+    // Plain onload rather than decode(): it's the same image the background
+    // already loaded, so this is a cache hit, and onload works everywhere.
     const im = new Image();
-    im.src = url;
-    im.decode().then(() => {
+    im.onload = () => {
       if (stopped) return;
       img = im;
       schedule(rand(800, 2000));
-    }, () => {});
+    };
+    im.onerror = () => console.warn('[homeGlitch] could not load', url);
+    im.src = url;
+  } else {
+    console.warn('[homeGlitch] no background image on .home-bg');
   }
+
+  // For trying it out: run `__glitchNow()` in the console for a burst on demand.
+  window.__glitchNow = () => { clearTimeout(timer); burst(); };
 
   function schedule(ms) {
     timer = setTimeout(burst, ms);
@@ -77,7 +85,9 @@ function mount(el) {
     const dw = img.naturalWidth * s;
     const dh = img.naturalHeight * s;
     const layer = (tint) => {
-      const c = new OffscreenCanvas(w, h);
+      const c = document.createElement('canvas');
+      c.width = w;
+      c.height = h;
       const g = c.getContext('2d');
       g.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
       if (tint) {
@@ -91,8 +101,8 @@ function mount(el) {
   }
 
   // One frame of a burst: a handful of torn bands, sometimes a moved block.
-  function frame(strength) {
-    const { base, red, cyan, w, h, dpr } = layers;
+  function frame(L, strength) {
+    const { base, red, cyan, w, h, dpr } = L;
     ctx.clearRect(0, 0, w, h);
     const bands = randInt(1, Math.round(3 + 5 * strength));
     for (let i = 0; i < bands; i++) {
@@ -102,8 +112,8 @@ function mount(el) {
       const split = Math.round(rand(2, 6) * dpr);
       // Additive red + cyan rebuild the image; offsetting them is the split.
       ctx.globalCompositeOperation = 'lighter';
-      band(red, y, bh, dx + split);
-      band(cyan, y, bh, dx - split);
+      band(red, w, y, bh, dx + split);
+      band(cyan, w, y, bh, dx - split);
     }
     if (Math.random() < 0.35 * strength) {
       const bw = Math.round(rand(40, 260) * dpr);
@@ -117,28 +127,38 @@ function mount(el) {
   }
 
   // Draw a horizontal band of `src` shifted by dx, wrapping at the edges.
-  function band(src, y, bh, dx) {
-    const w = layers.w;
+  function band(src, w, y, bh, dx) {
     ctx.drawImage(src, 0, y, w, bh, dx, y, w, bh);
     ctx.drawImage(src, 0, y, w, bh, dx - Math.sign(dx || 1) * w, y, w, bh);
   }
 
   function burst() {
-    if (stopped) return;
-    if (!layers) build();
+    if (stopped || !img) return;
+    let L;
+    try {
+      if (!layers) build();
+      L = layers;
+    } catch (err) {
+      console.warn('[homeGlitch] could not prepare the image', err);
+      return;
+    }
     const strength = Math.random() < 0.2 ? 1 : rand(0.35, 0.7);
     const end = performance.now() + rand(90, 260) * (0.6 + strength);
     let last = 0;
     const tick = (now) => {
       if (stopped) return;
       if (now >= end) {
-        ctx.clearRect(0, 0, layers.w, layers.h);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         // Sometimes a quick aftershock, otherwise a calm stretch.
         schedule(Math.random() < 0.3 ? rand(120, 400) : rand(2500, 7000));
         return;
       }
       if (now - last > 45) { // ~20 fps: choppy reads as a signal fault
-        frame(strength);
+        try {
+          frame(L, strength);
+        } catch (err) {
+          console.warn('[homeGlitch] frame failed', err);
+        }
         last = now;
       }
       raf = requestAnimationFrame(tick);
@@ -155,6 +175,7 @@ function mount(el) {
       resize.disconnect();
       canvas.remove();
       el.classList.remove('live');
+      delete window.__glitchNow;
     },
   };
 }

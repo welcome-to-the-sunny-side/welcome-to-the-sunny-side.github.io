@@ -6,6 +6,7 @@ import { push, startRouter } from './router.js';
 import { cycleSkin, labelSkinToggles } from './skin.js';
 import { startPane } from './pane.js';
 import { startToc } from './toc.js';
+import { startHomeEffects } from './homeEffects.js';
 import { isPage } from './vfs.js';
 import { typeset, rebreakDisplayMath } from './mathjax.js';
 
@@ -40,6 +41,7 @@ addEventListener('site:load', enhance);
 startRouter();
 startPane();
 startToc();
+startHomeEffects();
 enhance();
 
 function enhance() {

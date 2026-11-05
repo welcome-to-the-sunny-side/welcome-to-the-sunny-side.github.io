@@ -42,6 +42,7 @@ function sync() {
 
 const rand = (a, b) => a + Math.random() * (b - a);
 const randInt = (a, b) => Math.floor(rand(a, b + 1));
+const calm = () => rand(2500, 7000); // the gap between bursts
 
 function mount(el) {
   note('mount');
@@ -61,19 +62,16 @@ function mount(el) {
   const resize = new ResizeObserver(() => { layers = null; });
   resize.observe(el);
 
+  // Don't wait for the image's load event: in Brave and Edge it never came
+  // for the copy made while the page itself was still loading. Bursts start
+  // on schedule and use the image once it reports complete (a burst before
+  // that is skipped).
   const url = /url\("?(.*?)"?\)/.exec(getComputedStyle(el).backgroundImage)?.[1];
+  const im = new Image();
   if (url) {
-    // Plain onload rather than decode(): it's the same image the background
-    // already loaded, so this is a cache hit, and onload works everywhere.
-    const im = new Image();
-    im.onload = () => {
-      note('image loaded', `stopped=${stopped}`, `${im.naturalWidth}x${im.naturalHeight}`);
-      if (stopped) return;
-      img = im;
-      schedule(rand(800, 2000));
-    };
     im.onerror = () => console.warn('[homeGlitch] could not load', url);
     im.src = url;
+    schedule(rand(800, 2000));
   } else {
     console.warn('[homeGlitch] no background image on .home-bg');
   }
@@ -145,7 +143,15 @@ function mount(el) {
 
   function burst() {
     note('burst', `stopped=${stopped}`, `img=${!!img}`, `el=${el.clientWidth}x${el.clientHeight}`, `connected=${el.isConnected}`);
-    if (stopped || !img) return;
+    if (stopped) return;
+    if (!img) {
+      if (!(im.complete && im.naturalWidth)) {
+        schedule(calm()); // not loaded yet: skip this one, the next picks it up
+        return;
+      }
+      img = im;
+      note('image ready', `${im.naturalWidth}x${im.naturalHeight}`);
+    }
     let L;
     try {
       if (!layers) build();
@@ -164,7 +170,7 @@ function mount(el) {
         note('burst end', `canvas=${canvas.width}x${canvas.height}`);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         // Sometimes a quick aftershock, otherwise a calm stretch.
-        schedule(Math.random() < 0.3 ? rand(120, 400) : rand(2500, 7000));
+        schedule(Math.random() < 0.3 ? rand(120, 400) : calm());
         return;
       }
       if (now - last > 45) { // ~20 fps: choppy reads as a signal fault

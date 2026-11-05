@@ -65,8 +65,9 @@ async function routeCdn(context) {
 }
 
 async function newContext(browser, viewport, skin, extra = {}) {
-  // Reduced motion freezes the home page glitch (src/client/homeGlitch.js) so captures are deterministic.
-  const context = await browser.newContext({ viewport, deviceScaleFactor: 1, reducedMotion: 'reduce', ...extra });
+  const context = await browser.newContext({ viewport, deviceScaleFactor: 1, ...extra });
+  // Keep the home page glitch (src/client/homeGlitch.js) off: it is random, so captures would never match.
+  await context.addInitScript(() => { window.__wtssStill = true; });
   await context.addInitScript((s) => {
     try { localStorage.setItem('wtss-skin', s); } catch {}
   }, skin);

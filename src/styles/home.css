@@ -13,30 +13,29 @@
   pointer-events: none;
 }
 
-/* Dark skin, desktop: a faint CRT refresh band rolling down, and a slight
-   brightness flicker. Transform and opacity only, so both stay on the GPU. */
-@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
-  :root[data-skin="dark"] .home-bg::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: #000;
-    opacity: 0;
-    animation: home-flicker 5s steps(1) infinite;
-  }
+/* While the glitch is live (dark skin, desktop; homeGlitch.js decides): a
+   faint CRT refresh band rolling down, and a slight brightness flicker.
+   Transform and opacity only, so both stay on the GPU. */
+.home-bg.live::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: #000;
+  opacity: 0;
+  animation: home-flicker 5s steps(1) infinite;
+}
 
-  :root[data-skin="dark"] .home-bg::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 25%;
-    pointer-events: none;
-    background: linear-gradient(to bottom, transparent, rgba(150, 255, 230, 0.05) 40%, rgba(150, 255, 230, 0.09) 50%, rgba(150, 255, 230, 0.05) 60%, transparent);
-    animation: home-roll 8s linear infinite;
-  }
+.home-bg.live::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 25%;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgba(150, 255, 230, 0.05) 40%, rgba(150, 255, 230, 0.09) 50%, rgba(150, 255, 230, 0.05) 60%, transparent);
+  animation: home-roll 8s linear infinite;
 }
 
 @keyframes home-roll {

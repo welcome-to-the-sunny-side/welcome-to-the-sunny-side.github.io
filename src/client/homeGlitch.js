@@ -2,7 +2,9 @@
 // tears horizontal bands of the background sideways with a red/cyan channel
 // split, now and then shifts a block, then everything snaps back. Between
 // bursts the canvas is empty and nothing runs. The faint rolling band and
-// flicker underneath are plain CSS (src/styles/home.css).
+// flicker underneath are plain CSS (src/styles/home.css), switched on by the
+// `live` class this module puts on .home-bg, so this file alone decides when
+// anything moves. tools/shots.mjs sets window.__wtssStill to keep it all off.
 //
 // The canvas sits over .home-bg and redraws the same image the CSS background
 // shows (same cover/center fit), so a band left in place is invisible.
@@ -22,7 +24,7 @@ export function startHomeGlitch() {
 
 function sync() {
   const el = document.querySelector('.home-bg');
-  const want = !!el && document.documentElement.dataset.skin === 'dark' && DESKTOP.matches && !CALM.matches && !document.hidden;
+  const want = !!el && !window.__wtssStill && document.documentElement.dataset.skin === 'dark' && DESKTOP.matches && !CALM.matches && !document.hidden;
   if (active && (!want || active.el !== el)) {
     active.stop();
     active = null;
@@ -38,6 +40,7 @@ function mount(el) {
   canvas.className = 'home-glitch';
   canvas.setAttribute('aria-hidden', 'true');
   el.append(canvas);
+  el.classList.add('live');
   const ctx = canvas.getContext('2d');
 
   let img = null;
@@ -151,6 +154,7 @@ function mount(el) {
       cancelAnimationFrame(raf);
       resize.disconnect();
       canvas.remove();
+      el.classList.remove('live');
     },
   };
 }

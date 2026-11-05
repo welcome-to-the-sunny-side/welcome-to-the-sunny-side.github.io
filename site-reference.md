@@ -211,8 +211,10 @@ holding (it listens to `site:load`, `data-skin` changes, media queries and
 and split into red and cyan copies (additive, so an unshifted band is
 invisible), and now and then moves a block; between bursts the canvas is empty
 and nothing runs. `src/styles/home.css` adds a faint rolling refresh band and
-a brightness flicker in pure CSS (transform/opacity only), under the same
-conditions.
+a brightness flicker in pure CSS (transform/opacity only), keyed on the `live`
+class the module puts on `.home-bg` while it runs, so the JS alone decides when
+anything moves. `window.__wtssStill = true` (set by `tools/shots.mjs`) keeps
+it all off.
 
 ---
 
@@ -546,8 +548,9 @@ node tools/shots.mjs compare /tmp/before /tmp/after
 
 It screenshots every page in both skins (desktop viewport, desktop content at
 full height, mobile) plus scripted terminal and mobile-navigation sessions,
-and pixel-diffs two captures (diff images in `<after>-diff/`). Its browser
-asks for reduced motion, which keeps the home glitch off. Known noise:
+and pixel-diffs two captures (diff images in `<after>-diff/`). It sets
+`window.__wtssStill`, which keeps the random home glitch off. (Not reduced
+motion: that also turns off smooth scrolling and changes the terminal shots.) Known noise:
 about 10 pixels on most desktop shots, the sunny table on
 `algo/misc/good_problems.html`, and the terminal right after `clear`, all of
 which vary between runs of the same build.

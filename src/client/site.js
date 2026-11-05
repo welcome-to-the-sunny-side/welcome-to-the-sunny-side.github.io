@@ -6,7 +6,6 @@ import { push, startRouter } from './router.js';
 import { cycleSkin, labelSkinToggles } from './skin.js';
 import { startPane } from './pane.js';
 import { startToc } from './toc.js';
-import { startHomeGlitch } from './homeGlitch.js';
 import { isPage } from './vfs.js';
 import { typeset, rebreakDisplayMath } from './mathjax.js';
 
@@ -41,7 +40,6 @@ addEventListener('site:load', enhance);
 startRouter();
 startPane();
 startToc();
-startHomeGlitch();
 enhance();
 
 function enhance() {

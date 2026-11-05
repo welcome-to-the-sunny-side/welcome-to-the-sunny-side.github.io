@@ -121,7 +121,6 @@ async function buildCss() {
     readFileSync('node_modules/xterm/css/xterm.css', 'utf8'),
     readFileSync('src/styles/terminal.css', 'utf8'),
     readFileSync('src/styles/toc.css', 'utf8'),
-    readFileSync('src/styles/home.css', 'utf8'),
     themeCss(),
     homeBackgroundCss(),
   ].join('\n');

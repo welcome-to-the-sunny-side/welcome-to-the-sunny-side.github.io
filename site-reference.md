@@ -48,7 +48,6 @@ src/
 │   ├─ skin.js               cskin: switching content skins
 │   ├─ pane.js               terminal pane: collapse, shortcuts, lazy-loads terminal.js
 │   ├─ toc.js                blog contents tree: tracks the section being read
-│   ├─ homeGlitch.js         home page glitch bursts (dark skin, desktop)
 │   ├─ terminal.js           the xterm.js terminal and its commands
 │   ├─ terminalThemes.js     tskin themes (also read by build.js for CSS)
 │   ├─ vfs.js                the browser's copy of the VFS
@@ -60,8 +59,7 @@ src/
     ├─ skins.css             the skins' CSS variables
     ├─ custom-elements.css   spoiler / theorem-box / outline-list styles
     ├─ terminal.css          the terminal pane and breadcrumb styles
-    ├─ toc.css               the blog contents tree
-    └─ home.css              home background layers: glitch canvas, CRT roll
+    └─ toc.css               the blog contents tree
 public/                      copied into dist/ as is (assets, musings blobs, CNAME, ...)
 tools/
 ├─ serve.mjs                 static server for dist/ (npm run serve)
@@ -200,21 +198,6 @@ The home page is a full-pane background image chosen per skin and device by
 CSS that `build.js` generates from `public/assets/home/active/<skin>/<pc|mobile>/`
 (the first image in each folder, by name; `mobile` applies below 768px). Only
 the matching image is downloaded.
-
-**Glitch (dark skin, from 768px up, experimental).** `src/client/homeGlitch.js`
-adds a `.home-glitch` canvas over `.home-bg` while the home page is shown, the
-skin is dark, the viewport is desktop-sized, the tab is visible and the visitor
-hasn't asked for reduced motion; it removes it as soon as any of those stops
-holding (it listens to `site:load`, `data-skin` changes, media queries and
-`visibilitychange`). Every 2.5–7 s (sometimes a quick aftershock) a burst of
-~100–400 ms redraws a few horizontal bands of the same image, shifted sideways
-and split into red and cyan copies (additive, so an unshifted band is
-invisible), and now and then moves a block; between bursts the canvas is empty
-and nothing runs. `src/styles/home.css` adds a faint rolling refresh band in
-pure CSS (transform only), keyed on the `live`
-class the module puts on `.home-bg` while it runs, so the JS alone decides when
-anything moves. `window.__wtssStill = true` (set by `tools/shots.mjs`) keeps
-it all off.
 
 ---
 
@@ -548,9 +531,7 @@ node tools/shots.mjs compare /tmp/before /tmp/after
 
 It screenshots every page in both skins (desktop viewport, desktop content at
 full height, mobile) plus scripted terminal and mobile-navigation sessions,
-and pixel-diffs two captures (diff images in `<after>-diff/`). It sets
-`window.__wtssStill`, which keeps the random home glitch off. (Not reduced
-motion: that also turns off smooth scrolling and changes the terminal shots.) Known noise:
+and pixel-diffs two captures (diff images in `<after>-diff/`). Known noise:
 about 10 pixels on most desktop shots, the sunny table on
 `algo/misc/good_problems.html`, and the terminal right after `clear`, all of
 which vary between runs of the same build.

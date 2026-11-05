@@ -1,0 +1,55 @@
+/* Home page background. The image itself comes from rules build.js generates
+   (homeBackgroundCss); src/client/homeGlitch.js adds the .home-glitch canvas. */
+.home-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.home-glitch {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Dark skin, desktop: a faint CRT refresh band rolling down, and a slight
+   brightness flicker. Transform and opacity only, so both stay on the GPU. */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  :root[data-skin="dark"] .home-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: #000;
+    opacity: 0;
+    animation: home-flicker 5s steps(1) infinite;
+  }
+
+  :root[data-skin="dark"] .home-bg::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 25%;
+    pointer-events: none;
+    background: linear-gradient(to bottom, transparent, rgba(150, 255, 230, 0.05) 40%, rgba(150, 255, 230, 0.09) 50%, rgba(150, 255, 230, 0.05) 60%, transparent);
+    animation: home-roll 8s linear infinite;
+  }
+}
+
+@keyframes home-roll {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(400%); }
+}
+
+@keyframes home-flicker {
+  0%, 100% { opacity: 0; }
+  41% { opacity: 0.06; }
+  42% { opacity: 0; }
+  43% { opacity: 0.04; }
+  44% { opacity: 0; }
+  78% { opacity: 0.05; }
+  79% { opacity: 0; }
+}

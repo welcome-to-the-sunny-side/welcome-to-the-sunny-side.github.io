@@ -66,6 +66,8 @@ async function routeCdn(context) {
 
 async function newContext(browser, viewport, skin, extra = {}) {
   const context = await browser.newContext({ viewport, deviceScaleFactor: 1, ...extra });
+  // Keep the random home page effects (src/client/homeEffects.js) off.
+  await context.addInitScript(() => { window.__wtssStill = true; });
   await context.addInitScript((s) => {
     try { localStorage.setItem('wtss-skin', s); } catch {}
   }, skin);

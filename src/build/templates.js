@@ -108,7 +108,7 @@ const TERMINAL_PANE =
   `</div></div></div>`;
 
 export function homeBody() {
-  return `<div class="home-bg h-full w-full bg-cover bg-center bg-no-repeat"></div>`;
+  return `<div class="home-bg relative h-full w-full bg-cover bg-center bg-no-repeat"></div>`;
 }
 
 export function navBody(dir, entries) {

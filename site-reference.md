@@ -48,6 +48,8 @@ src/
 │   ├─ skin.js               cskin: switching content skins
 │   ├─ pane.js               terminal pane: collapse, shortcuts, lazy-loads terminal.js
 │   ├─ toc.js                blog contents tree: tracks the section being read
+│   ├─ homeEffects.js        animated home backgrounds: one effect per skin
+│   ├─ homeGlitch.js         the dark skin's effect: glitch bursts
 │   ├─ terminal.js           the xterm.js terminal and its commands
 │   ├─ terminalThemes.js     tskin themes (also read by build.js for CSS)
 │   ├─ vfs.js                the browser's copy of the VFS
@@ -198,6 +200,17 @@ The home page is a full-pane background image chosen per skin and device by
 CSS that `build.js` generates from `public/assets/home/active/<skin>/<pc|mobile>/`
 (the first image in each folder, by name; `mobile` applies below 768px). Only
 the matching image is downloaded.
+
+**Animated effects** (desktop only): `src/client/homeEffects.js` runs one
+effect per skin over `.home-bg` while the home page is shown in a visible tab,
+and stops or swaps it on navigation, skin change, resize below 768px or tab
+switch. An effect is a function that takes the `.home-bg` element and returns
+its stop function; register one in `EFFECTS` there. Only dark has one so far:
+`src/client/homeGlitch.js`, where every few seconds a short burst tears
+horizontal bands of the image sideways with a red/cyan split on a canvas that
+redraws the same image (cover/center fit). It reads the background image from
+the computed style at burst time, not at start: in Brave and Edge, during page
+load, `.home-bg` can report no background yet.
 
 ---
 
@@ -531,7 +544,8 @@ node tools/shots.mjs compare /tmp/before /tmp/after
 
 It screenshots every page in both skins (desktop viewport, desktop content at
 full height, mobile) plus scripted terminal and mobile-navigation sessions,
-and pixel-diffs two captures (diff images in `<after>-diff/`). Known noise:
+and pixel-diffs two captures (diff images in `<after>-diff/`). It sets
+`window.__wtssStill`, which keeps the random home effects off. Known noise:
 about 10 pixels on most desktop shots, the sunny table on
 `algo/misc/good_problems.html`, and the terminal right after `clear`, all of
 which vary between runs of the same build.

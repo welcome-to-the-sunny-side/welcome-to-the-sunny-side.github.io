@@ -62,19 +62,13 @@ function mount(el) {
   const resize = new ResizeObserver(() => { layers = null; });
   resize.observe(el);
 
-  // Don't wait for the image's load event: in Brave and Edge it never came
-  // for the copy made while the page itself was still loading. Bursts start
-  // on schedule and use the image once it reports complete (a burst before
-  // that is skipped).
-  const url = /url\("?(.*?)"?\)/.exec(getComputedStyle(el).backgroundImage)?.[1];
-  const im = new Image();
-  if (url) {
-    im.onerror = () => console.warn('[homeGlitch] could not load', url);
-    im.src = url;
-    schedule(rand(800, 2000));
-  } else {
-    console.warn('[homeGlitch] no background image on .home-bg');
-  }
+  // The image is looked up and checked by each burst, not here: in Brave and
+  // Edge, at this point (page still loading) .home-bg can report no
+  // background yet, and a load event for it may never come. A burst that
+  // finds the image not ready is skipped; the next one tries again.
+  let im = null;
+  note('background at mount', getComputedStyle(el).backgroundImage);
+  schedule(rand(800, 2000));
 
   // For trying it out: run `__glitchNow()` in the console for a burst on demand.
   window.__glitchNow = () => { clearTimeout(timer); burst(); };
@@ -145,8 +139,18 @@ function mount(el) {
     note('burst', `stopped=${stopped}`, `img=${!!img}`, `el=${el.clientWidth}x${el.clientHeight}`, `connected=${el.isConnected}`);
     if (stopped) return;
     if (!img) {
-      if (!(im.complete && im.naturalWidth)) {
-        schedule(calm()); // not loaded yet: skip this one, the next picks it up
+      if (!im) {
+        const bg = getComputedStyle(el).backgroundImage;
+        const url = /url\("?(.*?)"?\)/.exec(bg)?.[1];
+        if (url) {
+          im = new Image();
+          im.src = url;
+        } else {
+          note('no background yet', bg);
+        }
+      }
+      if (!(im?.complete && im.naturalWidth)) {
+        schedule(calm()); // not ready: skip this one, the next tries again
         return;
       }
       img = im;

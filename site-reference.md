@@ -205,7 +205,8 @@ the matching image is downloaded.
 effect per skin over `.home-bg` while the home page is shown in a visible tab,
 and stops or swaps it on navigation, skin change, resize below 768px or tab
 switch. An effect is a function that takes the `.home-bg` element and returns
-its stop function; register one in `EFFECTS` there. Only dark has one so far:
+its stop function; register one in `EFFECTS` there. Only dark has one so far
+(currently **switched off**: set `GLITCH_ON = true` in `homeEffects.js` to restore it):
 `src/client/homeGlitch.js`, where every few seconds a short burst tears
 horizontal bands of the image sideways with a red/cyan split on a canvas that
 redraws the same image (cover/center fit). It reads the background image from

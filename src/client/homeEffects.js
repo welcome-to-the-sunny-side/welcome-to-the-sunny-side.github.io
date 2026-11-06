@@ -6,7 +6,10 @@
 // window.__wtssStill to keep them off, since they're random.
 import { glitch } from './homeGlitch.js';
 
-const EFFECTS = { dark: glitch };
+// Glitch is switched off for now; flip this to true to bring it back.
+const GLITCH_ON = false;
+
+const EFFECTS = { dark: GLITCH_ON ? glitch : undefined };
 const DESKTOP = matchMedia('(min-width: 768px)');
 
 let running = null; // { el, effect, stop }

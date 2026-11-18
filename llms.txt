@@ -26,6 +26,7 @@ Each page at https://www.welcome-to-the-sunny-side.com/<path>.html has its markd
 - [CF-468D](https://www.welcome-to-the-sunny-side.com/algo/problems/cf-468d.md)
 - [algo/theory/about](https://www.welcome-to-the-sunny-side.com/algo/theory/about.md)
 - [Finding K neighbours in an implicitly defined bipartite graph](https://www.welcome-to-the-sunny-side.com/algo/theory/detect_k_neighbours_bip.md)
+- [Traversing complement graphs using DFS Trees](https://www.welcome-to-the-sunny-side.com/algo/theory/dfs_tree_complement.md)
 - [Offline Incremental SCC](https://www.welcome-to-the-sunny-side.com/algo/theory/offline_incremental_scc.md)
 - [Suffix arrays in O(n) using SA-IS](https://www.welcome-to-the-sunny-side.com/algo/theory/sais.md)
 - [A funny way to construct suffix tree and do other things](https://www.welcome-to-the-sunny-side.com/algo/theory/suffix_tree_funny.md)

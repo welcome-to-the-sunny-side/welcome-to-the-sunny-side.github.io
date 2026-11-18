@@ -89,9 +89,9 @@ I later realized that a few characters of diffs sufficed to correct my original 
 
 <figure style="text-align: center;">
   <img
-    src="https://i.ibb.co/Cpf8tXBc/Photo-31-03-24-3-26-58-PM.jpg"
+    src="/assets/icpc/img1.jpg"
     alt="Alt text"
-    width="300"
+    width="600"
     style="display: block; margin: 0 auto;"
   >
   <figcaption>
@@ -112,7 +112,7 @@ WellGroomedHair eventually confirmed that he didn't want to take part this year,
 
 <figure style="text-align: center;">
   <img
-    src="https://i.ibb.co/R46sSyBf/IMG-0087.jpg"
+    src="/assets/icpc/img2.jpg"
     alt="Alt text"
     width="300"
     style="display: block; margin: 0 auto;"
@@ -260,7 +260,7 @@ I was only a few minutes into the problem at this point, and all of this seemed 
 
 <figure style="text-align: center;">
   <img
-    src="https://i.ibb.co/ynPc1WL9/Screenshot-2026-03-14-at-2-47-17-PM.png"
+    src="/assets/icpc/img3.png"
     alt="Alt text"
     width="600"
     style="display: block; margin: 0 auto;"
@@ -314,7 +314,7 @@ GeometryDashAddict shook me out of this spiral with a constraint-conforming exam
 
 <figure style="text-align: center;">
   <img
-    src="https://i.ibb.co/wNJ3sGSY/Screenshot-From-2026-03-20-05-18-48.png"
+    src="/assets/icpc/img4.png"
     alt="Alt text"
     width="600"
     style="display: block; margin: 0 auto;"

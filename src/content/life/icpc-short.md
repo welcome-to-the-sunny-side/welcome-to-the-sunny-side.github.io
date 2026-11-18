@@ -103,7 +103,7 @@ I was only a few minutes into the problem at this point, and all of this seemed 
 
 <figure style="text-align: center;">
   <img
-    src="https://i.ibb.co/ynPc1WL9/Screenshot-2026-03-14-at-2-47-17-PM.png"
+    src="/assets/icpc/img3.png"
     alt="Alt text"
     width="600"
     style="display: block; margin: 0 auto;"
@@ -157,7 +157,7 @@ GeometryDashAddict shook me out of this spiral with a constraint-conforming exam
 
 <figure style="text-align: center;">
   <img
-    src="https://i.ibb.co/wNJ3sGSY/Screenshot-From-2026-03-20-05-18-48.png"
+    src="/assets/icpc/img4.png"
     alt="Alt text"
     width="600"
     style="display: block; margin: 0 auto;"
